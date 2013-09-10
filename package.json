@@ -1,16 +1,26 @@
 {
   "name": "malta",
-  "description": "lightning builder allows to compose on the fly and update packed and full coded huge javascript files, edit its parts as files, splitted and glued as You need",
-  "keywords" : ["builder","javascript builder", "composer", "javascript composer"],
   "version": "0.0.1",
-  "author": "Federico Ghedina <fedeghe@gmail.com>",
-  "repository": { "type": "git", "url": "https://github.com/fedeghe/malta" }
+  "description": "lightning builder allows to compose on the fly and update packed and full coded huge javascript files, edit its parts as files, splitted and glued as You need",
+  "main": "index.js",
   "dependencies": {
     "uglify-js": "~2.4.0"
   },
   "devDependencies": {},
-  "main":"./index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://fedeghe@github.com/fedeghe/malta.git"
+  },
+  "keywords": ["builder","javascript builder","composer","javascript composer"],
+  "author": "Federico Ghedina <fedeghe@gmail.com>",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/fedeghe/malta/issues"
+  },
   "bin" : {
-      "malta" : "./index.js"
+	"malta" : "./index.js"
   }
 }
