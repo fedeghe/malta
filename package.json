@@ -1,0 +1,16 @@
+{
+  "name": "malta",
+  "description": "lightning builder allows to compose on the fly and update packed and full coded huge javascript files, edit its parts as files, splitted and glued as You need",
+  "keywords" : ["builder","javascript builder", "composer", "javascript composer"],
+  "version": "0.0.1",
+  "author": "Federico Ghedina <fedeghe@gmail.com>",
+  "repository": { "type": "git", "url": "https://github.com/fedeghe/malta" }
+  "dependencies": {
+    "uglify-js": "~2.4.0"
+  },
+  "devDependencies": {},
+  "main":"./index.js",
+  "bin" : {
+      "malta" : "./index.js"
+  }
+}
