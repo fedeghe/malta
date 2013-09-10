@@ -27,5 +27,5 @@ placeholders
 Malta uses two kind of placeholders
 - **file** : `$$filePath$$`  
   here _filepath_ is the path to the desired file relative to the directory containing the base template
-- **variable** : $varname$  
-  here _varname_ is the key for a variable that Malta will search in a vars.json file that should be found in the same folder where is the base template  
+- **variable** : `$varname$`  
+  here _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the same folder where is the base template  
