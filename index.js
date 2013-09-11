@@ -138,6 +138,9 @@ Malta.prototype = {
                 while (level-- && self.tplCnt.match(reg.files)) {
                     self.tplCnt = replace.all(self.tplCnt);
                 }
+
+                //check for loops or too much digging
+                !level && console.log('[ERROR] maximum nesting level reached!');
                 
                 self.tplCnt = replace.vars(self.tplCnt)
                     .replace(/__TIME__/g, date().getHours() + ':' + date().getMinutes() + ':' + date().getSeconds())
