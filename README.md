@@ -34,6 +34,14 @@ Malta uses two kind of placeholders, to be used in the main template or in any f
 
 **Hint** : to avoid loops Malta stops digging at the tenth nesting level.
 
+###wired vars
+There are some placeholders that cen be used within any involved file:  
+
+- \_\_TIME\_\_ : the HH : MM : SS build time
+- \_\_DATE\_\_ : the D / M / YYYY build date   
+- \_\_YEAR\_\_ : the YYYY format build year
+
+
 ###a sample
 
 
