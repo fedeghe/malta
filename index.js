@@ -6,12 +6,11 @@ var fs = require("fs"),
     execRoot = process.cwd();
     args = process.argv.splice(2);
 
-
-
-
 function Malta() {}
 
 Malta.prototype = {
+    name : 'Malta',
+    version : '0.0.1',
     vars : {},
     tplName : '',
     baseDir : '',
@@ -47,7 +46,7 @@ Malta.prototype = {
 
 
         //console.log("[DEBUG]Checking outDir");
-        this.outDir = execRoot + '/' + args[1];
+        this.outDir = execRoot + '/' + args[1].replace(/\/$/, '');
         if (!fs.existsSync(this.outDir)) {
             console.log('OutDir `' + this.outDir + '` NOT FOUND!');
             process.exit();	
@@ -175,7 +174,7 @@ Malta.prototype = {
             };
             
         setInterval(function () {build(); }, 1000);
-        console.log("Running");
+        console.log(self.name + "@" + self.version + " running");
     }
 };
 
