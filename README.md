@@ -24,7 +24,7 @@ is the folder where the output files will be written in. That path must be relat
 
 ###placeholders
 
-Malta uses two kind of placeholders, to be used in the main template or in any file involved (but vars.json)  
+Malta uses two kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **$$filePath$$**  
   _filepath_ is the path to the desired file relative to the template directory  
@@ -88,8 +88,9 @@ and least but not last **vars.json** :
     "author":"Federico"
     }  
 <br />
-**Now** from ~ we execute:  
-`malta myproject/myfile.tpl myproject/out`  
+**Now** from ~ execute:  
+
+     malta myproject/myfile.tpl myproject/out
 in a while Malta will confirm the first creation of _myfile.js_ and _myfile.min.js_ in the _out/_ folder.  
 <br />
 This is the not minified code :  
@@ -97,7 +98,7 @@ This is the not minified code :
     /**
     Name : myFabulousProject
     Author: Federico
-    Date: 11-9-2013
+    Date: 11/9/2013
     */
     +function(){
         var name = 'what';
