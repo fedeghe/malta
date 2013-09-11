@@ -74,6 +74,7 @@ Supposing in `~/myproject` we have
         alert('Hello ' + n);
         $$src/inner/b.js$$
     }
+    hello('Federico'), hello('Federico');
 <br />
 **src/inner/b.js** :  
 
@@ -103,11 +104,12 @@ This is the not minified code :
     +function(){
         var name = 'what';
         function hello(n) {
-          alert('Hello ' + n);
-          hello = function () {
-            alert('Hello again ' + n);
-        };
-      }
+            alert('Hello ' + n);
+            hello = function () {
+                alert('Hello again ' + n);
+            };
+        }
+        hello('Federico'), hello('Federico');
     }();
 
 Let Malta run and try editing the _myproject.tpl_ or the _vars.json_ or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c
