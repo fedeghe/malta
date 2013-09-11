@@ -42,7 +42,7 @@ There are some placeholders that cen be used within any involved file:
 - \_\_YEAR\_\_ : the YYYY format build year
 
 
-###a sample
+###foo sample
 
 
 Supposing in `~/myproject` we have  
