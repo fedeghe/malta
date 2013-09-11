@@ -40,7 +40,7 @@ Malta uses two kind of placeholders, to be used in the main template or in any f
 Supposing in `~/myproject` we have  
 
     myfile.tpl
-    conf.json
+    vars.json
     out/
     src/
     |- a.js
