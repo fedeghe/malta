@@ -2,15 +2,22 @@
 //
 var fs = require("fs"),
     uglify = require("uglify-js"),
-    scriptRoot = __dirname,
-    execRoot = process.cwd();
-    args = process.argv.splice(2);
 
+    //path from where Malta is started
+    execRoot = process.cwd();
+
+    // commandline arguments array
+    args = process.argv.splice(2),
+
+    packageInfo = fs.existsSync('./package.json') ? require('./package.json') : {};
+
+
+//main object
 function Malta() {}
 
 Malta.prototype = {
-    name : 'Malta',
-    version : '0.0.1',
+    name : 'name' in packageInfo ? packageInfo.name : 'Malta',
+    version : 'version' in packageInfo ? packageInfo.version : 'undefined',
     vars : {},
     tplName : '',
     baseDir : '',
@@ -39,13 +46,9 @@ Malta.prototype = {
             console.log('Template `' + this.baseDir + '/' + this.tplName + '` NOT FOUND!');
             process.exit();	
         }
-
         
         this.tplCnt = fs.readFileSync(this.baseDir + '/' + this.tplName).toString();
 
-
-
-        //console.log("[DEBUG]Checking outDir");
         this.outDir = execRoot + '/' + args[1].replace(/\/$/, '');
         if (!fs.existsSync(this.outDir)) {
             console.log('OutDir `' + this.outDir + '` NOT FOUND!');
@@ -89,7 +92,6 @@ Malta.prototype = {
                         } else {
                             //		console.log("\t" + $2);
                         } 
-                        //if (fs.statSync(scriptRoot + '/' + $2).mtime.getTime() > self.updateTime) {
                         if (checkTimes(self.baseDir + '/' + $2)) {
                             self.update = true;
                         }
@@ -169,10 +171,10 @@ Malta.prototype = {
                     }
                 });
                 
-                //set flag
+                //reset update flag
                 self.update = false;
                 
-                //recover nesting max level
+                //recover nesting level
                 level = 10;
             };
             
