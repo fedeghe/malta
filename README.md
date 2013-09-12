@@ -12,7 +12,8 @@ installation
     [sudo] npm install malta [-g]
 
 
-###usage
+usage
+-----
     malta templateFile outDirectory
 
 - **templateFile**  
@@ -22,7 +23,8 @@ is the base template used to build the big ones. That file must be relative to p
 is the folder where the output files will be written in. That path must be relative to path from  where You start Malta.  
 
 
-###placeholders
+placeholders
+------------
 
 Malta uses two kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
@@ -34,7 +36,9 @@ Malta uses two kind of placeholders, to be used in the main template or in any f
 
 **Hint** : to avoid loops Malta stops digging at the tenth nesting level.
 
-###wired vars
+wired vars
+----------
+
 There are some placeholders that cen be used within any involved file:  
 
 - \_\_TIME\_\_ : the HH : MM : SS build time
@@ -42,8 +46,8 @@ There are some placeholders that cen be used within any involved file:
 - \_\_YEAR\_\_ : the YYYY format build year
 
 
-###foo sample
-
+foo sample
+----------
 
 Supposing in `~/myproject` we have  
 

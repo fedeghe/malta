@@ -1,5 +1,9 @@
 #!/usr/bin/env node
-//
+/**
+ *
+ *  Malta
+ * 
+ */
 var fs = require("fs"),
     uglify = require("uglify-js"),
 
@@ -9,7 +13,10 @@ var fs = require("fs"),
     // commandline arguments array
     args = process.argv.splice(2),
 
-    packageInfo = fs.existsSync('./package.json') ? require('./package.json') : {};
+    // get package info
+    packageInfo = fs.existsSync('./package.json') ? require('./package.json') : {},
+
+    DS = '/';
 
 
 //main object
@@ -24,7 +31,7 @@ Malta.prototype = {
     tplDir : '',
     tplCnt : '',
     outDir : '',
-    outName : {"clear":"", "min":""},
+    outName : {"clear" : "", "min" : ""},
     varFile : '',
     lastEditedFile : false,
     update : true,
@@ -40,27 +47,27 @@ Malta.prototype = {
         
         tmp = args[0].split('/');
         this.tplName = tmp.pop();
-        this.baseDir = execRoot + '/' + tmp.join('/');
+        this.baseDir = execRoot + DS + tmp.join(DS);
         
-        if (!fs.existsSync(this.baseDir + '/' + this.tplName)) {
-            console.log('Template `' + this.baseDir + '/' + this.tplName + '` NOT FOUND!');
+        if (!fs.existsSync(this.baseDir + DS + this.tplName)) {
+            console.log('Template `' + this.baseDir + DS + this.tplName + '` NOT FOUND!');
             process.exit();	
         }
         
-        this.tplCnt = fs.readFileSync(this.baseDir + '/' + this.tplName).toString();
+        this.tplCnt = fs.readFileSync(this.baseDir + DS + this.tplName).toString();
 
-        this.outDir = execRoot + '/' + args[1].replace(/\/$/, '');
+        this.outDir = execRoot + DS + args[1].replace(/\/$/, '');
         if (!fs.existsSync(this.outDir)) {
             console.log('OutDir `' + this.outDir + '` NOT FOUND!');
             process.exit();	
         }
-        this.outName.clear = this.outDir + '/' +  this.tplName.replace('.tpl', '.js');
+        this.outName.clear = this.outDir + DS +  this.tplName.replace('.tpl', '.js');
         this.outName.min = this.outName.clear.replace('.js', '.min.js');        
         
         //console.log("[DEBUG]outDir OK");
         
         //check vars.json
-        this.varFile = this.baseDir + '/vars.json';
+        this.varFile = this.baseDir + DS + 'vars.json';
         if (fs.existsSync(this.varFile)) {
             try {
                 this.vars = JSON.parse(fs.readFileSync(this.varFile));
@@ -85,14 +92,14 @@ Malta.prototype = {
                 all : function (tpl) {
                     var str;
                     return tpl.replace(reg.files, function (str, $1, $2) {
-                        var tmp = (fs.existsSync(self.baseDir + '/' + $2)) ? fs.readFileSync(self.baseDir + '/' + $2) : false;
+                        var tmp = (fs.existsSync(self.baseDir + DS + $2)) ? fs.readFileSync(self.baseDir + DS + $2) : false;
                         if (!tmp) {
-                            console.log('[ERROR]: file ' +  self.baseDir + ' / ' + $2 + ' NOT FOUND');
+                            console.log('[ERROR]: file ' +  self.baseDir + DS + $2 + ' NOT FOUND');
                             return $2;
                         } else {
                             //		console.log("\t" + $2);
                         } 
-                        if (checkTimes(self.baseDir + '/' + $2)) {
+                        if (checkTimes(self.baseDir + DS + $2)) {
                             self.update = true;
                         }
                         return $1 + tmp.toString().replace(/\n/g, "\n" + $1);// give back spaces to CODE
@@ -122,7 +129,7 @@ Malta.prototype = {
                 
                 //get time of target or no target found
                 self.updateTime = fs.existsSync(self.outName.clear) ? fs.statSync(self.outName.clear).mtime.getTime() : 0;
-                self.tplCnt = fs.readFileSync(self.baseDir + '/' + self.tplName).toString();
+                self.tplCnt = fs.readFileSync(self.baseDir + DS + self.tplName).toString();
                 try{
                     self.vars = fs.existsSync(self.varFile) ? JSON.parse(fs.readFileSync(self.varFile)) : {};
                 }catch(e){
@@ -131,7 +138,7 @@ Malta.prototype = {
                 }
 
                 // update template?
-                checkTimes(self.baseDir + '/' + self.tplName)
+                checkTimes(self.baseDir + DS + self.tplName)
                 ||
                 //checkTimes(self.outName.clear)||
                 checkTimes(self.varFile);
