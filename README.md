@@ -1,8 +1,6 @@
 Malta
 =====
 
-nodejs file builder
-
 Malta allows to built on the fly big files editing its parts in separated files and assembling in one following a main template file.  
 As You start Malta you can start editing every file involved and the resulting file will be updated on the fly, and if it's javascript,
  you'll find even the minified version in the output folder.
@@ -17,7 +15,7 @@ usage
     malta templateFile outDirectory
 
 - **templateFile**  
-is the base template used to build the big ones. That file must be relative to path from where  You start Malta.  
+is the base template used as base file. That file must be relative to the path from where You start Malta.  
   
 - **outDirectory**  
 is the folder where the output files will be written in. That path must be relative to path from  where You start Malta.  
@@ -39,7 +37,7 @@ Malta uses two kind of placeholders, to be used in the main template or in any f
 wired vars
 ----------
 
-There are some placeholders that cen be used within any involved file:  
+There are some placeholders that can be used within any involved file:  
 
 - \_\_TIME\_\_ : the HH : MM : SS build time
 - \_\_DATE\_\_ : the D / M / YYYY build date   
@@ -98,7 +96,7 @@ and least but not last **vars.json** :
      malta myproject/myfile.tpl myproject/out
 in a while Malta will confirm the first creation of _myfile.js_ and _myfile.min.js_ in the _out/_ folder.  
 <br />
-This is the not minified code :  
+The _myfile.js_ will look like:  
 
     /**
     Name : myFabulousProject
