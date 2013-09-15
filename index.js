@@ -15,9 +15,10 @@ var fs = require("fs"),
     args = process.argv.splice(2),
 
     // get package info
-    packageInfo = fs.existsSync('./package.json') ? require('./package.json') : {},
+    packageInfo = fs.existsSync(__dirname + '/package.json') ? require(__dirname + '/package.json') : {},
 
     DS = '/';
+
 
 
 //main object
