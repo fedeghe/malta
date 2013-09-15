@@ -15,7 +15,7 @@ usage
     malta templateFile outDirectory
 
 - **templateFile**  
-is the base template used as base file. That file must be relative to the path from where You start Malta.  
+is the base template used as base file. That file must be relative to the path from where You start Malta. Note that the extension will be inherited by output files.
   
 - **outDirectory**  
 is the folder where the output files will be written in. That path must be relative to path from  where You start Malta.  
@@ -49,7 +49,7 @@ foo sample
 
 Supposing in `~/myproject` we have  
 
-    myfile.tpl
+    myfile.js
     vars.json
     out/
     src/
@@ -58,8 +58,8 @@ Supposing in `~/myproject` we have
        |- b.js
 
 <br />
-**myfile.tpl** :
-
+**myfile.js** :
+    
     /**
     Name : $name$
     Author: $author$
@@ -93,10 +93,10 @@ and least but not last **vars.json** :
 <br />
 **Now** from ~ execute:  
 
-     malta myproject/myfile.tpl myproject/out
-in a while Malta will confirm the first creation of _myfile.js_ and _myfile.min.js_ in the _out/_ folder.  
+     malta myproject/myfile.js myproject/out
+in a while Malta will confirm the first creation of _myproject/out/myfile.js_ and _myproject/out/myfile.min.js_.  
 <br />
-The _myfile.js_ will look like:  
+The _myproject/out/myfile.js_ will look like:  
 
     /**
     Name : myFabulousProject
@@ -114,6 +114,6 @@ The _myfile.js_ will look like:
         hello('Federico'), hello('Federico');
     }();
 
-Let Malta run and try editing the _myproject.tpl_ or the _vars.json_ or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c
+Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.json_ or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c
  
  *Enjoy Malta*

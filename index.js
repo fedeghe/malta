@@ -6,6 +6,7 @@
  */
 var fs = require("fs"),
     uglify = require("uglify-js"),
+    path = require("path"),
 
     //path from where Malta is started
     execRoot = process.cwd();
@@ -47,7 +48,7 @@ Malta.prototype = {
         
         tmp = args[0].split('/');
         this.tplName = tmp.pop();
-        this.baseDir = execRoot + DS + tmp.join(DS);
+        this.baseDir = path.resolve(execRoot + DS + tmp.join(DS));
         
         if (!fs.existsSync(this.baseDir + DS + this.tplName)) {
             console.log('Template `' + this.baseDir + DS + this.tplName + '` NOT FOUND!');
@@ -56,15 +57,24 @@ Malta.prototype = {
         
         this.tplCnt = fs.readFileSync(this.baseDir + DS + this.tplName).toString();
 
-        this.outDir = execRoot + DS + args[1].replace(/\/$/, '');
+        this.outDir = path.resolve(execRoot + DS + args[1].replace(/\/$/, ''));
+
         if (!fs.existsSync(this.outDir)) {
             console.log('OutDir `' + this.outDir + '` NOT FOUND!');
             process.exit();	
         }
-        this.outName.clear = this.outDir + DS +  this.tplName.replace('.tpl', '.js');
-        this.outName.min = this.outName.clear.replace('.js', '.min.js');        
+
+
+        if (this.baseDir + "" == this.outDir + "") {
+            console.log('[ERROR] Output and template directories coincide. Malta won`t overwrite your template');
+            process.exit();
+        }
         
-        //console.log("[DEBUG]outDir OK");
+
+        tmp = this.tplName.split('.').pop();
+        this.outName.clear = this.outDir + DS +  this.tplName;//.replace('.tpl', '.js');
+        this.outName.min = this.outName.clear.replace('.' + tmp, '.min.' + tmp);        
+        
         
         //check vars.json
         this.varFile = this.baseDir + DS + 'vars.json';
@@ -96,8 +106,6 @@ Malta.prototype = {
                         if (!tmp) {
                             console.log('[ERROR]: file ' +  self.baseDir + DS + $2 + ' NOT FOUND');
                             return $2;
-                        } else {
-                            //		console.log("\t" + $2);
                         } 
                         if (checkTimes(self.baseDir + DS + $2)) {
                             self.update = true;
