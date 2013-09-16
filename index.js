@@ -102,7 +102,7 @@ Malta.prototype = {
 
         this.outName = {
             "clear" : this.outDir + DS +  this.tplName,
-            "min" : this.outName.clear.replace(tmp, '.min' + tmp)
+            "min" : (this.outDir + DS +  this.tplName).replace(tmp, '.min' + tmp)
         };
         
         //check vars.json
