@@ -201,8 +201,10 @@ Malta.prototype = {
 
                 if (self.update) {
                     //check for loops or too much digging
-                    !level && console.log('[ERROR] maximum nesting level reached!');
-                    
+                    if (level <= 0) {
+                        console.log('[ERROR] maximum nesting level reached!');
+                        process.exit();
+                    }
 
                     //
                     self.tplCnt = replace.vars(self.tplCnt)
@@ -239,6 +241,7 @@ Malta.prototype = {
                     //recover nesting level
                     level = self.MAX_NESTING;
                 }
+                
             };
         
         //call build every second
