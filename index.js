@@ -1,12 +1,10 @@
 #!/usr/bin/env node
 /**
- *
  *  Malta
- * 
  */
 var fs = require("fs"),
-    uglify = require("uglify-js"),
     path = require("path"),
+    uglify = require("uglify-js"),
 
     //path from where Malta is started
     execRoot = process.cwd();
@@ -17,54 +15,81 @@ var fs = require("fs"),
     // get package info
     packageInfo = fs.existsSync(__dirname + '/package.json') ? require(__dirname + '/package.json') : {},
 
+    //directory separator
     DS = '/';
-
-
 
 //main object
 function Malta() {}
 
 Malta.prototype = {
+
+    // Malta will dig for placeholder until the tenth level, that protect even from loops
+    MAX_NESTING : 10,
+    
+    //get package name and version
     name : 'name' in packageInfo ? packageInfo.name : 'Malta',
     version : 'version' in packageInfo ? packageInfo.version : 'undefined',
+
+    //var register from vars.json or {}
     vars : {},
+    varPath : '',
+
     tplName : '',
-    baseDir : '',
-    tplDir : '',
+    tplPath : '',
     tplCnt : '',
+
+    baseDir : '',
+    
     outDir : '',
-    outName : {"clear" : "", "min" : ""},
-    varFile : '',
+    outName : {},
+    
+
     lastEditedFile : false,
     update : true,
     updateTime : 0,
-    
+
+    /**
+     * Checks parameters value
+     * @param  [Array] a parameters 
+     * @return chain
+     */
     check : function (a) {
-        var tmp;
+        var tmp,
+            argTemplate,
+            argOutDir;
         if (a.length < 2) {
             console.log("\nUsage : malta [templatefile] [outdir]");
             console.log("\n")
             process.exit();
         }
+
+        //template and outdir params
+        argTemplate = args[0];
+        argOutDir = args[1];
         
-        tmp = args[0].split('/');
-        this.tplName = tmp.pop();
-        this.baseDir = path.resolve(execRoot + DS + tmp.join(DS));
+
+
+        this.tplName = path.basename(argTemplate);
+        this.tplPath = path.resolve(execRoot, argTemplate);
+        this.baseDir = path.dirname(this.tplPath);
+
+
         
-        if (!fs.existsSync(this.baseDir + DS + this.tplName)) {
-            console.log('Template `' + this.baseDir + DS + this.tplName + '` NOT FOUND!');
+        if (!fs.existsSync(this.tplPath)) {
+            console.log('Template `' + this.tplPath + '` NOT FOUND!');
             process.exit();	
         }
         
-        this.tplCnt = fs.readFileSync(this.baseDir + DS + this.tplName).toString();
+        this.tplCnt = fs.readFileSync(this.tplPath).toString();
+        this.outDir = path.resolve(execRoot, argOutDir);
 
-        this.outDir = path.resolve(execRoot + DS + args[1].replace(/\/$/, ''));
+
+
 
         if (!fs.existsSync(this.outDir)) {
             console.log('OutDir `' + this.outDir + '` NOT FOUND!');
             process.exit();	
         }
-
 
         if (this.baseDir + "" == this.outDir + "") {
             console.log('[ERROR] Output and template directories coincide. Malta won`t overwrite your template');
@@ -72,33 +97,49 @@ Malta.prototype = {
         }
         
 
-        tmp = this.tplName.split('.').pop();
-        this.outName.clear = this.outDir + DS +  this.tplName;//.replace('.tpl', '.js');
-        this.outName.min = this.outName.clear.replace('.' + tmp, '.min.' + tmp);        
-        
+
+        tmp = path.extname(this.tplName);
+
+        this.outName = {
+            "clear" : this.outDir + DS +  this.tplName,
+            "min" : this.outName.clear.replace(tmp, '.min' + tmp)
+        };
         
         //check vars.json
-        this.varFile = this.baseDir + DS + 'vars.json';
-        if (fs.existsSync(this.varFile)) {
+        this.varPath = this.baseDir + DS + 'vars.json';
+
+        if (fs.existsSync(this.varPath)) {
             try {
-                this.vars = JSON.parse(fs.readFileSync(this.varFile));
-            } catch (e){
+                this.vars = JSON.parse(fs.readFileSync(this.varPath));
+            } catch (e) {
                 this.vars = {};
             }
-        }else{
-            console.log('No config file found ' +  this.varFile);
+        } else {
+            console.log('[INFO] No config file found ' +  this.varPath);
         }
+        
+
+        // params validated 
+        //chain for run
         return this;
     },
     
     run : function () {
         var self = this,
-            level = 10,
+
+            //recover nesting level
+            level = self.MAX_NESTING,
+
+            //regexp for files and vars
             reg = {
                 files : new RegExp('(.*)\\\$\\\$([A-z0-9-_/.]*)\\\$\\\$', 'g'),
                 vars : new RegExp('\\\$([A-z0-9-_/.]*)\\\$', 'g')
             },
+
+            //date factory
             date = function () { return new Date(); },
+
+            //replacers functions
             replace = {
                 all : function (tpl) {
                     var str;
@@ -126,6 +167,7 @@ Malta.prototype = {
                 }
             },
 
+
             checkTimes  = function (f1) {
                 var res = fs.existsSync(f1) && fs.statSync(f1).mtime.getTime() > self.updateTime ;
                 res && (self.lastEditedFile = f1);
@@ -140,9 +182,9 @@ Malta.prototype = {
                 self.updateTime = fs.existsSync(self.outName.clear) ? fs.statSync(self.outName.clear).mtime.getTime() : 0;
                 self.tplCnt = fs.readFileSync(self.baseDir + DS + self.tplName).toString();
                 try{
-                    self.vars = fs.existsSync(self.varFile) ? JSON.parse(fs.readFileSync(self.varFile)) : {};
+                    self.vars = fs.existsSync(self.varPath) ? JSON.parse(fs.readFileSync(self.varPath)) : {};
                 }catch(e){
-                    console.log('[ERROR] parsing ' + varFile);
+                    console.log('[ERROR] parsing ' + self.varPath);
                     self.vars = {};
                 }
 
@@ -150,56 +192,64 @@ Malta.prototype = {
                 checkTimes(self.baseDir + DS + self.tplName)
                 ||
                 //checkTimes(self.outName.clear)||
-                checkTimes(self.varFile);
-                
-                
+                checkTimes(self.varPath);
+                    
                 while (level-- && self.tplCnt.match(reg.files)) {
                     self.tplCnt = replace.all(self.tplCnt);
                 }
 
-                //check for loops or too much digging
-                !level && console.log('[ERROR] maximum nesting level reached!');
-                
-                self.tplCnt = replace.vars(self.tplCnt)
-                    .replace(/__TIME__/g, date().getHours() + ':' + date().getMinutes() + ':' + date().getSeconds())
-                    .replace(/__DATE__/g, date().getDate() + '/' + (date().getMonth() + 1) + '/' + date().getFullYear())
-                    .replace(/__YEAR__/g, date().getFullYear());
-                
-                // update ?
-                self.update && fs.writeFile(self.outName.clear, self.tplCnt, function(err) {
-                    var d = date(),
-                        data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
-                        msg = '[' + data + '] created ' + self.outName.clear;
 
-                    if (self.outName.clear.split('.').pop() === 'js') {
-                        try {
-                            fs.writeFile(self.outName.min, uglify.minify(self.outName.clear).code, function(err) {
-                                if (!err) {
-                                    msg += " and " + self.outName.min;
-                                }
-                                console.log(msg);	
-                            });
-                        } catch(e) {
-                            console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+                if (self.update) {
+                    //check for loops or too much digging
+                    !level && console.log('[ERROR] maximum nesting level reached!');
+                    
+
+                    //
+                    self.tplCnt = replace.vars(self.tplCnt)
+                        .replace(/__TIME__/g, date().getHours() + ':' + date().getMinutes() + ':' + date().getSeconds())
+                        .replace(/__DATE__/g, date().getDate() + '/' + (date().getMonth() + 1) + '/' + date().getFullYear())
+                        .replace(/__YEAR__/g, date().getFullYear());
+                    
+                    // update ?
+                    fs.writeFile(self.outName.clear, self.tplCnt, function(err) {
+                        var d = date(),
+                            data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
+                            msg = '[' + data + '] created ' + self.outName.clear;
+
+                        // if has js extension use uglify-js to get even the minified version
+                        if (self.outName.clear.match(/\.js$/)) {
+                            try {
+                                fs.writeFile(self.outName.min, uglify.minify(self.outName.clear).code, function(err) {
+                                    if (!err) {
+                                        msg += " and " + self.outName.min;
+                                    }
+                                    console.log(msg);	
+                                });
+                            } catch(e) {
+                                console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+                            }
+                        } else {
+                            console.log(msg);
                         }
-                    } else {
-                        console.log(msg);
-                    }
-                });
-                
-                //reset update flag
-                self.update = false;
-                
-                //recover nesting level
-                level = 10;
+                    });
+                    
+                    //reset update flag
+                    self.update = false;
+                    
+                    //recover nesting level
+                    level = self.MAX_NESTING;
+                }
             };
-            
+        
+        //call build every second
         setInterval(function () {build(); }, 1000);
+
+        // Malta has started
         console.log(self.name + "@" + self.version + " running");
     }
 };
 
-// start
+// Start Malta
 (new Malta()).check(args).run();
 
 
