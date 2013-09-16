@@ -15,10 +15,10 @@ usage
     malta templateFile outDirectory
 
 - **templateFile**  
-is the base template used as base file. That file must be relative to the path from where You start Malta. Note that the extension will be inherited by output files.
+is the base template used as base file. Note that the extension will be inherited by output files.
   
 - **outDirectory**  
-is the folder where the output files will be written in. That path must be relative to path from  where You start Malta.  
+is the folder where the output files will be written in.
 
 
 placeholders
