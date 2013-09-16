@@ -24,7 +24,7 @@ function Malta() {}
 Malta.prototype = {
 
     // Malta will dig for placeholder until the tenth level, that protect even from loops
-    MAX_NESTING : 10,
+    MAX_NESTING : 100,
     
     //get package name and version
     name : 'name' in packageInfo ? packageInfo.name : 'Malta',
@@ -178,6 +178,8 @@ Malta.prototype = {
             
             build = function () {
                 
+                level = self.MAX_NESTING;
+
                 //get time of target or no target found
                 self.updateTime = fs.existsSync(self.outName.clear) ? fs.statSync(self.outName.clear).mtime.getTime() : 0;
                 self.tplCnt = fs.readFileSync(self.baseDir + DS + self.tplName).toString();
@@ -191,9 +193,9 @@ Malta.prototype = {
                 // update template?
                 checkTimes(self.baseDir + DS + self.tplName)
                 ||
-                //checkTimes(self.outName.clear)||
                 checkTimes(self.varPath);
-                    
+
+
                 while (level-- && self.tplCnt.match(reg.files)) {
                     self.tplCnt = replace.all(self.tplCnt);
                 }
