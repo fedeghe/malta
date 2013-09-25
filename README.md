@@ -32,7 +32,13 @@ Malta uses two kind of placeholders, to be used in the main template or in any f
 - **$varname$**  
   _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder  
 
-**Hint** : to avoid loops Malta stops digging at the tenth nesting level.
+hints
+-----
+
+- minified files **really** slow down the parsing, so the best thing is to avoid the inclusion of minified/packed files.
+
+- to avoid loops Malta stops digging at the tenth nesting level.
+
 
 wired vars
 ----------
