@@ -7,7 +7,7 @@ var fs = require("fs"),
     uglify = require("uglify-js"),
 
     //path from where Malta is started
-    execRoot = process.cwd();
+    execRoot = process.cwd(),
 
     // commandline arguments array
     args = process.argv.splice(2),
