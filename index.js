@@ -315,7 +315,8 @@ Malta.prototype = {
      */
     start : function () {
         var self = this;
-        
+
+        console.log(self.name + ' v.' + self.version);        
         // if exists add vars.json to watched files
         self.varPath && (self.files[self.varPath] = self._utils.createEntry(self.varPath));
 
