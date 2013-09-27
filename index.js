@@ -1,14 +1,8 @@
+#!/usr/bin/env node
 /**
- *---------------*
- * Malta builder |
- *---------------*
- * 
- * @version : 0.0.6
- * @author : Federico Ghedina <fedeghe@gmail.com>
- * @description : live building daemon
+ *  Malta
  */
-// requires
-var fs  = require("fs"),
+var fs = require("fs"),
     path = require("path"),
     uglify = require("uglify-js"),
     
@@ -23,7 +17,7 @@ var fs  = require("fs"),
     
     //directory separator, linefeed, tab
     DS = '/',
-    NL = "\n\r",
+    NL = "\n",
     TAB = "\t";
 
 // constructor
@@ -130,9 +124,6 @@ Malta.prototype = {
         this.debug && console.log('Building');
 
         var self = this,
-
-            
-
             //updated tpl
             baseTplContent = self.files[self.tplPath].content,
             
@@ -426,3 +417,5 @@ Malta.prototype = {
 
 // start Malta
 new Malta().check(args).start();
+
+
