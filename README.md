@@ -50,6 +50,12 @@ There are some placeholders that can be used within any involved file:
 - \_\_YEAR\_\_ : the YYYY format build year
 
 
+changelog
+---------
+**0.0.9** fixed build on vars.json change
+**0.0.8** parse error thrown by uglify is catched and stops no more Malta
+
+
 foo sample
 ----------
 
