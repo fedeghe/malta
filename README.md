@@ -52,8 +52,9 @@ There are some placeholders that can be used within any involved file:
 
 changelog
 ---------
-**0.0.9** fixed build on vars.json change
-**0.0.8** parse error thrown by uglify is catched and stops no more Malta
+- **0.0.10** involved files count fixed
+- **0.0.9** fixed build on vars.json change
+- **0.0.8** parse error thrown by uglify is catched and stops no more Malta
 
 
 foo sample

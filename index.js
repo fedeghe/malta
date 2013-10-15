@@ -126,7 +126,7 @@ Malta.prototype = {
 	_build : function () {
 		this.debug && console.log('Building');
 		
-
+		this.involvedFiles = 1;
 
 		var self = this,
 
@@ -154,6 +154,7 @@ Malta.prototype = {
 						// file exists, and we got indentation (spaces &| tabs)			
 						var tmp = fs.readFileSync(self.baseDir + DS + $2);
 
+						self.involvedFiles += 1;
 						// give back indentation
 						return $1 + tmp.toString().replace(/\n/g, NL + $1);
 					});
@@ -168,6 +169,9 @@ Malta.prototype = {
 			start = self.date(),
 			end,
 			msg;
+
+
+
 
 		self.debug && console.dir(self.files);
 		
@@ -229,15 +233,15 @@ Malta.prototype = {
 			end = self.date();
 			msg += 'in ' + (end-start) + 'ms' + NL;
 			msg += '---------------------------' + NL;
+			self.involvedFiles += ~~self._hasVars();
 			msg += 'watching ' + self.involvedFiles + " files";
 			console.log(msg);
 			msg = '';
 			self.doBuild = false;
 			
-			self.involvedFiles = self._hasVars() ? 2 : 1;
+			
 		}
 	},
-
 
 
 	/*
@@ -282,7 +286,6 @@ Malta.prototype = {
 					
 					if (f) {
 						self.queue.push(self.baseDir + DS + f);
-						self.involvedFiles++;
 
 						self._checkNesting();
 						tmp = self._utils.createEntry(self.baseDir + DS + f);
@@ -419,7 +422,6 @@ Malta.prototype = {
 		if (fs.existsSync(this.varPath)) {
 			try {
 				this.vars = JSON.parse(fs.readFileSync(this.varPath));
-				this.involvedFiles++;
 			} catch (e) {
 				this.vars = {};
 			}
