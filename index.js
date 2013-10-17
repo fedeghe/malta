@@ -88,7 +88,7 @@ Malta.prototype = {
 	// basic string used to create regular expressions for
 	// finding file and variable placeholder
 	reg : {
-		files : '([\s\t]*)\\\$\\\$([A-z0-9-_/.]*)\\\$\\\$',
+		files : '(.*)\\\$\\\$([A-z0-9-_/.]*)\\\$\\\$',
 		vars : '\\\$([A-z0-9-_/.]*)\\\$'
 	},
 
@@ -124,7 +124,6 @@ Malta.prototype = {
 	 * @return {void}
 	 */
 	_build : function () {
-		this.debug && console.log('Building');
 		
 		this.involvedFiles = 1;
 
@@ -173,7 +172,7 @@ Malta.prototype = {
 
 
 
-		self.debug && console.dir(self.files);
+
 		
 
 
@@ -300,7 +299,6 @@ Malta.prototype = {
 			}
 		})(cnt + "");
 
-		this.debug && console.log('parsed');        
 	},
 
 
@@ -334,7 +332,6 @@ Malta.prototype = {
 				}
 			}
 			self.doBuild && self._build();
-			this.debug && console.log('watching');
 		}
 		//every second, if nothing is building, watch files
 		setInterval(function () {

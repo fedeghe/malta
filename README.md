@@ -27,7 +27,7 @@ placeholders
 Malta uses two kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **$$filePath$$**  
-  _filepath_ is the path to the desired file relative to the template directory  
+  _filepath_ is the path to the desired file relative to the template directory 
 
 - **$varname$**  
   _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder  
@@ -35,6 +35,8 @@ Malta uses two kind of placeholders, to be used in the main template or in any f
 hints
 -----
 
+- **absolutely** use only spaces and tabs before file placeholders
+ 
 - minified files **really** slow down the parsing, so the best thing is to avoid the inclusion of minified/packed files.
 
 - to avoid loops Malta stops digging at the tenth nesting level.
@@ -52,6 +54,7 @@ There are some placeholders that can be used within any involved file:
 
 changelog
 ---------
+- **0.0.11** fixed inclusion indentation
 - **0.0.10** involved files count fixed
 - **0.0.9** fixed build on vars.json change
 - **0.0.8** parse error thrown by uglify is catched and stops no more Malta
