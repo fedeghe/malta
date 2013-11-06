@@ -147,9 +147,6 @@ Malta.prototype = {
 							return '/*### ' + $2 + ' ###*/';
 						}
 
-						//
-						
-
 						// file exists, and we got indentation (spaces &| tabs)			
 						var tmp = fs.readFileSync(self.baseDir + DS + $2);
 
@@ -169,8 +166,7 @@ Malta.prototype = {
 			end,
 			msg;
 
-
-
+		self.involvedFiles += ~~self._hasVars();
 
 
 		
@@ -185,7 +181,10 @@ Malta.prototype = {
 		baseTplContent = replace.vars(baseTplContent)
 			.replace(/__TIME__/g, self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds())
 			.replace(/__DATE__/g, self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear())
-			.replace(/__YEAR__/g, self.date().getFullYear());
+			.replace(/__YEAR__/g, self.date().getFullYear())
+			.replace(/__FILES__/g, self.involvedFiles)
+			.replace(/__NAME__/g, self.name)
+			.replace(/__VERSION__/g, self.version)
 
 
 		// write
@@ -232,7 +231,6 @@ Malta.prototype = {
 			end = self.date();
 			msg += 'in ' + (end-start) + 'ms' + NL;
 			msg += '---------------------------' + NL;
-			self.involvedFiles += ~~self._hasVars();
 			msg += 'watching ' + self.involvedFiles + " files";
 			console.log(msg);
 			msg = '';

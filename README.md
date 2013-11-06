@@ -7,12 +7,20 @@ As You start Malta you can start editing every file involved and the resulting f
 
 installation
 ------------
-    [sudo] npm install malta [-g]
+
+If You do not have node installed yet, run:
+
+    $ curl http://npmjs.org/install.sh | sh 
+	
+then install malta running:
+
+    $ [sudo] npm install malta [-g]
 
 
 usage
 -----
-    malta templateFile outDirectory
+
+    $ malta templateFile outDirectory
 
 - **templateFile**  
 is the base template used as base file. Note that the extension will be inherited by output files.
@@ -27,7 +35,7 @@ placeholders
 Malta uses two kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **$$filePath$$**  
-  _filepath_ is the path to the desired file relative to the template directory 
+  _filepath_ is the path to the desired file relative to the templateFile directory 
 
 - **$varname$**  
   _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder  
@@ -49,11 +57,15 @@ There are some placeholders that can be used within any involved file:
 
 - \_\_TIME\_\_ : the HH : MM : SS build time
 - \_\_DATE\_\_ : the D / M / YYYY build date   
-- \_\_YEAR\_\_ : the YYYY format build year
+- \_\_YEAR\_\_ : the YYYY format build year  
+- \_\_FILESNUM\_\_ : the number of files glued togheter  
+- \_\_VERSION\_\_ : Malta version
 
 
 changelog
 ---------
+
+- **1.0** added \_\_FILESNUM\_\_, \_\_VERSION\_\_ to the placeholders builtin set
 - **0.0.11** fixed inclusion indentation
 - **0.0.10** involved files count fixed
 - **0.0.9** fixed build on vars.json change
