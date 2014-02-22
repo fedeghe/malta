@@ -65,6 +65,10 @@ There are some placeholders that can be used within any involved file:
 changelog
 ---------
 
+- **1.0.7** added support for .less files
+- **1.0.5** real path is included only for .xml .js .css files
+- **1.0.3** real path included just before every inclusion
+- **1.0.1** not found $vname$ placeholders are untouched
 - **1.0** added \_\_FILESNUM\_\_, \_\_VERSION\_\_ to the placeholders builtin set
 - **0.0.11** fixed inclusion indentation
 - **0.0.10** involved files count fixed

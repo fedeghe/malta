@@ -5,6 +5,7 @@
 var fs = require("fs"),
 	path = require("path"),
 	uglify = require("uglify-js"),
+	less = require("less"),
 	
 	//path from where Malta is started
 	execRoot = process.cwd(),
@@ -22,6 +23,7 @@ var fs = require("fs"),
 
 // constructor
 function Malta() {};
+
 
 //proto
 Malta.prototype = {
@@ -100,6 +102,18 @@ Malta.prototype = {
 	// time spend to build
 	t2b : 0,
 
+	comments : {
+		xml : "<!--\n%content%\n-->\n",
+		js : "/*\n%content%\n*/\n",
+		css : "/*\n%content%\n*/\n"
+	},
+
+	postParsers : {
+		less : {
+			parse : less.render,
+			outExt : 'css'
+		}
+	},
 
 	/**
 	 * Check if the upper limit of nested placeholder
@@ -125,6 +139,7 @@ Malta.prototype = {
 	 */
 	_build : function () {
 		
+		// for sure the tpl is involved
 		this.involvedFiles = 1;
 
 		var self = this,
@@ -148,28 +163,32 @@ Malta.prototype = {
 						}
 
 						// file exists, and we got indentation (spaces &| tabs)			
-						var tmp = fs.readFileSync(self.baseDir + DS + $2);
+						var tmp = fs.readFileSync(self.baseDir + DS + $2).toString(),
+							ext = self._utils.getFileExtension($2);
 
+						// maybe add path tip in build just before file inclusion
+						if (ext in self.comments) {
+							tmp = self.comments[ext].replace('%content%', "[MALTA] " + self.baseDir + DS + $2) + tmp;
+						}
 						self.involvedFiles += 1;
 						// give back indentation
-						return $1 + tmp.toString().replace(/\n/g, NL + $1);
+						return $1 + tmp.replace(/\n/g, NL + $1);
 					});
 				},
 				vars : function (tpl) {
 					var str;
 					return tpl.replace(new RegExp(self.reg.vars, 'g'), function (str, $1) {
-						return ($1 in self.vars) ? self.vars[$1] : $1;
+						return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
 					});
 				}
 			},
 			start = self.date(),
 			end,
-			msg;
+			msg,
+			ext;
 
+		// if hasVars the add the file to the count
 		self.involvedFiles += ~~self._hasVars();
-
-
-		
 
 
 		// main
@@ -187,37 +206,38 @@ Malta.prototype = {
 			.replace(/__VERSION__/g, self.version)
 
 
-		// write
-		fs.writeFile(self.outName.clear, baseTplContent, function(err) {
-			var d = self.date(),
-				data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds();
+		// write function 
+		function write (cnt, fname) {
+			fs.writeFile(fname, cnt, function(err) {
+				var d = self.date(),
+					data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds();
 
-			msg = '[' + data + ']' + NL +'wrote ' + self.outName.clear + ' ('+ getSize(self.outName.clear) + ' KB)' + NL;
+				msg = '[' + data + ']' + NL +'wrote ' + fname + ' ('+ getSize(fname) + ' KB)' + NL;
 
-			// if has js extension use uglify-js to get even the minified version
-			if (self.outName.clear.match(/\.js$/)) {
-				try {
-					fs.writeFile(self.outName.min, uglify.minify(self.outName.clear).code, function(err) {
-						if (!err) {
-							msg += 'wrote ' + self.outName.min + ' ('+ getSize(self.outName.min) + ' KB)' + NL;
-						}else{
-							console.log('[ERROR] uglify-js says:' );
-							console.dir(err);
-							process.exit();
-						}
+				// if has js extension use uglify-js to get even the minified version
+				if (self.outName.clear.match(/\.js$/)) {
+					try {
+						fs.writeFile(self.outName.min, uglify.minify(fname).code, function(err) {
+							if (!err) {
+								msg += 'wrote ' + self.outName.min + ' ('+ getSize(self.outName.min) + ' KB)' + NL;
+							}else{
+								console.log('[ERROR] uglify-js says:' );
+								console.dir(err);
+								process.exit();
+							}
+							warnAndUnlock();
+						});
+					} catch(e) {
+						console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+						console.log('[WARN: Minified version skipped]');
 						warnAndUnlock();
-					});
-				} catch(e) {
-					console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
-					console.log('[WARN: Minified version skipped]');
+					}
+				} else {
+					end = self.date();
 					warnAndUnlock();
 				}
-			} else {
-				end = self.date();
-				warnAndUnlock();
-			}
-			
-		});
+			});
+		}
 
 		// get size of file
 		function getSize(path) {
@@ -235,19 +255,30 @@ Malta.prototype = {
 			console.log(msg);
 			msg = '';
 			self.doBuild = false;
-			
-			
 		}
+
+		// do write
+		ext = self._utils.getFileExtension(self.outName.clear);
+
+		// get a local copy for the original outname 
+		var fname = self.outName.clear;
+		if (ext in self.postParsers) {
+			// maybe the new filenaew has a different extension
+			if ('outExt' in self.postParsers[ext]) {
+				fname = self.outName.clear.replace(new RegExp('.' + ext + '$'), '.' + self.postParsers[ext].outExt);
+			}
+			self.postParsers[ext].parse(baseTplContent, function (err, out) {
+				if (err) {
+					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+					warnAndUnlock();
+				}
+				write(out, fname);
+			});
+		} else {
+			write(baseTplContent, fname);
+		}
+
 	},
-
-
-	/*
-		_parse (file):
-		//> popolo files con il loro content e time,
-		//  aggiungendo se non presenti
-		//  e aggiornando se il time é diverso dal precedente
-		//  
-	*/
 
 	/**
 	 * [_parse description]
@@ -323,7 +354,6 @@ Malta.prototype = {
 					if (f === self.varPath) {
 						//update vars
 						self.vars = JSON.parse(fs.readFileSync(self.varPath));
-
 					}
 					
 					self._parse(f);
@@ -373,8 +403,8 @@ Malta.prototype = {
 			argOutDir;
 
 		if (a.length < 2) {
-			console.log(NL + 'Usage : malta [templatefile] [outdir]');
-			console.log(NL)
+			console.log(this.name + ' v.' + this.version);  
+			console.log(NL + 'Usage : malta [templatefile] [outdir]' + NL);
 			process.exit();
 		}
 
@@ -443,6 +473,9 @@ Malta.prototype = {
 				content : fs.readFileSync(path).toString(),
 				time : fs.statSync(path).mtime.getTime()
 			};
+		},
+		getFileExtension : function (fname) {
+			return fname.split('.').pop();
 		},
 		getFileTime : function (path) {
 			return fs.existsSync(path) && fs.statSync(path).mtime.getTime();

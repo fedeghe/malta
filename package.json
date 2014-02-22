@@ -1,10 +1,12 @@
 {
   "name": "malta",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "description": "lightning builder allows to compose on the fly and update packed and full coded huge javascript files, edit its parts as files, splitted and glued as You need",
   "main": "index.js",
   "dependencies": {
-    "uglify-js": "~2.4.0"
+    "uglify-js": "~2.4.0",
+    "less": "~1.6.3",
+    "css-condense": "~0.0.6"
   },
   "devDependencies": {},
   "scripts": {
