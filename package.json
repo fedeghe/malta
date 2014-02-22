@@ -5,8 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "uglify-js": "~2.4.0",
-    "less": "~1.6.3",
-    "css-condense": "~0.0.6"
+    "less": "~1.6.3"
   },
   "devDependencies": {},
   "scripts": {
