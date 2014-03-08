@@ -64,7 +64,10 @@ There are some placeholders that can be used within any involved file:
 
 changelog
 ---------
-
+- **1.0.11** fixed deadly circular inclusion check; update only modified files
+- **1.0.10** xml files indentation for inner files removed
+- **1.0.9** some minor fixes on messages
+- **1.0.8** hint paths changed
 - **1.0.7** added support for .less files
 - **1.0.5** real path is included only for .xml .js .css files
 - **1.0.3** real path included just before every inclusion
