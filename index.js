@@ -291,6 +291,7 @@ Malta.prototype = {
 
 					try {
 						minif = uglify.minify(fname).code;
+						// minif = self._utils.clean(cnt)
 						fs.writeFile(self.outName.min, minif, function(err) {
 							if (err == null) {
 								msg += 'wrote ' + self.outName.min + ' ('+ getSize(self.outName.min) + ')' + NL;
@@ -329,7 +330,7 @@ Malta.prototype = {
 			msg += 'in ' + (end-start) + 'ms' + NL;
 			msg += (new Array(tmp.length + 1)).join('-') + NL;
 			msg += tmp + NL;
-			msg += (new Array(tmp.length + 1)).join('=') + NL + NL;
+			msg += (new Array(tmp.length + 1)).join('=') + NL;
 			console.log(msg);
 			msg = '';
 			self.doBuild = false;
@@ -390,22 +391,36 @@ Malta.prototype = {
 		// 
 		(function dig(c){
 			
-			var els = c.match(new RegExp(self.reg.files, 'g'));
+			// look for files placeholders
+			// 
+			var els = c.match(new RegExp(self.reg.files, 'gm'));
+
 			if (els) {
+				// loop over all found
+				//
 				for (var i = 0, l = els.length; i < l; i++) {
+
 					var p  = els[i].match(new RegExp(self.reg.files)),
 						f = p[2],
 						tmp;
-					
+
 					if (f) {
 						self.queue.push(self.baseDir + DS + f);
 
+						// check for circular inclusion
+						// 
 						self._checkInvolved();
+
 						tmp = self._utils.createEntry(self.baseDir + DS + f);
 						
 						if (tmp) {
-							
+
+							// store entry
+							// 
 							self.files[self.baseDir + DS + f] = tmp;
+
+							// recur to look for inner inclusions
+							// 
 							dig(self.files[self.baseDir + DS + f].content + "");
 						}
 					}
@@ -598,7 +613,19 @@ Malta.prototype = {
 	            r.push(a[i]);
 	        }
 	        return r;
-		} 
+		},
+
+		// experimenting some kind of dummy local minifier
+		//
+		clean : function (s) {
+			// inline
+			s = s.replace(/^[\s\t]*\/\/.*(?=[\n\r])/gm, '');
+
+			// multiline
+			// s = s.replace(/\/\*[^\*\/]*\*\//gm, '');
+
+			return s;
+		}
 
 	}
 
