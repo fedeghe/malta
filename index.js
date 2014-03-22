@@ -21,7 +21,7 @@ var fs = require("fs"),
 	
 	// directory separator, linefeed, tab
 	// 
-	DS = '/',
+	DS = path.sep,
 	NL = "\n",
 	TAB = "\t";
 
@@ -40,6 +40,7 @@ Malta.prototype = {
 	// 
 	name : 'name' in packageInfo ? packageInfo.name : 'Malta',
 	version : 'version' in packageInfo ? packageInfo.version : 'x.y.z',
+	buildnumber : null,
 	
 	// path for the vars.json
 	// 
@@ -126,7 +127,8 @@ Malta.prototype = {
 	comments : {
 		xml : "<!--\n%content%\n-->\n",
 		js : "/*\n%content%\n*/\n",
-		css : "/*\n%content%\n*/\n"
+		css : "/*\n%content%\n*/\n",
+		less : "/*\n%content%\n*/\n"
 	},
 
 	postParsers : {
@@ -180,6 +182,8 @@ Malta.prototype = {
 		// for sure the tpl is involved
 		// 
 		this.involvedFiles = 1;
+
+		this._signBuildNumber();
 
 		var self = this,
 
@@ -272,6 +276,7 @@ Malta.prototype = {
 			.replace(/__FILES__/g, self.involvedFiles)
 			.replace(/__NAME__/g, self.name)
 			.replace(/__VERSION__/g, self.version)
+			.replace(/__BUILDNUMBER__/g, self.buildnumber);
 
 
 		// write function 
@@ -282,7 +287,8 @@ Malta.prototype = {
 					data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
 					minif;
 
-				msg = '[' + data + ']' + NL +'wrote ' + fname + ' ('+ getSize(fname) + ')' + NL;
+				msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
+				msg += 'wrote ' + fname + ' ('+ getSize(fname) + ')' + NL;
 
 				// if has js extension use uglify-js to
 				// get even the minified version
@@ -363,6 +369,19 @@ Malta.prototype = {
 		// chain
 		//
 		return this;
+	},
+
+
+	_signBuildNumber : function () {
+		var fname = this.baseDir + DS + this.tplName.replace(/\./, '') + '.buildNum';
+			buildno = 0;
+		if (!fs.existsSync(fname)) {
+			fs.writeFileSync(fname, ++buildno);
+		} else {
+			buildno = parseInt(fs.readFileSync(fname), 10) + 1;
+		}
+		this.buildnumber = buildno;
+		fs.writeFileSync(fname, buildno);
 	},
 
 	/**

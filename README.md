@@ -60,10 +60,14 @@ There are some placeholders that can be used within any involved file:
 - \_\_YEAR\_\_ : the YYYY format build year  
 - \_\_FILESNUM\_\_ : the number of files glued togheter  
 - \_\_VERSION\_\_ : Malta version
+- \_\_BUILDNUMBER\_\_ : build number
 
 
 changelog
 ---------
+- **1.0.14** some fixes and refactor
+- **1.0.13** \_\_BUILDNUMBER\_\_ predefined build number var (file based)
+- **1.0.12** fixed path sep for win####
 - **1.0.11** fixed deadly circular inclusion check; update only modified files
 - **1.0.10** xml files indentation for inner files removed
 - **1.0.9** some minor fixes on messages
