@@ -229,7 +229,7 @@ Malta.prototype = {
 						// maybe add path tip in build just before file inclusion
 						// 
 						if (ext in self.comments) {
-							tmp = self.comments[ext].replace('%content%', "[MALTA] " + DS + $2) + tmp;
+							tmp = self.comments[ext].replace('%content%', "[MALTA] " + $2) + tmp;
 						}
 
 						// add a unit to the involved files count

@@ -65,6 +65,7 @@ There are some placeholders that can be used within any involved file:
 
 changelog
 ---------
+- **1.0.15** removed beginning os specific slash in inclusion comments
 - **1.0.14** some fixes and refactor
 - **1.0.13** \_\_BUILDNUMBER\_\_ predefined build number var (file based)
 - **1.0.12** fixed path sep for win####
