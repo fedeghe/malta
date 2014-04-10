@@ -21,13 +21,26 @@ usage
 -----
 
     $ malta templateFile outDirectory
-
+    	
 - **templateFile**  
 is the base template used as base file. Note that the extension will be inherited by output files.
   
 - **outDirectory**  
 is the folder where the output files will be written in.
 
+Seen that most of times it would be handy to engage many builds at once it`s possible to start Malta as follows: 
+
+	$ malta list.json
+	
+where *list.json* is a file containing one or more pairs, that commits Malta to build more than one file in one shot:
+
+- **list.json** :
+    
+	    {
+    		"common.less" : "../../public_html/css",
+    		"common.js" : "../../public_html/js",
+    		...
+    	}
 
 placeholders
 ------------
@@ -65,6 +78,7 @@ There are some placeholders that can be used within any involved file:
 
 changelog
 ---------
+- **1.0.16** accepts a json to execute multiple builds with one call
 - **1.0.15** removed beginning os specific slash in inclusion comments
 - **1.0.14** some fixes and refactor
 - **1.0.13** \_\_BUILDNUMBER\_\_ predefined build number var (file based)

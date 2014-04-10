@@ -6,6 +6,7 @@ var fs = require("fs"),
 	path = require("path"),
 	uglify = require("uglify-js"),
 	less = require("less"),
+	child_process = require('child_process'),
 	
 	// path from where Malta is started
 	// 
@@ -23,74 +24,80 @@ var fs = require("fs"),
 	// 
 	DS = path.sep,
 	NL = "\n",
-	TAB = "\t";
+	TAB = "\t",
+	spin = ['-', '\\', '|', '/'],
+	spinnum = 0
+	goSpin = function (){
+		process.stdout.clearLine();
+		process.stdout.cursorTo(0);
+		spinnum = (spinnum + 1) % spin.length;
+		process.stdout.write(spin[spinnum]);
+	};
 
 // zebra constructor
 // 
-function Malta() {};
+function Malta() {
 
-// proto
-// 
-Malta.prototype = {
+
 	// security nesting level
 	// 
-	MAX_INVOLVED : 10000,
+	this.MAX_INVOLVED = 10000;
 	
 	// name and version from package json
 	// 
-	name : 'name' in packageInfo ? packageInfo.name : 'Malta',
-	version : 'version' in packageInfo ? packageInfo.version : 'x.y.z',
-	buildnumber : null,
+	this.name = 'name' in packageInfo ? packageInfo.name : 'Malta';
+	this.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
+	this.buildnumber = null;
 	
 	// path for the vars.json
 	// 
-	varPath : '',
+	this.varPath = '';
 
 	// register for the content of vars.json, if found
 	// 
-	vars : {},
+	this.vars = {};
 	
 	// basename for the base template, path and content
 	// 
-	tplName : '',
-	tplPath : '',       
-	tplCnt : '',
+	this.tplName = '';
+	this.tplPath = '';       
+	this.tplCnt = '';
 	
 	// base dir from where placeholder will start
 	// will be always equal to the base template folder
 	// 
-	baseDir : '',
+	this.baseDir = '';
 	
 	// output directory written files
 	// 
-	outDir : '',
+	this.outDir = '';
 
 	// names for out files
 	// 
-	outName : {},
+	this.outName = {};
 	
 	// to store the last involved file while parsing,
 	// used to have more info when an exception occours
 	// or is fired from Malta
 	// 
-	lastEditedFile : false,
+	this.lastEditedFile = false;
 	
 	// this is the container for all files involved
 	// items are as following
 	// path-of-file : {content: the-content-of-file, time: last-edit-time} 
 	// 
-	files : {},
+	this.files = {};
 	
 	// that array is filled when diggin the base template looking
 	// for file placeholders, and emptied at the end of digging
 	// used to show the list of found file placeholders when Malta
 	// suppose a circular inclusion
 	// 
-	queue : [],
+	this.queue = [];
 
 	// for sure the template
 	// 
-	involvedFiles : 1, 
+	this.involvedFiles = 1;
 
 	// every second the watch function loops over files literal 
 	// triggering the build as far as t least one file is updated
@@ -100,11 +107,31 @@ Malta.prototype = {
 	// value back to true, allowing watch to execute again time checks
 	// on files
 	// 
-	doBuild : true,
+	this.doBuild = true;
 	
 	// a flag for inner debug (used for development)
 	// 
-	debug : false,
+	this.debug = false;
+
+
+
+	// date function used to show elapsed time for creation,
+	// and eve for wired time placeholders
+	// __TIME__ , __DATE__ , __YEAR__
+	// 
+	this.date = function () { return new Date(); };
+
+	// time spend to build
+	// 
+	this.t2b = 0;
+
+};
+
+// proto
+// 
+Malta.prototype = {
+
+	started : false,
 
 	// basic string used to create regular expressions for
 	// finding file and variable placeholder
@@ -113,16 +140,6 @@ Malta.prototype = {
 		files : '(.*)\\\$\\\$([A-z0-9-_/.]+)\\\$\\\$',
 		vars : '\\\$([A-z0-9-_/.]+)\\\$'
 	},
-
-	// date function used to show elapsed time for creation,
-	// and eve for wired time placeholders
-	// __TIME__ , __DATE__ , __YEAR__
-	// 
-	date : function () { return new Date(); },
-
-	// time spend to build
-	// 
-	t2b : 0,
 
 	comments : {
 		xml : "<!--\n%content%\n-->\n",
@@ -136,6 +153,11 @@ Malta.prototype = {
 			parse : less.render,
 			outExt : 'css'
 		}
+	},
+
+	_stop : function () {
+		console.log('MALTA has stoppend' + NL);
+		process.exit();
 	},
 
 	/**
@@ -157,8 +179,7 @@ Malta.prototype = {
 			console.log('OOOOUCH: it seems like running a circular file inclusion]');
 			console.log(TAB + 'try to look at the following inclusion queue to spot it quickly:');
 			console.log(this.queue);
-			console.log('MALTA has stoppend' + NL);
-			process.exit();
+			this._stop();
 		}
 
 		// look for too many files limit
@@ -168,8 +189,7 @@ Malta.prototype = {
 			// notify limit reached and exit
 			// 
 			console.log('OUCH: it seems like trying to involve too many files : ' + this.queue.length + ' ]');
-			console.log('MALTA has stoppend' + NL);
-			process.exit();
+			this._stop();
 		}
 	},
 
@@ -221,6 +241,9 @@ Malta.prototype = {
 							// 
 							return '';
 						}
+
+						
+
 
 						// file exists, and we got indentation (spaces &| tabs)
 						// 	
@@ -516,7 +539,10 @@ Malta.prototype = {
 	start : function () {
 		var self = this;
 
-		console.log(self.name + ' v.' + self.version);
+		if (!(self.started)) {
+			console.log(self.name + ' v.' + self.version);
+			self.started = true;
+		}
 
 		// if exists add vars.json to watched files
 		// 
@@ -548,8 +574,9 @@ Malta.prototype = {
 
 		// template and outdir params
 		// 
-		argTemplate = args[0];
-		argOutDir = args[1];
+		argTemplate = a[0];
+		argOutDir = a[1];
+
 		
 		this.tplName = path.basename(argTemplate);
 		this.tplPath = path.resolve(execRoot, argTemplate);
@@ -652,5 +679,28 @@ Malta.prototype = {
 
 // start Malta
 // -----------------------------
-new Malta().check(args).start();
+
+if (args.length == 1) {
+
+	var runs = fs.existsSync(execRoot + '/' + args[0]) ? require(execRoot + '/' + args[0]) : {},
+		run;
+	for (run in runs) {
+		
+		var ls = child_process.spawn('malta', [run, runs[run]]);
+
+		ls.stdout.on('data', function (data) {
+			console.log(""+data);
+		});
+		/*
+		ls.stderr.on('data', function (data) {
+			console.log('stderr: ' + data);
+		});
+		ls.on('close', function (code) {
+			console.log('child process exited with code ' + code);
+		});*/
+		//new Malta().check([run, runs[run]]).start();
+	}
+} else {
+	new Malta().check(args).start();
+}
 // -----------------------------
