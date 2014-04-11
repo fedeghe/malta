@@ -167,9 +167,10 @@ Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.j
 
 <br/>
 Less and minification
-------------- 
+---------------------
 
-- In the special `js` files case (thanks to the **uglyfy-js** node package) will be even produced a _myfile.min.js_
+- In the special `js` files case (thanks to the **uglyfy-js** node package) will be even produced a _myfile.min.js_ ; something similar will happen when the template is a  `less` or `css` file.
+ 
 
 - If the templace has a `less` extension (thanks to the **less** node package) the result content will be parsed as less before being written
 
@@ -180,6 +181,7 @@ Less and minification
 
 Changelog
 ---------
+- **1.0.18** some refactors and corrections to console output
 - **1.0.17** automatically write even minified version for css files (even less originated)
 - **1.0.16** accepts a json to execute multiple builds with one call
 - **1.0.15** removed beginning os specific slash in inclusion comments

@@ -299,42 +299,75 @@ Malta.prototype = {
 		// write function 
 		// 
 		function write (cnt, fname) {
-			fs.writeFile(fname, cnt, function(err) {
-				var d = self.date(),
-					data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
-					minif;
 
-				msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
-				msg += 'wrote ' + fname + ' ('+ getSize(fname) + ')' + NL;
+			
+			// !!!
+			// 
+			ext = self._utils.getFileExtension(self.outName.clear);
 
-				// if has js extension use uglify_js-js to
-				// get even the minified version
-				// 
-				if (self.outName.clear.match(/\.js$/)) {
-
-					try {
-						minif = uglify_js.minify(fname).code;
-						// minif = self._utils.clean(cnt)
-						fs.writeFile(self.outName.min, minif, function(err) {
-							if (err == null) {
-								msg += 'wrote ' + self.outName.min + ' ('+ getSize(self.outName.min) + ')' + NL;
-							} else {
-								console.log('[ERROR] uglify_js-js says:' );
-								console.dir(err);
-								process.exit();
-							}
-							notifyAndUnlock();
-						});
-					} catch(e) {
-						console.log('[PARSE ERROR: uglify_js] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
-						console.log('[WARN: Minified version skipped]');
+			if (ext.match(/less/)) {
+				self.outName.clear = self.outName.clear.replace(/\.less$/, '.css');
+				self.outName.min = self.outName.min.replace(/\.less$/, '.css');
+				fname = self.outName.clear
+				ext = 'css';
+				less.render(cnt, function (err, newcnt) {
+					if (err) {
+						console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
 						notifyAndUnlock();
 					}
-				} else {
-					end = self.date();
-					notifyAndUnlock();
-				}
-			});
+					// update content to be written
+					cnt = newcnt;
+					do_write();
+				});
+			} else {
+				do_write();
+			}
+
+			function do_write() {
+				fs.writeFile(fname, cnt, function(err) {
+					var d = self.date(),
+						data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
+						minif;
+
+					msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
+					msg += 'wrote ' + fname + ' ('+ getSize(fname) + ')' + NL;
+
+					// if has js or css extension use uglification to get the minified version
+					// 
+					if (ext.match(/js|css/)) {
+
+						minif =  (ext == 'js') ? 
+							uglify_js.minify(fname).code
+							:
+							uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
+
+						try {
+							
+							fs.writeFile(self.outName.min, minif, function(err) {
+								if (err == null) {
+									msg += 'wrote ' + self.outName.min + ' ('+ getSize(self.outName.min) + ')' + NL;
+								} else {
+									console.log('[ERROR] uglify-js says:' );
+									console.dir(err);
+									process.exit();
+								}
+								notifyAndUnlock();
+							});
+						} catch(e) {
+							console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+							console.log('[WARN: Minified version skipped]');
+							notifyAndUnlock();
+						}
+
+					} else {
+
+						end = self.date();
+						notifyAndUnlock();
+
+					}
+				});
+			}
+		
 		}
 
 		// get size of file
@@ -361,67 +394,14 @@ Malta.prototype = {
 
 		// do write
 		// 
-		ext = self._utils.getFileExtension(self.outName.clear);
+		
 
 		// get a local copy for the original outname 
 		// 
 		var fname = self.outName.clear,
 			fnamemin;
 
-
-/*
-
-		postParsers : {
-		less : {
-			parse : less.render,
-			outExt : 'css'
-		}
-	},
-*/
-
-		if (ext.match(/css|less/)) {
-			fname = self.outName.clear.replace(new RegExp('.' + ext + '$'), '.css');
-			fnamemin = self.outName.clear.replace(new RegExp('.' + ext + '$'), '.min.css');
-			if (ext == 'less') {
-				less.render(baseTplContent, function (err, out) {
-					if (err) {
-						console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
-						notifyAndUnlock();
-					}
-
-					write(out, fname);
-					write( uglify_css.processString(out, { maxLineLen: 500, expandVars: true }), fnamemin);
-
-				});
-			} else {
-				write(baseTplContent, fname);
-				write( uglify_css.processString(baseTplContent, { maxLineLen: 500, expandVars: true }), fnamemin);
-			}
-
-		} else {
-			write(baseTplContent, fname);
-		}
-
-/*
-		if (ext in self.postParsers) {
-			// maybe the new filenaew has a different extension
-			// 
-			if ('outExt' in self.postParsers[ext]) {
-				fname = self.outName.clear.replace(new RegExp('.' + ext + '$'), '.' + self.postParsers[ext].outExt);
-			}
-			self.postParsers[ext].parse(baseTplContent, function (err, out) {
-				if (err) {
-					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
-					notifyAndUnlock();
-				}
-				write(out, fname);
-			});
-		} else {
-			write(baseTplContent, fname);
-		}
-*/
-
-
+		write(baseTplContent, fname);
 
 
 
@@ -641,12 +621,13 @@ Malta.prototype = {
 			process.exit();
 		}
 		
-		tmp = path.extname(this.tplName);
+		tmp = path.extname(this.tplName)
 
 		this.outName = {
-			"clear" : this.outDir + DS +  this.tplName,
+			"clear" : (this.outDir + DS +  this.tplName),
 			"min" : (this.outDir + DS +  this.tplName).replace(tmp, '.min' + tmp)
 		};
+		
 		
 		// check vars.json
 		// 
