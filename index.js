@@ -336,12 +336,11 @@ Malta.prototype = {
 					// 
 					if (ext.match(/js|css/)) {
 
-						minif =  (ext == 'js') ? 
-							uglify_js.minify(fname).code
-							:
-							uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
-
 						try {
+							minif =  (ext == 'js') ? 
+								uglify_js.minify(fname).code
+								:
+								uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
 							
 							fs.writeFile(self.outName.min, minif, function(err) {
 								if (err == null) {
@@ -505,9 +504,12 @@ Malta.prototype = {
 	 * @return {[type]} [description]
 	 */
 	_watch : function () {
-		var self = this;
+		var self = this,
+			d;
 		
 		function watch() {
+
+
 
 			// empty queue
 			//
@@ -518,7 +520,9 @@ Malta.prototype = {
 				// somwthing changed
 				//
 				if (self.files[f].time < self._utils.getFileTime(f)) {
+					d = new Date;
 					
+					console.log('[MODIFIED @ '+ d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds() +'] ' + f.replace(self.baseDir + DS, ''));
 					// renew entry
 					// 
 					self.files[f] = self._utils.createEntry(f);
