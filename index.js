@@ -331,7 +331,7 @@ Malta.prototype = {
 				
 			} else {
 				name = self.outName.clear;
-				nameMin = self.outName.min.replace('.' + ext, '.min.' + ext);
+				nameMin = self.outName.min;
 				do_write(name, nameMin);
 			}
 

@@ -181,6 +181,7 @@ Less, Sass and minification
 
 Changelog
 ---------
+- **1.0.21** fixed a bug naming minified css
 - **1.0.20** added support for .scss files, fixed a bug using less package
 - **1.0.19** fixed a bug that hanged the process when, being not caught, a parsing exception was thrown by uglify-js and/or uglifycss
 - **1.0.18** some refactors and corrections to console output
