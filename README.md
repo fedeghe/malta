@@ -166,13 +166,13 @@ Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.j
 
 
 <br/>
-Less and minification
----------------------
+Less, Sass and minification
+---------------------------
 
-- In the special `js` files case (thanks to the **uglyfy-js** node package) will be even produced a _myfile.min.js_ ; something similar (thanks to the **uglyfycss** node package) will happen when the template is a  `less` or `css` file.
- 
+- When dealing with `.less` or `.sass` template files they will be compiled thanks to [less](1) and [sass](2) [npmjs](3) packages. 
 
-- If the templace has a `less` extension (thanks to the **less** node package) the result content will be parsed as less before being written
+- Thank to other two packages, [uglify-js](4) & [uglifycss](5), for every output `.js`  and`.css` file will be written even a minified version (thus even for `.less` and `.scss`).
+
 
  
 
@@ -181,6 +181,7 @@ Less and minification
 
 Changelog
 ---------
+- **1.0.20** added support for .scss files, fixed a bug using less package
 - **1.0.19** fixed a bug that hanged the process when, being not caught, a parsing exception was thrown by uglify-js and/or uglifycss
 - **1.0.18** some refactors and corrections to console output
 - **1.0.17** automatically write even minified version for css files (even less originated)
@@ -204,3 +205,9 @@ Changelog
 - **0.0.8** parse error thrown by uglify is catched and stops no more Malta
 
 --------
+
+[1]: https://www.npmjs.org/package/less
+[2]: https://www.npmjs.org/package/sass
+[3]: https://www.npmjs.org
+[4]: https://www.npmjs.org/package/uglify-js
+[5]: https://www.npmjs.org/package/uglifycss

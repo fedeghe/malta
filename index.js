@@ -7,6 +7,7 @@ var fs = require("fs"),
 	uglify_js = require("uglify-js"),
 	uglify_css = require("uglifycss"),
 	less = require("less"),
+	sass = require("sass"),
 	child_process = require('child_process'),
 	
 	// path from where Malta is started
@@ -25,15 +26,7 @@ var fs = require("fs"),
 	// 
 	DS = path.sep,
 	NL = "\n",
-	TAB = "\t",
-	spin = ['-', '\\', '|', '/'],
-	spinnum = 0
-	goSpin = function (){
-		process.stdout.clearLine();
-		process.stdout.cursorTo(0);
-		spinnum = (spinnum + 1) % spin.length;
-		process.stdout.write(spin[spinnum]);
-	};
+	TAB = "\t";
 
 // zebra constructor
 // 
@@ -146,7 +139,8 @@ Malta.prototype = {
 		xml : "<!--\n%content%\n-->\n",
 		js : "/*\n%content%\n*/\n",
 		css : "/*\n%content%\n*/\n",
-		less : "/*\n%content%\n*/\n"
+		less : "/*\n%content%\n*/\n",
+		scss : "/*\n%content%\n*/\n"
 	},
 
 	_stop : function () {
@@ -300,15 +294,17 @@ Malta.prototype = {
 		// 
 		function write (cnt, fname) {
 
+			var name,
+				nameMin;
 			
 			// !!!
 			// 
 			ext = self._utils.getFileExtension(self.outName.clear);
 
 			if (ext.match(/less/)) {
-				self.outName.clear = self.outName.clear.replace(/\.less$/, '.css');
-				self.outName.min = self.outName.min.replace(/\.less$/, '.css');
-				fname = self.outName.clear
+				name = self.outName.clear.replace(/\.less$/, '.css');
+				nameMin = self.outName.min.replace(/\.less$/, '.css');
+				fname = name;
 				ext = 'css';
 				less.render(cnt, function (err, newcnt) {
 					if (err) {
@@ -317,20 +313,37 @@ Malta.prototype = {
 					}
 					// update content to be written
 					cnt = newcnt;
-					do_write();
+					do_write(name, nameMin);
 				});
+			} else if (ext.match(/scss/)) {
+				name = self.outName.clear.replace(/\.scss$/, '.css');
+				nameMin = self.outName.min.replace(/\.scss$/, '.css');
+				fname = name;
+				ext = 'css';
+
+				try {
+					cnt = sass.render(cnt);
+					do_write(name, nameMin);	
+				} catch (err) {
+					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+					notifyAndUnlock();
+				}
+				
 			} else {
-				do_write();
+				name = self.outName.clear;
+				nameMin = self.outName.min.replace('.' + ext, '.min.' + ext);
+				do_write(name, nameMin);
 			}
 
-			function do_write() {
-				fs.writeFile(fname, cnt, function(err) {
+			function do_write(name, nameMin) {
+
+				fs.writeFile(name, cnt, function(err) {
 					var d = self.date(),
 						data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
 						minif;
 
 					msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
-					msg += 'wrote ' + fname + ' ('+ getSize(fname) + ')' + NL;
+					msg += 'wrote ' + fname + ' ('+ getSize(name) + ')' + NL;
 
 					// if has js or css extension use uglification to get the minified version
 					// 
@@ -338,13 +351,13 @@ Malta.prototype = {
 
 						try {
 							minif =  (ext == 'js') ? 
-								uglify_js.minify(fname).code
+								uglify_js.minify(name).code
 								:
 								uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
 							
-							fs.writeFile(self.outName.min, minif, function(err) {
+							fs.writeFile(nameMin, minif, function(err) {
 								if (err == null) {
-									msg += 'wrote ' + self.outName.min + ' ('+ getSize(self.outName.min) + ')' + NL;
+									msg += 'wrote ' + nameMin + ' ('+ getSize(nameMin) + ')' + NL;
 								} else {
 									console.log('[ERROR] uglify-js says:' );
 									console.dir(err);
