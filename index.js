@@ -606,7 +606,8 @@ Malta.prototype = {
 
 		if (a.length < 2) {
 			console.log(this.name + ' v.' + this.version);  
-			console.log(NL + 'Usage : malta [templatefile] [outdir]' + NL);
+			console.log(NL + 'Usage : malta [templatefile] [outdir]');
+			console.log('   OR   malta [buildfile.json]' + NL);
 			process.exit();
 		}
 
