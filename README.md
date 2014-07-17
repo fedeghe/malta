@@ -181,6 +181,7 @@ Less, Sass and minification
 
 Changelog
 ---------
+- **1.1.1** removed some ugly and unuseful messages from console
 - **1.1.0** updated console usage message
 - **1.0.21** fixed a bug naming minified css
 - **1.0.20** added support for .scss files, fixed a bug using less package

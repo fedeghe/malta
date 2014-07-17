@@ -658,7 +658,7 @@ Malta.prototype = {
 				this.vars = {};
 			}
 		} else {
-			console.log('[INFO] No ' + this.varPath + ' file found');
+			//console.log('[INFO] No ' + this.varPath + ' file found');
 			this.varPath = false;
 		}
 		
