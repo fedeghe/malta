@@ -35,7 +35,7 @@ function Malta() {
 
 	// security nesting level
 	// 
-	this.MAX_INVOLVED = 10000;
+	this.MAX_INVOLVED = 5000;
 	
 	// name and version from package json
 	// 
@@ -167,7 +167,7 @@ Malta.prototype = {
 			console.log('OOOOUCH: it seems like running a circular file inclusion]');
 			console.log(TAB + 'try to look at the following inclusion queue to spot it quickly:');
 			console.log(this.queue);
-			this._stop();
+			//this._stop();
 		}
 
 		// look for too many files limit
@@ -641,9 +641,14 @@ Malta.prototype = {
 		
 		tmp = path.extname(this.tplName)
 
+		// outnames, given here by the name of the tpl (tplName)
+		// if desired a name different from the tpl then
+		// here instead of this.tplName should be used the parameter given
+		// in this.outDir once checked his validity
+		// 
 		this.outName = {
-			"clear" : (this.outDir + DS +  this.tplName),
-			"min" : (this.outDir + DS +  this.tplName).replace(tmp, '.min' + tmp)
+			clear : (this.outDir + DS +  this.tplName),
+			min : (this.outDir + DS +  this.tplName).replace(tmp, '.min' + tmp)
 		};
 		
 		

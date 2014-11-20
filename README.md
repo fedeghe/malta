@@ -169,9 +169,9 @@ Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.j
 Less, Sass and minification
 ---------------------------
 
-- When dealing with `.less` or `.scss` template files they will be compiled thanks to [less](1) and [sass](2) [npmjs](3) packages. 
+- When dealing with `.less` or `.scss` template files they will be compiled thanks to [less][1] and [sass][2] [npmjs][3] packages. 
 
-- Thank to other two packages, [uglify-js](4) & [uglifycss](5), for every output `.js`  and`.css` file will be written even a minified version (thus even for `.less` and `.scss`).
+- Thank to other two packages, [uglify-js][4] & [uglifycss][5], for every output `.js`  and`.css` file will be written even a minified version (thus even for `.less` and `.scss`).
 
 
  
@@ -181,6 +181,8 @@ Less, Sass and minification
 
 Changelog
 ---------
+- **2.0.1** fixed README links
+- **2.0.0** no more stop if the same file is included more times, still check for loops over 5000 files
 - **1.1.1** removed some ugly and unuseful messages from console
 - **1.1.0** updated console usage message
 - **1.0.21** fixed a bug naming minified css
