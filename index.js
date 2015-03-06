@@ -6,6 +6,7 @@ var fs = require("fs"),
 	path = require("path"),
 	uglify_js = require("uglify-js"),
 	uglify_css = require("uglifycss"),
+	markdown = require("markdown").markdown,
 	less = require("less"),
 	sass = require("sass"),
 	child_process = require('child_process'),
@@ -167,7 +168,9 @@ Malta.prototype = {
 			console.log('OOOOUCH: it seems like running a circular file inclusion]');
 			console.log(TAB + 'try to look at the following inclusion queue to spot it quickly:');
 			console.log(this.queue);
-			//this._stop();
+
+			// from 2.0.0 won't stop anymore for it
+			// this._stop();
 		}
 
 		// look for too many files limit
@@ -323,6 +326,21 @@ Malta.prototype = {
 
 				try {
 					cnt = sass.render(cnt);
+					do_write(name, nameMin);	
+				} catch (err) {
+					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+					notifyAndUnlock();
+				}
+				
+			} else if (ext.match(/md/)) {
+				name = self.outName.clear.replace(/\.md$/, '.html');
+				nameMin = self.outName.min.replace(/\.md$/, '.html');
+				fname = name;
+				ext = 'html';
+
+				try {
+
+					cnt = markdown.toHTML( cnt );
 					do_write(name, nameMin);	
 				} catch (err) {
 					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
@@ -650,12 +668,20 @@ Malta.prototype = {
 			clear : (this.outDir + DS +  this.tplName),
 			min : (this.outDir + DS +  this.tplName).replace(tmp, '.min' + tmp)
 		};
-		
-		
-		// check vars.json
-		// 
-		this.varPath = this.baseDir + DS + 'vars.json';
 
+		// check vars.json
+		// by default search for vars.json in the same folder 
+		// of the tpl but if differently specified by a[2]
+		// Hint: even if it expected to be in that position
+		// it must be prefixed by -vars=json_relative_to_exec_folder
+		if (a[2]) {
+			tmp = a[2].match(/^-vars\=(.*)$/);
+			this.varPath = execRoot + DS + tmp[1];
+		} else {
+			this.varPath = this.baseDir + DS + 'vars.json';
+		}
+
+		// get the content
 		if (fs.existsSync(this.varPath)) {
 			try {
 				this.vars = JSON.parse(fs.readFileSync(this.varPath));
@@ -688,12 +714,15 @@ Malta.prototype = {
 				cachevalid : true
 			};
 		},
+		
 		getFileExtension : function (fname) {
 			return fname.split('.').pop();
 		},
+
 		getFileTime : function (path) {
 			return fs.existsSync(path) && fs.statSync(path).mtime.getTime();
 		},
+
 		uniquearr : function (a) {
 			var r = [],
 	            l = a.length,
@@ -730,11 +759,14 @@ if (args.length == 1) {
 	var runs = fs.existsSync(execRoot + '/' + args[0]) ? require(execRoot + '/' + args[0]) : {},
 		run;
 	for (run in runs) {
+
+		//skip key which begins with !
+		if (run.match(/^\!/))continue;
 		
-		var ls = child_process.spawn('malta', [run, runs[run]]);
+		var ls = child_process.spawn('malta', [run].concat(runs[run].split(/\s/)));
 
 		ls.stdout.on('data', function (data) {
-			console.log(""+data);
+			console.log("" + data);
 		});
 		/*
 		ls.stderr.on('data', function (data) {

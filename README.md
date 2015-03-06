@@ -20,13 +20,16 @@ then install malta running:
 Usage
 -----
 
-    $ malta templateFile outDirectory
+    $ malta templateFile outDirectory [-vars=nonDefault_vars_path]
     	
 - **templateFile**  
 is the base template used as base file. Note that the extension will be inherited by output files (but for .less & .sass files).
   
 - **outDirectory**  
 is the folder where the output files will be written in.
+
+- **nonDefaultVarsPath**
+here is possible to tell Malta to consider a different file for variables (defaut would be vars.json in the templateFiel folder)
 
 Seen that most of times it would be handy to engage many builds at once it`s possible to start Malta as follows: 
 
@@ -37,7 +40,7 @@ where *list.json* is a file containing one or more pairs, that commits Malta to 
 - **list.json** :
     
 	    {
-    		"common.less" : "../../public_html/css",
+    		"common.less" : "../../public_html/css -vars=./vars/deploy.json",
     		"common.js" : "../../public_html/js",
     		...
     	}
@@ -140,7 +143,7 @@ and least but not last **vars.json** :
 <br />
 **Now** from ~ execute:  
 
-     malta myproject/myfile.js myproject/out
+     malta myproject/myfile.js myproject/out [-vars=myproject/local/variables.json]
 in a while Malta will confirm the first creation of _myproject/out/myfile.js_ and _myproject/out/myfile.min.js_.  
 <br />
 The _myproject/out/myfile.js_ will look like:  
@@ -162,7 +165,7 @@ The _myproject/out/myfile.js_ will look like:
     }();
 
 <br/>
-Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.json_ or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c. 
+Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.json_ (or the overridden one) or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c. 
 
 
 <br/>
@@ -181,6 +184,10 @@ Less, Sass and minification
 
 Changelog
 ---------
+- **2.0.5** markdown support added, every .md tpl will be glued in an .html file
+- **2.0.4** lack of --force drives to a new version just to remove a console.log !!!
+- **2.0.3** is possible to specify the complete path (relative to the execution folder) of the variable json. 
+- **2.0.2** if using a json file for multi build, a ! as first key character will tell Malta to ignore this line
 - **2.0.1** fixed README links
 - **2.0.0** no more stop if the same file is included more times, still check for loops over 5000 files
 - **1.1.1** removed some ugly and unuseful messages from console
