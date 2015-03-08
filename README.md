@@ -169,14 +169,14 @@ Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.j
 
 
 <br/>
-Less, Sass and minification
----------------------------
+Less, Sass and minification and Markdown
+------------------------------------
 
 - When dealing with `.less` or `.scss` template files they will be compiled thanks to [less][1] and [sass][2] [npmjs][3] packages. 
 
 - Thank to other two packages, [uglify-js][4] & [uglifycss][5], for every output `.js`  and`.css` file will be written even a minified version (thus even for `.less` and `.scss`).
 
-
+- Thank again to other two pakages [markdown][6] & [markdown-pdf][7], every tamplate with .pdf.md will produce a .pdf file AND every template with .md will produce a glued .md and the resulting .html file.
  
 
 
@@ -184,7 +184,8 @@ Less, Sass and minification
 
 Changelog
 ---------
-- **2.0.5** markdown support added, every .md tpl will be glued in an .html file
+- **2.0.6** markdown to pdf support added, just use .pdf.md for the templates file
+- **2.0.5** markdown support added, every .md tpl will produce the glued .md and resulting .html file
 - **2.0.4** lack of --force drives to a new version just to remove a console.log !!!
 - **2.0.3** is possible to specify the complete path (relative to the execution folder) of the variable json. 
 - **2.0.2** if using a json file for multi build, a ! as first key character will tell Malta to ignore this line
@@ -223,3 +224,5 @@ Changelog
 [3]: https://www.npmjs.org
 [4]: https://www.npmjs.org/package/uglify-js
 [5]: https://www.npmjs.org/package/uglifycss
+[6]: https://www.npmjs.com/package/markdown-pdf
+[7]: https://www.npmjs.com/package/markdown

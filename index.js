@@ -7,6 +7,7 @@ var fs = require("fs"),
 	uglify_js = require("uglify-js"),
 	uglify_css = require("uglifycss"),
 	markdown = require("markdown").markdown,
+	markdownpdf = require("markdown-pdf"),
 	less = require("less"),
 	sass = require("sass"),
 	child_process = require('child_process'),
@@ -332,15 +333,35 @@ Malta.prototype = {
 					notifyAndUnlock();
 				}
 				
-			} else if (ext.match(/md/)) {
-				name = self.outName.clear.replace(/\.md$/, '.html');
-				nameMin = self.outName.min.replace(/\.md$/, '.html');
-				fname = name;
-				ext = 'html';
+			} else if (self.outName.clear.match(/\.pdf\.md$/)) {
+				name = self.outName.clear.replace(/\.pdf\.md$/, '.pdf');
+				nameMin = self.outName.min.replace(/\.pdf\.md$/, '.pdf');
+				fname = name;	
+				ext = 'pdf';
 
 				try {
+					markdownpdf().from.string(cnt).to(name, function () {
+						var d = self.date(),
+							data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds();
 
-					cnt = markdown.toHTML( cnt );
+						msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
+						msg += 'wrote ' + fname + ' ('+ getSize(name) + ')' + NL;
+						end = self.date();
+						notifyAndUnlock();
+					})
+				} catch (err) {
+					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+					notifyAndUnlock();
+				}
+				
+			}else if (ext.match(/md/)) {
+				name = self.outName.clear.replace(/\.md$/, '.md');
+				nameMin = self.outName.clear.replace(/\.md$/, '.html');
+				fname = name;
+				ext = 'md';
+
+				try {
+					//cnt = markdown.toHTML( cnt );
 					do_write(name, nameMin);	
 				} catch (err) {
 					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
@@ -352,6 +373,8 @@ Malta.prototype = {
 				nameMin = self.outName.min;
 				do_write(name, nameMin);
 			}
+
+
 
 			function do_write(name, nameMin) {
 
@@ -389,6 +412,26 @@ Malta.prototype = {
 							notifyAndUnlock();
 						}
 
+					} else if (ext.match(/md/)) {
+						try {
+
+							cnt = markdown.toHTML( cnt );
+							fs.writeFile(nameMin, cnt, function(err) {
+								if (err == null) {
+									msg += 'wrote ' + nameMin + ' ('+ getSize(nameMin) + ')' + NL;
+								} else {
+									console.log('[ERROR] markdown says:' );
+									console.dir(err);
+									process.exit();
+								}
+								notifyAndUnlock();
+							});
+							
+						} catch(e) {
+							console.log('[PARSE ERROR: markdown] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+							console.log('[WARN: Html version skipped]');
+							notifyAndUnlock();
+						}
 					} else {
 
 						end = self.date();
