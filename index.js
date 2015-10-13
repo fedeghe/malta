@@ -663,7 +663,7 @@ Malta.prototype = {
 	check : function (a) {
 		var tmp,
 			argTemplate,
-			argOutDir;
+			argOutDir, i, t;
 
 		if (a.length < 2) {
 			console.log(this.name + ' v.' + this.version);  
@@ -727,7 +727,17 @@ Malta.prototype = {
 		// get the content
 		if (fs.existsSync(this.varPath)) {
 			try {
-				this.vars = JSON.parse(fs.readFileSync(this.varPath));
+				tmp = JSON.parse(fs.readFileSync(this.varPath));
+
+				for (i in tmp) {
+					while(t = tmp[i].match(this.reg.vars)) {
+						if (t && t.length > 1 && t[1] in tmp) {
+							tmp[i] = tmp[i].replace(t[0]+"", tmp[t[1]]);
+						}
+					}
+				}
+				
+				this.vars = tmp;
 			} catch (e) {
 				this.vars = {};
 			}

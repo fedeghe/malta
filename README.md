@@ -184,6 +184,7 @@ Less, Sass and minification and Markdown
 
 Changelog
 ---------
+- **2.1.0** in vars.json nested vars can be used
 - **2.0.6** markdown to pdf support added, just use .pdf.md for the templates file
 - **2.0.5** markdown support added, every .md tpl will produce the glued .md and resulting .html file
 - **2.0.4** lack of --force drives to a new version just to remove a console.log !!!
