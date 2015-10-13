@@ -656,6 +656,7 @@ Malta.prototype = {
 		return this.vars !== {};
 	},
 
+
 	/**
 	 * check cmd params
 	 * @return {instance} Malta instance
@@ -728,14 +729,7 @@ Malta.prototype = {
 		if (fs.existsSync(this.varPath)) {
 			try {
 				tmp = JSON.parse(fs.readFileSync(this.varPath));
-
-				for (i in tmp) {
-					while(t = tmp[i].match(this.reg.vars)) {
-						if (t && t.length > 1 && t[1] in tmp) {
-							tmp[i] = tmp[i].replace(t[0]+"", tmp[t[1]]);
-						}
-					}
-				}
+				
 				
 				this.vars = tmp;
 			} catch (e) {
