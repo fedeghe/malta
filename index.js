@@ -610,7 +610,8 @@ Malta.prototype = {
 					if (f === self.varPath) {
 						// update vars
 						// 
-						self.vars = JSON.parse(fs.readFileSync(self.varPath));
+						self.vars = self._utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
+						// self.vars = JSON.parse(fs.readFileSync(self.varPath));
 					}
 					
 					self._parse(f);
@@ -728,7 +729,8 @@ Malta.prototype = {
 		// get the content
 		if (fs.existsSync(this.varPath)) {
 			try {
-				tmp = JSON.parse(fs.readFileSync(this.varPath));
+				// tmp = JSON.parse(fs.readFileSync(this.varPath));
+				tmp = this._utils.solveJson(JSON.parse(fs.readFileSync(this.varPath)));
 				
 				
 				this.vars = tmp;
@@ -792,8 +794,22 @@ Malta.prototype = {
 			// s = s.replace(/\/\*[^\*\/]*\*\//gm, '');
 
 			return s;
+		},
+		solveJson : function (o) {
+			var y;
+			for (var i in o) {
+				if((typeof o[i]).match(/string/i)) {
+					while(y = o[i].match(/\$([A-z0-9-_/.]+)\$/)){
+						if(y && y.length == 2 && y[1] in o){
+							o[i] = o[i].replace('$'+y[1]+'$', o[y[1]]);
+						} else {
+							break;
+						}
+					}
+				}
+			}
+			return o;
 		}
-
 	}
 
 }
