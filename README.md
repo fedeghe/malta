@@ -155,9 +155,10 @@ The _myproject/out/myfile.js_ will look like:
     /**
     Name : myFabulousProject
     Author: Federico
+    Project : https://github.com/fedeghe/malta
     Date: 11/9/2013
     */
-    +function(){
+    +function(){ 
         var name = 'what';
         function hello(n) {
             alert('Hello ' + n);
