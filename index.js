@@ -211,21 +211,15 @@ Malta.prototype = {
 					return tpl.replace(new RegExp(self.reg.files, 'g'), function (str, $1, $2) {
 
 						var tmp ,
-							ext = self._utils.getFileExtension($2),
-							fname;
-						if ($2.match(/^\//)) {
-							fname = execRoot + $2
-						} else {
-							fname = self.baseDir + DS + $2;	
-						}
+							ext = self._utils.getFileExtension($2);
 
 						// file not found
 						//
-						if (!fs.existsSync(fname)) {
+						if (!fs.existsSync(self.baseDir + DS + $2)) {
 							
 							// warn the user through console
 							// 
-							console.log('[WARNING] missing file ' + fname);
+							console.log('[WARNING] missing file ' + self.baseDir + DS + $2);
 
 							// file missing, replace a special placeholder
 							// if ext is compatible
@@ -245,7 +239,7 @@ Malta.prototype = {
 
 						// file exists, and we got indentation (spaces &| tabs)
 						// 	
-						tmp = self.files[fname].content.toString();
+						tmp = self.files[self.baseDir + DS + $2].content.toString();
 
 						// maybe add path tip in build just before file inclusion
 						// 
@@ -544,38 +538,26 @@ Malta.prototype = {
 
 					var p  = els[i].match(new RegExp(self.reg.files)),
 						f = p[2],
-						tmp,
-						fname;
-					if (f.match(/^\//)) {
-						fname = execRoot + f;
-
-					} else {
-						fname = self.baseDir + DS + f;
-					}
+						tmp;
 
 					if (f) {
-						
-						
-							self.queue.push(fname);	
-
-						
-						
+						self.queue.push(self.baseDir + DS + f);
 
 						// check for circular inclusion
 						// 
 						self._checkInvolved();
 
-						tmp = self._utils.createEntry(fname);
+						tmp = self._utils.createEntry(self.baseDir + DS + f);
 						
 						if (tmp) {
 
 							// store entry
 							// 
-							self.files[fname] = tmp;
+							self.files[self.baseDir + DS + f] = tmp;
 
 							// recur to look for inner inclusions
 							// 
-							dig(self.files[fname].content + "");
+							dig(self.files[self.baseDir + DS + f].content + "");
 						}
 					}
 				}

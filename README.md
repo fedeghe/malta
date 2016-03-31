@@ -184,7 +184,7 @@ Less, Sass and minification and Markdown
 
 Changelog
 ---------
-- **2.1.4** in file placeholders is possible to use absolute paths, will be based on to the execution path
+- **2.2.0** some refactors
 - **2.1.3** in vars.json nested vars can be used
 - **2.0.6** markdown to pdf support added, just use .pdf.md for the templates file
 - **2.0.5** markdown support added, every .md tpl will produce the glued .md and resulting .html file
