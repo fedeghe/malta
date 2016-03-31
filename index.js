@@ -35,6 +35,7 @@ var fs = require("fs"),
 function Malta() {
 
 
+
 	// security nesting level
 	// 
 	this.MAX_INVOLVED = 5000;
@@ -269,8 +270,8 @@ Malta.prototype = {
 					var str;
 					
 					return tpl.replace(new RegExp(self.reg.vars, 'g'), function (str, $1) {
-						var t = self._utils.checkns($1, self.vars);
-						return t ? t : '$' + $1 + '$';
+						var t = self._utils.checkns($1 + '', self.vars);
+						return typeof t !== "undefined" ? t : '$' + $1 + '$';
 						// return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
 
 					});

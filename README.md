@@ -189,6 +189,7 @@ Less, Sass and minification and Markdown
 
 Changelog
 ---------
+- **2.2.2** fixed a bug related to vars substitution
 - **2.2.1** in file placeholders is possible to use absolute paths, will be based on to the execution path;
 			vars.json file can contain deeper literals that can be references with . or / separator in the placeholder (see examples above)
 - **2.2.0** some refactors
