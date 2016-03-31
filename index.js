@@ -211,15 +211,21 @@ Malta.prototype = {
 					return tpl.replace(new RegExp(self.reg.files, 'g'), function (str, $1, $2) {
 
 						var tmp ,
-							ext = self._utils.getFileExtension($2);
+							ext = self._utils.getFileExtension($2),
+							fname;
+						if ($2.match(/^\//)) {
+							fname = execRoot + $2
+						} else {
+							fname = self.baseDir + DS + $2;	
+						}
 
 						// file not found
 						//
-						if (!fs.existsSync(self.baseDir + DS + $2)) {
+						if (!fs.existsSync(fname)) {
 							
 							// warn the user through console
 							// 
-							console.log('[WARNING] missing file ' + self.baseDir + DS + $2);
+							console.log('[WARNING] missing file ' + fname);
 
 							// file missing, replace a special placeholder
 							// if ext is compatible
@@ -239,7 +245,7 @@ Malta.prototype = {
 
 						// file exists, and we got indentation (spaces &| tabs)
 						// 	
-						tmp = self.files[self.baseDir + DS + $2].content.toString();
+						tmp = self.files[fname].content.toString();
 
 						// maybe add path tip in build just before file inclusion
 						// 
@@ -261,8 +267,12 @@ Malta.prototype = {
 				},
 				vars : function (tpl) {
 					var str;
+					
 					return tpl.replace(new RegExp(self.reg.vars, 'g'), function (str, $1) {
-						return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
+						var t = self._utils.checkns($1, self.vars);
+						return t ? t : '$' + $1 + '$';
+						// return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
+
 					});
 				}
 			},
@@ -538,26 +548,38 @@ Malta.prototype = {
 
 					var p  = els[i].match(new RegExp(self.reg.files)),
 						f = p[2],
-						tmp;
+						tmp,
+						fname;
+					if (f.match(/^\//)) {
+						fname = execRoot + f;
+
+					} else {
+						fname = self.baseDir + DS + f;
+					}
 
 					if (f) {
-						self.queue.push(self.baseDir + DS + f);
+						
+						
+							self.queue.push(fname);	
+
+						
+						
 
 						// check for circular inclusion
 						// 
 						self._checkInvolved();
 
-						tmp = self._utils.createEntry(self.baseDir + DS + f);
+						tmp = self._utils.createEntry(fname);
 						
 						if (tmp) {
 
 							// store entry
 							// 
-							self.files[self.baseDir + DS + f] = tmp;
+							self.files[fname] = tmp;
 
 							// recur to look for inner inclusions
 							// 
-							dig(self.files[self.baseDir + DS + f].content + "");
+							dig(self.files[fname].content + "");
 						}
 					}
 				}
@@ -866,7 +888,26 @@ Malta.prototype = {
 				}
 			}
 			return o;
-		}
+		},
+		checkns : function(ns, ctx) {
+	        var els = ns.split(/\.|\//),
+	            i = 0,
+	            l = els.length;
+	        ctx = (ctx !== undefined) ? ctx : W;
+
+	        if (!ns) return ctx;
+
+	        for (null; i < l; i += 1) {
+
+	            if (typeof ctx[els[i]] !== 'undefined') {
+	                ctx = ctx[els[i]];
+	            } else {
+	                // break it
+	                return undefined;
+	            }
+	        }
+	        return ctx;
+	    }
 	}
 
 }

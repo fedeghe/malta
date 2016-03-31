@@ -51,7 +51,7 @@ Placeholders
 Malta uses two kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **$$filePath$$**  
-  _filepath_ is the path to the desired file relative to the templateFile directory 
+  _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder
 
 - **$varname$**  
   _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder  
@@ -105,6 +105,7 @@ Here use the Malta placeholders and/or the wired vars to specify which files/var
     //
     Name : $name$ 			
     Author: $author$
+    Project : $more.repo$
     Date: __DATE__
     */
     +function(){
@@ -137,8 +138,11 @@ the last content file for that dummy sample is **src/inner/b.js** :
 and least but not last **vars.json** :  
 
     {
-    "name":"myFabulousProject",
-    "author":"Federico"
+    	"name":"myFabulousProject",
+    	"author":"Federico",
+    	"more" : {
+    		"repo" : "https://github.com/fedeghe/malta"
+    	}
     }  
 <br />
 **Now** from ~ execute:  
@@ -184,6 +188,8 @@ Less, Sass and minification and Markdown
 
 Changelog
 ---------
+- **2.2.1** in file placeholders is possible to use absolute paths, will be based on to the execution path;
+			vars.json file can contain deeper literals that can be references with . or / separator in the placeholder (see examples above)
 - **2.2.0** some refactors
 - **2.1.3** in vars.json nested vars can be used
 - **2.0.6** markdown to pdf support added, just use .pdf.md for the templates file
