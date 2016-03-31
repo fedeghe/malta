@@ -211,15 +211,21 @@ Malta.prototype = {
 					return tpl.replace(new RegExp(self.reg.files, 'g'), function (str, $1, $2) {
 
 						var tmp ,
-							ext = self._utils.getFileExtension($2);
+							ext = self._utils.getFileExtension($2),
+							fname;
+						if ($2.match(/^\//)) {
+							fname = execRoot + $2
+						} else {
+							fname = self.baseDir + DS + $2;	
+						}
 
 						// file not found
 						//
-						if (!fs.existsSync(self.baseDir + DS + $2)) {
+						if (!fs.existsSync(fname)) {
 							
 							// warn the user through console
 							// 
-							console.log('[WARNING] missing file ' + self.baseDir + DS + $2);
+							console.log('[WARNING] missing file ' + fname);
 
 							// file missing, replace a special placeholder
 							// if ext is compatible
@@ -239,7 +245,7 @@ Malta.prototype = {
 
 						// file exists, and we got indentation (spaces &| tabs)
 						// 	
-						tmp = self.files[self.baseDir + DS + $2].content.toString();
+						tmp = self.files[fname].content.toString();
 
 						// maybe add path tip in build just before file inclusion
 						// 
@@ -538,26 +544,38 @@ Malta.prototype = {
 
 					var p  = els[i].match(new RegExp(self.reg.files)),
 						f = p[2],
-						tmp;
+						tmp,
+						fname;
+					if (f.match(/^\//)) {
+						fname = execRoot + f;
+
+					} else {
+						fname = self.baseDir + DS + f;
+					}
 
 					if (f) {
-						self.queue.push(self.baseDir + DS + f);
+						
+						
+							self.queue.push(fname);	
+
+						
+						
 
 						// check for circular inclusion
 						// 
 						self._checkInvolved();
 
-						tmp = self._utils.createEntry(self.baseDir + DS + f);
+						tmp = self._utils.createEntry(fname);
 						
 						if (tmp) {
 
 							// store entry
 							// 
-							self.files[self.baseDir + DS + f] = tmp;
+							self.files[fname] = tmp;
 
 							// recur to look for inner inclusions
 							// 
-							dig(self.files[self.baseDir + DS + f].content + "");
+							dig(self.files[fname].content + "");
 						}
 					}
 				}
@@ -626,6 +644,63 @@ Malta.prototype = {
 			!self.doBuild && watch();
 		}, 1000);
 
+		// chain
+		//
+		return this;
+	},
+
+	_watchNew : function () {
+		var self = this,
+			d;
+	
+		for (file in self.files) {
+
+			
+
+			(function (f) {
+
+				var done = false;
+
+				fs.watch(f, function (event, filename) {
+
+						if (done) return;
+						done = true;
+
+						console.log(event)
+						// empty queue
+						//
+						self.queue = [];
+
+						d = new Date;
+							
+						console.log('[MODIFIED @ '+ d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds() +'] ' + f.replace(self.baseDir + DS, ''));
+						// renew entry
+						// 
+						self.files[filename] = self._utils.createEntry(filename);
+
+						// if it`s vars .json reload it
+						// 
+						if (filename === self.varPath) {
+							// update vars
+							// 
+							self.vars = self._utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
+							// self.vars = JSON.parse(fs.readFileSync(self.varPath));
+						}
+						
+						self._parse(filename);
+						
+						self._build();
+
+						setTimeout(function () {
+							done = false;
+						},2000);
+				});
+
+
+			})(file);
+
+
+		}
 		// chain
 		//
 		return this;
