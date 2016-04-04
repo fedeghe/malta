@@ -10,18 +10,18 @@ Installation
 
 If You do not have node installed yet, run:
 
-    $ curl http://npmjs.org/install.sh | sh 
+	$ curl http://npmjs.org/install.sh | sh 
 	
 then install malta running:
 
-    $ [sudo] npm install malta [-g]
+	$ [sudo] npm install malta [-g]
 
 
 Usage
 -----
 
-    $ malta templateFile outDirectory [-vars=nonDefault_vars_path]
-    	
+	$ malta templateFile outDirectory [-vars=nonDefault_vars_path]
+		
 - **templateFile**  
 is the base template used as base file. Note that the extension will be inherited by output files (but for .less & .sass files).
   
@@ -38,12 +38,12 @@ Seen that most of times it would be handy to engage many builds at once it`s pos
 where *list.json* is a file containing one or more pairs, that commits Malta to build more than one file in one shot:
 
 - **list.json** :
-    
-	    {
-    		"common.less" : "../../public_html/css -vars=./vars/deploy.json",
-    		"common.js" : "../../public_html/js",
-    		...
-    	}
+	
+		{
+			"common.less" : "../../public_html/css -vars=./vars/deploy.json",
+			"common.js" : "../../public_html/js",
+			...
+		}
 
 Placeholders
 ------------
@@ -84,13 +84,13 @@ Foo sample
 
 Supposing in `~/myproject/` folder there is the following  
 
-    myfile.js
-    vars.json
-    out/
-    src/
-    |- a.js
-    |- inner/
-       |- b.js
+	myfile.js
+	vars.json
+	out/
+	src/
+	|- a.js
+	|- inner/
+	   |- b.js
 
 <br />
 The most important is the Malta template file being the first file used to build the glued file. 
@@ -98,76 +98,80 @@ The most important is the Malta template file being the first file used to build
 Here use the Malta placeholders and/or the wired vars to specify which files/variables must be included.
 
 **myfile.js** :
-    
-    /**
-    // use the `name` and `author` variables from the vars.json
-    // the wired __DATE__ variable
-    //
-    Name : $name$ 			
-    Author: $author$
-    Project : $more.repo$
-    Date: __DATE__
-    */
-    +function(){
-        var name = 'what';
-        
+	
+	/**
+	// use the `name` and `author` variables from the vars.json
+	// the wired __DATE__ variable
+	//
+	Name : $name$ 			
+	Author: $author.ns$
+	Project : $more.repo$
+	Date: __DATE__
+	*/
+	+function(){
+		var name = 'what';
+		
 		// write here the content of the src/a.js file 
 		// the path is relative to the template folder
 		//
-        $$src/a.js$$	
-    }();
+		$$src/a.js$$	
+	}();
 <br />
 and here is the **src/a.js** :  
 
-    function hello(n) {
-        alert('Hello ' + n);
-        
-        // as before, always relative to the template
-        // even if this was at 10th inclusion level
-        //
-        $$src/inner/b.js$$	
-    }						
-    hello('Federico'), hello('Federico');
+	function hello(n) {
+		alert('Hello ' + n);
+		
+		// as before, always relative to the template
+		// even if this was at 10th inclusion level
+		//
+		$$src/inner/b.js$$	
+	}						
+	hello('Federico'), hello('Federico');
 <br />
 the last content file for that dummy sample is **src/inner/b.js** :  
 
-    hello = function () {
-        alert('Hello again ' + n);
-    };
+	hello = function () {
+		alert('Hello again ' + n);
+	};
 <br />
 and least but not last **vars.json** :  
 
-    {
-    	"name":"myFabulousProject",
-    	"author":"Federico",
-    	"more" : {
-    		"repo" : "https://github.com/fedeghe/malta"
-    	}
-    }  
+	{
+		"name":"myFabulousProject",
+		"author":{
+			"name" : "Federico",
+			"surname" : "Ghedina",
+			"ns" : "$author.name$ $author.surname$"
+		},
+		"more" : {
+			"repo" : "https://github.com/fedeghe/malta"
+		}
+	}  
 <br />
 **Now** from ~ execute:  
 
-     malta myproject/myfile.js myproject/out [-vars=myproject/local/variables.json]
+	 malta myproject/myfile.js myproject/out [-vars=myproject/local/variables.json]
 in a while Malta will confirm the first creation of _myproject/out/myfile.js_ and _myproject/out/myfile.min.js_.  
 <br />
 The _myproject/out/myfile.js_ will look like:  
 
-    /**
-    Name : myFabulousProject
-    Author: Federico
-    Project : https://github.com/fedeghe/malta
-    Date: 11/9/2013
-    */
-    +function(){ 
-        var name = 'what';
-        function hello(n) {
-            alert('Hello ' + n);
-            hello = function () {
-                alert('Hello again ' + n);
-            };
-        }
-        hello('Federico'), hello('Federico');
-    }();
+	/**
+	Name : myFabulousProject
+	Author: Federico
+	Project : https://github.com/fedeghe/malta
+	Date: 11/9/2013
+	*/
+	+function(){ 
+		var name = 'what';
+		function hello(n) {
+			alert('Hello ' + n);
+			hello = function () {
+				alert('Hello again ' + n);
+			};
+		}
+		hello('Federico'), hello('Federico');
+	}();
 
 <br/>
 Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.json_ (or the overridden one) or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c. 
