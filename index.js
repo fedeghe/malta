@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 /**
  *  Malta
  */
@@ -11,11 +12,11 @@ var fs = require("fs"),
 	less = require("less"),
 	sass = require("sass"),
 	child_process = require('child_process'),
-	
+
 	// path from where Malta is started
 	// 
 	execRoot = process.cwd(),
-	
+
 	// commandline arguments array
 	// 
 	args = process.argv.splice(2),
@@ -23,7 +24,7 @@ var fs = require("fs"),
 	// get package info
 	// 
 	packageInfo = fs.existsSync(__dirname + '/package.json') ? require(__dirname + '/package.json') : {},
-	
+
 	// directory separator, linefeed, tab
 	// 
 	DS = path.sep,
@@ -39,13 +40,13 @@ function Malta() {
 	// security nesting level
 	// 
 	this.MAX_INVOLVED = 5000;
-	
+
 	// name and version from package json
 	// 
 	this.name = 'name' in packageInfo ? packageInfo.name : 'Malta';
 	this.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
 	this.buildnumber = null;
-	
+
 	// path for the vars.json
 	// 
 	this.varPath = '';
@@ -53,18 +54,18 @@ function Malta() {
 	// register for the content of vars.json, if found
 	// 
 	this.vars = {};
-	
+
 	// basename for the base template, path and content
 	// 
 	this.tplName = '';
-	this.tplPath = '';       
+	this.tplPath = '';
 	this.tplCnt = '';
-	
+
 	// base dir from where placeholder will start
 	// will be always equal to the base template folder
 	// 
 	this.baseDir = '';
-	
+
 	// output directory written files
 	// 
 	this.outDir = '';
@@ -72,19 +73,19 @@ function Malta() {
 	// names for out files
 	// 
 	this.outName = {};
-	
+
 	// to store the last involved file while parsing,
 	// used to have more info when an exception occours
 	// or is fired from Malta
 	// 
 	this.lastEditedFile = false;
-	
+
 	// this is the container for all files involved
 	// items are as following
 	// path-of-file : {content: the-content-of-file, time: last-edit-time} 
 	// 
 	this.files = {};
-	
+
 	// that array is filled when diggin the base template looking
 	// for file placeholders, and emptied at the end of digging
 	// used to show the list of found file placeholders when Malta
@@ -105,7 +106,7 @@ function Malta() {
 	// on files
 	// 
 	this.doBuild = true;
-	
+
 	// a flag for inner debug (used for development)
 	// 
 	this.debug = false;
@@ -116,7 +117,8 @@ function Malta() {
 	// and eve for wired time placeholders
 	// __TIME__ , __DATE__ , __YEAR__
 	// 
-	this.date = function () { return new Date(); };
+	this.date = function() {
+		return new Date(); };
 
 	// time spend to build
 	// 
@@ -128,25 +130,25 @@ function Malta() {
 // 
 Malta.prototype = {
 
-	started : false,
+	started: false,
 
 	// basic string used to create regular expressions for
 	// finding file and variable placeholder
 	// 
-	reg : {
-		files : '(.*)\\\$\\\$([A-z0-9-_/.]+)\\\$\\\$',
-		vars : '\\\$([A-z0-9-_/.]+)\\\$'
+	reg: {
+		files: '(.*)\\\$\\\$([A-z0-9-_/.]+)\\\$\\\$',
+		vars: '\\\$([A-z0-9-_/.]+)\\\$'
 	},
 
-	comments : {
-		xml : "<!--\n%content%\n-->\n",
-		js : "/*\n%content%\n*/\n",
-		css : "/*\n%content%\n*/\n",
-		less : "/*\n%content%\n*/\n",
-		scss : "/*\n%content%\n*/\n"
+	comments: {
+		xml: "<!--\n%content%\n-->\n",
+		js: "/*\n%content%\n*/\n",
+		css: "/*\n%content%\n*/\n",
+		less: "/*\n%content%\n*/\n",
+		scss: "/*\n%content%\n*/\n"
 	},
 
-	_stop : function () {
+	_stop: function() {
 		console.log('MALTA has stoppend' + NL);
 		process.exit();
 	},
@@ -159,12 +161,12 @@ Malta.prototype = {
 	 * 
 	 * @return {void}
 	 */
-	_checkInvolved : function () {
+	_checkInvolved: function() {
 
 		// look for circular inclusion
 		// 
 		if (this.queue.length !== this._utils.uniquearr(this.queue).length) {
-		
+
 			// notify the queue and exit
 			// 
 			console.log('OOOOUCH: it seems like running a circular file inclusion]');
@@ -190,8 +192,8 @@ Malta.prototype = {
 	 * Builds the file, and the minifiled in case of js
 	 * @return {void}
 	 */
-	_build : function () {
-		
+	_build: function() {
+
 		// for sure the tpl is involved
 		// 
 		this.involvedFiles = 1;
@@ -203,27 +205,27 @@ Malta.prototype = {
 			// updated tpl
 			// 
 			baseTplContent = self.files[self.tplPath].content,
-			
+
 			// replacing functions for files and vars
 			// 
 			replace = {
-				all : function (tpl) {
+				all: function(tpl) {
 					var str;
-					return tpl.replace(new RegExp(self.reg.files, 'g'), function (str, $1, $2) {
+					return tpl.replace(new RegExp(self.reg.files, 'g'), function(str, $1, $2) {
 
-						var tmp ,
+						var tmp,
 							ext = self._utils.getFileExtension($2),
 							fname;
 						if ($2.match(/^\//)) {
 							fname = execRoot + $2
 						} else {
-							fname = self.baseDir + DS + $2;	
+							fname = self.baseDir + DS + $2;
 						}
 
 						// file not found
 						//
 						if (!fs.existsSync(fname)) {
-							
+
 							// warn the user through console
 							// 
 							console.log('[WARNING] missing file ' + fname);
@@ -241,7 +243,7 @@ Malta.prototype = {
 							return '';
 						}
 
-						
+
 
 
 						// file exists, and we got indentation (spaces &| tabs)
@@ -261,15 +263,14 @@ Malta.prototype = {
 						// give back indentation, but for xml (just to mantain preformatted content)
 						// 
 						return ext !== 'xml' ?
-							$1 + tmp.replace(/\n/g, NL + $1)
-							:
+							$1 + tmp.replace(/\n/g, NL + $1) :
 							tmp;
 					});
 				},
-				vars : function (tpl) {
+				vars: function(tpl) {
 					var str;
-					
-					return tpl.replace(new RegExp(self.reg.vars, 'g'), function (str, $1) {
+
+					return tpl.replace(new RegExp(self.reg.vars, 'g'), function(str, $1) {
 						var t = self._utils.checkns($1 + '', self.vars);
 						return typeof t !== "undefined" ? t : '$' + $1 + '$';
 						// return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
@@ -307,11 +308,11 @@ Malta.prototype = {
 
 		// write function 
 		// 
-		function write (cnt, fname) {
+		function write(cnt, fname) {
 
 			var name,
 				nameMin;
-			
+
 			// !!!
 			// 
 			ext = self._utils.getFileExtension(self.outName.clear);
@@ -321,7 +322,7 @@ Malta.prototype = {
 				nameMin = self.outName.min.replace(/\.less$/, '.css');
 				fname = name;
 				ext = 'css';
-				less.render(cnt, function (err, newcnt) {
+				less.render(cnt, function(err, newcnt) {
 					if (err) {
 						console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
 						notifyAndUnlock();
@@ -338,25 +339,25 @@ Malta.prototype = {
 
 				try {
 					cnt = sass.render(cnt);
-					do_write(name, nameMin);	
+					do_write(name, nameMin);
 				} catch (err) {
 					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
 					notifyAndUnlock();
 				}
-				
+
 			} else if (self.outName.clear.match(/\.pdf\.md$/)) {
 				name = self.outName.clear.replace(/\.pdf\.md$/, '.pdf');
 				nameMin = self.outName.min.replace(/\.pdf\.md$/, '.pdf');
-				fname = name;	
+				fname = name;
 				ext = 'pdf';
 
 				try {
-					markdownpdf().from.string(cnt).to(name, function () {
+					markdownpdf().from.string(cnt).to(name, function() {
 						var d = self.date(),
-							data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds();
+							data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
 
 						msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
-						msg += 'wrote ' + fname + ' ('+ getSize(name) + ')' + NL;
+						msg += 'wrote ' + fname + ' (' + getSize(name) + ')' + NL;
 						end = self.date();
 						notifyAndUnlock();
 					})
@@ -364,8 +365,8 @@ Malta.prototype = {
 					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
 					notifyAndUnlock();
 				}
-				
-			}else if (ext.match(/md/)) {
+
+			} else if (ext.match(/md/)) {
 				name = self.outName.clear.replace(/\.md$/, '.md');
 				nameMin = self.outName.clear.replace(/\.md$/, '.html');
 				fname = name;
@@ -373,12 +374,12 @@ Malta.prototype = {
 
 				try {
 					//cnt = markdown.toHTML( cnt );
-					do_write(name, nameMin);	
+					do_write(name, nameMin);
 				} catch (err) {
 					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
 					notifyAndUnlock();
 				}
-				
+
 			} else {
 				name = self.outName.clear;
 				nameMin = self.outName.min;
@@ -391,33 +392,32 @@ Malta.prototype = {
 
 				fs.writeFile(name, cnt, function(err) {
 					var d = self.date(),
-						data = d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds(),
+						data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds(),
 						minif;
 
 					msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
-					msg += 'wrote ' + fname + ' ('+ getSize(name) + ')' + NL;
+					msg += 'wrote ' + fname + ' (' + getSize(name) + ')' + NL;
 
 					// if has js or css extension use uglification to get the minified version
 					// 
 					if (ext.match(/js|css/)) {
 
 						try {
-							minif =  (ext == 'js') ? 
-								uglify_js.minify(name).code
-								:
+							minif = (ext == 'js') ?
+								uglify_js.minify(name).code :
 								uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
-							
+
 							fs.writeFile(nameMin, minif, function(err) {
 								if (err == null) {
-									msg += 'wrote ' + nameMin + ' ('+ getSize(nameMin) + ')' + NL;
+									msg += 'wrote ' + nameMin + ' (' + getSize(nameMin) + ')' + NL;
 								} else {
-									console.log('[ERROR] uglify-js says:' );
+									console.log('[ERROR] uglify-js says:');
 									console.dir(err);
 									process.exit();
 								}
 								notifyAndUnlock();
 							});
-						} catch(e) {
+						} catch (e) {
 							console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
 							console.log('[WARN: Minified version skipped]');
 							notifyAndUnlock();
@@ -426,19 +426,19 @@ Malta.prototype = {
 					} else if (ext.match(/md/)) {
 						try {
 
-							cnt = markdown.toHTML( cnt );
+							cnt = markdown.toHTML(cnt);
 							fs.writeFile(nameMin, cnt, function(err) {
 								if (err == null) {
-									msg += 'wrote ' + nameMin + ' ('+ getSize(nameMin) + ')' + NL;
+									msg += 'wrote ' + nameMin + ' (' + getSize(nameMin) + ')' + NL;
 								} else {
-									console.log('[ERROR] markdown says:' );
+									console.log('[ERROR] markdown says:');
 									console.dir(err);
 									process.exit();
 								}
 								notifyAndUnlock();
 							});
-							
-						} catch(e) {
+
+						} catch (e) {
 							console.log('[PARSE ERROR: markdown] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
 							console.log('[WARN: Html version skipped]');
 							notifyAndUnlock();
@@ -451,7 +451,7 @@ Malta.prototype = {
 					}
 				});
 			}
-		
+
 		}
 
 		// get size of file
@@ -467,7 +467,7 @@ Malta.prototype = {
 		function notifyAndUnlock() {
 			end = self.date();
 			var tmp = 'watching ' + self.involvedFiles + " files";
-			msg += 'in ' + (end-start) + 'ms' + NL;
+			msg += 'in ' + (end - start) + 'ms' + NL;
 			msg += (new Array(tmp.length + 1)).join('-') + NL;
 			msg += tmp + NL;
 			msg += (new Array(tmp.length + 1)).join('=') + NL;
@@ -478,7 +478,7 @@ Malta.prototype = {
 
 		// do write
 		// 
-		
+
 
 		// get a local copy for the original outname 
 		// 
@@ -500,9 +500,9 @@ Malta.prototype = {
 	},
 
 
-	_signBuildNumber : function () {
+	_signBuildNumber: function() {
 		var fname = this.baseDir + DS + this.tplName.replace(/\./, '') + '.buildNum';
-			buildno = 0;
+		buildno = 0;
 		if (!fs.existsSync(fname)) {
 			fs.writeFileSync(fname, ++buildno);
 		} else {
@@ -519,7 +519,7 @@ Malta.prototype = {
 	 *                  and reflects that on the files register        
 	 * @return {void}
 	 */
-	_parse : function (path) {
+	_parse: function(path) {
 		var self = this;
 
 		// update cached content and time for that file,
@@ -536,8 +536,8 @@ Malta.prototype = {
 
 		// start recursive dig
 		// 
-		(function dig(c){
-			
+		(function dig(c) {
+
 			// look for files placeholders
 			// 
 			var els = c.match(new RegExp(self.reg.files, 'gm'));
@@ -547,7 +547,7 @@ Malta.prototype = {
 				//
 				for (var i = 0, l = els.length; i < l; i++) {
 
-					var p  = els[i].match(new RegExp(self.reg.files)),
+					var p = els[i].match(new RegExp(self.reg.files)),
 						f = p[2],
 						tmp,
 						fname;
@@ -559,19 +559,19 @@ Malta.prototype = {
 					}
 
 					if (f) {
-						
-						
-							self.queue.push(fname);	
 
-						
-						
+
+						self.queue.push(fname);
+
+
+
 
 						// check for circular inclusion
 						// 
 						self._checkInvolved();
 
 						tmp = self._utils.createEntry(fname);
-						
+
 						if (tmp) {
 
 							// store entry
@@ -586,7 +586,7 @@ Malta.prototype = {
 				}
 			}
 		})(cnt + "");
-		
+
 		// chain
 		//
 		return this;
@@ -600,10 +600,10 @@ Malta.prototype = {
 	 * 
 	 * @return {[type]} [description]
 	 */
-	_watch : function () {
+	_watch: function() {
 		var self = this,
 			d;
-		
+
 		function watch() {
 
 
@@ -613,13 +613,13 @@ Malta.prototype = {
 			self.queue = [];
 
 			for (f in self.files) {
-				
+
 				// somwthing changed
 				//
 				if (self.files[f].time < self._utils.getFileTime(f)) {
 					d = new Date;
-					
-					console.log('[MODIFIED @ '+ d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds() +'] ' + f.replace(self.baseDir + DS, ''));
+
+					console.log('[MODIFIED @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, ''));
 					// renew entry
 					// 
 					self.files[f] = self._utils.createEntry(f);
@@ -636,7 +636,7 @@ Malta.prototype = {
 						self.vars = self._utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
 						// self.vars = JSON.parse(fs.readFileSync(self.varPath));
 					}
-					
+
 					self._parse(f);
 				}
 			}
@@ -645,7 +645,7 @@ Malta.prototype = {
 
 		// every second, if nothing is building, watch files
 		// 
-		setInterval(function () {
+		setInterval(function() {
 			!self.doBuild && watch();
 		}, 1000);
 
@@ -654,51 +654,51 @@ Malta.prototype = {
 		return this;
 	},
 
-	_watchNew : function () {
+	_watchNew: function() {
 		var self = this,
 			d;
-	
+
 		for (file in self.files) {
 
-			
 
-			(function (f) {
+
+			(function(f) {
 
 				var done = false;
 
-				fs.watch(f, function (event, filename) {
+				fs.watch(f, function(event, filename) {
 
-						if (done) return;
-						done = true;
+					if (done) return;
+					done = true;
 
-						console.log(event)
+					console.log(event)
 						// empty queue
 						//
-						self.queue = [];
+					self.queue = [];
 
-						d = new Date;
-							
-						console.log('[MODIFIED @ '+ d.getHours() + ':' + d.getMinutes()  + ':' + d.getSeconds() +'] ' + f.replace(self.baseDir + DS, ''));
-						// renew entry
+					d = new Date;
+
+					console.log('[MODIFIED @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, ''));
+					// renew entry
+					// 
+					self.files[filename] = self._utils.createEntry(filename);
+
+					// if it`s vars .json reload it
+					// 
+					if (filename === self.varPath) {
+						// update vars
 						// 
-						self.files[filename] = self._utils.createEntry(filename);
+						self.vars = self._utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
+						// self.vars = JSON.parse(fs.readFileSync(self.varPath));
+					}
 
-						// if it`s vars .json reload it
-						// 
-						if (filename === self.varPath) {
-							// update vars
-							// 
-							self.vars = self._utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
-							// self.vars = JSON.parse(fs.readFileSync(self.varPath));
-						}
-						
-						self._parse(filename);
-						
-						self._build();
+					self._parse(filename);
 
-						setTimeout(function () {
-							done = false;
-						},2000);
+					self._build();
+
+					setTimeout(function() {
+						done = false;
+					}, 2000);
 				});
 
 
@@ -716,7 +716,7 @@ Malta.prototype = {
 	 * starts watch and first build
 	 * @return {[type]} [description]
 	 */
-	start : function () {
+	start: function() {
 		var self = this;
 
 		if (!(self.started)) {
@@ -731,9 +731,9 @@ Malta.prototype = {
 			._watch()
 			._build();
 	},
-	
 
-	_hasVars : function () {
+
+	_hasVars: function() {
 		return this.vars !== {};
 	},
 
@@ -742,13 +742,13 @@ Malta.prototype = {
 	 * check cmd params
 	 * @return {instance} Malta instance
 	 */
-	check : function (a) {
+	check: function(a) {
 		var tmp,
 			argTemplate,
 			argOutDir, i, t;
 
 		if (a.length < 2) {
-			console.log(this.name + ' v.' + this.version);  
+			console.log(this.name + ' v.' + this.version);
 			console.log(NL + 'Usage : malta [templatefile] [outdir]');
 			console.log('   OR   malta [buildfile.json]' + NL);
 			process.exit();
@@ -759,29 +759,29 @@ Malta.prototype = {
 		argTemplate = a[0];
 		argOutDir = a[1];
 
-		
+
 		this.tplName = path.basename(argTemplate);
 		this.tplPath = path.resolve(execRoot, argTemplate);
 		this.baseDir = path.dirname(this.tplPath);
 
 		if (!fs.existsSync(this.tplPath)) {
 			console.log('Template `' + this.tplPath + '` NOT FOUND!');
-			process.exit(); 
+			process.exit();
 		}
-		
+
 		this.tplCnt = fs.readFileSync(this.tplPath).toString();
 		this.outDir = path.resolve(execRoot, argOutDir);
 
 		if (!fs.existsSync(this.outDir)) {
 			console.log('OutDir `' + this.outDir + '` NOT FOUND!');
-			process.exit(); 
+			process.exit();
 		}
 
 		if (this.baseDir + "" == this.outDir + "") {
 			console.log('[ERROR] Output and template directories coincide. Malta won`t overwrite your template');
 			process.exit();
 		}
-		
+
 		tmp = path.extname(this.tplName)
 
 		// outnames, given here by the name of the tpl (tplName)
@@ -790,8 +790,8 @@ Malta.prototype = {
 		// in this.outDir once checked his validity
 		// 
 		this.outName = {
-			clear : (this.outDir + DS +  this.tplName),
-			min : (this.outDir + DS +  this.tplName).replace(tmp, '.min' + tmp)
+			clear: (this.outDir + DS + this.tplName),
+			min: (this.outDir + DS + this.tplName).replace(tmp, '.min' + tmp)
 		};
 
 		// check vars.json
@@ -811,8 +811,8 @@ Malta.prototype = {
 			try {
 				// tmp = JSON.parse(fs.readFileSync(this.varPath));
 				tmp = this._utils.solveJson(JSON.parse(fs.readFileSync(this.varPath)));
-				
-				
+
+
 				this.vars = tmp;
 			} catch (e) {
 				this.vars = {};
@@ -821,7 +821,7 @@ Malta.prototype = {
 			//console.log('[INFO] No ' + this.varPath + ' file found');
 			this.varPath = false;
 		}
-		
+
 		// params validated 
 		// chain for run
 		// 
@@ -832,41 +832,42 @@ Malta.prototype = {
 	 * [_utils description]
 	 * @type {Object}
 	 */
-	_utils : {
-		createEntry : function (path) {
-			if(!fs.existsSync(path)){
+	_utils: {
+		createEntry: function(path) {
+			if (!fs.existsSync(path)) {
 				return false;
 			}
 			return {
-				content : fs.readFileSync(path).toString(),
-				time : fs.statSync(path).mtime.getTime(),
-				cachevalid : true
+				content: fs.readFileSync(path).toString(),
+				time: fs.statSync(path).mtime.getTime(),
+				cachevalid: true
 			};
 		},
-		
-		getFileExtension : function (fname) {
+
+		getFileExtension: function(fname) {
 			return fname.split('.').pop();
 		},
 
-		getFileTime : function (path) {
+		getFileTime: function(path) {
 			return fs.existsSync(path) && fs.statSync(path).mtime.getTime();
 		},
 
-		uniquearr : function (a) {
+		uniquearr: function(a) {
 			var r = [],
-	            l = a.length,
-	            i = 0, j;
-	        for (i = 0; i < l; i++) {
-	            for (j = i + 1; j < l; j++) 
-	                if (a[i] === a[j]) j = ++i;
-	            r.push(a[i]);
-	        }
-	        return r;
+				l = a.length,
+				i = 0,
+				j;
+			for (i = 0; i < l; i++) {
+				for (j = i + 1; j < l; j++)
+					if (a[i] === a[j]) j = ++i;
+				r.push(a[i]);
+			}
+			return r;
 		},
 
 		// experimenting some kind of dummy local minifier
 		//
-		clean : function (s) {
+		clean: function(s) {
 			// inline
 			s = s.replace(/^[\s\t]*\/\/.*(?=[\n\r])/gm, '');
 
@@ -875,40 +876,70 @@ Malta.prototype = {
 
 			return s;
 		},
-		solveJson : function (o) {
-			var y;
+
+		solveJson1: function(o) {
+			var self = this,
+				y;
 			for (var i in o) {
-				if((typeof o[i]).match(/string/i)) {
-					while(y = o[i].match(/\$([A-z0-9-_/.]+)\$/)){
-						if(y && y.length == 2 && y[1] in o){
-							o[i] = o[i].replace('$'+y[1]+'$', o[y[1]]);
+				if ((typeof o[i]).match(/string/i)) {
+					while (y = o[i].match(/\$([A-z0-9-_/.]+)\$/)) {
+						if (y && y.length == 2 && y[1] in o) {
+							o[i] = o[i].replace('$' + y[1] + '$', o[y[1]]);
 						} else {
 							break;
 						}
 					}
 				}
+				// here I could even solve objects, not yet
 			}
 			return o;
 		},
-		checkns : function(ns, ctx) {
-	        var els = ns.split(/\.|\//),
-	            i = 0,
-	            l = els.length;
-	        ctx = (ctx !== undefined) ? ctx : W;
 
-	        if (!ns) return ctx;
+		solveJson: function(obj) {
+			var self = this;
 
-	        for (null; i < l; i += 1) {
+			return (function _(o) {
+				var y, yy;
+				for (var j in o) {
+					switch (typeof o[j]) {
+						case 'string':
+							while (y = o[j].match(/\$([A-z0-9-_/.]+)\$/)) {
 
-	            if (typeof ctx[els[i]] !== 'undefined') {
-	                ctx = ctx[els[i]];
-	            } else {
-	                // break it
-	                return undefined;
-	            }
-	        }
-	        return ctx;
-	    }
+								if (yy = self.checkns(y[1], obj)) {
+									o[j] = o[j].replace('$' + y[1] + '$', yy);
+								} else {
+									o[j] = o[j].replace('$' + y[1] + '$', "");
+								}
+							}
+							break;
+						case 'object':
+							o[j] = _(o[j]);
+							break;
+					}
+				}
+				return o;
+			})(obj);
+		},
+
+		checkns: function(ns, ctx) {
+			var els = ns.split(/\.|\//),
+				i = 0,
+				l = els.length;
+			ctx = (ctx !== undefined) ? ctx : W;
+
+			if (!ns) return ctx;
+
+			for (null; i < l; i += 1) {
+
+				if (typeof ctx[els[i]] !== 'undefined') {
+					ctx = ctx[els[i]];
+				} else {
+					// break it
+					return undefined;
+				}
+			}
+			return ctx;
+		}
 	}
 
 }
@@ -923,11 +954,11 @@ if (args.length == 1) {
 	for (run in runs) {
 
 		//skip key which begins with !
-		if (run.match(/^\!/))continue;
-		
+		if (run.match(/^\!/)) continue;
+
 		var ls = child_process.spawn('malta', [run].concat(runs[run].split(/\s/)));
 
-		ls.stdout.on('data', function (data) {
+		ls.stdout.on('data', function(data) {
 			console.log("" + data);
 		});
 		/*
