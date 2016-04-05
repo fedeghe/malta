@@ -193,6 +193,7 @@ Less, Sass and minification and Markdown
 
 Changelog
 ---------
+- **2.2.4** added detection for placeholders loops into the variable json
 - **2.2.3** variables json can contain inner placeholders at any level
 - **2.2.2** fixed a bug related to vars substitution
 - **2.2.1** in file placeholders is possible to use absolute paths, will be based on to the execution path;

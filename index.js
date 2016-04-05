@@ -896,7 +896,9 @@ Malta.prototype = {
 		},
 
 		solveJson: function(obj) {
-			var self = this;
+			var self = this,
+				maxSub = 1E3,
+				i = 0;
 
 			return (function _(o) {
 				var y, yy;
@@ -904,13 +906,23 @@ Malta.prototype = {
 					switch (typeof o[j]) {
 						case 'string':
 							while (y = o[j].match(/\$([A-z0-9-_/.]+)\$/)) {
-
+/*
 								if (yy = self.checkns(y[1], obj)) {
 									o[j] = o[j].replace('$' + y[1] + '$', yy);
 								} else {
 									o[j] = o[j].replace('$' + y[1] + '$', "");
 								}
+*/								
+								o[j] = o[j].replace(
+									'$' + y[1] + '$',
+									self.checkns(y[1], obj) || ""
+								);
+								if (i++ > maxSub) {
+									console.log('[ERROR] it seems like variable json has looping placeholders!');
+									process.exit();
+								}
 							}
+							
 							break;
 						case 'object':
 							o[j] = _(o[j]);
