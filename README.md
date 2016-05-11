@@ -10,18 +10,18 @@ Installation
 
 If You do not have node installed yet, run:
 
-	$ curl http://npmjs.org/install.sh | sh 
-	
+    $ curl http://npmjs.org/install.sh | sh 
+    
 then install malta running:
 
-	$ [sudo] npm install malta [-g]
+    $ [sudo] npm install malta [-g]
 
 
 Usage
 -----
 
-	$ malta templateFile outDirectory [-vars=nonDefault_vars_path]
-		
+    $ malta templateFile outDirectory [-vars=nonDefault_vars_path] [-o={0|1|2|3}]  [-base62={true|false}]  [-shrink={true|false}]
+        
 - **templateFile**  
 is the base template used as base file. Note that the extension will be inherited by output files (but for .less & .sass files).
   
@@ -31,19 +31,34 @@ is the folder where the output files will be written in.
 - **nonDefaultVarsPath**
 here is possible to tell Malta to consider a different file for variables (defaut would be vars.json in the templateFiel folder)
 
+- the **-o** is used only for .js, .css, .less, sass files (default value is 1):  
+
+| -o        | js           | css, less, sass  |
+|:---|:---|:---|
+| 0 | plain compiled | plain compiled |
+| 1 | plain compiled and .min.js (uglify-js) |   plain compiled and .min.css (uglify-css) |
+| 2 | plain compiled AND the .pack.js (packer) |    default  (as if 1) |
+| 3 | plain compiled AND both .min.js and .pack.js |    default (as if 1) |
+
+- the **-base62** and **-shrink** parameters has effect only for .js files and the packer is involved (-o > 1) and act as can be easily expected (default values are base62=true and shrink=false)
+
+
+
 Seen that most of times it would be handy to engage many builds at once it`s possible to start Malta as follows: 
 
-	$ malta list.json
-	
+    $ malta list.json
+    
 where *list.json* is a file containing one or more pairs, that commits Malta to build more than one file in one shot:
 
 - **list.json** :
-	
-		{
-			"common.less" : "../../public_html/css -vars=./vars/deploy.json",
-			"common.js" : "../../public_html/js",
-			...
-		}
+    
+        {
+            "palette.less" : "../../public_html/css -vars=./vars/deploy.json -o=0",
+            "common.less" : "../../public_html/css -vars=./vars/deploy.json",
+            "common.js" : "../../public_html/js",
+            "lib.js" : "../../public_html/js -o=3 -base62=false -shrink=true",
+            ...
+        }
 
 Placeholders
 ------------
@@ -84,13 +99,13 @@ Foo sample
 
 Supposing in `~/myproject/` folder there is the following  
 
-	myfile.js
-	vars.json
-	out/
-	src/
-	|- a.js
-	|- inner/
-	   |- b.js
+    myfile.js
+    vars.json
+    out/
+    src/
+    |- a.js
+    |- inner/
+       |- b.js
 
 <br />
 The most important is the Malta template file being the first file used to build the glued file. 
@@ -98,92 +113,101 @@ The most important is the Malta template file being the first file used to build
 Here use the Malta placeholders and/or the wired vars to specify which files/variables must be included.
 
 **myfile.js** :
-	
-	/**
-	// use the `name` and `author` variables from the vars.json
-	// the wired __DATE__ variable
-	//
-	Name : $name$ 			
-	Author: $author.ns$
-	Project : $more.repo$
-	Date: __DATE__
-	*/
-	+function(){
-		var name = 'what';
-		
-		// write here the content of the src/a.js file 
-		// the path is relative to the template folder
-		//
-		$$src/a.js$$	
-	}();
+    
+    /**
+    // use the `name` and `author` variables from the vars.json
+    // the wired __DATE__ variable
+    //
+    Name : $name$           
+    Author: $author.ns$
+    Project : $more.repo$
+    Date: __DATE__
+    */
+    +function(){
+        var name = 'what',
+            data = $data$,
+            tenPrimes = $tenPrimes$;
+        
+        // write here the content of the src/a.js file 
+        // the path is relative to the template folder
+        //
+        $$src/a.js$$    
+    }();
 <br />
 and here is the **src/a.js** :  
 
-	function hello(n) {
-		alert('Hello ' + n);
-		
-		// as before, always relative to the template
-		// even if this was at 10th inclusion level
-		//
-		$$src/inner/b.js$$	
-	}						
-	hello('Federico'), hello('Federico');
+    function hello(n) {
+        alert('Hello ' + n);
+        
+        // as before, always relative to the template
+        // even if this was at 10th inclusion level
+        //
+        $$src/inner/b.js$$  
+    }                       
+    hello('Federico'), hello('Federico');
 <br />
 the last content file for that dummy sample is **src/inner/b.js** :  
 
-	hello = function () {
-		alert('Hello again ' + n);
-	};
+    hello = function () {
+        alert('Hello again ' + n);
+    };
 <br />
 and least but not last **vars.json** :  
 
-	{
-		"name":"myFabulousProject",
-		"author":{
-			"name" : "Federico",
-			"surname" : "Ghedina",
-			"ns" : "$author.name$ $author.surname$"
-		},
-		"more" : {
-			"repo" : "https://github.com/fedeghe/malta"
-		}
-	}  
+    {
+        "name":"myFabulousProject",
+        "author":{
+            "name" : "Federico",
+            "surname" : "Ghedina",
+            "ns" : "$author.name$ $author.surname$"
+        },
+        "more" : {
+            "repo" : "https://github.com/fedeghe/malta"
+        },
+        "data" : {
+            "namesurname" : "$author.name$ - $author.surname$"
+        },
+        "tenPrimes" : [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+    }  
 <br />
 **Now** from ~ execute:  
 
-	 malta myproject/myfile.js myproject/out [-vars=myproject/local/variables.json]
+     malta myproject/myfile.js myproject/out [-vars=myproject/local/variables.json]
 in a while Malta will confirm the first creation of _myproject/out/myfile.js_ and _myproject/out/myfile.min.js_.  
 <br />
 The _myproject/out/myfile.js_ will look like:  
 
-	/**
-	Name : myFabulousProject
-	Author: Federico
-	Project : https://github.com/fedeghe/malta
-	Date: 11/9/2013
-	*/
-	+function(){ 
-		var name = 'what';
-		function hello(n) {
-			alert('Hello ' + n);
-			hello = function () {
-				alert('Hello again ' + n);
-			};
-		}
-		hello('Federico'), hello('Federico');
-	}();
+    /**
+    Name : myFabulousProject
+    Author: Federico Ghedina
+    Project : https://github.com/fedeghe/malta
+    Date: 11/9/2013
+    */
+    +function(){ 
+        var name = 'what',
+            data = {"namesurname":"Federico - Ghedina"},
+            tenPrimes = [2,3,5,7,11,13,17,19,23,29];
+        function hello(n) {
+            alert('Hello ' + n);
+            hello = function () {
+                alert('Hello again ' + n);
+            };
+        }
+        hello('Federico'), hello('Federico');
+    }();
 
 <br/>
 Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.json_ (or the overridden one) or one of the involved files, and get a look at the output folder content.  To stop it use Ctrl + c. 
 
 
 <br/>
-Less, Sass and minification and Markdown
+Less, Sass and minification and Markdown  
+
 ------------------------------------
 
 - When dealing with `.less` or `.scss` template files they will be compiled thanks to [less][1] and [sass][2] [npmjs][3] packages. 
 
-- Thank to other two packages, [uglify-js][4] & [uglifycss][5], for every output `.js`  and`.css` file will be written even a minified version (thus even for `.less` and `.scss`).
+- Thank to other three packages, [uglify-js][4], [uglifycss][5] and [packer][8] for every output `.js` will be written a minified and a packed version and for every `.css` file will be written a minified version (thus even for `.less` and `.scss`).
 
 - Thank again to other two pakages [markdown][6] & [markdown-pdf][7], every tamplate with .pdf.md will produce a .pdf file AND every template with .md will produce a glued .md and the resulting .html file.
  
@@ -192,12 +216,17 @@ Less, Sass and minification and Markdown
 
 
 Changelog
----------
+--------- 
+- **2.3.2** fixed some typos in the README.md 
+- **2.2.8** var placeholder replace with JSON.stringify output in case of object 
+- **2.2.7** new options available for files that can be minified/packed 
+- **2.2.6** fixed a small bug in the console ouput messages for the packed versions of js files
+- **2.2.5** in case of js files will be written even a packed version using the amazing Dean Edwards npm port
 - **2.2.4** added detection for placeholders loops into the variable json
 - **2.2.3** variables json can contain inner placeholders at any level
 - **2.2.2** fixed a bug related to vars substitution
 - **2.2.1** in file placeholders is possible to use absolute paths, will be based on to the execution path;
-			vars.json file can contain deeper literals that can be references with . or / separator in the placeholder (see examples above)
+            vars.json file can contain deeper literals that can be references with . or / separator in the placeholder (see examples above)
 - **2.2.0** some refactors
 - **2.1.3** in vars.json nested vars can be used
 - **2.0.6** markdown to pdf support added, just use .pdf.md for the templates file
@@ -242,3 +271,4 @@ Changelog
 [5]: https://www.npmjs.org/package/uglifycss
 [6]: https://www.npmjs.com/package/markdown-pdf
 [7]: https://www.npmjs.com/package/markdown
+[8]: https://www.npmjs.com/package/packer

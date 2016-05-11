@@ -1,0 +1,1 @@
+node index.js test/multi.json

@@ -11,6 +11,7 @@ var fs = require("fs"),
 	markdownpdf = require("markdown-pdf"),
 	less = require("less"),
 	sass = require("sass"),
+	packer = require("packer"),
 	child_process = require('child_process'),
 
 	// path from where Malta is started
@@ -112,6 +113,20 @@ function Malta() {
 	this.debug = false;
 
 
+	this.js_base62 = true;
+	this.js_shrink = false;
+
+	/*
+
+	.js tpl 						| .css OR/AND .less tpl 
+	--------------------------------+----------------------
+	0 > .js 						| .css
+	1 > .js & .min.js 				| .css & .min.css 		<<<<<<<<< DEFAULT
+	2 > .js & .pack.js 				| DEFAULT (1)
+	3 > .js & .min.js & .pack.js 	| DEFAULT (1)
+
+ 	 */
+	this.outVersion = 1;
 
 	// date function used to show elapsed time for creation,
 	// and eve for wired time placeholders
@@ -149,7 +164,7 @@ Malta.prototype = {
 	},
 
 	_stop: function() {
-		console.log('MALTA has stoppend' + NL);
+		console.log('MALTA has stopped' + NL);
 		process.exit();
 	},
 
@@ -272,6 +287,9 @@ Malta.prototype = {
 
 					return tpl.replace(new RegExp(self.reg.vars, 'g'), function(str, $1) {
 						var t = self._utils.checkns($1 + '', self.vars);
+						if (typeof t === 'object') {
+							t = JSON.stringify(t);
+						}
 						return typeof t !== "undefined" ? t : '$' + $1 + '$';
 						// return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
 
@@ -311,7 +329,8 @@ Malta.prototype = {
 		function write(cnt, fname) {
 
 			var name,
-				nameMin;
+				nameMin,
+				namePack;
 
 			// !!!
 			// 
@@ -383,6 +402,7 @@ Malta.prototype = {
 			} else {
 				name = self.outName.clear;
 				nameMin = self.outName.min;
+				namePack = self.outName.pack;
 				do_write(name, nameMin);
 			}
 
@@ -393,7 +413,8 @@ Malta.prototype = {
 				fs.writeFile(name, cnt, function(err) {
 					var d = self.date(),
 						data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds(),
-						minif;
+						minif,
+						packed;
 
 					msg = 'Build ' + self.buildnumber + ' @ ' + data + NL;
 					msg += 'wrote ' + fname + ' (' + getSize(name) + ')' + NL;
@@ -402,6 +423,9 @@ Malta.prototype = {
 					// 
 					if (ext.match(/js|css/)) {
 
+
+						// outVersion
+/*
 						try {
 							minif = (ext == 'js') ?
 								uglify_js.minify(name).code :
@@ -415,13 +439,107 @@ Malta.prototype = {
 									console.dir(err);
 									process.exit();
 								}
-								notifyAndUnlock();
+
+								// now packer if js
+								if (ext == 'js') {
+									packed = packer.pack(cnt, self.js_base62, self.js_shrink);
+									fs.writeFile(namePack, packed, function(err) {
+										if (err == null) {
+											// msg += 'wrote ' + namePack + ' (' + getSize(namePack) + '), base62:' + self.js_base62 + ' shrink:' + self.js_shrink + NL;
+											msg += 'wrote ' + namePack + ' (' + getSize(namePack) + ')' + NL;
+										} else {
+											console.log('[ERROR] packer says:');
+											console.dir(err);
+											process.exit();
+										}
+										notifyAndUnlock();
+									});
+								} else {
+									notifyAndUnlock();
+								}
 							});
 						} catch (e) {
 							console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
 							console.log('[WARN: Minified version skipped]');
 							notifyAndUnlock();
 						}
+*/
+
+						function _writeJsFiles() {
+
+							function writePacked() {
+								packed = packer.pack(cnt, self.js_base62, self.js_shrink);
+								fs.writeFile(namePack, packed, function(err) {
+									if (err == null) {
+										msg += 'wrote ' + namePack + ' (' + getSize(namePack) + ')' + (self.js_base62 ? ' base62' : '') + (self.js_shrink ? ' shrink' : '');
+										msg +=  NL;
+									} else {
+										console.log('[ERROR] packer says:');
+										console.dir(err);
+										process.exit();
+									}
+									notifyAndUnlock();
+								});
+							}
+							// console.log('outversion :', self.outVersion);
+							/*
+							mode 1 > only min
+							mode 2 > only pack
+							mode 3 > both
+							*/
+							try {
+								if (self.outVersion !== 2) {
+									minif = uglify_js.minify(name).code ;
+									fs.writeFile(nameMin, minif, function(err) {
+										if (err == null) {
+											msg += 'wrote ' + nameMin + ' (' + getSize(nameMin) + ')' + NL;
+										} else {
+											console.log('[ERROR] uglify-js says:');
+											console.dir(err);
+											process.exit();
+										}
+										notifyAndUnlock();
+										// now packer if js
+										// 
+										self.outVersion==3 && writePacked();
+										
+									});
+								} else {
+									// only pack
+									writePacked();
+								}
+
+							} catch (e) {
+								console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+								console.log('[WARN: Minified version skipped]');
+								notifyAndUnlock();
+							}
+						}
+
+						function _writeCssFiles() {
+							// even minified
+							minif = uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
+							fs.writeFile(nameMin, minif, function(err) {
+								if (err == null) {
+									msg += 'wrote ' + nameMin + ' (' + getSize(nameMin) + ')' + NL;
+								} else {
+									console.log('[ERROR] uglify-css says:');
+									console.dir(err);
+									process.exit();
+								}
+								notifyAndUnlock();
+							});
+						}
+
+
+						// if >0 need somethign more that plain one
+						// 
+						if (self.outVersion){
+							(ext == 'js') ? _writeJsFiles() : _writeCssFiles();
+						} else {
+							notifyAndUnlock();
+						}
+
 
 					} else if (ext.match(/md/)) {
 						try {
@@ -791,7 +909,8 @@ Malta.prototype = {
 		// 
 		this.outName = {
 			clear: (this.outDir + DS + this.tplName),
-			min: (this.outDir + DS + this.tplName).replace(tmp, '.min' + tmp)
+			min: (this.outDir + DS + this.tplName).replace(tmp, '.min' + tmp),
+			pack: (this.outDir + DS + this.tplName).replace(tmp, '.pack' + tmp)
 		};
 
 		// check vars.json
@@ -799,12 +918,53 @@ Malta.prototype = {
 		// of the tpl but if differently specified by a[2]
 		// Hint: even if it expected to be in that position
 		// it must be prefixed by -vars=json_relative_to_exec_folder
+/*
 		if (a[2]) {
 			tmp = a[2].match(/^-vars\=(.*)$/);
-			this.varPath = execRoot + DS + tmp[1];
+			if (tmp) this.varPath = execRoot + DS + tmp[1];
+
+			tmp = a[2].match(/^-base62=true$/);
+			if (tmp) this.js_base62 = true;
+
+			tmp = a[2].match(/^-shrink=true$/);
+			if (tmp) this.js_shrink = true;
+
 		} else {
 			this.varPath = this.baseDir + DS + 'vars.json';
 		}
+*/
+
+
+
+		this.varPath = this.baseDir + DS + 'vars.json';
+
+		
+		for (var i=2, t=a.length; i<t; i++) {
+			tmp = a[i].match(/^-vars\=(.*)$/);
+			if (tmp) {
+				this.varPath = execRoot + DS + tmp[1];
+				continue;
+			}
+
+			tmp = a[i].match(/^-o\=(\d)$/);
+			if (tmp && tmp[1]>=0 && tmp[1]<4){
+				this.outVersion = ~~(tmp[1]);
+				continue;
+			}
+
+			tmp = a[i].match(/^-base62=(true|false)$/);
+			if (tmp && tmp.length > 1){
+				this.js_base62 = !!(tmp[1]=='true');
+				continue;
+			}
+
+			tmp = a[i].match(/^-shrink=(true|false)$/);
+			if (tmp && tmp.length > 1){
+				this.js_shrink = !!(tmp[1]=='true');
+			}
+
+		}
+
 
 		// get the content
 		if (fs.existsSync(this.varPath)) {

@@ -1,6 +1,6 @@
 {
   "name": "malta",
-  "version": "2.2.4",
+  "version": "2.3.2",
   "description": "lightning builder allows to compose on the fly and update packed and full coded huge javascript files, edit its parts as files, splitted and glued as You need.",
   "main": "index.js",
   "dependencies": {
@@ -9,7 +9,8 @@
     "less": "~1.6.3",
     "sass": "~0.5.0",
     "markdown": "~0.5.0",
-    "markdown-pdf": "~5.1.0"
+    "markdown-pdf": "~5.1.0",
+    "packer": "~0.0.6"
   },
   "devDependencies": {},
   "scripts": {
