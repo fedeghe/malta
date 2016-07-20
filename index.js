@@ -341,15 +341,23 @@ Malta.prototype = {
 				nameMin = self.outName.min.replace(/\.less$/, '.css');
 				fname = name;
 				ext = 'css';
-				less.render(cnt, function(err, newcnt) {
-					if (err) {
-						console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
-						notifyAndUnlock();
-					}
-					// update content to be written
-					cnt = newcnt;
-					do_write(name, nameMin);
-				});
+
+				try {
+					less.render(cnt, function(err, newcnt) {
+						if (err) {
+							console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+							notifyAndUnlock();
+						} else {
+							// update content to be written
+							cnt = newcnt;
+							do_write(name, nameMin);
+						}
+					});
+				} catch (err) {
+					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+					notifyAndUnlock();
+				}
+
 			} else if (ext.match(/scss/)) {
 				name = self.outName.clear.replace(/\.scss$/, '.css');
 				nameMin = self.outName.min.replace(/\.scss$/, '.css');
