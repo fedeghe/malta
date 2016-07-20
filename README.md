@@ -217,7 +217,8 @@ Less, Sass and minification and Markdown
 
 Changelog
 --------- 
-- **2.3.2** fixed some typos in the README.md 
+- **2.3.7** better handling for `less` compiler exceptions 
+- **2.3.5** fixed some typos in the README file 
 - **2.2.8** var placeholder replace with JSON.stringify output in case of object 
 - **2.2.7** new options available for files that can be minified/packed 
 - **2.2.6** fixed a small bug in the console ouput messages for the packed versions of js files

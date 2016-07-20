@@ -1,1 +1,1 @@
-node index.js test/app.js test/build/ -o=0
+node index.js test/app.js test/build/ -o=0 
