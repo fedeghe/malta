@@ -1,0 +1,1 @@
+node index.js test/daisy.svg test/build/svg/
