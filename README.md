@@ -63,13 +63,16 @@ where *list.json* is a file containing one or more pairs, that commits Malta to 
 Placeholders
 ------------
 
-Malta uses two kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
+Malta uses three kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **$$filePath$$**  
   _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder
 
 - **$varname$**  
   _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder  
+
+- **!{expression}!**
+  _expression_ can contain anything that must be evaluated (eval is used)
 
 Hints
 -----
@@ -131,7 +134,8 @@ Here use the Malta placeholders and/or the wired vars to specify which files/var
         // write here the content of the src/a.js file 
         // the path is relative to the template folder
         //
-        $$src/a.js$$    
+        $$src/a.js$$   
+        console.debug(!{$width$ * $height$ / 7 - 8}!) // new 'comp' placeholder (>=2.3.8) 
     }();
 <br />
 and here is the **src/a.js** :  
@@ -167,7 +171,9 @@ and least but not last **vars.json** :
         "data" : {
             "namesurname" : "$author.name$ - $author.surname$"
         },
-        "tenPrimes" : [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
+        "tenPrimes" : [2, 3, 5, 7, 11, 13, 17, 19, 23, 29],
+        "width" : 112,
+        "height" :124
     }  
 <br />
 **Now** from ~ execute:  
@@ -194,6 +200,7 @@ The _myproject/out/myfile.js_ will look like:
             };
         }
         hello('Federico'), hello('Federico');
+        console.debug(1976)
     }();
 
 <br/>
@@ -201,15 +208,17 @@ Let Malta run and try editing the _myproject/myfile.js_ or the _myproject/vars.j
 
 
 <br/>
-Less, Sass and minification and Markdown  
+Less, Sass, js minification, markdown and svg  
 
 ------------------------------------
 
 - When dealing with `.less` or `.scss` template files they will be compiled thanks to [less][1] and [sass][2] [npmjs][3] packages. 
 
-- Thank to other three packages, [uglify-js][4], [uglifycss][5] and [packer][8] for every output `.js` will be written a minified and a packed version and for every `.css` file will be written a minified version (thus even for `.less` and `.scss`).
+- Thanks to other three packages, [uglify-js][4], [uglifycss][5] and [packer][8] for every output `.js` will be written a minified and a packed version and for every `.css` file will be written a minified version (thus even for `.less` and `.scss`).
 
-- Thank again to other two pakages [markdown][6] & [markdown-pdf][7], every tamplate with .pdf.md will produce a .pdf file AND every template with .md will produce a glued .md and the resulting .html file.
+- Thanks again to other two pakages [markdown][6] & [markdown-pdf][7], every template with .pdf.md will produce a .pdf file AND every template with .md will produce a glued .md and the resulting .html file.
+
+- Thanks to another pakages [svg-to-png][9] , every template with .svg will produce even a .png file.
  
 
 
@@ -217,6 +226,9 @@ Less, Sass and minification and Markdown
 
 Changelog
 --------- 
+- **2.4.1** removed some unuseful messages from console
+- **2.4.0** .svg files will automatically output even a .png
+- **2.3.8** added _comp_ placeholder for evaluate simple arithmentic expressions
 - **2.3.7** better handling for `less` compiler exceptions 
 - **2.3.5** fixed some typos in the README file 
 - **2.2.8** var placeholder replace with JSON.stringify output in case of object 
@@ -273,3 +285,4 @@ Changelog
 [6]: https://www.npmjs.com/package/markdown-pdf
 [7]: https://www.npmjs.com/package/markdown
 [8]: https://www.npmjs.com/package/packer
+[9]: https://www.npmjs.com/package/svg-to-png
