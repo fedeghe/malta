@@ -5,14 +5,17 @@
  */
 var fs = require("fs"),
 	path = require("path"),
+	child_process = require('child_process'),
+
 	uglify_js = require("uglify-js"),
 	uglify_css = require("uglifycss"),
 	markdown = require("markdown").markdown,
 	markdownpdf = require("markdown-pdf"),
+	svg_to_png = require('svg-to-png'),
 	less = require("less"),
 	sass = require("sass"),
 	packer = require("packer"),
-	child_process = require('child_process'),
+	
 
 	// path from where Malta is started
 	// 
@@ -30,7 +33,8 @@ var fs = require("fs"),
 	// 
 	DS = path.sep,
 	NL = "\n",
-	TAB = "\t";
+	TAB = "\t",
+	watchInterval = 1E3
 
 // zebra constructor
 // 
@@ -40,12 +44,11 @@ function Malta() {
 
 	// security nesting level
 	// 
-	this.MAX_INVOLVED = 5000;
+	this.MAX_INVOLVED = 5E3;
 
 	// name and version from package json
 	// 
-	this.name = 'name' in packageInfo ? packageInfo.name : 'Malta';
-	this.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
+	
 	this.buildnumber = null;
 
 	// path for the vars.json
@@ -132,14 +135,15 @@ function Malta() {
 	// and eve for wired time placeholders
 	// __TIME__ , __DATE__ , __YEAR__
 	// 
-	this.date = function() {
-		return new Date(); };
+	this.date = function() {return new Date(); };
 
 	// time spend to build
 	// 
 	this.t2b = 0;
 
 };
+Malta.name = 'name' in packageInfo ? packageInfo.name : 'Malta';
+Malta.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
 
 // proto
 // 
@@ -152,11 +156,13 @@ Malta.prototype = {
 	// 
 	reg: {
 		files: '(.*)\\\$\\\$([A-z0-9-_/.]+)\\\$\\\$',
-		vars: '\\\$([A-z0-9-_/.]+)\\\$'
+		vars: '\\\$([A-z0-9-_/.]+)\\\$',
+		calc : '\!{([^{}]*)}\!'
 	},
 
 	comments: {
 		xml: "<!--\n%content%\n-->\n",
+		svg: "<!--\n%content%\n-->\n",
 		js: "/*\n%content%\n*/\n",
 		css: "/*\n%content%\n*/\n",
 		less: "/*\n%content%\n*/\n",
@@ -294,6 +300,11 @@ Malta.prototype = {
 						// return ($1 in self.vars) ? self.vars[$1] : '$' + $1 + '$';
 
 					});
+				},
+				calc : function (tpl) {
+					return tpl.replace(new RegExp(self.reg.calc, 'g'), function(str, $1) {
+						return eval($1);
+					});
 				}
 			},
 			start = self.date(),
@@ -319,10 +330,11 @@ Malta.prototype = {
 			.replace(/__DATE__/g, self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear())
 			.replace(/__YEAR__/g, self.date().getFullYear())
 			.replace(/__FILES__/g, self.involvedFiles)
-			.replace(/__NAME__/g, self.name)
-			.replace(/__VERSION__/g, self.version)
+			.replace(/__NAME__/g, Malta.name)
+			.replace(/__VERSION__/g, Malta.version)
 			.replace(/__BUILDNUMBER__/g, self.buildnumber);
 
+		baseTplContent = replace.calc(baseTplContent)
 
 		// write function 
 		// 
@@ -336,6 +348,8 @@ Malta.prototype = {
 			// 
 			ext = self._utils.getFileExtension(self.outName.clear);
 
+			// less
+			// 
 			if (ext.match(/less/)) {
 				name = self.outName.clear.replace(/\.less$/, '.css');
 				nameMin = self.outName.min.replace(/\.less$/, '.css');
@@ -349,6 +363,7 @@ Malta.prototype = {
 							notifyAndUnlock();
 						} else {
 							// update content to be written
+							// 
 							cnt = newcnt;
 							do_write(name, nameMin);
 						}
@@ -358,6 +373,8 @@ Malta.prototype = {
 					notifyAndUnlock();
 				}
 
+			// sass
+			//
 			} else if (ext.match(/scss/)) {
 				name = self.outName.clear.replace(/\.scss$/, '.css');
 				nameMin = self.outName.min.replace(/\.scss$/, '.css');
@@ -372,6 +389,8 @@ Malta.prototype = {
 					notifyAndUnlock();
 				}
 
+			// .pdf.md
+			//
 			} else if (self.outName.clear.match(/\.pdf\.md$/)) {
 				name = self.outName.clear.replace(/\.pdf\.md$/, '.pdf');
 				nameMin = self.outName.min.replace(/\.pdf\.md$/, '.pdf');
@@ -393,6 +412,9 @@ Malta.prototype = {
 					notifyAndUnlock();
 				}
 
+
+			// markdown
+			//
 			} else if (ext.match(/md/)) {
 				name = self.outName.clear.replace(/\.md$/, '.md');
 				nameMin = self.outName.clear.replace(/\.md$/, '.html');
@@ -407,6 +429,27 @@ Malta.prototype = {
 					notifyAndUnlock();
 				}
 
+
+			// svg 
+			//
+			} else if (ext.match(/svg/)) {
+				name = self.outName.clear.replace(/\.svg$/, '.svg');
+				nameMin = self.outName.clear.replace(/\.svg$/, '.png');
+				fname = name;
+				ext = 'svg';
+
+				try {
+					//cnt = markdown.toHTML( cnt );
+					do_write(name, nameMin);
+				} catch (err) {
+					console.log('[PARSE ERROR: ' + ext + '] ' + err.message + ' @' + err.line);
+					notifyAndUnlock();
+				}
+
+
+			
+			// All other files
+			//
 			} else {
 				name = self.outName.clear;
 				nameMin = self.outName.min;
@@ -431,48 +474,6 @@ Malta.prototype = {
 					// 
 					if (ext.match(/js|css/)) {
 
-
-						// outVersion
-/*
-						try {
-							minif = (ext == 'js') ?
-								uglify_js.minify(name).code :
-								uglify_css.processString(cnt, { maxLineLen: 500, expandVars: true });
-
-							fs.writeFile(nameMin, minif, function(err) {
-								if (err == null) {
-									msg += 'wrote ' + nameMin + ' (' + getSize(nameMin) + ')' + NL;
-								} else {
-									console.log('[ERROR] uglify-js says:');
-									console.dir(err);
-									process.exit();
-								}
-
-								// now packer if js
-								if (ext == 'js') {
-									packed = packer.pack(cnt, self.js_base62, self.js_shrink);
-									fs.writeFile(namePack, packed, function(err) {
-										if (err == null) {
-											// msg += 'wrote ' + namePack + ' (' + getSize(namePack) + '), base62:' + self.js_base62 + ' shrink:' + self.js_shrink + NL;
-											msg += 'wrote ' + namePack + ' (' + getSize(namePack) + ')' + NL;
-										} else {
-											console.log('[ERROR] packer says:');
-											console.dir(err);
-											process.exit();
-										}
-										notifyAndUnlock();
-									});
-								} else {
-									notifyAndUnlock();
-								}
-							});
-						} catch (e) {
-							console.log('[PARSE ERROR: uglify] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
-							console.log('[WARN: Minified version skipped]');
-							notifyAndUnlock();
-						}
-*/
-
 						function _writeJsFiles() {
 
 							function writePacked() {
@@ -484,7 +485,7 @@ Malta.prototype = {
 									} else {
 										console.log('[ERROR] packer says:');
 										console.dir(err);
-										process.exit();
+										self._stop();
 									}
 									notifyAndUnlock();
 								});
@@ -504,7 +505,7 @@ Malta.prototype = {
 										} else {
 											console.log('[ERROR] uglify-js says:');
 											console.dir(err);
-											process.exit();
+											self._stop();
 										}
 										notifyAndUnlock();
 										// now packer if js
@@ -533,7 +534,7 @@ Malta.prototype = {
 								} else {
 									console.log('[ERROR] uglify-css says:');
 									console.dir(err);
-									process.exit();
+									self._stop();
 								}
 								notifyAndUnlock();
 							});
@@ -559,7 +560,7 @@ Malta.prototype = {
 								} else {
 									console.log('[ERROR] markdown says:');
 									console.dir(err);
-									process.exit();
+									self._stop();
 								}
 								notifyAndUnlock();
 							});
@@ -567,6 +568,21 @@ Malta.prototype = {
 						} catch (e) {
 							console.log('[PARSE ERROR: markdown] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
 							console.log('[WARN: Html version skipped]');
+							notifyAndUnlock();
+						}
+
+					} else if (ext.match(/svg/)) {
+						try {
+
+							svg_to_png.convert(fname, self.outDir, {compress : true}) // async, returns promise 
+							.then( function(){
+								msg += 'wrote ' + nameMin + ' (' + getSize(nameMin) + ')' + NL;
+								notifyAndUnlock();
+							});
+
+						} catch (e) {
+							console.log('[PARSE ERROR: svg-to-png] ' + e.message + ' @' + e.line + ' maybe on ' + self.lastEditedFile);
+							console.log('[WARN: Png version skipped]');
 							notifyAndUnlock();
 						}
 					} else {
@@ -612,13 +628,6 @@ Malta.prototype = {
 			fnamemin;
 
 		write(baseTplContent, fname);
-
-
-
-
-
-
-
 
 		// chain
 		//
@@ -676,21 +685,14 @@ Malta.prototype = {
 					var p = els[i].match(new RegExp(self.reg.files)),
 						f = p[2],
 						tmp,
-						fname;
-					if (f.match(/^\//)) {
-						fname = execRoot + f;
-
-					} else {
-						fname = self.baseDir + DS + f;
-					}
+						fname = f.match(/^\//) ? 
+							execRoot + f
+							:
+							self.baseDir + DS + f;
 
 					if (f) {
 
-
 						self.queue.push(fname);
-
-
-
 
 						// check for circular inclusion
 						// 
@@ -773,7 +775,7 @@ Malta.prototype = {
 		// 
 		setInterval(function() {
 			!self.doBuild && watch();
-		}, 1000);
+		}, watchInterval);
 
 		// chain
 		//
@@ -824,7 +826,7 @@ Malta.prototype = {
 
 					setTimeout(function() {
 						done = false;
-					}, 2000);
+					}, watchInterval);
 				});
 
 
@@ -845,10 +847,9 @@ Malta.prototype = {
 	start: function() {
 		var self = this;
 
-		if (!(self.started)) {
-			console.log(self.name + ' v.' + self.version);
-			self.started = true;
-		}
+		
+		
+		
 
 		// if exists add vars.json to watched files
 		// 
@@ -874,7 +875,7 @@ Malta.prototype = {
 			argOutDir, i, t;
 
 		if (a.length < 2) {
-			console.log(this.name + ' v.' + this.version);
+			console.log(Malta.name + ' v.' + Malta.version);
 			console.log(NL + 'Usage : malta [templatefile] [outdir]');
 			console.log('   OR   malta [buildfile.json]' + NL);
 			process.exit();
@@ -926,24 +927,6 @@ Malta.prototype = {
 		// of the tpl but if differently specified by a[2]
 		// Hint: even if it expected to be in that position
 		// it must be prefixed by -vars=json_relative_to_exec_folder
-/*
-		if (a[2]) {
-			tmp = a[2].match(/^-vars\=(.*)$/);
-			if (tmp) this.varPath = execRoot + DS + tmp[1];
-
-			tmp = a[2].match(/^-base62=true$/);
-			if (tmp) this.js_base62 = true;
-
-			tmp = a[2].match(/^-shrink=true$/);
-			if (tmp) this.js_shrink = true;
-
-		} else {
-			this.varPath = this.baseDir + DS + 'vars.json';
-		}
-*/
-
-
-
 		this.varPath = this.baseDir + DS + 'vars.json';
 
 		
@@ -1045,24 +1028,8 @@ Malta.prototype = {
 			return s;
 		},
 
-		solveJson1: function(o) {
-			var self = this,
-				y;
-			for (var i in o) {
-				if ((typeof o[i]).match(/string/i)) {
-					while (y = o[i].match(/\$([A-z0-9-_/.]+)\$/)) {
-						if (y && y.length == 2 && y[1] in o) {
-							o[i] = o[i].replace('$' + y[1] + '$', o[y[1]]);
-						} else {
-							break;
-						}
-					}
-				}
-				// here I could even solve objects, not yet
-			}
-			return o;
-		},
-
+		// 
+		//
 		solveJson: function(obj) {
 			var self = this,
 				maxSub = 1E3,
@@ -1074,13 +1041,13 @@ Malta.prototype = {
 					switch (typeof o[j]) {
 						case 'string':
 							while (y = o[j].match(/\$([A-z0-9-_/.]+)\$/)) {
-/*
+								/*
 								if (yy = self.checkns(y[1], obj)) {
 									o[j] = o[j].replace('$' + y[1] + '$', yy);
 								} else {
 									o[j] = o[j].replace('$' + y[1] + '$', "");
 								}
-*/								
+								*/								
 								o[j] = o[j].replace(
 									'$' + y[1] + '$',
 									self.checkns(y[1], obj) || ""
@@ -1127,7 +1094,21 @@ Malta.prototype = {
 // start Malta
 // -----------------------------
 
+function outVersion() {
+	var str = Malta.name + ' v.' + Malta.version,
+		l = str.length + 4,
+		top = "╔" + (new Array(l-1)).join("═") + "╗" + NL +
+			//"║"	+ (new Array(l-1)).join(' ') + "║" + NL + 
+			"║ " + str + " ║" + NL + 
+			//"║"	+ (new Array(l-1)).join(' ') + "║" + NL + 
+			"╚" + (new Array(l-1)).join("═") + "╝" + NL + NL;
+	console.log(top);
+}
+
 if (args.length == 1) {
+
+	
+	outVersion();
 
 	var runs = fs.existsSync(execRoot + '/' + args[0]) ? require(execRoot + '/' + args[0]) : {},
 		run;
@@ -1136,7 +1117,7 @@ if (args.length == 1) {
 		//skip key which begins with !
 		if (run.match(/^\!/)) continue;
 
-		var ls = child_process.spawn('malta', [run].concat(runs[run].split(/\s/)));
+		var ls = child_process.spawn('malta', [run].concat(runs[run].split(/\s/)).concat(['do_not_print_version']));
 
 		ls.stdout.on('data', function(data) {
 			console.log("" + data);
@@ -1151,6 +1132,9 @@ if (args.length == 1) {
 		//new Malta().check([run, runs[run]]).start();
 	}
 } else {
+	if (args.indexOf('do_not_print_version') < 0) {
+		outVersion();
+	}
 	new Malta().check(args).start();
 }
 // -----------------------------
