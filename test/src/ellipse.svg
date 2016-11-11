@@ -1,0 +1,1 @@
+<ellipse transform="translate(0 0),rotate($rot$ !{$daisy.size$ / 2}! !{$daisy.size$ / 2}!)" rx="!{$daisy.size$ * 9 / 40}!" ry="!{$daisy.size$ * 35 / 400}!" cx="!{$daisy.size$ * 3 / 4}!" cy="!{$daisy.size$ / 2}!" stroke="black" stroke-width="!{$daisy.size$ / 80}!" fill="$daisy.color.outer$" />

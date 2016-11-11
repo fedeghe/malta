@@ -1,7 +1,5 @@
 node_modules
 malta.sublime-project
 malta.sublime-workspace
-test
-testdeath
-next.js
 npm-debug.log
+test/src/*.buildNum

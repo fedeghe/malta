@@ -1,0 +1,22 @@
+{
+	"name" : "default",
+	"surname" : "vars.json loaded",
+	"puzzle" : {
+		"one" : 1,
+		"two" : 2,
+		"three" : 202
+	},
+	"solved" : "$puzzle.one$$puzzle.two$" ,
+	"daisy" : {
+		"size" : 900,
+		"color" : {
+			"inner" : "yellow",
+			"outer" : "white",
+			"cc": 1
+		}
+	},
+	"pdf" : {
+		"one" : "README.pdf",
+		"two" : "chapter2.pdf"
+	}
+}

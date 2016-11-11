@@ -1,0 +1,14 @@
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #237;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+}
+
+#mauri{
+	color :red;
+	p {
+		font-size:2em
+	}
+}

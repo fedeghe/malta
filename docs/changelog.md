@@ -1,0 +1,54 @@
+Changelog
+--------- 
+- **3.0.2** Malta main file completely rewritten: 
+    - new plugin based architecture, now doing something more with some files is really easy
+    - every previously additional file now is produced only if the user needs it 
+    - write Your own plugin is extremely easy
+- **2.4.1** removed some unuseful messages from console
+- **2.4.0** .svg files will automatically output even a .png
+- **2.3.8** added _comp_ placeholder for evaluate simple arithmentic expressions
+- **2.3.7** better handling for `less` compiler exceptions 
+- **2.3.5** fixed some typos in the README file 
+- **2.2.8** var placeholder replace with JSON.stringify output in case of object 
+- **2.2.7** new options available for files that can be minified/packed 
+- **2.2.6** fixed a small bug in the console ouput messages for the packed versions of js files
+- **2.2.5** in case of js files will be written even a packed version using the amazing Dean Edwards npm port
+- **2.2.4** added detection for placeholders loops into the variable json
+- **2.2.3** variables json can contain inner placeholders at any level
+- **2.2.2** fixed a bug related to vars substitution
+- **2.2.1** in file placeholders is possible to use absolute paths, will be based on to the execution path;
+            vars.json file can contain deeper literals that can be references with . or / separator in the placeholder (see examples above)
+- **2.2.0** some refactors
+- **2.1.3** in vars.json nested vars can be used
+- **2.0.6** markdown to pdf support added, just use .pdf.md for the templates file
+- **2.0.5** markdown support added, every .md tpl will produce the glued .md and resulting .html file
+- **2.0.4** lack of --force drives to a new version just to remove a console.log !!!
+- **2.0.3** is possible to specify the complete path (relative to the execution folder) of the variable json. 
+- **2.0.2** if using a json file for multi build, a ! as first key character will tell Malta to ignore this line
+- **2.0.1** fixed README links
+- **2.0.0** no more stop if the same file is included more times, still check for loops over 5000 files
+- **1.1.1** removed some ugly and unuseful messages from console
+- **1.1.0** updated console usage message
+- **1.0.21** fixed a bug naming minified css
+- **1.0.20** added support for .scss files, fixed a bug using less package
+- **1.0.19** fixed a bug that hanged the process when, being not caught, a parsing exception was thrown by uglify-js and/or uglifycss
+- **1.0.18** some refactors and corrections to console output
+- **1.0.17** automatically write even minified version for css files (even less originated)
+- **1.0.16** accepts a json to execute multiple builds with one call
+- **1.0.15** removed beginning os specific slash in inclusion comments
+- **1.0.14** some fixes and refactor
+- **1.0.13** \_\_BUILDNUMBER\_\_ predefined build number var (file based)
+- **1.0.12** fixed path sep for win####
+- **1.0.11** fixed deadly circular inclusion check; update only modified files
+- **1.0.10** xml files indentation for inner files removed
+- **1.0.9** some minor fixes on messages
+- **1.0.8** hint paths changed
+- **1.0.7** added support for .less files
+- **1.0.5** real path is included only for .xml .js .css files
+- **1.0.3** real path included just before every inclusion
+- **1.0.1** not found $vname$ placeholders are untouched
+- **1.0** added \_\_FILESNUM\_\_, \_\_VERSION\_\_ to the placeholders builtin set
+- **0.0.11** fixed inclusion indentation
+- **0.0.10** involved files count fixed
+- **0.0.9** fixed build on vars.json change
+- **0.0.8** parse error thrown by uglify is catched and stops no more Malta
