@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.0.2** Malta main file completely rewritten: 
+- **3.0.3** Malta main file completely rewritten: 
     - new plugin based architecture, now doing something more with some files is really easy
     - every previously additional file now is produced only if the user needs it 
     - write Your own plugin is extremely easy
