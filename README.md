@@ -199,7 +199,7 @@ There are some placeholders that can be used within any involved file:
 
 [0]: https://www.npmjs.org
 [1]: plugins/sample.js
-[2]: https://github.com/fedeghe/malta/docs/sample.md
-[3]: https://github.com/fedeghe/malta/docs/plugin-list.md
-[4]: https://github.com/fedeghe/malta/docs/changelog.md
-[5]: https://github.com/fedeghe/malta/docs/create-a-plugin.md
+[2]: https://github.com/fedeghe/malta/blob/master/docs/sample.md
+[3]: https://github.com/fedeghe/malta/blob/master/docs/plugin-list.md
+[4]: https://github.com/fedeghe/malta/blob/master/docs/changelog.md
+[5]: https://github.com/fedeghe/malta/blob/master/docs/create-a-plugin.md
