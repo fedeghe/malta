@@ -3,3 +3,4 @@ malta.sublime-project
 malta.sublime-workspace
 npm-debug.log
 test/src/*.buildNum
+test/out/*

@@ -342,10 +342,15 @@ Malta.prototype.build = function() {
 		doPlugin();
 	});
 
-	function callPlugin(p) {
-		self.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : '') );
-		self.doBuild = true;
-		return p.func.bind(self)(content_and_name, p.params);
+	function doPlugin() {
+		var pluginKeys = Object.keys(self.plugins);
+		
+		pluginKeys.length && self.log_info('Starting plugins');
+
+		if (self.hasPlugins) {
+			self.log_debug('on ' + self.outName.underline() + ' called plugins:');
+			plugin4ext(self.utils.getIterator(pluginKeys));
+		}
 	}
 	 
 	function plugin4ext(extIterator) {
@@ -355,15 +360,14 @@ Malta.prototype.build = function() {
 
 		if (extIterator.hasNext()) {
 			ext = extIterator.next();
-
 			pins = self.plugins[ext];
 
-			if (self.outName.match(new RegExp(".*\." + ext))) {
+			// if ends with the extension
+			if (self.outName.match(new RegExp(".*\." + ext + '$'))) {
 				iterator = self.utils.getIterator(pins);
 				(function go(){
 					var res,
 						pl;
-
 					if (iterator.hasNext()){
 						pl = iterator.next();
 						res = callPlugin(pl);
@@ -379,22 +383,16 @@ Malta.prototype.build = function() {
 							go();
 					} else {
 						extIterator.hasNext() && plugin4ext(extIterator);
-					}	
-
+					}
 				})();
 			}
 		}
-	};
+	}
 
-	function doPlugin() {
-		var pluginKeys = Object.keys(self.plugins);
-		
-		pluginKeys.length && self.log_info('Starting plugins');
-
-		if (self.hasPlugins) {
-			self.log_debug('on ' + self.outName.underline() + ' called plugins:');
-			plugin4ext(self.utils.getIterator(pluginKeys));
-		}
+	function callPlugin(p) {
+		self.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : '') );
+		self.doBuild = true;
+		return p.func.bind(self)(content_and_name, p.params);
 	}
 
 	// chain
@@ -629,6 +627,7 @@ Malta.prototype.loadPlugins = function () {
 		pluginsManager.add(parts[1], self.utils.jsonFromStr(parts[3]) || false);
 		self.hasPlugins = true;
 	}
+
 	self.hasPlugins ?
 		self.log_dir(self.plugins)
 		:
@@ -700,7 +699,9 @@ Malta.prototype.notifyAndUnlock = function (start, msg){
 	var self = this,
 		tmp = ('watching ' + self.involvedFiles + " files").white(),
 	end = self.date();
+	
 	msg = !!msg ? (msg + NL) : '';
+
 	msg += 'build #' + this.buildnumber;
 	msg += ' in ' + (end - start) + 'ms' + NL;
 	msg += tmp + NL;
