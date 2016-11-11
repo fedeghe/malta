@@ -7,6 +7,11 @@
 # Malta is ...
 a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
+
+### ... plugin based   
+Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows to transpil es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_, to get a _.pdf_ from a _.md_, to beautify and uglify _.js_ and _.css_, minify _.js_, _.css_ and _.html_, to get live output from _jshint_ and/or _jslint_, to rename and delete a file, to add a header comment, to merge two or more _.pdf_ files, to launch jsdoc or even to notify via email about a change. 
+
+
 ---
 
 ### Get started  
@@ -17,17 +22,6 @@ a super-simple & handy tool which allows to build on the fly big files editing i
 - [complete example of usage][2]
 - [plugins list][3]
 - [changelog][4]
-
----
-
-### Plugins for postprocessing 
-Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows to transpil es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_, to get a _.pdf_ from a _.md_, to beautify and uglify _.js_ and _.css_, minify _.js_, _.css_ and _.html_, to get live output from _jshint_ and/or _jslint_, to rename and delete a file, to add a header comment, to merge two or more _.pdf_ files, to launch jsdoc or even to notify via email about a change.  
-
----
-
-### Write Your plugin in one minute  
-Writing a plugin is extremely easy, just get a look at the _sample.js_ file in the _plugins_ folder or read [how to create a plugin][5]
-
 
 ---
 
@@ -168,6 +162,12 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 
 - **!{expression}!**
   _expression_ can contain anything that must be evaluated (eval is used)
+ 
+
+---
+
+### Write Your plugin in one minute  
+Writing a plugin is extremely easy, just get a look at the _sample.js_ file in the _plugins_ folder or read [how to create a plugin][5]
 
 ---
 
