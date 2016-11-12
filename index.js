@@ -354,39 +354,41 @@ Malta.prototype.build = function() {
 	}
 	 
 	function plugin4ext(extIterator) {
-		var ext,
-			pins,
-			iterator;
+		
+		(function checknext(){
+			if (extIterator.hasNext()) {
+				var ext = extIterator.next(),
+					pins  = self.plugins[ext],
+					iterator;
 
-		if (extIterator.hasNext()) {
-			ext = extIterator.next();
-			pins = self.plugins[ext];
-
-			// if ends with the extension
-			if (self.outName.match(new RegExp(".*\." + ext + '$'))) {
-				iterator = self.utils.getIterator(pins);
-				(function go(){
-					var res,
-						pl;
-					if (iterator.hasNext()){
-						pl = iterator.next();
-						res = callPlugin(pl);
-						res ? 
-							new Promise(res).then(function (obj) {
-								obj.plugin = pl.name;
-								self.userWatch && self.userWatch.call(self, obj);
-								content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
-								content_and_name.content = obj.content;
+				// if ends with the extension
+				if (self.outName.match(new RegExp(".*\." + ext + '$'))) {
+					iterator = self.utils.getIterator(pins);
+					(function go(){
+						var res,
+							pl;
+						if (iterator.hasNext()){
+							pl = iterator.next();
+							res = callPlugin(pl);
+							res ? 
+								new Promise(res).then(function (obj) {
+									obj.plugin = pl.name;
+									self.userWatch && self.userWatch.call(self, obj);
+									content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
+									content_and_name.content = obj.content;
+									go();
+								})
+								:
 								go();
-							})
-							:
-							go();
-					} else {
-						extIterator.hasNext() && plugin4ext(extIterator);
-					}
-				})();
+						} else {
+							extIterator.hasNext() && plugin4ext(extIterator);
+						}
+					})();
+				} else {
+					checknext();
+				}	
 			}
-		}
+		})();
 	}
 
 	function callPlugin(p) {
