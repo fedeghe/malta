@@ -103,6 +103,13 @@ _multi-mode_ is not available within a script, then the following code **will no
     ...
     Malta.get().check(['multifile.json']).start();
 
+in _multi-mode_ is possible to use wildcards for files, as follows:  
+
+    {
+        "source/controllers/*.js" : "out/controllers -plugins=malta-js-uglify",
+        "source/style/*.less" : "out/controllers -plugins=malta-less...malta-css-uglify",
+        ...
+    }
 
 ---
 

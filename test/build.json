@@ -1,24 +1,24 @@
 {
-	"!test/src/style_sass.scss" : "test/out -require=malta-sass...malta-header-comment[name:\"mitlicence.txt\"]...malta-beautify -options=showPath:true,watchInterval:200",
-	"!test/src/style_less.less" : "test/out -require=malta-less...malta-css-uglify...malta-header-comment[name:\"mitlicence.txt\"] -options=showPath:true,watchInterval:200,verbose:1",
+	"!test/src/style_sass.scss" : "test/out -require=malta-sass...malta-header-comment[name:\"mitlicense.txt\"]...malta-beautify -options=showPath:true,watchInterval:200",
+	"!test/src/style_less.less" : "test/out -require=malta-less...malta-css-uglify...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:true,watchInterval:200,verbose:1",
 	
-	"!test/src/aaa.js" : "test/out -require=malta-jslint[browser:true,bitwise:true,eval:true,single:true]...malta-js-uglify...malta-header-comment[name:\"mitlicence.txt\"] -options=showPath:true,watchInterval:200",
-	"!test/src/aaa.js" : "test/out -require=malta-jshint[evil:false]...malta-js-uglify...malta-header-comment[name:\"mitlicence.txt\"] -options=showPath:true,watchInterval:200",
+	"!test/src/aaa.js" : "test/out -require=malta-jslint[browser:true,bitwise:true,eval:true,single:true]...malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:true,watchInterval:200",
+	"!test/src/aaa.js" : "test/out -require=malta-jshint[evil:false]...malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:true,watchInterval:200",
 	"!test/src/aaa.js" : "test/out -require=malta-jsdoc[outFolder:\"docs\"]...malta-beautify -options=showPath:false,watchInterval:200",
 	"!test/src/aaa.js" : "test/out -require=malta-notify[configFile:\"nodemailer/params.json\",to:\"fedeghe@gmail.com\"]",
 	
 	"!test/src/typescript.ts" : "test/out -require=malta-typescript -options=showPath:false,watchInterval:200",
-	"!test/src/typescript.ts" : "test/out -require=malta-typescript...malta-rename[to:\"ts.js\"]...malta-header-comment[name:\"mitlicence.txt\"]...malta-js-uglify -options=showPath:false,watchInterval:200",
+	"!test/src/typescript.ts" : "test/out -require=malta-typescript...malta-rename[to:\"ts.js\"]...malta-header-comment[name:\"mitlicense.txt\"]...malta-js-uglify -options=showPath:false,watchInterval:200",
 
-	"!test/src/aaa.css" : "test/out -require=malta-css-uglify...malta-header-comment[name:\"mitlicence.txt\"] -options=showPath:true,watchInterval:200",
+	"!test/src/aaa.css" : "test/out -require=malta-css-uglify...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:true,watchInterval:200",
 	"!test/src/index.md" : "test/out -require=malta-markdown-pdf[paperOrientation:\"landscape\"] -options=showPath:true,watchInterval:200",
 	"!test/src/index1.md" : "test/out -require=malta-markdown -options=showPath:true,watchInterval:200",
 	"!test/src/index2.md" : "test/out -require=malta-markdown-pdf -options=showPath:true,watchInterval:200",
 	"!test/src/daisy.svg" : "test/out -require=malta-svg2png -options=showPath:false,watchInterval:200",
-	"!test/src/ccc.js" : "test/out -require=malta-js-packer[js_base62:true,js_shrink:false]...malta-header-comment[name:\"mitlicence2.txt\"] -options=showPath:true,watchInterval:200",
-	"!test/src/index.html" : "test/out -require=malta-html-minify[removeAttributeQuotes:true,minifyJS:true,removeComments:true,removeEmptyAttributes:true,removeEmptyElements:true,maxLineLength:100,collapseWhitespace:true]...malta-header-comment[name:\"mitlicence.txt\"] -options=showPath:false,watchInterval:200",
+	"!test/src/ccc.js" : "test/out -require=malta-js-packer[js_base62:true,js_shrink:false]...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:true,watchInterval:200",
+	"!test/src/index.html" : "test/out -require=malta-html-minify[removeAttributeQuotes:true,minifyJS:true,removeComments:true,removeEmptyAttributes:true,removeEmptyElements:true,maxLineLength:100,collapseWhitespace:true]...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:false,watchInterval:200",
 	"!test/src/index.html" : "test/out -options=showPath:false,watchInterval:200",
-	"test/src/es6.js" : "test/out -require=malta-babel...malta-js-uglify...malta-beautify -options=showPath:false,watchInterval:200",
+	"test/src/es6.js" : "test/out -require=malta-babel...malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"] -options=showPath:false,watchInterval:200",
 
 	"!test/src/cf.coffee" : "test/out -require=malta-coffeescript -options=showPath:false,watchInterval:200",
 

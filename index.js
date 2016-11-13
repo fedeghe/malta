@@ -1382,7 +1382,7 @@ if (args.length === 1) {
 						wildFiles.push(wildPath + file);	
 					}	
 				});
-				for (null, l = wildFiles.length; i < l; i++) {
+				for (l = wildFiles.length; i < l; i++) {
 					start(wildFiles[i], wildValue)	
 				}
 			});
@@ -1397,38 +1397,6 @@ if (args.length === 1) {
 	Malta.get().check(args).start();
 
 }
-
-/*
-function checkWild(tpl, wildValue) {
-	var wildValue,
-		wildc = tpl.match(/(.*)\*\.(.*)$/),
-		wildPath,
-		wildExt,
-		wildFiles,
-		i = 1;
-
-	if (wildc) {
-		wildPath = wildc[1];
-		wildExt = wildc[2];
-		wildFiles = [];
-		fs.readdir(wildPath, function (err, files) {
-			var i = 0, l;
-			files.forEach(function (file) {
-				//right ext ?
-				if (file.match(new RegExp('\.' + wildExt + '$'))) {
-					wildFiles.push(wildPath + file);	
-				}	
-			});
-			for (null, l = wildFiles.length; i < l; i++) {
-				start(wildFiles[i], wildValue)	
-			}
-		});
-	} else {
-		start(tpl, wildValue);
-	}
-}
-*/
-
 
 function start(key, el) {
 	var opts = ['proc=' + j],
