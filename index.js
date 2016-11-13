@@ -1392,10 +1392,6 @@ if (args.length === 1) {
 
 		
 
-
-
-
-
 	}
 } else if (args.length > 1){
 	Malta.get().check(args).start();
@@ -1449,7 +1445,7 @@ function start(key, el) {
 		console.log(data + "");
 	});
 
-	ls.stderr.on('data', function (data) {
+	ls.stderr.on('error', function (data) {
 		console.log('stderr: ' + data);
 	});
 }
