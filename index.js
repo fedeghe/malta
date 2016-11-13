@@ -1351,12 +1351,7 @@ if (args.length === 1) {
 
 	var p = path.resolve(execPath, args[0]),
 		runs = fs.existsSync(p) ? require(p) : false,
-		tpl,
-		wildValue,
-		wildPath,
-		wildExt,
-		wildFiles,
-		i = 1;
+		tpl;
 
 	// check
 	// 
@@ -1365,33 +1360,7 @@ if (args.length === 1) {
 	for (tpl in runs) {
 		//skip if key begins with !
 		if (tpl.match(/^\!/)) continue;
-
-		// checkWild(tpl, runs[tpl])
-		wildValue = runs[tpl];
-
-		wildc = tpl.match(/(.*)\*\.(.*)$/);
-		if (wildc) {
-			wildPath = wildc[1];
-			wildExt = wildc[2];
-			wildFiles = [];
-			fs.readdir(wildPath, function (err, files) {
-				var i = 0, l;
-				files.forEach(function (file) {
-					//right ext ?
-					if (file.match(new RegExp('\.' + wildExt + '$'))) {
-						wildFiles.push(wildPath + file);	
-					}	
-				});
-				for (l = wildFiles.length; i < l; i++) {
-					start(wildFiles[i], wildValue)	
-				}
-			});
-		} else {
-			start(tpl, wildValue);
-		}
-
-		
-
+		start(tpl, runs[tpl]);
 	}
 } else if (args.length > 1){
 	Malta.get().check(args).start();
@@ -1400,7 +1369,7 @@ if (args.length === 1) {
 
 function start(key, el) {
 	var opts = ['proc=' + j],
-		ls = [];
+		ls;
 
 	if (j>0) {
 		opts.push('do_not_print_version');

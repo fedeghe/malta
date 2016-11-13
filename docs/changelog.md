@@ -1,7 +1,6 @@
 Changelog
 --------- 
-- **3.0.10** Allowed wildcards in multimode json keys
-- **3.0.7** Some bugfix about plugins execution
+- **3.0.13** Some bugfix about plugins execution
 - **3.0.4** Malta main file completely rewritten: 
     - new plugin based architecture, now doing something more with some files is really easy
     - every previously additional file now is produced only if the user needs it 
