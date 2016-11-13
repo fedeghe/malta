@@ -1344,41 +1344,113 @@ Malta.get = function () {
 
 module.exports = Malta;
 
+
+var j = 0;
+
 if (args.length === 1) {
 
 	var p = path.resolve(execPath, args[0]),
 		runs = fs.existsSync(p) ? require(p) : false,
-		run,
-		i=1;
+		tpl,
+		wildValue,
+		wildPath,
+		wildExt,
+		wildFiles,
+		i = 1;
 
 	// check
 	// 
 	!runs && Malta.badargs(p);
 	
-	for (run in runs) {
+	for (tpl in runs) {
 		//skip if key begins with !
-		if (run.match(/^\!/)) continue;
+		if (tpl.match(/^\!/)) continue;
 
-		var opts = ['proc=' + i],
-			ls = [];
+		// checkWild(tpl, runs[tpl])
+		wildValue = runs[tpl];
 
-		if (i>1) {
-			opts.push('do_not_print_version');
+		wildc = tpl.match(/(.*)\*\.(.*)$/);
+		if (wildc) {
+			wildPath = wildc[1];
+			wildExt = wildc[2];
+			wildFiles = [];
+			fs.readdir(wildPath, function (err, files) {
+				var i = 0, l;
+				files.forEach(function (file) {
+					//right ext ?
+					if (file.match(new RegExp('\.' + wildExt + '$'))) {
+						wildFiles.push(wildPath + file);	
+					}	
+				});
+				for (null, l = wildFiles.length; i < l; i++) {
+					start(wildFiles[i], wildValue)	
+				}
+			});
+		} else {
+			start(tpl, wildValue);
 		}
-		i++;
 
-		ls = child_process.spawn('malta', [run].concat(runs[run].split(/\s/)).concat(opts));
 		
-		ls.stdout.on('data', function(data) {
-			console.log(data + "");
-		});
 
-		ls.stderr.on('data', function (data) {
-			console.log('stderr: ' + data);
-		});
+
+
+
+
 	}
 } else if (args.length > 1){
 	Malta.get().check(args).start();
+
 }
 
+/*
+function checkWild(tpl, wildValue) {
+	var wildValue,
+		wildc = tpl.match(/(.*)\*\.(.*)$/),
+		wildPath,
+		wildExt,
+		wildFiles,
+		i = 1;
+
+	if (wildc) {
+		wildPath = wildc[1];
+		wildExt = wildc[2];
+		wildFiles = [];
+		fs.readdir(wildPath, function (err, files) {
+			var i = 0, l;
+			files.forEach(function (file) {
+				//right ext ?
+				if (file.match(new RegExp('\.' + wildExt + '$'))) {
+					wildFiles.push(wildPath + file);	
+				}	
+			});
+			for (null, l = wildFiles.length; i < l; i++) {
+				start(wildFiles[i], wildValue)	
+			}
+		});
+	} else {
+		start(tpl, wildValue);
+	}
+}
+*/
+
+
+function start(key, el) {
+	var opts = ['proc=' + j],
+		ls = [];
+
+	if (j>0) {
+		opts.push('do_not_print_version');
+	}
+	j++;
+
+	ls = child_process.spawn('malta', [key].concat(el.split(/\s/)).concat(opts));
+	
+	ls.stdout.on('data', function(data) {
+		console.log(data + "");
+	});
+
+	ls.stderr.on('data', function (data) {
+		console.log('stderr: ' + data);
+	});
+}
 
