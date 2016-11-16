@@ -1373,22 +1373,23 @@ function start(key, el) {
 	var opts = ['proc=' + j],
 		multi = key.match(/(.*)\/\*\.(.*)$/);
 
-	if (j>0) {
+	if (j++>0) {
 		opts.push('do_not_print_version');
 	}
 	if (multi) {
 		fs.readdir(multi[1], function (err, files) {
 			files.forEach(function (file) {
 				if (file.match(new RegExp(".*\." + multi[2] + "$"))){
+					++j;
 					proceed(multi[1] + '/' + file, el, opts);
 				}
 			});
 		});
 	} else {
+		++j;
 		proceed(key, el, opts);
 	}
 	function proceed(tpl, options, op){
-		j++;
 		(function () {
 			var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
 			
