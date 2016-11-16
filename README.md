@@ -89,8 +89,8 @@ multifile.json:
     {  
         "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
         "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true",  
-        "common.js" : "../../public_html/js -plugins=malta-js-packer",  
-        "lib.js" : "../../public_html/js -plugins=malta-js-packer",  
+        "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
+        "lib.js" : "../../public_html/js -plugins=malta-js-uglify",  
         ...  
     }  
 
@@ -102,6 +102,12 @@ _multi-mode_ is not available within a script, then the following code **will no
 
     ...
     Malta.get().check(['multifile.json']).start();
+
+moreover since 3.0.16 wildcards can be used in the json keys : 
+
+    {
+        "src/controllers/*.js" : "../../public_html/js -plugins=malta-js-uglify"
+    }
 
 ---
 
