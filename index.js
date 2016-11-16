@@ -1380,7 +1380,6 @@ function start(key, el) {
 		fs.readdir(multi[1], function (err, files) {
 			files.forEach(function (file) {
 				if (file.match(new RegExp(".*\." + multi[2] + "$"))){
-					console.log(file);
 					proceed(multi[1] + '/' + file, el, opts);
 				}
 			});
