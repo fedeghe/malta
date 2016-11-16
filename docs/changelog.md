@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.0.17** added wildcards only on `multi-mode`
+- **3.0.18** added wildcards only on `multi-mode`
 - **3.0.15** now relies on `promise` npm package
 - **3.0.13** Some bugfix about plugins execution
 - **3.0.4** Malta main file completely rewritten: 
