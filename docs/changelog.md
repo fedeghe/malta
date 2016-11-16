@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.0.14** now relies on `promise` npm package
 - **3.0.13** Some bugfix about plugins execution
 - **3.0.4** Malta main file completely rewritten: 
     - new plugin based architecture, now doing something more with some files is really easy

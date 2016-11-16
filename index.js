@@ -4,6 +4,7 @@ var fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
 	readline = require('readline'),
+	Promise = require('promise'),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
 	packageInfo = fs.existsSync(__dirname + '/package.json') ? require(__dirname + '/package.json') : {},
@@ -362,6 +363,7 @@ Malta.prototype.build = function() {
 					iterator;
 
 				// if ends with the extension
+				//    ----
 				if (self.outName.match(new RegExp(".*\." + ext + '$'))) {
 					iterator = self.utils.getIterator(pins);
 					(function go(){
@@ -1369,21 +1371,35 @@ if (args.length === 1) {
 
 function start(key, el) {
 	var opts = ['proc=' + j],
-		ls;
+		multi = key.match(/(.*)\/\*\.(.*)$/);
 
-	if (j>0) {
+	if (j++>0) {
 		opts.push('do_not_print_version');
 	}
-	j++;
+	if (multi) {
+		fs.readdir(multi[1], function (err, files) {
+			files.forEach(function (file) {
+				if (file.match(new RegExp(".*\." + multi[2] + "$"))){
+					console.log(file);
+					proceed(multi[1] + '/' + file, el, opts);
+				}
+			});
+		});
+	} else {
+		proceed(key, el, opts);
+	}
+	function proceed(tpl, options, op){
+		(function () {
+			var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
+			
+			ls.stdout.on('data', function(data) {
+				console.log(data + "");
+			});
 
-	ls = child_process.spawn('malta', [key].concat(el.split(/\s/)).concat(opts));
-	
-	ls.stdout.on('data', function(data) {
-		console.log(data + "");
-	});
-
-	ls.stderr.on('error', function (data) {
-		console.log('stderr: ' + data);
-	});
+			ls.stderr.on('error', function (data) {
+				console.log('stderr: ' + data);
+			});	
+		})();
+	}
 }
 
