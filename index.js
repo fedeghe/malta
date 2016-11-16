@@ -478,7 +478,7 @@ Malta.prototype.check = function (a) {
 	}
 
 	if (this.baseDir + "" === this.outDir + "") {
-		this.log_err('Output and template directories coincide. Malta won`t overwrite your template');
+		this.log_err('Output and template directories coincide. Malta won`t overwrite your template'.red());
 	}
 
 	this.inName = this.baseDir + DS + this.tplName;
@@ -821,7 +821,7 @@ Malta.prototype.replace_all = function(tpl) {
 
 			// warn the user through console
 			// 
-			self.log_info('[WARNING] missing file ' + fname);
+			self.log_info('[WARNING]'.red() + ' missing file ' + fname);
 
 			// file missing, replace a special placeholder
 			// if ext is compatible
