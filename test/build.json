@@ -18,5 +18,4 @@
 	"test/src/lame.pug" : "test/out -require=malta-pug...malta-beautify",
 	"test/src/merge.txt" : "test/out -require=malta-pdf-merge[name:\"my_merged.pdf\"]",
 	"!test/src/secret.css" : "test/out -require=sample"
-	
 }

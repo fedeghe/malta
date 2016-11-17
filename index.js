@@ -185,6 +185,19 @@ Malta.badargs = function (tpl, dst) {
 };
 
 /**
+ * { function_description }
+ *
+ * @param      {<type>}  err         The error
+ * @param      {<type>}  obj         The object
+ * @param      {string}  pluginName  The plugin name
+ */
+Malta.prototype.doErr = function (err, obj, pluginName) {
+	console.log(('[ERROR on ' + obj.name + ' using ' + pluginName + '] :').red());
+	console.dir(err);
+};
+
+
+/**
  * [log_debug description]
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
