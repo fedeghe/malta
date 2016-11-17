@@ -364,7 +364,7 @@ Malta.prototype.build = function() {
 
 				// if ends with the extension
 				//    ----
-				if (self.outName.match(new RegExp(".*\." + ext + '$'))) {
+				if (self.outName.match(new RegExp(".*\\." + ext + '$'))) {
 					iterator = self.utils.getIterator(pins);
 					(function go(){
 						var res,
@@ -373,11 +373,10 @@ Malta.prototype.build = function() {
 							pl = iterator.next();
 							res = callPlugin(pl);
 							res ? 
-								new Promise(res).then(function (obj) {
-									obj.plugin = pl.name;
+								(new Promise(res)).then(function (obj) {
 									self.userWatch && self.userWatch.call(self, obj);
 									content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
-									content_and_name.content = obj.content;
+									content_and_name.content = "" + obj.content;
 									go();
 								})
 								:
