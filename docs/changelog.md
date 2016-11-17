@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.0.21** some bug related to plugins execution fixed
 - **3.0.19** added wildcards only on `multi-mode`
 - **3.0.15** now relies on `promise` npm package
 - **3.0.13** Some bugfix about plugins execution
