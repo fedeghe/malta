@@ -948,7 +948,7 @@ Malta.prototype.start = function (userWatch) {
  * [signBuildNumber description]
  * @return {[type]} [description]
  */
-Malta.prototype.signBuildNumber = function() {
+Malta.prototype.signBuildNumberOLD = function() {
 	'use strict';
 	var hidden = true,
 		fname = this.baseDir + DS + (hidden ? '.' : '') + this.tplName.replace(/\./, '') + '.buildNum',
@@ -960,6 +960,25 @@ Malta.prototype.signBuildNumber = function() {
 	}
 	this.buildnumber = buildno;
 	fs.writeFileSync(fname, buildno);
+};
+Malta.prototype.signBuildNumber = function() {
+	'use strict';
+	var self = this,
+		hidden = true,
+		fname = this.baseDir + DS + '.buildNum.json',
+		cnt,
+		buildno = 0;
+	if (!fs.existsSync(fname)) {
+		cnt = '{}';
+		fs.writeFileSync(fname, cnt);
+	}
+	cnt = JSON.parse(fs.readFileSync(fname));
+	console.log(cnt);
+
+	if (!(self.inName in cnt)) cnt[self.inName] = 0;
+	cnt[self.inName] = parseInt(cnt[self.inName], 10) + 1
+	this.buildnumber = cnt[self.inName];
+	fs.writeFileSync(fname, JSON.stringify(cnt));
 };
 
 /**
