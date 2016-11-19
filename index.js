@@ -948,19 +948,6 @@ Malta.prototype.start = function (userWatch) {
  * [signBuildNumber description]
  * @return {[type]} [description]
  */
-Malta.prototype.signBuildNumberOLD = function() {
-	'use strict';
-	var hidden = true,
-		fname = this.baseDir + DS + (hidden ? '.' : '') + this.tplName.replace(/\./, '') + '.buildNum',
-		buildno = 0;
-	if (!fs.existsSync(fname)) {
-		fs.writeFileSync(fname, ++buildno);
-	} else {
-		buildno = parseInt(fs.readFileSync(fname), 10) + 1;
-	}
-	this.buildnumber = buildno;
-	fs.writeFileSync(fname, buildno);
-};
 Malta.prototype.signBuildNumber = function() {
 	'use strict';
 	var self = this,
@@ -973,7 +960,6 @@ Malta.prototype.signBuildNumber = function() {
 		fs.writeFileSync(fname, cnt);
 	}
 	cnt = JSON.parse(fs.readFileSync(fname));
-	console.log(cnt);
 
 	if (!(self.inName in cnt)) cnt[self.inName] = 0;
 	cnt[self.inName] = parseInt(cnt[self.inName], 10) + 1
@@ -1250,7 +1236,10 @@ Malta.prototype.watch = function() {
 
 		for (f in self.files) {
 
-			// somwthing changed
+			// what about remove a file from self.files if the file has been removed?
+
+
+			// something changed ?
 			//
 			if (self.files[f].time < self.utils.getFileTime(f)) {
 				d = self.date();
@@ -1420,18 +1409,19 @@ function start(key, el) {
 		++j;
 		proceed(key, el, opts);
 	}
-	function proceed(tpl, options, op){
-		(function () {
-			var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
-			
-			ls.stdout.on('data', function(data) {
-				console.log(data + "");
-			});
 
-			ls.stderr.on('error', function (data) {
-				console.log('stderr: ' + data);
-			});	
-		})();
+	function proceed(tpl, options, op){
+		
+		var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
+		
+		ls.stdout.on('data', function(data) {
+			console.log(data + "");
+		});
+
+		ls.stderr.on('error', function (data) {
+			console.log('stderr: ' + data);
+		});	
+		return ls;
 	}
 }
 

@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.0.25** better exception handling for plugins
+- **3.0.27** better exception handling for plugins; now just one buildNum file
 - **3.0.21** some bug related to plugins execution fixed
 - **3.0.19** added wildcards only on `multi-mode`
 - **3.0.15** now relies on `promise` npm package

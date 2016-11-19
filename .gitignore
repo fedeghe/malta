@@ -4,4 +4,4 @@ malta.sublime-workspace
 npm-debug.log
 test/src/*.buildNum
 test/out/*
-*.buildNum.json
+.buildNum.json
