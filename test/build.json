@@ -18,5 +18,6 @@
 	"test/src/music.coffee" : "test/out -require=malta-coffeescript",
 	"test/src/lame.pug" : "test/out -require=malta-pug...malta-beautify",
 	"test/src/merge.txt" : "test/out -require=malta-pdf-merge[name:\"my_merged.pdf\"]",
-	"!test/src/secret.css" : "test/out -require=sample"
+	"test/src/nvh.sh" : "test/out -require=malta-header-comment[name:\"mitlicense.txt\"]",
+	"test/src/my_epub.json" : "test/out -require=malta-epub"
 }

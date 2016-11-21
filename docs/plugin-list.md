@@ -18,7 +18,11 @@ Uglifies css markup,  based on [uglifycss npm package][4dep]
 
 ---
 ### [malta-del][5]  
-Deletes a file  
+Deletes a file 
+
+---
+### [malta-epub][5bis]  
+Creates a ebup file from md files  
 
 ---
 ### [malta-header-comment][6]  
@@ -97,6 +101,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [3]: https://www.npmjs.com/package/malta-coffeescript
 [4]: https://www.npmjs.com/package/malta-css-uglify
 [5]: https://www.npmjs.com/package/malta-del
+[5bis]: https://www.npmjs.com/package/malta-epub
 [6]: https://www.npmjs.com/package/malta-header-comment
 [7]: https://www.npmjs.com/package/malta-html-minify
 [8]: https://www.npmjs.com/package/malta-js-packer

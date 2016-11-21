@@ -1,0 +1,21 @@
+{
+    "title": "Alice's Adventures in Wonderland",
+    "author": "Lewis Carroll",
+    "publisher": "Macmillan & Co.",
+    "cover": "http://demo.com/url-to-cover-image.jpg",
+    "content": [
+        {
+            "title": "About the author",
+            "author": "John Doe",
+            "data": "epubcontent/chapter1.md"
+        },
+        {
+            "title": "Down the Rabbit Hole",
+            "data": "epubcontent/chapter2.md"
+        },
+        {
+            "title": "The world outside the cradle what",
+            "data": "epubcontent/chapter3.md"
+        }
+    ]
+}

@@ -295,13 +295,17 @@ Malta.prototype.comments = {
 	'xml': "<!--\n%content%\n-->\n",
 	'svg': "<!--\n%content%\n-->\n",
 	'pug': "//\n// %content%\n//\n",
+	'c': "/*\n%content%\n*/\n",
+	'cpp': "/*\n%content%\n*/\n",
 	'js': "/*\n%content%\n*/\n",
 	'css': "/*\n%content%\n*/\n",
 	'less': "/*\n%content%\n*/\n",
 	'scss': "/*\n%content%\n*/\n",
 	'php': "/*\n%content%\n*/\n",
 	'java': "/*\n%content%\n*/\n",
-	'ts': "/*\n%content%\n*/\n"
+	'ts': "/*\n%content%\n*/\n",
+	'rb': "=begin\n%content%\n=end",
+	'hs': "{-\n%content%\n-}"
 };
 
 /**

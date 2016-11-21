@@ -1,5 +1,6 @@
 {
 	"name" : "default",
+	"author" : "Federico Ghedina federico.ghdina@gmail.com",
 	"surname" : "vars.json loaded",
 	"puzzle" : {
 		"one" : 1,
