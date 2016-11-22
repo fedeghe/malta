@@ -1407,7 +1407,7 @@ function start(key, el) {
 	if (multi) {
 		fs.readdir(multi[1], function (err, files) {
 			files.forEach(function (file) {
-				if (file.match(new RegExp(".*\." + multi[2] + "$"))){
+				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + multi[2] + "$"))){
 					++j;
 					proceed(multi[1] + '/' + file, el, opts);
 				}
