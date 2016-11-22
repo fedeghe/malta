@@ -963,12 +963,16 @@ Malta.prototype.signBuildNumber = function() {
 		cnt = '{}';
 		fs.writeFileSync(fname, cnt);
 	}
-	cnt = JSON.parse(fs.readFileSync(fname));
+	try {
+		cnt = JSON.parse(fs.readFileSync(fname));
 
-	if (!(self.inName in cnt)) cnt[self.inName] = 0;
-	cnt[self.inName] = parseInt(cnt[self.inName], 10) + 1
-	this.buildnumber = cnt[self.inName];
-	fs.writeFileSync(fname, JSON.stringify(cnt));
+		if (!(self.inName in cnt)) cnt[self.inName] = 0;
+		cnt[self.inName] = (parseInt(cnt[self.inName], 10) || 0) + 1
+		this.buildnumber = cnt[self.inName];
+		fs.writeFileSync(fname, JSON.stringify(cnt));
+	} catch(e){
+		fs.writeFileSync(fname, '{}');
+	}
 };
 
 /**
