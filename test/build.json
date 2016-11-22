@@ -4,7 +4,7 @@
 	"test/src/form.css" : "test/out -require=malta-beautify",
 	"test/src/nslint.js" : "test/out -require=malta-jslint[browser:true,bitwise:true,eval:true,single:true]...malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"]",
 	"test/src/nshint.js" : "test/out -require=malta-jshint[evil:false]...malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"]",
-	"test/src/nsdoc.js" : "test/out -require=malta-jsdoc[outFolder:\"docs\"]...malta-beautify",
+	"test/src/nsdoc.js" : "test/out -require=malta-doc2[d:\"docs\",c:\"jsdoc_config.json\",t:\"/Users/federicoghedina/node_modules/ink-docstrap/template\"]...malta-beautify",
 	"test/src/typescript.ts" : "test/out -require=malta-typescript...malta-beautify",
 	"test/src/mortgage.js" : "test/out -require=malta-babel...malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"]",
 	"test/src/topic.js" : "test/out -require=malta-js-uglify...malta-header-comment[name:\"mitlicense.txt\"]",
