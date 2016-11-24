@@ -5,6 +5,7 @@ var fs = require("fs"),
 	child_process = require('child_process'),
 	readline = require('readline'),
 	Promise = require('promise'),
+	watcher = require('./lib/observe.js'),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
 	packageInfo = fs.existsSync(__dirname + '/package.json') ? require(__dirname + '/package.json') : {},
@@ -18,6 +19,8 @@ require('./lib/stringproto');
 
 /**
  * Malta is the main object that will watch for modifications and build when needed
+ * 
+ * @constructor Malta
  * @class      Malta (name)
  * @return     {Object}  The instance of Malta 
  */
@@ -25,25 +28,30 @@ function Malta () {
 	'use strict';
 	
 	this.args = [];
-
-	// security nesting level
-	// 
+	
+	/**
+	 * security nesting level
+	 */
 	this.MAX_INVOLVED = 5E3;
 
-	// name and version from package json
-	// 
+	/**
+	 * name and version from package json
+	 */
 	this.buildnumber = null;
 
-	// path for the vars.json
-	// 
+	/**
+	 * path for the vars.json
+	 */
 	this.varPath = '';
 
-	// register for the content of vars.json, if found
-	// 
+	/**
+	 * register for the content of vars.json, if found
+	 */
 	this.vars = {};
 
-	// basename for the base template, path and content
-	// 
+	/**
+	 * basename for the base template, path and content
+	 */
 	this.tplName = '';
 	this.tplPath = '';
 	this.tplCnt = '';
@@ -89,28 +97,34 @@ function Malta () {
 	// 
 	this.involvedFiles = 1;
 
-	// every second the watch function loops over files literal 
-	// triggering the build as far as t least one file is updated
-	// (checking the distance from stored file time and current file time)
-	// when the build is fired, watch pauses inner execution, until
-	// the build ends, the build function at the end will set that
-	// value back to true, allowing watch to execute again time checks
-	// on files
-	// 
+	/**
+	 * every second the watch function loops over files literal 
+	 * triggering the build as far as t least one file is updated
+	 * (checking the distance from stored file time and current file time)
+	 * when the build is fired, watch pauses inner execution, until
+	 * the build ends, the build function at the end will set that
+	 * value back to true, allowing watch to execute again time checks
+	 * on files
+	 */
 	this.doBuild = true;
 
-	// plugins container
-	// 
+	/**
+	 * plugins container
+	 */
 	this.plugins = {};
 
-	// just a flag to know if plugins are required
-	// 
+	/**
+	 * just a flag to know if plugins are required
+	 */
 	this.hasPlugins = false;
 	
-	// date function used to show elapsed time for creation,
-	// and eve for wired time placeholders
-	// __TIME__ , __DATE__ , __YEAR__
-	// 
+	/**
+	 * date function used to show elapsed time for creation,
+	 * and eve for wired time placeholders
+	 * __TIME__ , __DATE__ , __YEAR__
+	 *
+	 * @return     {Date}  { description_of_the_return_value }
+	 */
 	this.date = function() {return new Date(); };
 
 	// time spend to build
@@ -129,6 +143,8 @@ function Malta () {
 	// in this case it is stored here
 	//
 	this.userWatch = false;
+
+	this.name = Malta.name;
 }
 
 /**
@@ -152,19 +168,22 @@ Malta.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
  */
 Malta.author = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
 
-
-// default values for all options that can be passed throug the
-// -options parameter
-// 
+/**
+ * default values for all options that can be passed throug the -options parameter
+ */
 Malta.watchInterval = 1E3;
 
-//0 nothing
-//1 some
-//2 a lot
+
+/**
+ * 0 nothing, 1 some, 2 a lot
+ */
 Malta.verbose = 1; 
 
+/**
+ * by default show the inclusion path on the files where Malta knows how to comment
+ */
 Malta.showPath = true;
-// Malta.stealth = false;
+
 
 
 /**
@@ -276,8 +295,9 @@ Malta.prototype.log_help = function () {
 };
 
 /**
- * basic string used to create regular expressions for
+ * basic string used to create regular expressions for 
  * finding file, variable and executable placeholder
+ * 
  * @type {Object}
  */
 Malta.prototype.reg = {
@@ -355,7 +375,7 @@ Malta.prototype.build = function() {
 		
 		self.notifyAndUnlock(start, msg);
 
-		self.userWatch && self.userWatch.call(self, content_and_name);
+		self.userWatch && self.userWatch.call(self, content_and_name, self);
 
 		doPlugin();
 	});
@@ -391,7 +411,7 @@ Malta.prototype.build = function() {
 							res = callPlugin(pl);
 							res ? 
 								(new Promise(res)).then(function (obj) {
-									self.userWatch && self.userWatch.call(self, obj);
+									self.userWatch && self.userWatch.call(self, obj, pl);
 									content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
 									content_and_name.content = "" + obj.content;
 									go();
@@ -744,6 +764,13 @@ Malta.outVersion = function () {
 			"╚" + (new Array(l-1)).join("═") + "╝" + NL;
 	console.log(top);
 }
+
+
+Malta.prototype.delete_result = function () {
+	'use strict';
+	var self = this;
+	console.log(self.outName);
+};
 
 /**
  * [parse description]
@@ -1305,10 +1332,12 @@ Malta.prototype.watch = function() {
 
 
 /**
- * { function_description }
+ * Checks npm package dependencies, meant to be used at te very beginning of a plugin code
  * 
  * @static
- * @return     {Object}  { description_of_the_return_value }
+ * @memberof   Malta
+ * @param      {mixed} one or more strings valued with the names of the dependenct package that must be checked
+ * @return     {Object} the running instance of Malta
  */
 Malta.checkDeps = function () {
 	'use strict';
@@ -1337,11 +1366,12 @@ Malta.checkDeps = function () {
 }
 
 /**
- * { function_description }
+ * Checks command line executables dependencies, meant to be used at te very beginning of a plugin code
+ * 
  * @static
  * @memberof Malta
- * @param      {string}  ex      { parameter_description }
- * @return     {Object}  { description_of_the_return_value }
+ * @param      {string}  ex 	the name of the executable to be checked
+ * @return     {Object}  the running instance of Malta
  */
 Malta.checkExec = function (ex) {
 	'use strict';
@@ -1363,16 +1393,19 @@ Malta.checkExec = function (ex) {
 };
 
 /**
- * { function_description }
+ * Factory method for Malta
  * 
- * @static
- * @return     {Malta}  { description_of_the_return_value }
+ * static
+ * memberof   Malta
+ * return     {Object}  a new Malta instance
  */
 Malta.get = function () {
 	return new Malta;
 }
 
 module.exports = Malta;
+
+
 
 
 var j = 0;
@@ -1390,45 +1423,63 @@ if (args.length === 1) {
 	for (tpl in runs) {
 		//skip if key begins with !
 		if (tpl.match(/^\!/)) continue;
-		start(tpl, runs[tpl]);
+		multi(tpl, runs[tpl]);
 	}
 } else if (args.length > 1){
 	Malta.get().check(args).start();
 
 }
 
-function start(key, el) {
+function multi(key, el) {
 	var opts = ['proc=' + j],
-		multi = key.match(/(.*)\/\*\.(.*)$/);
+		multi = key.match(/(.*)\/\*\.(.*)$/),
+		folder, ext,
+		multiElements = {};
 
 	if (j++>0) {
 		opts.push('do_not_print_version');
 	}
 	if (multi) {
-		fs.readdir(multi[1], function (err, files) {
+		folder = multi[1];
+		ext = multi[2];
+		fs.readdir(folder, function (err, files) {
 			files.forEach(function (file) {
-				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + multi[2] + "$"))){
+				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
 					++j;
-					proceed(multi[1] + '/' + file, el, opts);
+					// store the process
+					multiElements[file] = proceed(folder + '/' + file, el, opts);
 				}
 			});
 		});
+
+		// observe folder, add/remove 
+		// 
+		watcher.observe(folder, function (diff) {
+			
+			diff.added.filter(function (v) {
+				return v.match(new RegExp(".*\\." + ext + '$'))
+			}).forEach(function (v){
+				multiElements[v] = proceed(folder + '/' + v, el, opts);
+				console.log('ADDED '.yellow() + folder + '/' + v + NL)
+			});
+
+			diff.removed.filter(function (v) {
+				return v.match(new RegExp(".*\\." + ext + '$'))
+			}).forEach(function (v){
+				multiElements[v].kill();
+				console.log('REMOVED '.yellow() + folder + '/' + v + NL)
+			});
+		})
+		
 	} else {
 		++j;
 		proceed(key, el, opts);
 	}
 
 	function proceed(tpl, options, op){
-		
 		var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
-		
-		ls.stdout.on('data', function(data) {
-			console.log(data + "");
-		});
-
-		ls.stderr.on('error', function (data) {
-			console.log('stderr: ' + data);
-		});	
+		ls.stdout.on('data', function(data) {console.log(data + "");});
+		ls.stderr.on('error', function (data) {console.log('Stderr: '.red() + data);});	
 		return ls;
 	}
 }
