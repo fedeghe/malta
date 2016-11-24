@@ -91,6 +91,7 @@ multifile.json:
         "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true",  
         "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
         "lib.js" : "../../public_html/js -plugins=malta-js-uglify",  
+        "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify"
         ...  
     }  
 
