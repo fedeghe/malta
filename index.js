@@ -324,8 +324,8 @@ Malta.prototype.comments = {
 	'php': "/*\n%content%\n*/\n",
 	'java': "/*\n%content%\n*/\n",
 	'ts': "/*\n%content%\n*/\n",
-	'rb': "=begin\n%content%\n=end",
-	'hs': "{-\n%content%\n-}"
+	'rb': "=begin\n%content%\n=end\n",
+	'hs': "{-\n%content%\n-}\n"
 };
 
 /**
@@ -369,8 +369,8 @@ Malta.prototype.build = function() {
 			data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds(),
 			msg = '';
 
-		msg += 'Build ' + self.buildnumber + ' @ ' + data + NL + NL;
-		msg += 'wrote ' + self.outName + ' (' + self.getSize(self.outName) + ')';
+		msg += 'Build ' + self.buildnumber + ' @ ' + data + NL;
+		msg += Malta.name + ' compiled ' + self.outName + ' (' + self.getSize(self.outName) + ')';
 		end = self.date();
 		
 		self.notifyAndUnlock(start, msg);
@@ -383,7 +383,7 @@ Malta.prototype.build = function() {
 	function doPlugin() {
 		var pluginKeys = Object.keys(self.plugins);
 		
-		pluginKeys.length && self.log_info('Starting plugins');
+		pluginKeys.length && self.log_info('Starting plugins'.yellow());
 
 		if (self.hasPlugins) {
 			self.log_debug('on ' + self.outName.underline() + ' called plugins:');
@@ -722,7 +722,7 @@ Malta.prototype.loadVars = function () {
 			self.vars = {};
 		}
 	} else {
-		self.log_debug('No vars file to load'.yellow());
+		self.log_debug(('No vars file to load' + NL).yellow());
 		self.varPath = false;
 	}
 	return this;
@@ -737,15 +737,13 @@ Malta.prototype.loadVars = function () {
 Malta.prototype.notifyAndUnlock = function (start, msg){
 	'use strict';
 	var self = this,
-		tmp = ('watching ' + self.involvedFiles + " files").white(),
-	end = self.date();
-	
-	msg = !!msg ? (msg + NL) : '';
+		end = self.date();
 
-	msg += 'build #' + this.buildnumber;
-	msg += ' in ' + (end - start) + 'ms' + NL;
-	msg += tmp + NL;
-	self.log_info(msg);
+	msg = (!!msg ? (msg + NL) : '') +
+		'build #' + this.buildnumber + ' in ' + (end - start + "").white() + 'ms' + NL +
+		'watching ' + (self.involvedFiles + "").white() + " files";
+
+	self.log_info(msg);	
 	self.doBuild = false;
 }
 
@@ -1279,7 +1277,7 @@ Malta.prototype.watch = function() {
 			if (self.files[f].time < self.utils.getFileTime(f)) {
 				d = self.date();
 
-				self.log_info('[MODIFIED @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, ''));
+				self.log_info('[' + 'MODIFIED'.yellow() + ' @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, '').underline());
 				// renew entry
 				// 
 				self.files[f] = self.utils.createEntry(f);
@@ -1351,10 +1349,10 @@ Malta.checkDeps = function () {
 		} catch(e) {
 			errs.push({
 				err : e,
-				msg : "\n" + deps[i].underline() + " package is needed"+
-		    		"\nby a plugin "+
-		    		"\nbut cannot be found".italic()+
-		    		("\nrun `npm install " + deps[i] + "`").yellow()
+				msg : NL + deps[i].underline() + " package is needed"+
+		    		NL + "by a plugin "+
+		    		NL + "but cannot be found".italic()+
+		    		NL + ("run `npm install " + deps[i] + "`").yellow()
 			});
 		}
 	}
@@ -1381,9 +1379,9 @@ Malta.checkExec = function (ex) {
 		if (error !== null) {
 			err = {
 				err : error + '',
-				msg : "\n" + ex.underline() + " executable is needed"+
-					"\nbut cannot be found".italic()+
-					("\ninstall `" + ex  + "` and try again").yellow()
+				msg : NL + ex.underline() + " executable is needed" + NL + 
+					"but cannot be found".italic() + NL + 
+					("install `" + ex  + "` and try again").yellow()
 			};
 			console.log(err.err.red() + ' ' + err.msg);
 			process.exit();
@@ -1436,7 +1434,7 @@ function multi(key, el) {
 		folder, ext,
 		multiElements = {};
 
-	if (j++>0) {
+	if (j>0) {
 		opts.push('do_not_print_version');
 	}
 	if (multi) {
