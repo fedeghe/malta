@@ -184,6 +184,11 @@ Malta.verbose = 1;
  */
 Malta.showPath = true;
 
+/**
+ * { item_description }
+ */
+Malta.printfile = '.printVersion';
+
 
 
 /**
@@ -200,7 +205,7 @@ Malta.badargs = function (tpl, dst) {
 		(dst ? dst + NL : "") + 
 		'can`t be found!' + NL + 
 		'... check, fix and rerun' + NL ).red());
-	process.exit();
+	Malta.stop();
 };
 
 /**
@@ -211,8 +216,7 @@ Malta.log_help = function () {
 	'use strict';
 	Malta.outVersion(true);
 	console.log('Usage:' + NL + '> malta [templatefile] [outdir] {options}' + NL + '> malta [buildfile.json]' + NL);
-	fs.unlink(Malta.printfile);
-	process.exit();
+	Malta.stop();
 };
 
 /**
@@ -308,7 +312,7 @@ Malta.prototype.log_err = function (msg) {
 	if (Malta.verbose > 0){
 		console.log(this.proc + "[ERROR]: ".red() + msg.red());
 	}
-	process.exit();
+	Malta.stop();
 };
 
 /**
@@ -1004,10 +1008,11 @@ Malta.prototype.signBuildNumber = function() {
  * [stop description]
  * @return {[type]} [description]
  */
-Malta.prototype.stop =  function() {
+Malta.stop = Malta.prototype.stop = function() {
 	'use strict';
 	console.log('MALTA has stopped' + NL);
-	process.exit();
+	fs.unlink(Malta.printfile);
+	process.exit()
 };
 
 /**
@@ -1076,7 +1081,7 @@ Malta.prototype.utils = {
 							);
 							if (i++ > maxSub) {
 								console.log('[ERROR] it seems like variable json has looping placeholders!');
-								process.exit();
+								Malta.stop()
 							}
 						}
 						break;
@@ -1359,7 +1364,7 @@ Malta.checkDeps = function () {
 	for (i=0, l = errs.length; i < l; i++) {
 		console.log(errs[i].err.code.red() + ': ' + errs[i].msg);
 	}
-	errs.length && process.exit();
+	errs.length && Malta.stop();
 	return this;
 }
 
@@ -1384,7 +1389,7 @@ Malta.checkExec = function (ex) {
 					("install `" + ex  + "` and try again").yellow()
 			};
 			console.log(err.err.red() + ' ' + err.msg);
-			process.exit();
+			Malta.stop();
 		}
 	});
 	return this;
@@ -1411,14 +1416,11 @@ Malta.isCommand = function(s) {
 	return s.match(/^\@(.*)/);
 }
 
-Malta.printfile = '.printVersion';
 
 
-process.on('SIGINT', function () {
-	//remove print file
-	fs.unlink(Malta.printfile);
-	process.exit();
-});
+
+
+process.on('SIGINT', Malta.stop);
 
 
 module.exports = Malta;
@@ -1465,7 +1467,7 @@ function multi(key, el) {
 			console.log("\n\n\n\n\n--------\nCOMMAND : ");
 			console.log(isCommand);
 			console.log("--------\n\n\n\n");
-			process.exit();
+			Malta.stop();
 		}
 
 		folder = multi[1];
