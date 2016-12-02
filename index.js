@@ -209,8 +209,9 @@ Malta.badargs = function (tpl, dst) {
  */
 Malta.log_help = function () {
 	'use strict';
-	Malta.outVersion();
+	Malta.outVersion(true);
 	console.log('Usage:' + NL + '> malta [templatefile] [outdir] {options}' + NL + '> malta [buildfile.json]' + NL);
+	fs.unlink(Malta.printfile);
 	process.exit();
 };
 
@@ -218,7 +219,7 @@ Malta.log_help = function () {
  * { function_description }
  * @static
  */
-Malta.outVersion = function () {
+Malta.outVersion = function (do_not_write) {
 	'use strict';
 	if (Malta.verbose === 0 || fs.existsSync(Malta.printfile)) return;
 	var str = Malta.name.rainbow() + ' v.' + Malta.version,
@@ -227,7 +228,7 @@ Malta.outVersion = function () {
 			"╔" + (new Array(l-1)).join("═") + "╗" + NL +
 			"║" +      ' ' + str + ' '       + "║" + NL + 
 			"╚" + (new Array(l-1)).join("═") + "╝" + NL;
-	fs.writeFileSync(Malta.printfile, '');
+	!do_not_write && fs.writeFileSync(Malta.printfile, '');
 	console.log(top);
 }
 
