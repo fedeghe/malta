@@ -204,6 +204,34 @@ Malta.badargs = function (tpl, dst) {
 };
 
 /**
+ * [log_help description]
+ * @return {[type]} [description]
+ */
+Malta.log_help = function () {
+	'use strict';
+	Malta.outVersion();
+	console.log('Usage:' + NL + '> malta [templatefile] [outdir] {options}' + NL + '> malta [buildfile.json]' + NL);
+	process.exit();
+};
+
+/**
+ * { function_description }
+ * @static
+ */
+Malta.outVersion = function () {
+	'use strict';
+	if (Malta.verbose === 0 || fs.existsSync(Malta.printfile)) return;
+	var str = Malta.name.rainbow() + ' v.' + Malta.version,
+		l = (Malta.name + ' v.' + Malta.version).length + 4,
+		top = NL +
+			"╔" + (new Array(l-1)).join("═") + "╗" + NL +
+			"║" +      ' ' + str + ' '       + "║" + NL + 
+			"╚" + (new Array(l-1)).join("═") + "╝" + NL;
+	fs.writeFileSync(Malta.printfile, '');
+	console.log(top);
+}
+
+/**
  * { function_description }
  *
  * @param      {<type>}  err         The error
@@ -279,18 +307,6 @@ Malta.prototype.log_err = function (msg) {
 	if (Malta.verbose > 0){
 		console.log(this.proc + "[ERROR]: ".red() + msg.red());
 	}
-	process.exit();
-};
-
-/**
- * [log_help description]
- * @return {[type]} [description]
- */
-Malta.prototype.log_help = function () {
-	'use strict';
-	console.log(Malta.name + ' v.' + Malta.version);
-	console.log(NL + 'Usage : malta [templatefile] [outdir] {options}');
-	console.log('   OR   malta [buildfile.json]' + NL);
 	process.exit();
 };
 
@@ -475,13 +491,13 @@ Malta.prototype.check = function (a) {
 		proc,
 		buildFile;
 	
-	this.printVersion = a.indexOf('do_not_print_version') < 0;
+	// this.printVersion = a.indexOf('do_print_version') >= 0;
 
 	this.args = a;
 
 	// stop with usage info in case not enough args are given
 	//
-	a.length < 2 && this.log_help();
+	a.length < 2 && Malta.log_help();
 
 	// template and outdir params
 	// 
@@ -634,10 +650,7 @@ Malta.prototype.loadOptions = function () {
 		if ('watchInterval' in opts) Malta.watchInterval = parseInt(opts.watchInterval, 10);
 		if ('showPath' in opts) Malta.showPath = !!(opts.showPath);
 	}
-	
-	// depends on verbose!!!.. .so now is the moment
-	
-	Malta.verbose && self.printVersion && Malta.outVersion();
+
 	
 	if (tmp) {
 		self.log_debug('Loading options'.yellow());
@@ -747,21 +760,7 @@ Malta.prototype.notifyAndUnlock = function (start, msg){
 	self.doBuild = false;
 }
 
-/**
- * { function_description }
- * @static
- */
-Malta.outVersion = function () {
-	'use strict';
-	if (Malta.verbose === 0) return;
-	var str = Malta.name.rainbow() + ' v.' + Malta.version,
-		l = (Malta.name + ' v.' + Malta.version).length + 4,
-		top = NL +
-			"╔" + (new Array(l-1)).join("═") + "╗" + NL +
-			"║" +      ' ' + str + ' '       + "║" + NL + 
-			"╚" + (new Array(l-1)).join("═") + "╝" + NL;
-	console.log(top);
-}
+
 
 
 Malta.prototype.delete_result = function () {
@@ -1401,6 +1400,26 @@ Malta.get = function () {
 	return new Malta;
 }
 
+/**
+ * Determines if command.
+ *
+ * @param      {string}  s       { parameter_description }
+ * @return     {string}  True if command, False otherwise.
+ */
+Malta.isCommand = function(s) {
+	return s.match(/^\@(.*)/);
+}
+
+Malta.printfile = '.printVersion';
+
+
+process.on('SIGINT', function () {
+	//remove print file
+	fs.unlink(Malta.printfile);
+	process.exit();
+});
+
+
 module.exports = Malta;
 
 
@@ -1408,10 +1427,12 @@ module.exports = Malta;
 
 var j = 0;
 
-if (args.length === 1) {
-
+if (args.length === 0) {
+	Malta.log_help();
+} else if (args.length === 1) {
+	Malta.outVersion();
 	var p = path.resolve(execPath, args[0]),
-		runs = fs.existsSync(p) ? require(p) : false,
+		runs = fs.existsSync(p) ? require(p) :  false,
 		tpl;
 
 	// check
@@ -1424,22 +1445,33 @@ if (args.length === 1) {
 		multi(tpl, runs[tpl]);
 	}
 } else if (args.length > 1){
+	Malta.outVersion();
 	Malta.get().check(args).start();
-
 }
 
 function multi(key, el) {
 	var opts = ['proc=' + j],
 		multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
-		multiElements = {};
+		multiElements = {},
+		isCommand = Malta.isCommand(key);
 
-	if (j>0) {
-		opts.push('do_not_print_version');
-	}
+
+
 	if (multi) {
+		
+		if (isCommand) {
+			console.log("\n\n\n\n\n--------\nCOMMAND : ");
+			console.log(isCommand);
+			console.log("--------\n\n\n\n");
+			process.exit();
+		}
+
 		folder = multi[1];
 		ext = multi[2];
+		// console.log(key, folder, ext)
+		// process.exit();
+
 		fs.readdir(folder, function (err, files) {
 			files.forEach(function (file) {
 				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
