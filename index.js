@@ -1450,34 +1450,37 @@ module.exports = Malta;
 
 var j = 0;
 
-switch (args.length) {
+if (args.length) {
 
-	case 0 : 
-		Malta.log_help();
-		break;
+	switch (args.length) {
+/*
+ // ONLY IN THE BIN
+		case 0 : 
+			Malta.log_help();
+			break;
+*/
+		case 1 :
+			Malta.outVersion();
+			var p = path.resolve(execPath, args[0]),
+				runs = fs.existsSync(p) ? require(p) :  false,
+				tpl;
 
-	case 1 :
-		Malta.outVersion();
-		var p = path.resolve(execPath, args[0]),
-			runs = fs.existsSync(p) ? require(p) :  false,
-			tpl;
+			// check
+			// 
+			!runs && Malta.badargs(p);
+			for (tpl in runs) {
+				//skip if key begins with !
+				if (tpl.match(/^\!/)) continue;
+				multi(tpl, runs[tpl]);
+			}
+			break;
 
-		// check
-		// 
-		!runs && Malta.badargs(p);
-		for (tpl in runs) {
-			//skip if key begins with !
-			if (tpl.match(/^\!/)) continue;
-			multi(tpl, runs[tpl]);
-		}
-		break;
-
-	default : 
-		Malta.outVersion();
-		Malta.get().check(args).start();
-		break;
+		default : 
+			Malta.outVersion();
+			Malta.get().check(args).start();
+			break;
+	}
 }
-
 
 function doCommand(c, opt) {
 	var spawn = child_process.spawn,

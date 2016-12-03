@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.0.44** fixed a bug when requiring malta
 - **3.0.42** better console messaging
 - **3.0.37** whenever a file wildcard is used in multimode, te folder is watched to automatically start/kill malta on new/removed files
 - **3.0.33** fixed a bug on buildnum file writing
