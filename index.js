@@ -1448,38 +1448,38 @@ process.on('SIGINT', Malta.stop);
 
 module.exports = Malta;
 
-var j = 0;
+var j = 0,
+	len = args.length;
 
-if (args.length) {
-
-	switch (args.length) {
+if (len == 0) {
 /*
- // ONLY IN THE BIN
-		case 0 : 
-			Malta.log_help();
-			break;
+// ONLY IN THE BIN, must write it, by now it means silence when
+// malta is la=unched from the console passing no parameters
+	case 0 : 
+		Malta.log_help();
+		break;
 */
-		case 1 :
-			Malta.outVersion();
-			var p = path.resolve(execPath, args[0]),
-				runs = fs.existsSync(p) ? require(p) :  false,
-				tpl;
+} else if (len == 1){
 
-			// check
-			// 
-			!runs && Malta.badargs(p);
-			for (tpl in runs) {
-				//skip if key begins with !
-				if (tpl.match(/^\!/)) continue;
-				multi(tpl, runs[tpl]);
-			}
-			break;
+	Malta.outVersion();
+	var p = path.resolve(execPath, args[0]),
+		runs = fs.existsSync(p) ? require(p) :  false,
+		tpl;
 
-		default : 
-			Malta.outVersion();
-			Malta.get().check(args).start();
-			break;
+	// check
+	// 
+	!runs && Malta.badargs(p);
+	for (tpl in runs) {
+		//skip if key begins with !
+		if (tpl.match(/^\!/)) continue;
+		multi(tpl, runs[tpl]);
 	}
+
+} else {
+
+	Malta.outVersion();
+	Malta.get().check(args).start();
+
 }
 
 function doCommand(c, opt) {
