@@ -117,15 +117,6 @@ function Malta () {
 	 * just a flag to know if plugins are required
 	 */
 	this.hasPlugins = false;
-	
-	/**
-	 * date function used to show elapsed time for creation,
-	 * and eve for wired time placeholders
-	 * __TIME__ , __DATE__ , __YEAR__
-	 *
-	 * @return     {Date}  { description_of_the_return_value }
-	 */
-	this.date = function() {return new Date(); };
 
 	// time spend to build
 	// 
@@ -190,7 +181,6 @@ Malta.showPath = true;
 Malta.printfile = '.printVersion';
 
 
-
 /**
  * [badargs description]
  * @param  {[type]} tpl [description]
@@ -235,6 +225,106 @@ Malta.outVersion = function (do_not_write) {
 	!do_not_write && fs.writeFileSync(Malta.printfile, '');
 	console.log(top);
 }
+
+/**
+ * Checks npm package dependencies, meant to be used at te very beginning of a plugin code
+ * 
+ * @static
+ * @memberof   Malta
+ * @param      {mixed} one or more strings valued with the names of the dependenct package that must be checked
+ * @return     {Object} the running instance of Malta
+ */
+Malta.checkDeps = function () {
+	'use strict';
+	var i,l,
+		errs = [],
+		deps = [].slice.call(arguments, 0);
+
+	for (i = 0, l = deps.length; i < l; i++){
+		try {
+		    require.resolve(deps[i]);
+		} catch(e) {
+			errs.push({
+				err : e,
+				msg : NL + deps[i].underline() + " package is needed"+
+		    		NL + "by a plugin "+
+		    		NL + "but cannot be found".italic()+
+		    		NL + ("run `npm install " + deps[i] + "`").yellow()
+			});
+		}
+	}
+	for (i=0, l = errs.length; i < l; i++) {
+		console.log(errs[i].err.code.red() + ': ' + errs[i].msg);
+	}
+	errs.length && Malta.stop();
+	return this;
+}
+
+/**
+ * Checks command line executables dependencies, meant to be used at te very beginning of a plugin code
+ * 
+ * @static
+ * @memberof Malta
+ * @param      {string}  ex 	the name of the executable to be checked
+ * @return     {Object}  the running instance of Malta
+ */
+Malta.checkExec = function (ex) {
+	'use strict';
+	var err;
+
+	child_process.exec("which " + ex, function (error, stdout, stderr) {
+		if (error !== null) {
+			err = {
+				err : error + '',
+				msg : NL + ex.underline() + " executable is needed" + NL + 
+					"but cannot be found".italic() + NL + 
+					("install `" + ex  + "` and try again").yellow()
+			};
+			console.log(err.err.red() + ' ' + err.msg);
+			Malta.stop();
+		}
+	});
+	return this;
+};
+
+/**
+ * Factory method for Malta
+ * 
+ * static
+ * memberof   Malta
+ * return     {Object}  a new Malta instance
+ */
+Malta.get = function () {
+	return new Malta;
+}
+
+/**
+ * Determines if command.
+ *
+ * @param      {string}  s       { parameter_description }
+ * @return     {string}  True if command, False otherwise.
+ */
+Malta.isCommand = function(s) {
+	return s.match(/^\@(.*)/);
+}
+
+/**
+ * { function_description }
+ */
+Malta.stop =  function() {
+	'use strict';
+	console.log('MALTA has stopped' + NL);
+	fs.unlink(Malta.printfile);
+	process.exit()
+};
+
+
+
+
+
+
+
+Malta.prototype.date = function() {return new Date(); };
 
 /**
  * { function_description }
@@ -327,26 +417,30 @@ Malta.prototype.reg = {
 	calc : '\!{([^{}]*)}\!'
 };
 
+
+function getCommentFn(pre, post) {
+	return function(cnt) {return pre + cnt + post; };
+}
 /**
  * [comments description]
  * @type {Object}
  */
 Malta.prototype.comments = {
-	'html':	"<!--\n%content%\n-->\n",
-	'xml': "<!--\n%content%\n-->\n",
-	'svg': "<!--\n%content%\n-->\n",
-	'pug': "//\n// %content%\n//\n",
-	'c': "/*\n%content%\n*/\n",
-	'cpp': "/*\n%content%\n*/\n",
-	'js': "/*\n%content%\n*/\n",
-	'css': "/*\n%content%\n*/\n",
-	'less': "/*\n%content%\n*/\n",
-	'scss': "/*\n%content%\n*/\n",
-	'php': "/*\n%content%\n*/\n",
-	'java': "/*\n%content%\n*/\n",
-	'ts': "/*\n%content%\n*/\n",
-	'rb': "=begin\n%content%\n=end\n",
-	'hs': "{-\n%content%\n-}\n"
+	"html" : getCommentFn("<!--\n", "\n-->\n"),
+	"xml" : getCommentFn("<!--\n", "\n-->\n"),
+	"svg" : getCommentFn("<!--\n", "\n-->\n"),
+	"pug" : getCommentFn("//\n//", "\n//\n"),
+	"c" : getCommentFn("/*\n", "\n*/\n"),
+	"cpp" : getCommentFn("/*\n", "\n*/\n"),
+	"js" : getCommentFn("/*\n", "\n*/\n"),
+	"css" : getCommentFn("/*\n", "\n*/\n"),
+	"less" : getCommentFn("/*\n", "\n*/\n"),
+	"scss" : getCommentFn("/*\n", "\n*/\n"),
+	"php" : getCommentFn("/*\n", "\n*/\n"),
+	"java" : getCommentFn("/*\n", "\n*/\n"),
+	"ts" : getCommentFn("/*\n", "\n*/\n"),
+	"rb" : getCommentFn("=begin\n", "\n=end\n"),
+	"hs" : getCommentFn("{-\n", "\n-}\n")
 };
 
 /**
@@ -872,7 +966,7 @@ Malta.prototype.replace_all = function(tpl) {
 			// if ext is compatible
 			// 
 			if (ext in self.comments) {
-				return self.comments[ext].replace('%content%', ' ### ' + $2 + ' ### ');
+				return self.comments[ext](' ### ' + $2 + ' ### ');
 			}
 
 			// remove it
@@ -895,7 +989,7 @@ Malta.prototype.replace_all = function(tpl) {
 		// maybe add path tip in build just before file inclusion
 		// 
 		if (Malta.showPath && ext in self.comments) {
-			tmp = self.comments[ext].replace('%content%', "[MALTA] " + $2) + tmp;
+			tmp = self.comments[ext]("[MALTA] " + $2) + tmp;
 		}
 
 		// add a unit to the involved files count
@@ -1008,18 +1102,20 @@ Malta.prototype.signBuildNumber = function() {
  * [stop description]
  * @return {[type]} [description]
  */
-Malta.stop = Malta.prototype.stop = function() {
-	'use strict';
-	console.log('MALTA has stopped' + NL);
-	fs.unlink(Malta.printfile);
-	process.exit()
-};
+Malta.prototype.stop = Malta.stop;
 
 /**
  * [utils description]
  * @type {Object}
  */
 Malta.prototype.utils = {
+
+	/**
+	 * Creates an entry.
+	 *
+	 * @param      {<type>}            path    The path
+	 * @return     {(Object|boolean)}  { description_of_the_return_value }
+	 */
 	createEntry: function(path) {
 		'use strict';
 		if (!fs.existsSync(path)) {
@@ -1032,16 +1128,34 @@ Malta.prototype.utils = {
 		};
 	},
 
+	/**
+	 * Gets the file extension.
+	 *
+	 * @param      {<type>}  fname   The filename
+	 * @return     {<type>}  The file extension.
+	 */
 	getFileExtension: function(fname) {
 		'use strict';
 		return fname.split('.').pop();
 	},
 
+	/**
+	 * Gets the file time.
+	 *
+	 * @param      {<type>}  path    The path
+	 * @return     {<type>}  The file time.
+	 */
 	getFileTime: function(path) {
 		'use strict';
 		return fs.existsSync(path) && fs.statSync(path).mtime.getTime();
 	},
 
+	/**
+	 * get a unique array given an array
+	 *
+	 * @param      {<type>}  a       { parameter_description }
+	 * @return     {Array}   { description_of_the_return_value }
+	 */
 	uniquearr: function(a) {
 		'use strict';
 		var r = [],
@@ -1055,14 +1169,12 @@ Malta.prototype.utils = {
 		return r;
 	},
 
-	// experimenting some kind of dummy local minifier
-	//
-	clean: function(s) {
-		'use strict';
-		// inline
-		return s.replace(/^[\s\t]*\/\/.*(?=[\n\r])/gm, '');
-	},
-
+	/**
+	 * solves internal references in the json vars file
+	 *
+	 * @param      {<type>}  obj     The object
+	 * @return     {<type>}  { description_of_the_return_value }
+	 */
 	solveJson: function(obj) {
 		'use strict';
 		var self = this,
@@ -1094,6 +1206,12 @@ Malta.prototype.utils = {
 		})(obj);
 	},
 
+	/**
+	 * checks is a ns exists
+	 *
+	 * @param      {<type>}           ns      { parameter_description }
+	 * @param      {(number|string)}  ctx     The context
+	 */
 	checkns: function(ns, ctx) {
 		'use strict';
 		var els = ns.split(/\.|\//),
@@ -1115,6 +1233,12 @@ Malta.prototype.utils = {
 		return ctx;
 	},
 
+	/**
+	 * json from a string
+	 *
+	 * @param      {string}   s       { parameter_description }
+	 * @return     {boolean}  { description_of_the_return_value }
+	 */
 	jsonFromStr : function (s) {
 		'use strict';
 		var r;
@@ -1124,7 +1248,6 @@ Malta.prototype.utils = {
 		eval('r = {' + s + '}');
 		return r;
 	},
-
 
 	/**
 	 * [isArray description]
@@ -1274,8 +1397,9 @@ Malta.prototype.watch = function() {
 
 		for (f in self.files) {
 
-			// what about remove a file from self.files if the file has been removed?
-
+			// mmmm ... it would be nice
+			// to remove a file from self.files
+			// if the file has been removed!....btw
 
 			// something changed ?
 			//
@@ -1297,7 +1421,6 @@ Malta.prototype.watch = function() {
 					// update vars
 					// 
 					self.vars = self.utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
-					// self.vars = JSON.parse(fs.readFileSync(self.varPath));
 				}
 
 				self.parse(f);
@@ -1309,6 +1432,7 @@ Malta.prototype.watch = function() {
 	// every second, if nothing is building, watch files
 	// 
 	self.log_debug('Watch interval used : '.yellow() + (''+Malta.watchInterval).red() );
+
 	setInterval(function() {
 		!self.doBuild && watch();
 	}, Malta.watchInterval);
@@ -1318,139 +1442,54 @@ Malta.prototype.watch = function() {
 	return this;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Checks npm package dependencies, meant to be used at te very beginning of a plugin code
- * 
- * @static
- * @memberof   Malta
- * @param      {mixed} one or more strings valued with the names of the dependenct package that must be checked
- * @return     {Object} the running instance of Malta
- */
-Malta.checkDeps = function () {
-	'use strict';
-	var i,l,
-		errs = [],
-		deps = [].slice.call(arguments, 0);
-
-	for (i = 0, l = deps.length; i < l; i++){
-		try {
-		    require.resolve(deps[i]);
-		} catch(e) {
-			errs.push({
-				err : e,
-				msg : NL + deps[i].underline() + " package is needed"+
-		    		NL + "by a plugin "+
-		    		NL + "but cannot be found".italic()+
-		    		NL + ("run `npm install " + deps[i] + "`").yellow()
-			});
-		}
-	}
-	for (i=0, l = errs.length; i < l; i++) {
-		console.log(errs[i].err.code.red() + ': ' + errs[i].msg);
-	}
-	errs.length && Malta.stop();
-	return this;
-}
-
-/**
- * Checks command line executables dependencies, meant to be used at te very beginning of a plugin code
- * 
- * @static
- * @memberof Malta
- * @param      {string}  ex 	the name of the executable to be checked
- * @return     {Object}  the running instance of Malta
- */
-Malta.checkExec = function (ex) {
-	'use strict';
-	var err;
-
-	child_process.exec("which " + ex, function (error, stdout, stderr) {
-		if (error !== null) {
-			err = {
-				err : error + '',
-				msg : NL + ex.underline() + " executable is needed" + NL + 
-					"but cannot be found".italic() + NL + 
-					("install `" + ex  + "` and try again").yellow()
-			};
-			console.log(err.err.red() + ' ' + err.msg);
-			Malta.stop();
-		}
-	});
-	return this;
-};
-
-/**
- * Factory method for Malta
- * 
- * static
- * memberof   Malta
- * return     {Object}  a new Malta instance
- */
-Malta.get = function () {
-	return new Malta;
-}
-
-/**
- * Determines if command.
- *
- * @param      {string}  s       { parameter_description }
- * @return     {string}  True if command, False otherwise.
- */
-Malta.isCommand = function(s) {
-	return s.match(/^\@(.*)/);
-}
-
-
-
-
-
+// be sure to call malta stop when the user CTRL+C
+//
 process.on('SIGINT', Malta.stop);
-
 
 module.exports = Malta;
 
-
-
-
 var j = 0;
 
-if (args.length === 0) {
-	Malta.log_help();
-} else if (args.length === 1) {
-	Malta.outVersion();
-	var p = path.resolve(execPath, args[0]),
-		runs = fs.existsSync(p) ? require(p) :  false,
-		tpl;
+switch (args.length) {
 
-	// check
-	// 
-	!runs && Malta.badargs(p);
-	
-	for (tpl in runs) {
-		//skip if key begins with !
-		if (tpl.match(/^\!/)) continue;
-		multi(tpl, runs[tpl]);
-	}
-} else if (args.length > 1){
-	Malta.outVersion();
-	Malta.get().check(args).start();
+	case 0 : 
+		Malta.log_help();
+		break;
+
+	case 1 :
+		Malta.outVersion();
+		var p = path.resolve(execPath, args[0]),
+			runs = fs.existsSync(p) ? require(p) :  false,
+			tpl;
+
+		// check
+		// 
+		!runs && Malta.badargs(p);
+		for (tpl in runs) {
+			//skip if key begins with !
+			if (tpl.match(/^\!/)) continue;
+			multi(tpl, runs[tpl]);
+		}
+		break;
+
+	default : 
+		Malta.outVersion();
+		Malta.get().check(args).start();
+		break;
 }
+
+
+function doCommand(c, opt) {
+	var spawn = child_process.spawn,
+		command = spawn(c, opt.split(' ') );
+
+	command.stdout.on( 'data', function (data) {
+	    console.log(`${data}`);
+	});
+	// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
+	// command.on( 'close', function (code) {console.log( `child process exited with code ${code}` );});
+}
+
 
 function multi(key, el) {
 	var opts = ['proc=' + j],
@@ -1459,21 +1498,16 @@ function multi(key, el) {
 		multiElements = {},
 		isCommand = Malta.isCommand(key);
 
+	if (isCommand) {
 
+		doCommand(isCommand[1], el);
+		console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
 
-	if (multi) {
-		
-		if (isCommand) {
-			console.log("\n\n\n\n\n--------\nCOMMAND : ");
-			console.log(isCommand);
-			console.log("--------\n\n\n\n");
-			Malta.stop();
-		}
+	} else if (multi) {
 
 		folder = multi[1];
+
 		ext = multi[2];
-		// console.log(key, folder, ext)
-		// process.exit();
 
 		fs.readdir(folder, function (err, files) {
 			files.forEach(function (file) {
@@ -1516,4 +1550,3 @@ function multi(key, el) {
 		return ls;
 	}
 }
-
