@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.0.47** finally split in two files for script and console execution
+- **3.0.49** finally split in two files for script and console execution
 - **3.0.45** fixed a bug when requiring malta
 - **3.0.42** better console messaging
 - **3.0.37** whenever a file wildcard is used in multimode, te folder is watched to automatically start/kill malta on new/removed files

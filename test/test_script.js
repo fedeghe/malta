@@ -1,7 +1,11 @@
 var Malta = require('malta');
+
+console.log(Malta);
+
+
 Malta.get().check([
-	'test/src/homepage.less',
-	'test/out',
+	'src/homepage.less',
+	'out',
 	'-require=malta-less...malta-css-uglify...malta-header-comment[name:\"mitlicense.txt\"]',
 	'-options=showPath:false,watchInterval:500,verbose:0'
 ]).start(function (o, who) {

@@ -5,17 +5,17 @@ var fs = require("fs"),
 	child_process = require('child_process'),
 	readline = require('readline'),
 	Promise = require('promise'),
-	watcher = require('./lib/observe.js'),
+	watcher = require('./observe'),
 	execPath = process.cwd(),
 	
-	packageInfo = fs.existsSync(__dirname + '/package.json') ? require(__dirname + '/package.json') : {},
+	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
 	DS = path.sep,
 	NL = "\n",
 	TAB = "\t";
 
 // string proto for console colors
 
-require('./lib/stringproto');
+require('./stringproto');
 
 /**
  * Malta is the main object that will watch for modifications and build when needed
@@ -852,7 +852,7 @@ Malta.prototype.notifyAndUnlock = function (start, msg){
 
 	msg = (!!msg ? (msg + NL) : '') +
 		'build #' + this.buildnumber + ' in ' + (end - start + "").white() + 'ms' + NL +
-		'watching ' + (self.involvedFiles + "").white() + " files";
+		'watching ' + (self.involvedFiles + "").white() + " files" + NL;
 
 	self.log_info(msg);	
 	self.doBuild = false;

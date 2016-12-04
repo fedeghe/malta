@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var Malta = require('./Malta.js'),
+var Malta = require('./malta'),
+	watcher = require('./observe'),
 	fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
-	watcher = require('./lib/observe.js'),
 	j = 0;
 
 function doCommand(c, opt) {

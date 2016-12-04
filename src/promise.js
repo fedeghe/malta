@@ -1,7 +1,7 @@
 function MPromise (f) {
 	var self = this;
-	!self.called && f(function () {
-		self.called = true;
+	!self.solved && f(function () {
+		self.solved = true;
 		self.cb.apply(null, [].slice.call(arguments, 0));
 	});
 	

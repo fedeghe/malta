@@ -13,7 +13,6 @@ SM = {
         var t = "one two three $name$ !{$puzzle.three$*$puzzle.two$}!";
 
         var t = function r(){const y = 's'}
-
         $$bbb.js$$
         eval('var yy=2'  );
         // __TIME__

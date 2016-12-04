@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-var Malta = require("./malta.js"),
+var Malta = require("./malta"),
+	functions = require("./functions"),
 	fs = require("fs"),
 	path = require("path"),
-	functions = require("./functions.js"),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
 	j = 0,

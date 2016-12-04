@@ -53,6 +53,11 @@ Shows jshint outcomes, based on [jshint npm package][11b]
 Shows jslint outcomes, based on [jslint npm package][12b]  
 
 ---
+### [malta-json-minify][12bis]  
+Minifies json files  
+
+
+---
 ### [malta-less][13]  
 Creates css files from less files, based on [less npm package][13b]  
 
@@ -109,6 +114,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [10]: https://www.npmjs.com/package/malta-jsdoc
 [11]: https://www.npmjs.com/package/malta-jshint
 [12]: https://www.npmjs.com/package/malta-jslint
+[12bis]: https://www.npmjs.com/package/malta-json-minify
 [13]: https://www.npmjs.com/package/malta-less
 [14]: https://www.npmjs.com/package/malta-markdown
 [15]: https://www.npmjs.com/package/malta-markdown-pdf

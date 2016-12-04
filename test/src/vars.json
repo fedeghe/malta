@@ -12,7 +12,7 @@
 	},
 	"solved" : "$puzzle.one$$puzzle.two$" ,
 	"daisy" : {
-		"size" : 900,
+		"size" : 800,
 		"color" : {
 			"inner" : "yellow",
 			"outer" : "white",

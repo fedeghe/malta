@@ -3,7 +3,7 @@
  * @return {[type]} [description]
  */
 function jjj() {
-    alert('hello there $surname$ dgdfgdf');
+    alert('hello there $surname$');
     $$ccc.js$$
     zzj();
 }

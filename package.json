@@ -1,8 +1,8 @@
 {
   "name": "malta",
-  "version": "3.0.47",
+  "version": "3.0.49",
   "description": "lightning builder allows to compose on the fly and update packed and full coded huge javascript files, edit its parts as files, splitted and glued as You need.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "make test"
   },
@@ -22,7 +22,7 @@
     "url": "https://github.com/fedeghe/malta/issues"
   },
   "bin": {
-    "malta": "bin.js"
+    "malta": "src/bin.js"
   },
   "dependencies": {
     "promise": "^7.1.1"
