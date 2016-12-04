@@ -8,18 +8,14 @@ var Malta = require("./malta.js"),
 	j = 0,
 	len = args.length;
 
-// console.log('script here')
+// console.log('bin here')
 
 module.exports = Malta;
 
 if (len == 0) {
-/*
-// ONLY IN THE BIN, must write it, by now it means silence when
-// malta is la=unched from the console passing no parameters
-	case 0 : 
-		Malta.log_help();
-		break;
-*/
+
+	Malta.log_help();
+
 } else if (len == 1){
 
 	Malta.outVersion();

@@ -168,10 +168,10 @@ Malta uses three kind of placeholders, to be used in the main template or in any
   _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder
 
 - **$varname$**  
-  _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder  
+  _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder (or wherever the -vars options indicates)  
 
 - **!{expression}!**
-  _expression_ can contain anything that must be evaluated (eval is used)
+  _expression_ can contain anything that must be evaluated (`eval` function is used)
  
 
 ---
