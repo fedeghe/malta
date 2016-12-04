@@ -118,7 +118,7 @@ once started, Malta will start/stop on new files that could be added/removed to/
 ---
 
 <a name="parameters"></a>
-# Parameters
+### Parameters
 
 Starting it as command line tool or programmatically the arguments are the same
 
@@ -153,11 +153,12 @@ To use one plugin a `-require` or `-plugins` argument must be specified when inv
 Whenever some parameters are needed to be passed to the plugin, i9n case of string value, then You need to pass the string just wrap it into escaped double quotes \".  
 
 
-### something more about plugins 
+### something more about plugins  
 
 The version 3 of _malta_ aims to simplify any post-processing needed to be done on the composed file. In fact now _malta_ just do the job of creating the big file from the template and all files and variables involved... nothing else, no packing for js, no less/sass compiling, only the clean plain big file.
-Whatever work is needed afterwards it needs to be done by a plugin.   
+Whatever work is needed afterwards it needs to be done by a plugin. 
 When a plugin `myplugin` is requested the first place malta will search for it is `executionfolder/plugins/myplugin.js` if not found will be searched as `plugins/myplugin.js` into the local malta package path, otherwise will be searched as a local/global package.
+
 ---
 
 ### Placeholders  
@@ -181,7 +182,7 @@ Writing a plugin is extremely easy, just get a look at the _sample.js_ file in t
 
 ---
 
-# Hints
+### Hints
 
 - **absolutely** use only spaces and/or tabs before and after file placeholders
  
@@ -190,7 +191,7 @@ Writing a plugin is extremely easy, just get a look at the _sample.js_ file in t
 - to avoid loops Malta stops digging at the tenth nesting level.
 
 
-# Wired vars
+### Wired vars
 
 There are some placeholders that can be used within any involved file:  
 
