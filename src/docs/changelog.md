@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.1.0** fixed local plugin loading path problem
 - **3.0.52** some fix on readme
 - **3.0.51** finally split in two files for script and console execution
 - **3.0.45** fixed a bug when requiring malta

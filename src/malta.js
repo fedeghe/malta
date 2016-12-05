@@ -312,7 +312,7 @@ Malta.isCommand = function(s) {
  */
 Malta.stop =  function() {
 	'use strict';
-	console.log('MALTA has stopped' + NL);
+	console.log(Malta.name + ' has stopped' + NL);
 	fs.unlink(Malta.printfile);
 	process.exit()
 };
@@ -667,8 +667,8 @@ Malta.prototype.getPluginsManager = function () {
 	return {
 		add : function (fname, params) {
 
-			var reqName = "./plugins/" + fname,
-				path = "/plugins/" + fname  + '.js',
+			var reqName = "../plugins/" + fname,
+				path = "/../plugins/" + fname  + '.js',
 				user_path = execPath + path,
 				malta_path = __dirname + path,
 				plugin;
@@ -988,7 +988,7 @@ Malta.prototype.replace_all = function(tpl) {
 		// maybe add path tip in build just before file inclusion
 		// 
 		if (Malta.showPath && ext in self.comments) {
-			tmp = self.comments[ext]("[MALTA] " + $2) + tmp;
+			tmp = self.comments[ext]("[" + Malta.name + "] " + $2) + tmp;
 		}
 
 		// add a unit to the involved files count
