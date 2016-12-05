@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.2.0** now Malta will run only one single node process instead of spawning one for each build
 - **3.1.1** fixed local plugin loading path problem;
     removed number of process indication
 - **3.0.52** some fix on readme

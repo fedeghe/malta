@@ -5,7 +5,6 @@ var Malta = require("./malta"),
 	path = require("path"),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
-	j = 0,
 	len = args.length;
 
 // console.log('script here')

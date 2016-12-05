@@ -3,7 +3,6 @@
 var fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
-	readline = require('readline'),
 	Promise = require('promise'),
 	watcher = require('./observe'),
 	execPath = process.cwd(),
@@ -132,7 +131,14 @@ function Malta () {
 	//
 	this.userWatch = false;
 
+
+	this.proc = false;
+
 	this.name = Malta.name;
+
+	// the watching obj returned by setInterval
+	//
+	this.watch_TI = false;
 }
 
 /**
@@ -345,7 +351,7 @@ Malta.prototype.log_debug = function (msg){
 	if (Malta.verbose < 2){
 		return;
 	}
-	console.log(msg);
+	console.log(this.proc + " " + msg);
 }; 
 
 /**
@@ -358,7 +364,7 @@ Malta.prototype.log_dir = function (msg){
 	if (Malta.verbose < 2){
 		return;
 	}
-	console.log(JSON.stringify(msg));
+	console.log(this.proc + " " + JSON.stringify(msg));
 };
 
 /**
@@ -372,7 +378,7 @@ Malta.prototype.log_info = function (msg){
 		return;
 	}
 	var self = this;
-	console.log(msg);
+	console.log(this.proc + " " + msg);
 };
 
 /**
@@ -385,7 +391,7 @@ Malta.prototype.log_warn = function (msg) {
 	if (Malta.verbose === 0){
 		return;
 	}
-	console.log(msg);
+	console.log(this.proc + " " + msg);
 };
 
 /**
@@ -396,7 +402,7 @@ Malta.prototype.log_warn = function (msg) {
 Malta.prototype.log_err = function (msg) {
 	'use strict';
 	if (Malta.verbose > 0){
-		console.log("[ERROR]: ".red() + msg.red());
+		console.log(this.proc + " " + "[ERROR]: ".red() + msg.red());
 	}
 	Malta.stop();
 };
@@ -480,7 +486,7 @@ Malta.prototype.build = function() {
 			data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds(),
 			msg = '';
 
-		msg += 'Build ' + self.buildnumber + ' @ ' + data + NL;
+		msg += '@ ' + data + NL;
 		msg += Malta.name + ' compiled ' + self.outName + ' (' + self.getSize(self.outName) + ')';
 		end = self.date();
 		
@@ -585,7 +591,7 @@ Malta.prototype.check = function (a) {
 		argOutDir,
 		buildFile;
 	
-	// this.printVersion = a.indexOf('do_print_version') >= 0;
+	
 
 	this.args = a;
 
@@ -609,7 +615,7 @@ Malta.prototype.check = function (a) {
 	badArgs.length && Malta.badargs.apply(null, badArgs);
 
 	
-	this.args = a.splice(2);
+	
 
 	this.tplName = path.basename(argTemplate);
 	this.tplPath = path.resolve(execPath, argTemplate);
@@ -625,6 +631,13 @@ Malta.prototype.check = function (a) {
 
 	this.inName = this.baseDir + DS + this.tplName;
 	this.outName = this.outDir + DS + this.tplName;
+
+	t = a.join(' ').match(/proc=(\d*)/);
+
+	this.procNum = t ? t[1] : 0;
+	this.proc = "[" + this.procNum + "] " +  this.tplName.white();
+
+	this.args = a.splice(2);
 
 	return this
 		.loadOptions()
@@ -1060,6 +1073,7 @@ Malta.prototype.start = function (userWatch) {
 	self.parse(self.tplPath)
 		.watch()
 		.build();
+	return this;
 };
 
 /**
@@ -1388,13 +1402,17 @@ Malta.prototype.watch = function() {
 
 		for (f in self.files) {
 
-			// mmmm ... it would be nice
-			// to remove a file from self.files
-			// if the file has been removed!....btw
+
+			// if the file has been removed
+			//
+			if (!fs.existsSync(f)){
+				
+				self.shut();
+				console.log('REMOVED '.yellow() + f + NL);
 
 			// something changed ?
 			//
-			if (self.files[f].time < self.utils.getFileTime(f)) {
+			} else if (self.files[f].time < self.utils.getFileTime(f)) {
 				d = self.date();
 
 				self.log_info('[' + 'MODIFIED'.yellow() + ' @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, '').underline());
@@ -1424,7 +1442,10 @@ Malta.prototype.watch = function() {
 	// 
 	self.log_debug('Watch interval used : '.yellow() + (''+Malta.watchInterval).red() );
 
-	setInterval(function() {
+	// save the interval fucntion so that if the element is removed (wildcard)
+	// then the interval is cleared by the shut function
+	// 
+	this.watch_TI = setInterval(function() {
 		!self.doBuild && watch();
 	}, Malta.watchInterval);
 
@@ -1432,6 +1453,10 @@ Malta.prototype.watch = function() {
 	//
 	return this;
 };
+
+Malta.prototype.shut = function () {
+	clearInterval(this.watch_TI);
+}
 
 // be sure to call malta stop when the user CTRL+C
 //

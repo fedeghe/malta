@@ -4,7 +4,11 @@ var Malta = require('./malta'),
 	watcher = require('./observe'),
 	fs = require("fs"),
 	path = require("path"),
-	child_process = require('child_process');
+	child_process = require('child_process'),
+	DS = path.sep,
+	NL = "\n",
+	TAB = "\t";
+	proc = 0;
 
 function doCommand(c, opt) {
 	var spawn = child_process.spawn,
@@ -19,8 +23,7 @@ function doCommand(c, opt) {
 
 
 function multi(key, el) {
-	var opts = [],
-		multi = key.match(/(.*)\/\*\.(.*)$/),
+	var multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
 		multiElements = {},
 		isCommand = Malta.isCommand(key);
@@ -40,7 +43,8 @@ function multi(key, el) {
 			files.forEach(function (file) {
 				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
 					// store the process
-					multiElements[file] = proceed(folder + '/' + file, el, opts);
+					++proc;
+					multiElements[file] = proceed(folder + '/' + file, el);
 				}
 			});
 		});
@@ -52,26 +56,35 @@ function multi(key, el) {
 			diff.added.filter(function (v) {
 				return v.match(new RegExp(".*\\." + ext + '$'))
 			}).forEach(function (v){
-				multiElements[v] = proceed(folder + '/' + v, el, opts);
+				++proc;
+				multiElements[v] = proceed(folder + '/' + v, el);
 				console.log('ADDED '.yellow() + folder + '/' + v + NL)
 			});
 
 			diff.removed.filter(function (v) {
 				return v.match(new RegExp(".*\\." + ext + '$'))
 			}).forEach(function (v){
-				multiElements[v].kill();
+				multiElements[v].shut();
+				multiElements[v] = null;
 				console.log('REMOVED '.yellow() + folder + '/' + v + NL)
 			});
 		})
 		
 	} else {
-		proceed(key, el, opts);
+		++proc;
+		proceed(key, el);
 	}
 
-	function proceed(tpl, options, op){
+	function proceedOLD(tpl, options, op){
 		var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
 		ls.stdout.on('data', function(data) {console.log(data + "");});
 		ls.stderr.on('error', function (data) {console.log('Stderr: '.red() + data);});	
+		return ls;
+	}
+
+	function proceed(tpl, options){
+		var o = [tpl].concat(options.split(/\s/)).concat(["proc="+proc]),
+			ls = Malta.get().check(o).start();
 		return ls;
 	}
 }
