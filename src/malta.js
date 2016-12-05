@@ -122,9 +122,6 @@ function Malta () {
 	// 
 	this.t2b = 0;
 
-	// to recognise the process
-	//
-	this.proc = '';
 
 	// should print the version on console?
 	//
@@ -348,7 +345,7 @@ Malta.prototype.log_debug = function (msg){
 	if (Malta.verbose < 2){
 		return;
 	}
-	console.log(this.proc + msg);
+	console.log(msg);
 }; 
 
 /**
@@ -361,7 +358,7 @@ Malta.prototype.log_dir = function (msg){
 	if (Malta.verbose < 2){
 		return;
 	}
-	console.log(this.proc + ' ' + JSON.stringify(msg));
+	console.log(JSON.stringify(msg));
 };
 
 /**
@@ -375,7 +372,7 @@ Malta.prototype.log_info = function (msg){
 		return;
 	}
 	var self = this;
-	console.log(this.proc + msg);
+	console.log(msg);
 };
 
 /**
@@ -388,7 +385,7 @@ Malta.prototype.log_warn = function (msg) {
 	if (Malta.verbose === 0){
 		return;
 	}
-	console.log(this.proc + msg);
+	console.log(msg);
 };
 
 /**
@@ -399,7 +396,7 @@ Malta.prototype.log_warn = function (msg) {
 Malta.prototype.log_err = function (msg) {
 	'use strict';
 	if (Malta.verbose > 0){
-		console.log(this.proc + "[ERROR]: ".red() + msg.red());
+		console.log("[ERROR]: ".red() + msg.red());
 	}
 	Malta.stop();
 };
@@ -586,7 +583,6 @@ Malta.prototype.check = function (a) {
 		badArgs = [],
 		argTemplate,
 		argOutDir,
-		proc,
 		buildFile;
 	
 	// this.printVersion = a.indexOf('do_print_version') >= 0;
@@ -622,10 +618,6 @@ Malta.prototype.check = function (a) {
 	this.outDir = path.resolve(execPath, argOutDir);
 	this.execDir = execPath;
 
-	proc = this.args.join(',').match(/proc=(\d)*/);
-	if (proc) {
-		this.proc = parseInt(proc[1], 10) + '(' + this.tplName + ') : ';
-	}
 
 	if (this.baseDir + "" === this.outDir + "") {
 		this.log_err('Output and template directories coincide. Malta won`t overwrite your template'.red());

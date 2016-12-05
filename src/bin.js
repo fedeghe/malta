@@ -5,7 +5,6 @@ var Malta = require("./malta"),
 	functions = require("./functions"),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
-	j = 0,
 	len = args.length;
 
 // console.log('bin here')

@@ -4,8 +4,7 @@ var Malta = require('./malta'),
 	watcher = require('./observe'),
 	fs = require("fs"),
 	path = require("path"),
-	child_process = require('child_process'),
-	j = 0;
+	child_process = require('child_process');
 
 function doCommand(c, opt) {
 	var spawn = child_process.spawn,
@@ -20,7 +19,7 @@ function doCommand(c, opt) {
 
 
 function multi(key, el) {
-	var opts = ['proc=' + j],
+	var opts = [],
 		multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
 		multiElements = {},
@@ -40,7 +39,6 @@ function multi(key, el) {
 		fs.readdir(folder, function (err, files) {
 			files.forEach(function (file) {
 				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
-					++j;
 					// store the process
 					multiElements[file] = proceed(folder + '/' + file, el, opts);
 				}
@@ -67,7 +65,6 @@ function multi(key, el) {
 		})
 		
 	} else {
-		++j;
 		proceed(key, el, opts);
 	}
 
