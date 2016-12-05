@@ -212,5 +212,5 @@ There are some placeholders that can be used within any involved file:
 [1]: plugins/sample.js
 [2]: https://github.com/fedeghe/malta/blob/master/src/docs/sample.md
 [3]: https://github.com/fedeghe/malta/blob/master/src/docs/plugin-list.md
-[4]: https://github.com/fedeghe/malta/blob/master/srcdocs/changelog.md
+[4]: https://github.com/fedeghe/malta/blob/master/src/docs/changelog.md
 [5]: https://github.com/fedeghe/malta/blob/master/src/docs/create-a-plugin.md
