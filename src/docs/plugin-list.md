@@ -25,6 +25,10 @@ Deletes a file
 Creates a ebup file from md files  
 
 ---
+### [malta-haml][6pre]  
+Creates html files from haml files, based on [hamljs npm package][6preb]
+
+---
 ### [malta-header-comment][6]  
 Adds a commented preamble given a file for getting the content
 
@@ -107,6 +111,8 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [4]: https://www.npmjs.com/package/malta-css-uglify
 [5]: https://www.npmjs.com/package/malta-del
 [5bis]: https://www.npmjs.com/package/malta-epub
+[6pre]: https://www.npmjs.com/package/malta-haml
+[6preb]: https://www.npmjs.com/package/hamljs
 [6]: https://www.npmjs.com/package/malta-header-comment
 [7]: https://www.npmjs.com/package/malta-html-minify
 [8]: https://www.npmjs.com/package/malta-js-packer
