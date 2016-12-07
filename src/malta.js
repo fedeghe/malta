@@ -456,11 +456,13 @@ Malta.prototype.build = function() {
 		baseTplContent = self.files[self.tplPath].content,
 		start = self.date(),
 		end,
-		ext,
-		content_and_name = {
-			content : null,
-			name : null
-		};
+		ext;
+
+	self.content_and_name = {
+		content : null,
+		name : null
+	};
+
 	// for sure the tpl is involved
 	self.involvedFiles = 1;
 
@@ -476,12 +478,12 @@ Malta.prototype.build = function() {
 	baseTplContent = self.replace_wiredvars(baseTplContent);
 	baseTplContent = self.replace_calc(baseTplContent);
 
-	content_and_name.content = baseTplContent;
-	content_and_name.name = self.outName;
+	self.content_and_name.content = baseTplContent;
+	self.content_and_name.name = self.outName;
 
 	// do write
 	// 
-	fs.writeFile(self.outName, content_and_name.content, function(err) {
+	fs.writeFile(self.outName, self.content_and_name.content, function(err) {
 		var d = self.date(),
 			data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds(),
 			msg = '';
@@ -492,7 +494,7 @@ Malta.prototype.build = function() {
 		
 		self.notifyAndUnlock(start, msg);
 
-		self.userWatch && self.userWatch.call(self, content_and_name, self);
+		self.userWatch && self.userWatch.call(self, self.content_and_name, self);
 
 		doPlugin();
 	});
@@ -529,8 +531,8 @@ Malta.prototype.build = function() {
 							res ? 
 								(new Promise(res)).then(function (obj) {
 									self.userWatch && self.userWatch.call(self, obj, pl);
-									content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
-									content_and_name.content = "" + obj.content;
+									self.content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
+									self.content_and_name.content = "" + obj.content;
 									go();
 								})
 								:
@@ -548,8 +550,11 @@ Malta.prototype.build = function() {
 
 	function callPlugin(p) {
 		self.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : '') );
+		
 		self.doBuild = true;
-		return p.func.bind(self)(content_and_name, p.params);
+		// actually I dont` need to pass content_and_name, since it can be retrieved by the context,
+		// but is better (and I don`t have to modify every plugin and the documentation)
+		return p.func.bind(self)(self.content_and_name, p.params);
 	}
 
 	// chain

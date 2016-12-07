@@ -40,7 +40,6 @@ function multi(key, el) {
 		ext = multi[2];
 
 		fs.readdir(folder, function (err, files) {
-			
 			files && files.forEach(function (file) {
 				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
 					// store the process
@@ -65,6 +64,12 @@ function multi(key, el) {
 			diff.removed.filter(function (v) {
 				return v.match(new RegExp(".*\\." + ext + '$'))
 			}).forEach(function (v){
+				var outFile = multiElements[v].content_and_name.name;
+
+				// remove out file if exists
+				//
+				fs.existsSync(outFile) && fs.unlink(outFile);
+
 				multiElements[v].shut();
 				multiElements[v] = null;
 				console.log('REMOVED '.yellow() + folder + '/' + v + NL)
