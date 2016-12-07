@@ -21,6 +21,7 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 - [parameters](#parameters)
 - [complete example of usage][2]
 - [plugins list][3]
+- [write your plugin in 5 minutes](#writeyourplugin)
 - [changelog][4]
 
 ---
@@ -91,12 +92,18 @@ multifile.json:
 
     {  
         "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
-        "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true",  
-        "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
-        "lib.js" : "../../public_html/js -plugins=malta-js-uglify",  
-        "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify"
+        "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true", 
+        "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify",
+        "nested.json" : true // ONLY since v 3.2.3 (malta will not take care about loops)
         ...  
     }  
+
+where nested.json :
+
+    {
+        "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
+        "lib.js" : "../../public_html/js -plugins=malta-js-uglify"
+    }
 
 then run 
 
@@ -177,7 +184,8 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 
 ---
 
-### Write Your plugin in one minute  
+<a name="writeyourplugin"></a>
+### Write Your plugin in 5 minutes  
 Writing a plugin is extremely easy, just get a look at the _sample.js_ file in the _plugins_ folder or read [how to create a plugin][5]
 
 ---

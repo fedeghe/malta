@@ -13,22 +13,45 @@ module.exports = Malta;
 
 if (len == 0) {
 
+
+
 	Malta.log_help();
+
+
 
 } else if (len == 1){
 
 	Malta.outVersion();
 	var p = path.resolve(execPath, args[0]),
 		runs = fs.existsSync(p) ? require(p) :  false,
-		tpl;
+		tpl,
+		tmp,
+		nest;
 
 	// check
 	// 
 	!runs && Malta.badargs(p);
+
 	for (tpl in runs) {
-		//skip if key begins with !
-		if (tpl.match(/^\!/)) continue;
-		functions.multi(tpl, runs[tpl]);
+
+		//check if is inclusion {whatever.json : true}
+		// 
+		if (tpl.match(/\.json$/)) {
+
+			if (runs[tpl] === true) {
+				p = path.resolve(execPath, tpl),
+				nest = fs.existsSync(p) ? require(p) :  false;
+				for (tmp in nest) {
+					if (tmp.match(/^\!/)) continue;
+					functions.multi(tmp, nest[tmp]);
+				}
+			} 
+			
+		} else {
+			//skip if key begins with !
+			if (tpl.match(/^\!/)) continue;
+			functions.multi(tpl, runs[tpl]);
+		}
 	}
 
 } else {

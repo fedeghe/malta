@@ -40,7 +40,8 @@ function multi(key, el) {
 		ext = multi[2];
 
 		fs.readdir(folder, function (err, files) {
-			files.forEach(function (file) {
+			
+			files && files.forEach(function (file) {
 				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
 					// store the process
 					++proc;
