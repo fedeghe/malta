@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.2.3** now is possible to use one level nested files in the json
+- **3.2.4** now is possible to use one level nested files in the build json
 - **3.2.1** now Malta will run only one single node process instead of spawning one for each build
 - **3.1.1** fixed local plugin loading path problem;
     removed number of process indication

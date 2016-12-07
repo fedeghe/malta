@@ -36,16 +36,14 @@ if (len == 0) {
 
 		//check if is inclusion {whatever.json : true}
 		// 
-		if (tpl.match(/\.json$/)) {
+		if (tpl.match(/\.json$/) && runs[tpl] === true) {
 
-			if (runs[tpl] === true) {
-				p = path.resolve(execPath, tpl),
-				nest = fs.existsSync(p) ? require(p) :  false;
-				for (tmp in nest) {
-					if (tmp.match(/^\!/)) continue;
-					functions.multi(tmp, nest[tmp]);
-				}
-			} 
+			p = path.resolve(execPath, tpl),
+			nest = fs.existsSync(p) ? require(p) :  false;
+			for (tmp in nest) {
+				if (tmp.match(/^\!/)) continue;
+				functions.multi(tmp, nest[tmp]);
+			}
 			
 		} else {
 			//skip if key begins with !
