@@ -26,7 +26,10 @@ function multi(key, el) {
 	var multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
 		multiElements = {},
-		isCommand = Malta.isCommand(key);
+		isCommand = Malta.isCommand(key),
+		exclude = function (filename) {
+			return filename.match(/\.buildNum\.json$/);
+		}
 
 	if (isCommand) {
 
@@ -41,7 +44,7 @@ function multi(key, el) {
 
 		fs.readdir(folder, function (err, files) {
 			files && files.forEach(function (file) {
-				if (!file.match(/\.buildNum\.json$/) && file.match(new RegExp(".*\." + ext + "$"))){
+				if (!exclude(file) && file.match(new RegExp(".*\." + ext + "$"))){
 					// store the process
 					++proc;
 					multiElements[file] = proceed(folder + '/' + file, el);
@@ -56,6 +59,7 @@ function multi(key, el) {
 			diff.added.filter(function (v) {
 				return v.match(new RegExp(".*\\." + ext + '$'))
 			}).forEach(function (v){
+				if (exclude(v)) return;
 				++proc;
 				multiElements[v] = proceed(folder + '/' + v, el);
 				console.log('ADDED '.yellow() + folder + '/' + v + NL)
