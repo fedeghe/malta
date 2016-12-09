@@ -10,18 +10,6 @@ var Malta = require('./malta'),
 	TAB = "\t";
 	proc = 0;
 
-function doCommand(c, opt) {
-	var spawn = child_process.spawn,
-		command = spawn(c, opt.split(' ') );
-
-	command.stdout.on( 'data', function (data) {
-	    console.log(`${data}`);
-	});
-	// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
-	// command.on( 'close', function (code) {console.log( `child process exited with code ${code}` );});
-}
-
-
 function multi(key, el) {
 	var multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
@@ -29,11 +17,21 @@ function multi(key, el) {
 		isCommand = Malta.isCommand(key),
 		exclude = function (filename) {
 			return filename.match(/\.buildNum\.json$/);
-		}
+		},
+		execute = function (c, opt) {
+			var spawn = child_process.spawn,
+				command = spawn(c, opt.split(' ') );
+
+			command.stdout.on( 'data', function (data) {
+			    console.log(`${data}`);
+			});
+			// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
+			// command.on( 'close', function (code) {console.log( `child process exited with code ${code}` );});
+		};
 
 	if (isCommand) {
 
-		doCommand(isCommand[1], el);
+		execute(isCommand[1], el);
 		console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
 
 	} else if (multi) {
