@@ -85,13 +85,6 @@ function multi(key, el) {
 		proceed(key, el);
 	}
 
-	function proceedOLD(tpl, options, op){
-		var ls = child_process.spawn('malta', [tpl].concat(options.split(/\s/)).concat(op));
-		ls.stdout.on('data', function(data) {console.log(data + "");});
-		ls.stderr.on('error', function (data) {console.log('Stderr: '.red() + data);});	
-		return ls;
-	}
-
 	function proceed(tpl, options){
 		var o = [tpl].concat(options.split(/\s/)).concat(["proc="+proc]),
 			ls = Malta.get().check(o).start();
