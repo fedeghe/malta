@@ -2,19 +2,19 @@ Plugins available
 -----------------
 
 ### [malta-babel][1]
-Transpills es6 code, based on [babel npm package][1dep]  
+Transpills es6 code, based on [babel npm package][1b]  
 
 ---
 ### [malta-beautify][2]  
-Beautify js, css and html, based on [js-beautify npm package][2dep]  
+Beautify js, css and html, based on [js-beautify npm package][2b]  
 
 ---
 ### [malta-coffeescript][3]  
-Transpills coffeescript code, based on [coffee npm package][3dep]  
+Transpills coffeescript code, based on [coffee npm package][3b]  
 
 ---
 ### [malta-css-uglify][4]  
-Uglifies css markup,  based on [uglifycss npm package][4dep]  
+Uglifies css markup,  based on [uglifycss npm package][4b]  
 
 ---
 ### [malta-del][5]  
@@ -22,7 +22,7 @@ Deletes a file
 
 ---
 ### [malta-epub][5bis]  
-Creates a ebup file from md files  
+Creates a ebup file from md files, based on [epub-gen npm package][5bisb]  
 
 ---
 ### [malta-haml][6pre]  
@@ -112,7 +112,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [5]: https://www.npmjs.com/package/malta-del
 [5bis]: https://www.npmjs.com/package/malta-epub
 [6pre]: https://www.npmjs.com/package/malta-haml
-[6preb]: https://www.npmjs.com/package/hamljs
+
 [6]: https://www.npmjs.com/package/malta-header-comment
 [7]: https://www.npmjs.com/package/malta-html-minify
 [8]: https://www.npmjs.com/package/malta-js-packer
@@ -136,6 +136,8 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [2b]: https://www.npmjs.com/package/js-beautify
 [3b]: https://www.npmjs.com/package/coffee
 [4b]: https://www.npmjs.com/package/uglifycss
+[5bisb]: https://www.npmjs.com/package/epub-gen
+[6preb]: https://www.npmjs.com/package/hamljs
 [7b]: https://www.npmjs.com/package/html-minifier
 [8b]: https://www.npmjs.com/package/packer
 [9b]: https://www.npmjs.com/package/uglify-js
