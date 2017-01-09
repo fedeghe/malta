@@ -1,0 +1,7 @@
+{
+	"post" : {
+		"title": "Titolo",
+		"subtitle": "Sottotitolo",
+		"content": "Hello haml"
+	}
+}

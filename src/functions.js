@@ -11,6 +11,7 @@ var Malta = require('./malta'),
 	proc = 0;
 
 function multi(key, el) {
+	
 	var multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
 		multiElements = {},
@@ -50,9 +51,9 @@ function multi(key, el) {
 			});
 		});
 
-		// observe folder, add/remove 
+		// if demon mode then observe folder, add/remove 
 		// 
-		watcher.observe(folder, function (diff) {
+		Malta.demon && watcher.observe(folder, function (diff) {
 			
 			diff.added.filter(function (v) {
 				return v.match(new RegExp(".*\\." + ext + '$'))
@@ -88,6 +89,7 @@ function multi(key, el) {
 			ls = Malta.get().check(o).start();
 		return ls;
 	}
+
 }
 
 module.exports = {

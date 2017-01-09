@@ -1,0 +1,4 @@
+{
+	"build.json" : true,
+	"src/logo.svg" : "out -require=malta-svg2png -options=showPath:false"
+}

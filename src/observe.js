@@ -21,6 +21,7 @@ module.exports = (function() {
     }
 
     function observe(folder, cb) {
+
         var actual = {},
             previous = false;
 
@@ -55,6 +56,7 @@ module.exports = (function() {
                 process.exit();
             }
         }, 100);
+
         return true;
     }
 

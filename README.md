@@ -4,17 +4,20 @@
     ╚══╦══╩══╦══╝  v.  3
        ╚═════╝
 
-# Malta is ...
+# Malta is ...  
+
 a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
 
 ### ... plugin based   
+
 Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows for example to transpil es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_ and a lot more. 
 
 
 ---
 
 ### Get started  
+
 - [installation](#installation)
 - [command line](#commandline)
 - [programmatic](#programmatic)
@@ -27,7 +30,8 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 ---
 
 <a name="installation"></a>
-### Installation
+
+### Installation  
 
 If You do not have node installed yet, run:
 
@@ -41,7 +45,8 @@ then install malta running:
 ---
 
 <a name="commandline"></a>
-### Command line Usage
+
+### Command line Usage  
 
 _Malta_ can be started from the shell console just passing the right parameters to the malta executable: 
 
@@ -53,7 +58,8 @@ or
 ---
 
 <a name="programmatic"></a>
-### Programmatic
+
+### Programmatic  
 
 To use _malta_ within a javascript file just require it, _get_ a instance, pass a suitable array of parameters to the _check_ function and invoke _start_.
 
@@ -71,7 +77,7 @@ To use _malta_ within a javascript file just require it, _get_ a instance, pass 
 
 ---
 
-### Single mode
+### Single mode  
 
 The purpose of `single-mode` is just to build one file and in this case there are two mandatory parameters: _templateFile_ and _outDirectory_
 
@@ -84,7 +90,7 @@ in programmatic this correspond to pass a corresponding array to the _check_ fun
 
 ---
 
-### Multi mode
+### Multi mode  
 
 The _multi-mode_ purpose is to launch Malta on more that one build in one command. In this case it take just one parameter that is the path to a json file which contains for each file the same informations. It uses as key the templateFile path and as value all other parameters space separated. E.g.:
 
@@ -125,7 +131,8 @@ once started, Malta will start/stop on new files that could be added/removed to/
 ---
 
 <a name="parameters"></a>
-### Parameters
+
+### Parameters  
 
 Starting it as command line tool or programmatically the arguments are the same
 
@@ -147,11 +154,13 @@ here the following key:values are considered:
     - *showPath*: *boolean* (default : true)  
          Malta for certain files will prepend the file inclusion with a small comment which will be really helpful when looking in the resulting file one wants to know from which file a particular section comes from. Significant only in xml, svg, js, css, less, scss files.
     - *watchInterval* : *integer* (default 1000)  
-        This is the interval in milliseconds between every check for a modification in one of the involved files
+        This is the interval in milliseconds between every check for a modification in one of the involved files.  
     - *verbose* : *integer* (default : 1)  
         0 no console messages
         1 default messages
         2 verbose messages
+    - *demon* : *boolean* (default : true)  
+        passing demon:false Malta will just run once and then stop; if used in _multi-mode_ then must be set on every entry of the json file.
         
 
 - **-plugins=**  
@@ -185,12 +194,14 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 ---
 
 <a name="writeyourplugin"></a>
+
 ### Write Your plugin in 5 minutes  
+
 Writing a plugin is extremely easy, just get a look at the _sample.js_ file in the _plugins_ folder or read [how to create a plugin][5]
 
 ---
 
-### Hints
+### Hints  
 
 - **absolutely** use only spaces and/or tabs before and after file placeholders
  
@@ -199,7 +210,7 @@ Writing a plugin is extremely easy, just get a look at the _sample.js_ file in t
 - to avoid loops Malta stops digging at the tenth nesting level.
 
 
-### Wired vars
+### Wired vars  
 
 There are some placeholders that can be used within any involved file:  
 

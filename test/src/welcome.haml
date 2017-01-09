@@ -1,0 +1,21 @@
+!!! 5
+%html
+  %head
+    %title= post.title
+  
+    %script{ src: 'jquery.js' }
+    
+    %script{ src: 'jquery.ui.js' }
+    
+  %body
+    %h1 Welcome
+    
+    %ul#menu
+      %li.first one
+      %li two
+      %li.last three
+      %li
+        %ul
+          %li nested
+          
+    #content= post.content

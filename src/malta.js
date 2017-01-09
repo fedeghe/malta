@@ -4,7 +4,7 @@ var fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
 	Promise = require('promise'),
-	watcher = require('./observe'),
+	// watcher = require('./observe'),
 	execPath = process.cwd(),
 	
 	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
@@ -317,10 +317,10 @@ Malta.stop =  function() {
 	'use strict';
 	console.log(Malta.name + ' has stopped' + NL);
 	fs.unlink(Malta.printfile);
-	process.exit()
+	process.exit();
 };
 
-
+Malta.demon = true;
 
 
 
@@ -538,7 +538,8 @@ Malta.prototype.build = function() {
 								:
 								go();
 						} else {
-							extIterator.hasNext() && plugin4ext(extIterator);
+							// extIterator.hasNext() &&
+							plugin4ext(extIterator);
 						}
 					})();
 				} else {
@@ -757,6 +758,7 @@ Malta.prototype.loadOptions = function () {
 		if ('verbose' in opts) Malta.verbose = parseInt(opts.verbose, 10);
 		if ('watchInterval' in opts) Malta.watchInterval = parseInt(opts.watchInterval, 10);
 		if ('showPath' in opts) Malta.showPath = !!(opts.showPath);
+		if ('demon' in opts) Malta.demon = !!(opts.demon);
 	}
 
 	
@@ -1075,9 +1077,9 @@ Malta.prototype.start = function (userWatch) {
 	var self = this;
 	self.varPath && (self.files[self.varPath] = self.utils.createEntry(self.varPath));	
 	if (userWatch) self.userWatch = userWatch;
-	self.parse(self.tplPath)
-		.watch()
-		.build();
+	self.parse(self.tplPath);
+	Malta.demon && self.watch();
+	self.build();
 	return this;
 };
 

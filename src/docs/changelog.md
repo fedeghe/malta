@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.2.6** now is possible to disable the demon and run malta once
 - **3.2.6** fixed a small bug on buildNum files
 - **3.2.5** now is possible to use one level nested files in the build json
 - **3.2.1** now Malta will run only one single node process instead of spawning one for each build
