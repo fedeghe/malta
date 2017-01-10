@@ -1399,6 +1399,8 @@ Malta.prototype.utils = {
  */
 Malta.prototype.watch = function() {
 	'use strict';
+
+
 	var self = this,
 		d, f;
 
@@ -1452,6 +1454,7 @@ Malta.prototype.watch = function() {
 	// save the interval fucntion so that if the element is removed (wildcard)
 	// then the interval is cleared by the shut function
 	// 
+
 	this.watch_TI = setInterval(function() {
 		!self.doBuild && watch();
 	}, Malta.watchInterval);

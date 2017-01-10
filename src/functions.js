@@ -53,6 +53,8 @@ function multi(key, el) {
 
 		// if demon mode then observe folder, add/remove 
 		// 
+		/*
+		console.log('Malta.demon : ' + Malta.demon)
 		Malta.demon && watcher.observe(folder, function (diff) {
 			
 			diff.added.filter(function (v) {
@@ -78,6 +80,7 @@ function multi(key, el) {
 				console.log('REMOVED '.yellow() + folder + '/' + v + NL)
 			});
 		})
+		*/
 		
 	} else {
 		++proc;
