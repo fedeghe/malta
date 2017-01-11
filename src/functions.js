@@ -12,7 +12,7 @@ var Malta = require('./malta'),
 
 function multi(key, el) {
 	
-	var demon = !(key.match(/#(.*)/)),
+	var noDemon = key.match(/#(.*)/),
 		multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
 		multiElements = {},
@@ -37,12 +37,14 @@ function multi(key, el) {
 		console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
 
 	} else if (multi) {
+		
+		noDemon = multi[0].match(/#(.*)/);
 
 		folder = multi[1];
 
 		ext = multi[2];
 
-		fs.readdir(folder, function (err, files) {
+		fs.readdir(folder.replace(/^#/, ''), function (err, files) {
 			files && files.forEach(function (file) {
 				if (!exclude(file) && file.match(new RegExp(".*\." + ext + "$"))){
 					// store the process
@@ -54,7 +56,7 @@ function multi(key, el) {
 
 		// if demon mode then observe folder, add/remove 
 		//		
-		demon && watcher.observe(folder, function (diff) {
+		!noDemon && watcher.observe(folder, function (diff) {
 			
 			diff.added.filter(function (v) {
 				return v.match(new RegExp(".*\\." + ext + '$'))
