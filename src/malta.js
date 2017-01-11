@@ -139,6 +139,10 @@ function Malta () {
 	// the watching obj returned by setInterval
 	//
 	this.watch_TI = false;
+
+	// by default demon is active
+	//
+	this.demon = true;
 }
 
 /**
@@ -319,8 +323,6 @@ Malta.stop =  function() {
 	fs.unlink(Malta.printfile);
 	process.exit();
 };
-
-Malta.demon = true;
 
 
 
@@ -605,9 +607,18 @@ Malta.prototype.check = function (a) {
 	//
 	a.length < 2 && Malta.log_help();
 
+	
+
+	t = a[0].match(/#(.*)/);
+	if (t) {
+		this.demon = false;
+		a[0] = t[1];
+	}
+
 	// template and outdir params
 	// 
 	argTemplate = a[0];
+
 	argOutDir = a[1];
 
 	// check tpl and destination
@@ -758,7 +769,6 @@ Malta.prototype.loadOptions = function () {
 		if ('verbose' in opts) Malta.verbose = parseInt(opts.verbose, 10);
 		if ('watchInterval' in opts) Malta.watchInterval = parseInt(opts.watchInterval, 10);
 		if ('showPath' in opts) Malta.showPath = !!(opts.showPath);
-		if ('demon' in opts) Malta.demon = !!(opts.demon);
 	}
 
 	
@@ -1078,7 +1088,7 @@ Malta.prototype.start = function (userWatch) {
 	self.varPath && (self.files[self.varPath] = self.utils.createEntry(self.varPath));	
 	if (userWatch) self.userWatch = userWatch;
 	self.parse(self.tplPath);
-	Malta.demon && self.watch();
+	self.demon && self.watch();
 	self.build();
 	return this;
 };

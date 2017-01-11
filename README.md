@@ -159,8 +159,6 @@ here the following key:values are considered:
         0 no console messages
         1 default messages
         2 verbose messages
-    - *demon* : *boolean* (default : true)  
-        passing demon:false Malta will just run once and then stop; if used in _multi-mode_ then must be set on every entry of the json file.
         
 
 - **-plugins=**  
@@ -173,7 +171,13 @@ Whenever some parameters are needed to be passed to the plugin, i9n case of stri
 
 The version 3 of _malta_ aims to simplify any post-processing needed to be done on the composed file. In fact now _malta_ just do the job of creating the big file from the template and all files and variables involved... nothing else, no packing for js, no less/sass compiling, only the clean plain big file.
 Whatever work is needed afterwards it needs to be done by a plugin. 
-When a plugin `myplugin` is requested the first place malta will search for it is `executionfolder/plugins/myplugin.js` if not found will be searched as `plugins/myplugin.js` into the local malta package path, otherwise will be searched as a local/global package.
+When a plugin `myplugin` is requested the first place malta will search for it is `executionfolder/plugins/myplugin.js` if not found will be searched as `plugins/myplugin.js` into the local malta package path, otherwise will be searched as a local/global package.  
+
+
+### no demon  
+
+In case the process must end after the first build just prefix with #
+the template (only in _multi-mode_)  
 
 ---
 

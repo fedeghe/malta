@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.2.9** the watching on foldersworks again, to disable the demon mode just prefix with # the template.
 - **3.2.8** the watching on folders has a problem with `demon:false` option, here is disabled till I find the time for a solution
 - **3.2.7** now is possible to disable the demon and run malta once
 - **3.2.6** fixed a small bug on buildNum files
