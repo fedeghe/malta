@@ -311,7 +311,7 @@ Malta.get = function () {
  * @return     {string}  True if command, False otherwise.
  */
 Malta.isCommand = function(s) {
-	return s.match(/^\@(.*)/);
+	return s.match(/^EXE/);
 }
 
 /**
@@ -598,22 +598,19 @@ Malta.prototype.check = function (a) {
 		argTemplate,
 		argOutDir,
 		buildFile;
-	
-	
-
-	this.args = a;
 
 	// stop with usage info in case not enough args are given
 	//
 	a.length < 2 && Malta.log_help();
-
-	
 
 	t = a[0].match(/#(.*)/);
 	if (t) {
 		this.demon = false;
 		a[0] = t[1];
 	}
+
+	this.args = a;
+	
 
 	// template and outdir params
 	// 
@@ -626,13 +623,11 @@ Malta.prototype.check = function (a) {
 	// 
 	i = path.resolve(execPath, argTemplate);
 	j = path.resolve(execPath, argOutDir);
+	
 	fs.existsSync(i) || badArgs.push(i);
 	fs.existsSync(j) || badArgs.push(j);
 
 	badArgs.length && Malta.badargs.apply(null, badArgs);
-
-	
-	
 
 	this.tplName = path.basename(argTemplate);
 	this.tplPath = path.resolve(execPath, argTemplate);
@@ -640,7 +635,6 @@ Malta.prototype.check = function (a) {
 	this.tplCnt = fs.readFileSync(this.tplPath).toString();
 	this.outDir = path.resolve(execPath, argOutDir);
 	this.execDir = execPath;
-
 
 	if (this.baseDir + "" === this.outDir + "") {
 		this.log_err('Output and template directories coincide. Malta won`t overwrite your template'.red());

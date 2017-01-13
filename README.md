@@ -126,7 +126,7 @@ moreover since 3.0.16 a simpla kind of wildcards can be used in the json keys :
         "src/controllers/*.js" : "../../public_html/js -plugins=malta-js-uglify"
     }
 
-once started, Malta will start/stop on new files that could be added/removed to/from the `controllers` folder. 
+once started, Malta will start/stop on new files that could be added/removed to/from the `controllers` folder.  
 
 ---
 
@@ -174,10 +174,22 @@ Whatever work is needed afterwards it needs to be done by a plugin.
 When a plugin `myplugin` is requested the first place malta will search for it is `executionfolder/plugins/myplugin.js` if not found will be searched as `plugins/myplugin.js` into the local malta package path, otherwise will be searched as a local/global package.  
 
 
-### no demon  
+##### no demon (only _multi-mode_)  
 
 In case the process must end after the first build just prefix with #
 the template (only in _multi-mode_)  
+
+##### execute a terminal command (only _multi-mode_)  
+
+Is possible to execute one or more commands using the `EXE` key in the json file, containing an array of command or a single string for one command :  
+
+    {
+        "exec" : [
+            'mkdir -p app/config app/controllers app/views app/routes',
+            'ls -la app'
+        ],
+        ....
+    } 
 
 ---
 

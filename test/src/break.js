@@ -1,3 +1,4 @@
-function zzj() {
-    alert('hello there $surname$');
+function foo () {
+    alert('foo foo foo');
 }
+foo();

@@ -10,6 +10,19 @@ var Malta = require('./malta'),
 	TAB = "\t";
 	proc = 0;
 
+function isArray(o) {
+    if (Array.isArray && Array.isArray(o)) {
+        return true;
+    }
+    var t1 = String(o) !== o,
+        t2 = {}.toString.call(o).match(/\[object\sArray\]/);
+
+    return t1 && !!(t2 && t2.length);
+}
+function isString(o) {
+    return typeof o === 'string' || o instanceof String;
+}
+
 function multi(key, el) {
 	
 	var noDemon = key.match(/#(.*)/),
@@ -20,21 +33,33 @@ function multi(key, el) {
 		exclude = function (filename) {
 			return filename.match(/\.buildNum\.json$/);
 		},
-		execute = function (c, opt) {
-			var spawn = child_process.spawn,
-				command = spawn(c, opt.split(' ') );
+		execute = function (tmpExe) {
+			var exe = tmpExe.join(' '),
+				c = tmpExe[0];
+				opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
+				spawn = child_process.spawn,
+				command = spawn(c, opt.length ? opt.split(' ') : null);
 
 			command.stdout.on( 'data', function (data) {
 			    console.log(`${data}`);
 			});
 			// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
-			// command.on( 'close', function (code) {console.log( `child process exited with code ${code}` );});
-		};
+			command.on( 'close', function (code) {
+				console.log(`\`${exe}\` child process exited with code ${code}`);
+			});
+		}, i, l;
 
 	if (isCommand) {
 
-		execute(isCommand[1], el);
-		console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
+		if (isArray(el)) {
+			for (i = 0, l = el.length; i < l; i++) {
+				execute(el[i].split(/\s/));
+			}
+		} else if(isString(el)){
+			execute(el.split(/\s/));
+		}
+
+		// console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
 
 	} else if (multi) {
 		
@@ -87,8 +112,13 @@ function multi(key, el) {
 	}
 
 	function proceed(tpl, options){
-		var o = [tpl].concat(options.split(/\s/)).concat(["proc="+proc]),
-			ls = Malta.get().check(o).start();
+		var o = [tpl],
+			ls;
+		// if (typeof options !== 'undefined' && options !== true) {
+			o = o.concat(options.split(/\s/));
+		// }
+		o = o.concat(["proc="+proc]);
+		ls = Malta.get().check(o).start();
 		return ls;
 	}
 

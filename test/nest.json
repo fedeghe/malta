@@ -1,4 +1,4 @@
 {
-	"build.json" : true,
-	"src/logo.svg" : "out -require=malta-svg2png -options=showPath:false"
+	"#src/logo.svg" : "out -require=malta-svg2png",
+	"#src/list/*.js" : "out/list -require=malta-header-comment[name:\"mitlicense.txt\"]"
 }
