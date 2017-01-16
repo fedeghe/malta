@@ -31,7 +31,7 @@
 	"!src/mdlist/*.md" : "out/list -require=malta-markdown",
 	"!src/json/*.json" : "out/list -require=malta-json-minify",
 	"!src/aaa.js" : "out",
-	"!nest.json" : true,
+	"nest.json" : true,
 	"#src/hello.java" : "out -require=malta-javac",
 	"EXE_2" : [
 		"figlet whoami"

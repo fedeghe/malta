@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 var Malta = require("./malta"),
-	functions = require("./functions"),
 	fs = require("fs"),
 	path = require("path"),
+	functions = require("./functions"),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
 	len = args.length;
 
-// console.log('script here')
+// console.log('bin here')
 
 module.exports = Malta;
 
@@ -32,23 +32,43 @@ if (len == 0) {
 	// 
 	!runs && Malta.badargs(p);
 
-	for (tpl in runs) {
+	if ('EXE' in runs) {
+		(function (commands) {
+			var c,
+				i = 0
+				clen = commands.length;
+			clen ? (function start() {
+				if (i < clen - 1) {
+					Malta.execute(commands[i].split(/\s/), function (){++i; start();});
+				} else {
+					Malta.execute(commands[i].split(/\s/), function (){delete runs.EXE; go(runs);});
+				}
+			})(i) : go(runs);
+		})(runs.EXE);
+	} else {
+		go(runs);
+	}
 
-		//check if is inclusion {whatever.json : true}
-		// 
-		if (tpl.match(/\.json$/) && runs[tpl] === true) {
+	function go(_runs){
 
-			p = path.resolve(execPath, tpl),
-			nest = fs.existsSync(p) ? require(p) :  false;
-			for (tmp in nest) {
-				if (tmp.match(/^\!/)) continue;
-				functions.multi(tmp, nest[tmp]);
+		for (tpl in _runs) {
+
+			//check if is inclusion {whatever.json : true}
+			// 
+			if (tpl.match(/\.json$/) && _runs[tpl] === true) {
+
+				p = path.resolve(execPath, tpl),
+				nest = fs.existsSync(p) ? require(p) :  false;
+				for (tmp in nest) {
+					if (tmp.match(/^\!/)) continue;
+					functions.multi(tmp, nest[tmp]);
+				}
+				
+			} else {
+				//skip if key begins with !
+				if (tpl.match(/^\!/)) continue;
+				functions.multi(tpl, _runs[tpl]);
 			}
-			
-		} else {
-			//skip if key begins with !
-			if (tpl.match(/^\!/)) continue;
-			functions.multi(tpl, runs[tpl]);
 		}
 	}
 

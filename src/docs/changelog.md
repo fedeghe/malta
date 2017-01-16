@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.3.2** EXE precedence added.
 - **3.3.1** EXE option in molti-mode added for executing multiple commands.
 - **3.3.0** bugfix on no-Demon mode.
 - **3.2.9** the watching on foldersworks again, to disable the demon mode just prefix with # the template.

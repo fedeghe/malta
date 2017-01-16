@@ -32,25 +32,10 @@ function multi(key, el) {
 		isCommand = Malta.isCommand(key),
 		exclude = function (filename) {
 			return filename.match(/\.buildNum\.json$/);
-		},
-		execute = function (tmpExe) {
-			var exe = tmpExe.join(' '),
-				c = tmpExe[0];
-				opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
-				spawn = child_process.spawn,
-				command = spawn(c, opt.length ? opt.split(' ') : null);
-
-			command.stdout.on( 'data', function (data) {
-			    console.log(`${data}`);
-			});
-			// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
-			command.on( 'close', function (code) {
-				console.log(`\`${exe}\` child process exited with code ${code}`);
-			});
 		}, i, l;
 
 	if (isCommand) {
-
+/*
 		if (isArray(el)) {
 			for (i = 0, l = el.length; i < l; i++) {
 				execute(el[i].split(/\s/));
@@ -58,7 +43,7 @@ function multi(key, el) {
 		} else if(isString(el)){
 			execute(el.split(/\s/));
 		}
-
+*/
 		// console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
 
 	} else if (multi) {

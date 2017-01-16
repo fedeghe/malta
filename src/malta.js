@@ -188,6 +188,25 @@ Malta.showPath = true;
 Malta.printfile = '.printVersion';
 
 
+
+Malta.execute = function (tmpExe, then) {
+	var exe = tmpExe, //.join(' '),
+		c = tmpExe[0];
+		opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
+		spawn = child_process.spawn,
+		command = spawn(c, opt.length ? opt.split(' ') : null);
+
+	command.stdout.on( 'data', function (data) {
+	    console.log(`${data}`);
+	});
+	// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
+	command.on( 'close', function (code) {
+		console.log(`\`${exe}\` child process exited with code ${code}`);
+		typeof then !== 'undefined' && then();
+	});
+};
+
+
 /**
  * [badargs description]
  * @param  {[type]} tpl [description]

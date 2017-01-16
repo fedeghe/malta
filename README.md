@@ -184,12 +184,14 @@ the template (only in _multi-mode_)
 Is possible to execute one or more commands using the `EXE` key in the json file, containing an array of command or a single string for one command :  
 
     {
-        "exec" : [
+        "EXE" : [
             'mkdir -p app/config app/controllers app/views app/routes',
             'ls -la app'
         ],
         ....
     } 
+
+hint: this feature is available only on the main called json, not in a nested one.
 
 ---
 
