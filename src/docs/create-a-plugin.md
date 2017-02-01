@@ -24,7 +24,8 @@ A plugin is structured basically as follows:
             start = new Date(),
             
             // a message the plugin can send to the console
-            msg;
+            msg,
+            pluginName = path.basename(path.dirname(__filename));
     
         options = options || {};
         
@@ -47,7 +48,7 @@ A plugin is structured basically as follows:
             // free to be async
             fs.writeFile(obj.name, obj.content, function (err) {
                 if (err == null) {
-                    msg = 'plugin ' + path.basename(__filename) + ' wrote ' + obj.name + ' (' + self.getSize(obj.name) + ')';
+                    msg = 'plugin ' + pluginName.white() + ' wrote ' + o.name +' (' + self.getSize(o.name) + ')';
                 } else {
                     console.log('[ERROR] myplugin says:');
                     console.dir(err);

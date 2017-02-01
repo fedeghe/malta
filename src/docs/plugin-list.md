@@ -42,7 +42,7 @@ Obfuscate javascript code using [js-obfuscator npm package][8preb]
 
 ---
 ### [malta-js-packer][8]  
-Packs javascript using [Dean Edwards ported packer npm package][8b] 
+Packs javascript using [Dean Edwards ported packer npm package][8b]  
 **DEPRECATED**: use malta-js-obfuscator instead 
 
 ---
