@@ -37,8 +37,13 @@ Adds a commented preamble given a file for getting the content
 Minifies html markup, based on [html-minifier npm package][7b]  
 
 ---
+### [malta-js-obfuscator][8pre]  
+Obfuscate javascript code using [js-obfuscator npm package][8preb]  
+
+---
 ### [malta-js-packer][8]  
-Packs javascript using [Dean Edwards ported packer npm package][8b]  
+Packs javascript using [Dean Edwards ported packer npm package][8b] 
+**DEPRECATED**: use malta-js-obfuscator instead 
 
 ---
 ### [malta-js-uglify][9]  
@@ -116,6 +121,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [6]: https://www.npmjs.com/package/malta-header-comment
 [7]: https://www.npmjs.com/package/malta-html-minify
 [8]: https://www.npmjs.com/package/malta-js-packer
+[8pre]: https://www.npmjs.com/package/malta-js-obfuscator
 [9]: https://www.npmjs.com/package/malta-js-uglify
 [10]: https://www.npmjs.com/package/malta-jsdoc
 [11]: https://www.npmjs.com/package/malta-jshint
@@ -139,6 +145,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [5bisb]: https://www.npmjs.com/package/epub-gen
 [6preb]: https://www.npmjs.com/package/hamljs
 [7b]: https://www.npmjs.com/package/html-minifier
+[8preb]: https://www.npmjs.com/package/javascript-obfuscator
 [8b]: https://www.npmjs.com/package/packer
 [9b]: https://www.npmjs.com/package/uglify-js
 [10b]: https://www.npmjs.com/package/jsdoc

@@ -5,6 +5,7 @@ A plugin is structured basically as follows:
 
     //load dependencies and whatever needed
     var dep = require('lib'),
+        path = require('path')
         fs = require('fs');
     
     function myplugin(obj, options) {
@@ -46,7 +47,7 @@ A plugin is structured basically as follows:
             // free to be async
             fs.writeFile(obj.name, obj.content, function (err) {
                 if (err == null) {
-                    msg = 'plugin ' + path.basename(__filename) + ' wrote ' + o.name + ' (' + self.getSize(o.name) + ')';
+                    msg = 'plugin ' + path.basename(__filename) + ' wrote ' + obj.name + ' (' + self.getSize(obj.name) + ')';
                 } else {
                     console.log('[ERROR] myplugin says:');
                     console.dir(err);
