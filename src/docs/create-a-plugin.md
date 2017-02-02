@@ -48,7 +48,7 @@ A plugin is structured basically as follows:
             // free to be async
             fs.writeFile(obj.name, obj.content, function (err) {
                 if (err == null) {
-                    msg = 'plugin ' + pluginName.white() + ' wrote ' + o.name +' (' + self.getSize(o.name) + ')';
+                    msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
                 } else {
                     console.log('[ERROR] myplugin says:');
                     console.dir(err);
