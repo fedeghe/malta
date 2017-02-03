@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.3.4** Yes I forgot to save the readme... so whaat? #missingThe-fOption  
 - **3.3.3** Added a `then` function which accetps a function that will be executed after the last plugin will terminate his job; this applies only in `programmatic mode`.  
 - **3.3.2** EXE precedence added.
 - **3.3.1** EXE option in molti-mode added for executing multiple commands.
