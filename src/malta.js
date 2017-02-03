@@ -566,6 +566,8 @@ Malta.prototype.build = function() {
 				} else {
 					checknext();
 				}	
+			} else {
+				self.endCb();
 			}
 		})();
 	}
@@ -583,6 +585,11 @@ Malta.prototype.build = function() {
 	//
 	return this;
 };
+
+Malta.prototype.then = function (cb) {
+	this.endCb = cb;
+}
+
 
 /**
  * [checkInvolved description]

@@ -43,7 +43,11 @@ Obfuscate javascript code using [js-obfuscator npm package][8preb]
 ---
 ### [malta-js-packer][8]  
 Packs javascript using [Dean Edwards ported packer npm package][8b]  
-**DEPRECATED**: use malta-js-obfuscator instead 
+**DEPRECATED**: some depencencies has broken it, use malta-js-obfuscator instead 
+
+---
+### [malta-js-toolkit][9pre]  
+Allow to enable some extra features on javascript code   
 
 ---
 ### [malta-js-uglify][9]  
@@ -122,6 +126,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [7]: https://www.npmjs.com/package/malta-html-minify
 [8]: https://www.npmjs.com/package/malta-js-packer
 [8pre]: https://www.npmjs.com/package/malta-js-obfuscator
+[9pre]: https://www.npmjs.com/package/malta-js-toolkit
 [9]: https://www.npmjs.com/package/malta-js-uglify
 [10]: https://www.npmjs.com/package/malta-jsdoc
 [11]: https://www.npmjs.com/package/malta-jshint
