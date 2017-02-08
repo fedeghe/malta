@@ -50,7 +50,7 @@ A plugin is structured basically as follows:
                 if (err == null) {
                     msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
                 } else {
-                    console.log('[ERROR] myplugin says:');
+                    console.log('[ERROR] '.red() + pluginName + ' says:');
                     console.dir(err);
     
                     // something wrong, stop malta

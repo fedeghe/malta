@@ -37,6 +37,10 @@ Adds a commented preamble given a file for getting the content
 Minifies html markup, based on [html-minifier npm package][7b]  
 
 ---
+### [malta-js-bookmarklet][7post]  
+Create bookmarklet code from javascript code  
+
+---
 ### [malta-js-obfuscator][8pre]  
 Obfuscate javascript code using [js-obfuscator npm package][8preb]  
 
@@ -124,6 +128,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 
 [6]: https://www.npmjs.com/package/malta-header-comment
 [7]: https://www.npmjs.com/package/malta-html-minify
+[7post]: https://www.npmjs.com/package/malta-js-bookmarklet
 [8]: https://www.npmjs.com/package/malta-js-packer
 [8pre]: https://www.npmjs.com/package/malta-js-obfuscator
 [9pre]: https://www.npmjs.com/package/malta-js-toolkit
