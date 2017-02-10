@@ -117,10 +117,11 @@ multifile.json:
     "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
     "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true", 
     "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify",
-    "nested.json" : true /* ONLY since v 3.2.4 (malta will not take care about reference loops) */
-    ...  
+    "nested.json" : true 
 }  
 ```
+
+`nested.json` is allowd ONLY since v 3.2.4 (malta will not take care about reference loops)
 where nested.json :
 ``` json
 {
@@ -205,7 +206,7 @@ Is possible to execute one or more commands using the `EXE` key in the json file
         "mkdir -p app/config app/controllers app/views app/routes",
         "ls -la app"
     ],
-    ....
+    "all other" : "stuff"
 } 
 ```
 hint: this feature is available only on the main called json, not in a nested one.
