@@ -1091,7 +1091,8 @@ Malta.prototype.replace_wiredvars = function(tpl) {
 		FILES : self.involvedFiles,
 		NAME : Malta.name,
 		VERSION : Malta.version,
-		BUILDNUMBER : self.buildnumber	
+		BUILDNUMBER : self.buildnumber,
+		FILE : self.tplName
 	},{
 		delim : ['__', '__']
 	});

@@ -1,8 +1,5 @@
+![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
 
-       ╔═════╗
-    ╔══╩══╦══╩══╗  MALTA
-    ╚══╦══╩══╦══╝  v.  3
-       ╚═════╝
 
 # Malta is ...  
 
@@ -35,11 +32,15 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 
 If You do not have node installed yet, run:
 
-    $ curl http://npmjs.org/install.sh | sh 
+```
+$ curl http://npmjs.org/install.sh | sh 
+```
 
 then install malta running:
 
-    $ [sudo] npm install malta [-g]
+```
+$ [sudo] npm install malta [-g]
+```
 
 
 ---
@@ -50,11 +51,13 @@ then install malta running:
 
 _Malta_ can be started from the shell console just passing the right parameters to the malta executable: 
 
-    $ malta templateFile outDirectory -plugins=... -vars=... -options=...
-
+```
+$ malta templateFile outDirectory -plugins=... -vars=... -options=...
+```
 or
-
-    $ malta conf.json
+```
+$ malta conf.json
+```
 ---
 
 <a name="programmatic"></a>
@@ -62,46 +65,46 @@ or
 ### Programmatic  
 
 To use _malta_ within a javascript file just require it, _get_ a instance, pass a suitable array of parameters to the _check_ function and invoke _start_.
-
-    var Malta = require('malta');
-    Malta.get().check(['templateFile', 'outDirectory', '-plugins=...', '-vars=...', '-options=...']).start(/**
-        here You can specify a function which will be called at every build step, with the Malta instance as context and will receive an object containing the current file _name_ and _content_
-        eg:
-         function (o) {
-            console.log('Instance : ', this);
-            console.log('File name: ' + o.name);
-            console.log('File content: ' + o.content);
-         }
-    */);
-
+``` js
+var Malta = require('malta');
+Malta.get().check(['templateFile', 'outDirectory', '-plugins=...', '-vars=...', '-options=...']).start(/**
+    here You can specify a function which will be called at every build step, with the Malta instance as context and will receive an object containing the current file _name_ and _content_
+    eg:
+     function (o) {
+        console.log('Instance : ', this);
+        console.log('File name: ' + o.name);
+        console.log('File content: ' + o.content);
+     }
+*/);
+```
 From version __3.3.3__ is possible to pass a function to a `then` function; it will be executed as far as _all_ involved plugins have terminated their job:
+``` js
+... same code as previous, but in the end
+...
+'-vars=...', '-options=...']).start(/*
+    everybuild code, each plugin end, even first plain build
+*/)
 
-    ... same code as previous, but in the end
-    ...
-    '-vars=...', '-options=...']).start(/*
-        everybuild code, each plugin end, even first plain build
-    */)
-
-    .then(function (){
-        /*
-        this code will be executed when ALL plugin terminated the job;
-        even in this function the context is the Malta instance running
-        */
-    });
-
+.then(function (){
+    /*
+    this code will be executed when ALL plugin terminated the job;
+    even in this function the context is the Malta instance running
+    */
+});
+```
 ---
 
 ### Single mode  
 
 The purpose of `single-mode` is just to build one file and in this case there are two mandatory parameters: _templateFile_ and _outDirectory_
-
-    $ malta templateFile outDirectory  [-plugins=...] [-vars=...] [-options=...]
-
+```
+$ malta templateFile outDirectory  [-plugins=...] [-vars=...] [-options=...]
+```
 in programmatic this correspond to pass a corresponding array to the _check_ function :
-
-    var Malta = require('malta');
-    Malta.get().check(['templatefile', 'outDirectory']).start();
-
+``` js
+var Malta = require('malta');
+Malta.get().check(['templatefile', 'outDirectory']).start();
+```
 ---
 
 ### Multi mode  
@@ -109,37 +112,37 @@ in programmatic this correspond to pass a corresponding array to the _check_ fun
 The _multi-mode_ purpose is to launch Malta on more that one build in one command. In this case it take just one parameter that is the path to a json file which contains for each file the same informations. It uses as key the templateFile path and as value all other parameters space separated. E.g.:
 
 multifile.json:  
-
-    {  
-        "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
-        "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true", 
-        "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify",
-        "nested.json" : true // ONLY since v 3.2.4 (malta will not take care about reference loops)
-        ...  
-    }  
-
+``` json
+{  
+    "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
+    "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true", 
+    "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify",
+    "nested.json" : true // ONLY since v 3.2.4 (malta will not take care about reference loops)
+    ...  
+}  
+```
 where nested.json :
-
-    {
-        "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
-        "lib.js" : "../../public_html/js -plugins=malta-js-uglify"
-    }
-
+``` json
+{
+    "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
+    "lib.js" : "../../public_html/js -plugins=malta-js-uglify"
+}
+```
 then run 
-
-    $ malta multifile.json
-
+```
+$ malta multifile.json
+```
 _multi-mode_ is not available within a script, then the following code **will not work**:
-
-    ...
-    Malta.get().check(['multifile.json']).start();
-
+``` js
+// ...
+Malta.get().check(['multifile.json']).start();
+```
 moreover since 3.0.16 a simpla kind of wildcards can be used in the json keys : 
-
-    {
-        "src/controllers/*.js" : "../../public_html/js -plugins=malta-js-uglify"
-    }
-
+``` json
+{
+    "src/controllers/*.js" : "../../public_html/js -plugins=malta-js-uglify"
+}
+```
 once started, Malta will start/stop on new files that could be added/removed to/from the `controllers` folder.  
 
 ---
@@ -149,9 +152,9 @@ once started, Malta will start/stop on new files that could be added/removed to/
 ### Parameters  
 
 Starting it as command line tool or programmatically the arguments are the same
-
-    $ malta templateFile outDirectory [-vars=non_default_vars_path] [-options=options] [-require|plugins=name1(options)[...name2(options)[...]]]
-        
+```
+$ malta templateFile outDirectory [-vars=non_default_vars_path] [-options=options] [-require|plugins=name1(options)[...name2(options)[...]]]
+```
 
 - **templateFile**  
 is the base template used as base file.  
@@ -196,15 +199,15 @@ the template (only in _multi-mode_)
 ##### execute a terminal command (only _multi-mode_)  
 
 Is possible to execute one or more commands using the `EXE` key in the json file, containing an array of command or a single string for one command :  
-
-    {
-        "EXE" : [
-            'mkdir -p app/config app/controllers app/views app/routes',
-            'ls -la app'
-        ],
-        ....
-    } 
-
+``` json
+{
+    "EXE" : [
+        'mkdir -p app/config app/controllers app/views app/routes',
+        'ls -la app'
+    ],
+    ....
+} 
+```
 hint: this feature is available only on the main called json, not in a nested one.
 
 ---
@@ -246,12 +249,13 @@ Writing a plugin is extremely easy, just get a look at the _sample.js_ file in t
 
 There are some placeholders that can be used within any involved file:  
 
-- \_\_TIME\_\_ : the HH : MM : SS build time
+- \_\_TIME\_\_ : the HH : MM : SS build time  
 - \_\_DATE\_\_ : the D / M / YYYY build date   
 - \_\_YEAR\_\_ : the YYYY format build year  
 - \_\_FILESNUM\_\_ : the number of files glued togheter  
-- \_\_VERSION\_\_ : Malta version
-- \_\_BUILDNUMBER\_\_ : build number
+- \_\_VERSION\_\_ : Malta version  
+- \_\_BUILDNUMBER\_\_ : build number  
+- \_\_FILE\_\_ : template name  
 
 
 
