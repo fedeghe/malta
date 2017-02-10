@@ -66,8 +66,8 @@ $ malta conf.json
 
 To use _malta_ within a javascript file just require it, _get_ a instance, pass a suitable array of parameters to the _check_ function and invoke _start_.
 ``` js
-var Malta = require('malta');
-Malta.get().check(['templateFile', 'outDirectory', '-plugins=...', '-vars=...', '-options=...']).start(/**
+var Malta = require("malta");
+Malta.get().check(["templateFile", "outDirectory", "-plugins=...", "-vars=...", "-options=..."]).start(/**
     here You can specify a function which will be called at every build step, with the Malta instance as context and will receive an object containing the current file _name_ and _content_
     eg:
      function (o) {
@@ -81,7 +81,7 @@ From version __3.3.3__ is possible to pass a function to a `then` function; it w
 ``` js
 ... same code as previous, but in the end
 ...
-'-vars=...', '-options=...']).start(/*
+"-vars=...", "-options=..."]).start(/*
     everybuild code, each plugin end, even first plain build
 */)
 
@@ -102,8 +102,8 @@ $ malta templateFile outDirectory  [-plugins=...] [-vars=...] [-options=...]
 ```
 in programmatic this correspond to pass a corresponding array to the _check_ function :
 ``` js
-var Malta = require('malta');
-Malta.get().check(['templatefile', 'outDirectory']).start();
+var Malta = require("malta");
+Malta.get().check(["templatefile", "outDirectory"]).start();
 ```
 ---
 
@@ -117,7 +117,7 @@ multifile.json:
     "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
     "common.less" : "../../public_html/css -plugins=malta-less(compress:false) -options=skipPlain=true", 
     "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify",
-    "nested.json" : true // ONLY since v 3.2.4 (malta will not take care about reference loops)
+    "nested.json" : true /* ONLY since v 3.2.4 (malta will not take care about reference loops) */
     ...  
 }  
 ```
@@ -135,7 +135,7 @@ $ malta multifile.json
 _multi-mode_ is not available within a script, then the following code **will not work**:
 ``` js
 // ...
-Malta.get().check(['multifile.json']).start();
+Malta.get().check(["multifile.json"]).start();
 ```
 moreover since 3.0.16 a simpla kind of wildcards can be used in the json keys : 
 ``` json
@@ -202,8 +202,8 @@ Is possible to execute one or more commands using the `EXE` key in the json file
 ``` json
 {
     "EXE" : [
-        'mkdir -p app/config app/controllers app/views app/routes',
-        'ls -la app'
+        "mkdir -p app/config app/controllers app/views app/routes",
+        "ls -la app"
     ],
     ....
 } 
