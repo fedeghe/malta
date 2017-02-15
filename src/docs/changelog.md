@@ -1,6 +1,7 @@
 Changelog
 --------- 
-- **3.3.5** Added the wired __FILE__ variable containing the template filename  
+- **3.3.8** Fixed a bug about the ending callback (when used) 
+- **3.3.5** Added the wired __FILE__ variable containing the template filename 
 - **3.3.4** Yes I forgot to save the readme... so whaat? #missingThe-fOption  
 - **3.3.3** Added a `then` function which accetps a function that will be executed after the last plugin will terminate his job; this applies only in `programmatic mode`.  
 - **3.3.2** EXE precedence added.
