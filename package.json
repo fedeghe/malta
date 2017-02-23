@@ -1,6 +1,6 @@
 {
   "name": "malta",
-  "version": "3.3.8",
+  "version": "3.4.0",
   "description": "Lightning builder allows to compose on the fly and update packed and full coded huge files, edit its parts as files, splitted and glued as You need.",
   "main": "src/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "javascript composer"
   ],
   "author": "Federico Ghedina <fedeghe@gmail.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fedeghe/malta/issues"
   },

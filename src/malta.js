@@ -143,6 +143,8 @@ function Malta () {
 	// by default demon is active
 	//
 	this.demon = true;
+
+	this.endCb = null;
 }
 
 /**
@@ -542,10 +544,14 @@ Malta.prototype.build = function() {
 				// if ends with the extension
 				//    ----
 				if (self.outName.match(new RegExp(".*\\." + ext + '$'))) {
-					iterator = self.utils.getIterator(pins);
+					
+						iterator = self.utils.getIterator(pins);
+
 					(function go(){
+
 						var res,
 							pl;
+
 						if (iterator.hasNext()){
 							pl = iterator.next();
 							res = callPlugin(pl);
@@ -559,15 +565,16 @@ Malta.prototype.build = function() {
 								:
 								go();
 						} else {
-							// extIterator.hasNext() &&
+
 							plugin4ext(extIterator);
+
 						}
 					})();
 				} else {
 					checknext();
 				}	
 			} else {
-				self.endCb();
+				typeof self.endCb === 'function' &&  self.endCb();
 			}
 		})();
 	}
