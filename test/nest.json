@@ -1,5 +1,0 @@
-{
-	"#src/logo.svg" : "out -require=malta-svg2png",
-	"#src/list/*.js" : "out/list -require=malta-header-comment[name:\"mitlicense.txt\"]",
-	"EXE" : "figlet nested"
-}

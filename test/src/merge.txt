@@ -1,5 +1,0 @@
-##pdf/$pdf.one$##
-doesn't a matter what you write here,
-just do not use the placeholders for the files!!!
-##pdf/$pdf.two$##
-
