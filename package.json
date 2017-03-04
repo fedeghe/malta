@@ -1,6 +1,6 @@
 {
   "name": "malta",
-  "version": "3.4.0",
+  "version": "3.4.2",
   "description": "Lightning builder allows to compose on the fly and update packed and full coded huge files, edit its parts as files, splitted and glued as You need.",
   "main": "src/index.js",
   "scripts": {
@@ -26,8 +26,5 @@
   },
   "engines" : {
     "node" : ">=4.0.0"
-  },
-  "dependencies": {
-    "promise": "^7.1.1"
   }
 }

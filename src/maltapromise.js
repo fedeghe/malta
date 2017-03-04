@@ -20,7 +20,7 @@ function MPromise (f) {
 	this.solved = false;
 }
 MPromise.prototype.then = function (f) {
-	console.log('DOING THEN'.rainbow())
+	// console.log('DOING THEN'.rainbow())
 	this.solve = f;
 	check(this);
 	return this;

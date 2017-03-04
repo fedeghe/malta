@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.4.1** Removed npm `promise` dependency!  
+- **3.4.2** Removed npm `promise` dependency!  
 - **3.4.0** Set MIT license, ...finally!  
 - **3.3.8** Fixed a bug about the ending callback (when used) 
 - **3.3.5** Added the wired __FILE__ variable containing the template filename 
