@@ -3,10 +3,8 @@
 var fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
-	Promise = require('promise'),
-	// watcher = require('./observe'),
+	Promise = require('./maltapromise.js'),
 	execPath = process.cwd(),
-	
 	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
 	DS = path.sep,
 	NL = "\n",
@@ -55,45 +53,52 @@ function Malta () {
 	this.tplPath = '';
 	this.tplCnt = '';
 
-	// base dir from where placeholder will start
-	// will be always equal to the base template folder
-	// 
+	/**
+	 * base dir from where placeholder will start
+	 * will be always equal to the base template folder
+	 */
 	this.baseDir = '';
 
 	// output directory written files
 	// 
 	this.outDir = '';
 
-	// execution directory
-	//
+	/**
+	 * execution directory
+	 */
 	this.execDir = '';
 
-	// names for in/out files
-	// 
+	/**
+	 * names for in/out files
+	 */
 	this.inName = '';
 	this.outName = '';
 
-	// to store the last involved file while parsing,
-	// used to have more info when an exception occours
-	// or is fired from Malta
-	// 
+	/**
+	 * to store the last involved file while parsing,
+	 * used to have more info when an exception occours
+	 * or is fired from Malta
+	 */
 	this.lastEditedFile = false;
 
-	// this is the container for all files involved
-	// items are as following
-	// path-of-file : {content: the-content-of-file, time: last-edit-time} 
-	// 
+	/**
+	 * this is the container for all files involved
+	 * items are as following
+	 * path-of-file : {content: the-content-of-file, time: last-edit-time} 
+	 */
 	this.files = {};
 
-	// that array is filled when diggin the base template looking
-	// for file placeholders, and emptied at the end of digging
-	// used to show the list of found file placeholders when Malta
-	// suppose a circular inclusion
-	// 
+	/**
+	 * that array is filled when diggin the base template looking
+	 * for file placeholders, and emptied at the end of digging
+	 * used to show the list of found file placeholders when Malta
+	 * suppose a circular inclusion
+	 */ 
 	this.queue = [];
 
-	// for sure the template
-	// 
+	/**
+	 * for sure the template
+	 */
 	this.involvedFiles = 1;
 
 	/**
@@ -117,18 +122,21 @@ function Malta () {
 	 */
 	this.hasPlugins = false;
 
-	// time spend to build
-	// 
+	/**
+	 * time spend to build
+	 */
 	this.t2b = 0;
 
 
-	// should print the version on console?
-	//
+	/**
+	 * should print the version on console?
+	 */
 	this.printVersion = false;
 
-	// maybe the user has passed a watch function at the start function
-	// in this case it is stored here
-	//
+	/**
+	 * maybe the user has passed a watch function at the start function
+	 * in this case it is stored here
+	 */
 	this.userWatch = false;
 
 
@@ -136,12 +144,14 @@ function Malta () {
 
 	this.name = Malta.name;
 
-	// the watching obj returned by setInterval
-	//
+	/**
+	 * the watching obj returned by setInterval
+	 */
 	this.watch_TI = false;
 
-	// by default demon is active
-	//
+	/**
+	 * by default demon is active
+	 */
 	this.demon = true;
 
 	this.endCb = null;
@@ -201,7 +211,7 @@ Malta.execute = function (tmpExe, then) {
 	command.stdout.on( 'data', function (data) {
 	    console.log(`${data}`);
 	});
-	// command.stderr.on( 'data', function (data) {console.log( `stderr: ${data}` );});
+	
 	command.on( 'close', function (code) {
 		console.log(`\`${exe}\` child process exited with code ${code}`);
 		typeof then !== 'undefined' && then();
@@ -345,10 +355,11 @@ Malta.stop =  function() {
 	process.exit();
 };
 
-
-
-
-
+/**
+ * [date description]
+ * @param  {[type]} ) {return      new Date( [description]
+ * @return {[type]}   [description]
+ */
 Malta.prototype.date = function() {return new Date(); };
 
 /**
@@ -362,7 +373,6 @@ Malta.prototype.doErr = function (err, obj, pluginName) {
 	console.log(('[ERROR on ' + obj.name + ' using ' + pluginName + '] :').red());
 	console.dir(err);
 };
-
 
 /**
  * [log_debug description]
@@ -493,13 +503,16 @@ Malta.prototype.build = function() {
 
 	self.involvedFiles += self.hasVars();
 
-	while (baseTplContent.match(new RegExp(self.reg.files, 'g'))) baseTplContent = self.replace_all(baseTplContent);
+
+	while (baseTplContent.match(new RegExp(self.reg.files, 'g')))
+		baseTplContent = self.replace_all(baseTplContent);
 
 	// wiredvars
 	// 
 	baseTplContent = self.replace_vars(baseTplContent);
 	baseTplContent = self.replace_wiredvars(baseTplContent);
 	baseTplContent = self.replace_calc(baseTplContent);
+	
 
 	self.content_and_name.content = baseTplContent;
 	self.content_and_name.name = self.outName;
@@ -561,13 +574,15 @@ Malta.prototype.build = function() {
 									self.content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
 									self.content_and_name.content = "" + obj.content;
 									go();
+								}).throw(function (msg){
+									console.log(`Plugin '${pl.name}' error: `)
+									console.log("\t" + msg);
+									Malta.stop();
 								})
 								:
 								go();
 						} else {
-
 							plugin4ext(extIterator);
-
 						}
 					})();
 				} else {
@@ -594,6 +609,7 @@ Malta.prototype.build = function() {
 };
 
 Malta.prototype.then = function (cb) {
+	'use strict';
 	this.endCb = cb;
 }
 
@@ -906,9 +922,6 @@ Malta.prototype.notifyAndUnlock = function (start, msg){
 	self.log_info(msg);	
 	self.doBuild = false;
 }
-
-
-
 
 Malta.prototype.delete_result = function () {
 	'use strict';
@@ -1448,12 +1461,9 @@ Malta.prototype.watch = function() {
 		self.queue = [];
 
 		for (f in self.files) {
-
-
 			// if the file has been removed
 			//
 			if (!fs.existsSync(f)){
-				
 				self.shut();
 				console.log('REMOVED '.yellow() + f + NL);
 
@@ -1503,6 +1513,7 @@ Malta.prototype.watch = function() {
 };
 
 Malta.prototype.shut = function () {
+	'use strict';
 	clearInterval(this.watch_TI);
 }
 

@@ -1,6 +1,7 @@
 [![npm version](https://badge.fury.io/js/malta.svg)](http://badge.fury.io/js/malta)
 [![Dependencies](https://david-dm.org/fedeghe/malta.svg)](https://david-dm.org/fedeghe/malta)
-
+[![npm downloads](https://img.shields.io/npm/dt/malta.svg)](https://npmjs.org/package/malta)
+[![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
   
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
 

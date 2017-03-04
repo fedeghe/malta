@@ -1,6 +1,6 @@
 node_modules
 plugins/*
-localtest
+test/local
 malta.sublime-project
 malta.sublime-workspace
 npm-debug.log
