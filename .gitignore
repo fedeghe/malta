@@ -1,5 +1,5 @@
 node_modules
-plugins/*
+plugins/*.js
 test/local
 malta.sublime-project
 malta.sublime-workspace
@@ -8,3 +8,4 @@ test/src/*.buildNum
 test/out/*
 .buildNum.json
 .printVersion
+plugin_ideas.md
