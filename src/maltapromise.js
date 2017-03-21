@@ -25,7 +25,7 @@ MPromise.prototype.then = function (f) {
 	check(this);
 	return this;
 };
-MPromise.prototype.throw = function (f) {
+MPromise.prototype.catch = function (f) {
 	this.reject = f;
 	return this;
 };

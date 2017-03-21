@@ -202,6 +202,7 @@ Malta.printfile = '.printVersion';
 
 
 Malta.execute = function (tmpExe, then) {
+	//'use strict'; not here
 	var exe = tmpExe, //.join(' '),
 		c = tmpExe[0];
 		opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
@@ -507,12 +508,17 @@ Malta.prototype.build = function() {
 	while (baseTplContent.match(new RegExp(self.reg.files, 'g')))
 		baseTplContent = self.replace_all(baseTplContent);
 
+	
+
 	// wiredvars
 	// 
 	baseTplContent = self.replace_vars(baseTplContent);
 	baseTplContent = self.replace_wiredvars(baseTplContent);
 	baseTplContent = self.replace_calc(baseTplContent);
 	
+
+	baseTplContent = self.microTpl(baseTplContent);
+
 
 	self.content_and_name.content = baseTplContent;
 	self.content_and_name.name = self.outName;
@@ -574,7 +580,7 @@ Malta.prototype.build = function() {
 									self.content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
 									self.content_and_name.content = "" + obj.content;
 									go();
-								}).throw(function (msg){
+								}).catch(function (msg){
 									console.log(`Plugin '${pl.name}' error: `)
 									console.log("\t" + msg);
 									Malta.stop();
@@ -590,6 +596,7 @@ Malta.prototype.build = function() {
 				}	
 			} else {
 				typeof self.endCb === 'function' &&  self.endCb();
+				// console.log('✅')
 			}
 		})();
 	}
@@ -923,6 +930,9 @@ Malta.prototype.notifyAndUnlock = function (start, msg){
 	self.doBuild = false;
 }
 
+/**
+ * { function_description }
+ */
 Malta.prototype.delete_result = function () {
 	'use strict';
 	var self = this;
@@ -996,6 +1006,41 @@ Malta.prototype.parse = function(path) {
 	return this;
 };
 
+Malta.prototype.microTpl = function (cnt) {
+
+	var rx = {
+			outer : /(\<malta\%.*\%malta\>)/gm,
+			inner : /\<malta\%(.*)\%malta\>/
+		},
+		m = cnt.split(rx.outer),
+		ev = ['var r = [];'],
+		rout = [];
+
+	if (m) {
+		m.forEach(function (el){
+			var t = el.match(rx.inner);
+			if (t) {
+				ev.push(t[1]);
+			} else {
+				el.split(/\n/mg).forEach(function (el2) {
+					ev.push('r.push("' + el2.replace(/\"/g, '\\\"') + '")')
+				});
+			}
+		})
+		eval(ev.join("\n"));
+		
+		/*
+		// remove empty lines from r
+		r = r.filter(function (v) {
+			return v.length;
+		});
+		*/
+		return r.join("\n");
+	}
+	return cnt;
+};
+
+
 /**
  * [replace_all description]
  * @param  {[type]} tpl [description]
@@ -1004,6 +1049,9 @@ Malta.prototype.parse = function(path) {
 Malta.prototype.replace_all = function(tpl) {
 	'use strict';
 	var self = this;
+
+	
+
 	return tpl.replace(new RegExp(self.reg.files, 'g'), function(str, $1, $2, $3, $4) {
 
 		var tmp,
@@ -1037,6 +1085,10 @@ Malta.prototype.replace_all = function(tpl) {
 		// file exists, and we got indentation (spaces &| tabs)
 		// 	
 		tmp = self.files[fname].content.toString();
+
+
+		
+
 
 		if ($4) {
 			innerVars = self.utils.jsonFromStr($4);	
