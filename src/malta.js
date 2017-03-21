@@ -517,7 +517,7 @@ Malta.prototype.build = function() {
 	baseTplContent = self.replace_calc(baseTplContent);
 	
 
-	// baseTplContent = self.microTpl(baseTplContent);
+	baseTplContent = self.microTpl(baseTplContent);
 
 
 	self.content_and_name.content = baseTplContent;
@@ -1016,13 +1016,16 @@ Malta.prototype.microTpl = function (cnt) {
 		ev = ['var r = [];'],
 		rout = [];
 
-	if (m) {
+	if (m.length > 1) {
 		m.forEach(function (el){
 			var t = el.match(rx.inner);
 			if (t) {
 				ev.push(t[1]);
 			} else {
 				el.split(/\n/mg).forEach(function (el2) {
+
+					// this is really dangerous
+					//
 					ev.push('r.push("' + el2.replace(/\"/g, '\\\"') + '")')
 				});
 			}

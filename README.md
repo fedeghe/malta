@@ -26,6 +26,7 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 - [programmatic](#programmatic)
 - [parameters](#parameters)
 - [complete example of usage][2]
+- [microtemplating](#microtemplating)
 - [plugins list][3]
 - [write your plugin in 5 minutes](#writeyourplugin)
 - [changelog][4]
@@ -216,6 +217,27 @@ Is possible to execute one or more commands using the `EXE` key in the json file
 } 
 ```
 hint: this feature is available only on the main called json, not in a nested one.  
+
+---
+
+<a name="microtemplating"></a>  
+
+### Microtemplating (experimental)   
+
+Starting from the version `3.5.3` a simple microtemplating functionality is builtin; within the template just use the `<malta%` and `%malta>` placeholders to set your logic on the template composition (or any involved file):
+``` js
+... all your awesome code here
+<malta% if($my.config.bool$) { %malta>
+    ...
+    $$fileA.js$$
+    ...
+<malta% } else { %malta>
+    ...
+    $$fileB.js$$
+    ...
+<malta% } %malta>
+```
+now the Malta rebuild will include the right file depending on the `my.config.bool` value found on the vars json.
 
 ---
 
