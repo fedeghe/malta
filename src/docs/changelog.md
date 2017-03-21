@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.5.4** A step forward in microtemplating, still some problems.
 - **3.5.3** Fixed partially microtemplating, btw, at that early has to be used just for really simple templates and involving really simple files
 - **3.5.2** Sorry about that,  microtemplating functionality has to wait
 - **3.5.1** Added microtemplating functionality  

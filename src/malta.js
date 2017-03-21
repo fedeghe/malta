@@ -1006,6 +1006,8 @@ Malta.prototype.parse = function(path) {
 	return this;
 };
 
+
+
 Malta.prototype.microTpl = function (cnt) {
 
 	var rx = {
@@ -1021,16 +1023,25 @@ Malta.prototype.microTpl = function (cnt) {
 			var t = el.match(rx.inner);
 			if (t) {
 				ev.push(t[1]);
+				
 			} else {
+				// this is really dangerous
+				//
+				ev.push('r.push(`' + el.replace(/\"/g, '\\\"').replace(/\'/g, '\\\'') + '`)')
+
+				/*
 				el.split(/\n/mg).forEach(function (el2) {
 
-					// this is really dangerous
+					// this is really dangerous too
 					//
 					ev.push('r.push("' + el2.replace(/\"/g, '\\\"') + '")')
+
 				});
+				*/
 			}
 		})
 		eval(ev.join("\n"));
+
 		
 		/*
 		// remove empty lines from r
