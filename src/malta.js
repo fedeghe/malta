@@ -517,7 +517,7 @@ Malta.prototype.build = function() {
 	baseTplContent = self.replace_calc(baseTplContent);
 	
 
-	baseTplContent = self.microTpl(baseTplContent);
+	// baseTplContent = self.microTpl(baseTplContent);
 
 
 	self.content_and_name.content = baseTplContent;

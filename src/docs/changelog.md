@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.5.2** Sorry about that,  microtemplating functionality has to wait
 - **3.5.1** Added microtemplating functionality  
 - **3.4.2** Removed npm `promise` dependency!  
 - **3.4.0** Set MIT license, ...finally!  
