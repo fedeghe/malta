@@ -26,7 +26,7 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 - [programmatic](#programmatic)
 - [parameters](#parameters)
 - [complete example of usage][2]
-- [microtemplating][#microtemplating]
+- [microtemplating](#microtemplating)
 - [plugins list][3]
 - [write your plugin in 5 minutes](#writeyourplugin)
 - [changelog][4]
@@ -220,7 +220,8 @@ hint: this feature is available only on the main called json, not in a nested on
 
 ---
 
-<a name="microtemplating"></a>
+<a name="microtemplating"></a>  
+
 ### Microtemplating  
 
 Starting from the version `3.5.0` a simple microtemplating functionality is builtin; within the template just use the `<malta%` and `%malta>` placeholders to set your logic on the template composition (or any involved file):
