@@ -1008,6 +1008,7 @@ Malta.prototype.parse = function(path) {
 
 
 
+
 Malta.prototype.microTpl = function (cnt) {
 
 	var rx = {
@@ -1028,19 +1029,16 @@ Malta.prototype.microTpl = function (cnt) {
 				// this is really dangerous
 				//
 				ev.push('r.push(`' + el.replace(/\"/g, '\\\"').replace(/\'/g, '\\\'') + '`)')
-
-				/*
-				el.split(/\n/mg).forEach(function (el2) {
-
-					// this is really dangerous too
-					//
-					ev.push('r.push("' + el2.replace(/\"/g, '\\\"') + '")')
-
-				});
-				*/
 			}
 		})
-		eval(ev.join("\n"));
+		try {
+			eval(ev.join("\n"));
+		} catch (e) {
+			console.log("Malta microtemplating error evaluating code: ".red())	
+			console.log(ev.join("\n"))	
+			console.log("---\n")
+			Malta.stop();	
+		}
 
 		
 		/*
