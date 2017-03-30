@@ -9,6 +9,10 @@ Transpills es6 code, based on [babel npm package][1b]
 Beautify js, css and html, based on [js-beautify npm package][2b]  
 
 ---
+### [malta-browser-refresh][2bis]  
+Trigger browser refresh whenever relavant files are updated
+
+---
 ### [malta-coffeescript][3]  
 Transpills coffeescript code, based on [coffee npm package][3b]  
 
@@ -120,6 +124,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 
 [1]: https://www.npmjs.com/package/malta-babel
 [2]: https://www.npmjs.com/package/malta-beautify
+[2bis]: https://www.npmjs.com/package/malta-browser-refresh
 [3]: https://www.npmjs.com/package/malta-coffeescript
 [4]: https://www.npmjs.com/package/malta-css-uglify
 [5]: https://www.npmjs.com/package/malta-del
