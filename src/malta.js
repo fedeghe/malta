@@ -155,6 +155,18 @@ function Malta () {
 	this.demon = true;
 
 	this.endCb = null;
+
+	/**
+	 * t
+	 */
+	this.t_start = 0;
+	this.t_end = 0;
+
+	/**
+	 * by default notify build with osascript
+	 */
+	this.notifyBuild = true;
+
 }
 
 /**
@@ -198,8 +210,6 @@ Malta.showPath = true;
  * { item_description }
  */
 Malta.printfile = '.printVersion';
-
-
 
 Malta.execute = function (tmpExe, then) {
 	//'use strict'; not here
@@ -320,6 +330,30 @@ Malta.checkExec = function (ex) {
 			};
 			console.log(err.err.red() + ' ' + err.msg);
 			Malta.stop();
+		}
+	});
+	return this;
+};
+
+/**
+ * Checks if command line executable is available and in case it is executes a command
+ * 
+ * @static
+ * @memberof Malta
+ * @param      {string}  ex 	the name of the executable to be checked
+ * @return     {Object}  the running instance of Malta
+ */
+Malta.ifExec = function (ex, params) {
+	'use strict';
+	var err;
+
+	child_process.exec("which " + ex, function (error, stdout, stderr) {
+		if (error == null) {
+			// child_process.spawn(ex, params);
+			// 
+			child_process.exec(ex + ' ' + params.join(' '), function (error, stdout, stderr) { error && console.log(error); });
+			//
+			//console.log(ex + ' ' + params.join(' '))
 		}
 	});
 	return this;
@@ -488,9 +522,11 @@ Malta.prototype.build = function() {
 
 	var self = this,
 		baseTplContent = self.files[self.tplPath].content,
-		start = self.date(),
-		end,
+		// start = self.date(),
+		// end,
 		ext;
+
+	self.t_start = self.date(),
 
 	self.content_and_name = {
 		content : null,
@@ -532,9 +568,9 @@ Malta.prototype.build = function() {
 
 		msg += '@ ' + data + NL;
 		msg += Malta.name + ' compiled ' + self.outName + ' (' + self.getSize(self.outName) + ')';
-		end = self.date();
+		self.t_end = self.date();
 		
-		self.notifyAndUnlock(start, msg);
+		self.notifyAndUnlock(self.t_start, msg);
 
 		self.userWatch && self.userWatch.call(self, self.content_and_name, self);
 
@@ -549,6 +585,8 @@ Malta.prototype.build = function() {
 		if (self.hasPlugins) {
 			self.log_debug('on ' + self.outName.underline() + ' called plugins:');
 			plugin4ext(self.utils.getIterator(pluginKeys));
+		} else {
+			maybeNotifyBuild();
 		}
 	}
 	 
@@ -577,7 +615,11 @@ Malta.prototype.build = function() {
 							res ? 
 								(new Promise(res)).then(function (obj) {
 									self.userWatch && self.userWatch.call(self, obj, pl);
-									self.content_and_name.name = obj.name; //replace the name given by the plugin fo the file produced and to be passed to the next plugin
+									self.content_and_name.name = obj.name;
+									
+									// replace the name given by the plugin fo the file
+									// produced and to be passed to the next plugin
+									// 
 									self.content_and_name.content = "" + obj.content;
 									go();
 								}).catch(function (msg){
@@ -596,9 +638,22 @@ Malta.prototype.build = function() {
 				}	
 			} else {
 				typeof self.endCb === 'function' &&  self.endCb();
-				// console.log('✅')
+				maybeNotifyBuild();
 			}
 		})();
+	}
+
+	function maybeNotifyBuild() {
+		// console.log('✅')
+		Malta.verbose > 0 && self.notifyBuild && Malta.ifExec(
+			'osascript', [
+				'-e',
+				"'display notification \"✅ " +
+				path.basename(self.outName) +
+				" build completed in " + (self.t_end - self.t_start) + "ms\" with title \"Malta @ "
+				+ ("" + new Date).replace(/(GMT.*)$/, '') + "\"'"
+			]
+		)	
 	}
 
 	function callPlugin(p) {
@@ -819,6 +874,7 @@ Malta.prototype.loadOptions = function () {
 		if ('verbose' in opts) Malta.verbose = parseInt(opts.verbose, 10);
 		if ('watchInterval' in opts) Malta.watchInterval = parseInt(opts.watchInterval, 10);
 		if ('showPath' in opts) Malta.showPath = !!(opts.showPath);
+		if ('notifyBuild' in opts) self.notifyBuild = !!(opts.notifyBuild);
 	}
 
 	

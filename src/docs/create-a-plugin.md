@@ -3,7 +3,9 @@
 Whenever `malta` is started the first job of getting the template content, solve the includes and replace variables is done just by `malta`, no plugin is required.  
 A plugin is structured basically as follows:  
 
-    //load dependencies and whatever needed
+    /**
+     * load dependencies and whatever needed
+     */
     var dep = require('lib'),
         path = require('path')
         fs = require('fs');
@@ -19,11 +21,15 @@ A plugin is structured basically as follows:
          */
         var self = this,
             
-            // just to show some stats on the console
-            // about the time required by the plugin
+            /**
+             * just to show some stats on the console
+             * about the time required by the plugin
+             */
             start = new Date(),
             
-            // a message the plugin can send to the console
+            /**
+             * a message the plugin can send to the console
+             */
             msg,
             pluginName = path.basename(path.dirname(__filename));
     
@@ -42,10 +48,14 @@ A plugin is structured basically as follows:
          */
         obj.name = obj.name.replace(/\.js$/, '.commented.js');
         
-        // the next plugin will be invoked with an updated obj
-        // only when the solve function is called passing the updated obj
+        /**
+         * the next plugin will be invoked with an updated obj
+         * only when the solve function is called passing the updated obj
+         */
         return function (solve, reject) {
-            // free to be async
+            /**
+             * free to be async
+             */
             fs.writeFile(obj.name, obj.content, function (err) {
                 if (err == null) {
                     msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
@@ -53,11 +63,15 @@ A plugin is structured basically as follows:
                     console.log('[ERROR] '.red() + pluginName + ' says:');
                     console.dir(err);
     
-                    // something wrong, stop malta
+                    /**
+                     * something wrong, stop malta
+                     */
                     self.stop();
                 }
                 
-                // allright, solve, notify and let malta proceed
+                /**
+                 * allright, solve, notify and let malta proceed
+                 */
                 solve(obj);
                 self.notifyAndUnlock(start, msg);
             })
@@ -69,8 +83,6 @@ A plugin is structured basically as follows:
      * if not specified the plugin will be called on any file
      */
     myplugin.ext = 'js';
-    
-    // export
     module.exports = myplugin;
 
 ## Listen to me    

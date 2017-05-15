@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.5.6** On MacOS sticky notifications added by default at each build; can be disabled with the `notifyBuild` option.
 - **3.5.5** A step forward in microtemplating, better exception handling.
 - **3.5.3** Fixed partially microtemplating, btw, at that early has to be used just for really simple templates and involving really simple files
 - **3.5.2** Sorry about that,  microtemplating functionality has to wait

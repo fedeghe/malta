@@ -184,6 +184,8 @@ here the following key:values are considered:
         0 no console messages
         1 default messages
         2 verbose messages
+    - *notifyBuild*: *boolean* (deafult : true)
+        Only on MacOS. Use _osascript_ to show a sticky message at each build (verbose has to be > 0).
         
 
 - **-plugins=**  
