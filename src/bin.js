@@ -21,9 +21,12 @@ if (len == 0) {
 
 } else if (len == 1){
 
+	
+
 	Malta.outVersion();
 	var p = path.resolve(execPath, args[0]),
-		runs = fs.existsSync(p) ? require(p) :  false,
+		// runs = fs.existsSync(p) ? require(p) :  false,
+		runs = Malta.getRunsFromPath(p),
 		tpl,
 		tmp,
 		nest;

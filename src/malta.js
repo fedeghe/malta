@@ -4,6 +4,7 @@ var fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
 	Promise = require('./maltapromise.js'),
+	Sticky = require('./sticky.js'),
 	execPath = process.cwd(),
 	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
 	DS = path.sep,
@@ -335,29 +336,7 @@ Malta.checkExec = function (ex) {
 	return this;
 };
 
-/**
- * Checks if command line executable is available and in case it is executes a command
- * 
- * @static
- * @memberof Malta
- * @param      {string}  ex 	the name of the executable to be checked
- * @return     {Object}  the running instance of Malta
- */
-Malta.ifExec = function (ex, params) {
-	'use strict';
-	var err;
 
-	child_process.exec("which " + ex, function (error, stdout, stderr) {
-		if (error == null) {
-			// child_process.spawn(ex, params);
-			// 
-			child_process.exec(ex + ' ' + params.join(' '), function (error, stdout, stderr) { error && console.log(error); });
-			//
-			//console.log(ex + ' ' + params.join(' '))
-		}
-	});
-	return this;
-};
 
 /**
  * Factory method for Malta
@@ -388,6 +367,17 @@ Malta.stop =  function() {
 	console.log(Malta.name + ' has stopped' + NL);
 	fs.unlink(Malta.printfile);
 	process.exit();
+};
+
+Malta.getRunsFromPath = function (p) {
+	var ret = false;
+	if (fs.existsSync(p)) {
+		ret = fs.readFileSync(p, {encoding : "UTF8"});
+		ret = ret.replace(/^[\s|\t]*\/\/.*$/m, '');
+		ret = ret.replace(/[\s|\t]\/\*.*\*\//m, '');
+		ret = JSON.parse(ret);
+	}
+	return ret;
 };
 
 /**
@@ -645,15 +635,12 @@ Malta.prototype.build = function() {
 
 	function maybeNotifyBuild() {
 		// console.log('✅')
-		Malta.verbose > 0 && self.notifyBuild && Malta.ifExec(
-			'osascript', [
-				'-e',
-				"'display notification \"✅ " +
-				path.basename(self.outName) +
-				" build completed in " + (self.t_end - self.t_start) + "ms\" with title \"Malta @ "
-				+ ("" + new Date).replace(/(GMT.*)$/, '') + "\"'"
-			]
-		)	
+		Malta.verbose > 0
+		&& self.notifyBuild
+		&& Sticky(
+			"Malta @ " + ("" + new Date).replace(/(GMT.*)$/, ''),
+			path.basename(self.outName) + " build completed in " + (self.t_end - self.t_start) + "ms"
+		);
 	}
 
 	function callPlugin(p) {
