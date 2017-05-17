@@ -373,8 +373,7 @@ Malta.getRunsFromPath = function (p) {
 	var ret = false;
 	if (fs.existsSync(p)) {
 		ret = fs.readFileSync(p, {encoding : "UTF8"});
-		ret = ret.replace(/^[\s|\t]*\/\/.*$/m, '');
-		ret = ret.replace(/[\s|\t]\/\*.*\*\//m, '');
+		ret = ret.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
 		ret = JSON.parse(ret);
 	}
 	return ret;

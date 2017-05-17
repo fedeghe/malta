@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.5.8** small fix to allow single and multi line comments in build json file.
 - **3.5.7**  
     - Sticky build notifications enabled also on linux thx to `notify-send`
     - Now is possible to use js comments in the build json, the content will be cleaned before usage.
