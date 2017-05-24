@@ -287,6 +287,7 @@ There are some placeholders that can be used within any involved file:
 - \_\_VERSION\_\_ : Malta version  
 - \_\_BUILDNUMBER\_\_ : build number  
 - \_\_FILE\_\_ : template name  
+- \_\_LINE\_\_ : line number  
 
 
 
