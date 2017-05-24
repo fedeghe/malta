@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.5.9** Added wired __LINE__ variable.
+- **3.6.0** Added wired __LINE__ variable.
 - **3.5.8** small fix to allow single and multi line comments in build json file.
 - **3.5.7**  
     - Sticky build notifications enabled also on linux thx to `notify-send`
