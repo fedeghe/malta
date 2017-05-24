@@ -1210,6 +1210,9 @@ Malta.prototype.replace_wiredvars = function(tpl) {
 	'use strict';
 	var self = this;
 	tpl = self.replace_vars(tpl);
+	if (tpl.match(/__LINE__/)){
+		tpl = self.replaceLinenumbers(tpl);
+	}
 	return self.utils.replaceAll(tpl,{
 		TIME : self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds(),
 		DATE : self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear(),
@@ -1223,6 +1226,18 @@ Malta.prototype.replace_wiredvars = function(tpl) {
 		delim : ['__', '__']
 	});
 };
+
+/**
+ * Replace __LINENUMBER__
+ *
+ * @param      {String}  tpl     The tpl
+ * @return     {String}  with LN replaced
+ */
+Malta.prototype.replaceLinenumbers = function (tpl) {
+	return tpl.split(/\n/).map(function(line, i){
+		return line.replace(/__LINE__/g, i + 1);
+	}).join("\n");
+}
 
 /**
  * Must be called after check, to start Malta demon
