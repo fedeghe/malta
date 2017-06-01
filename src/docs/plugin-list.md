@@ -77,7 +77,6 @@ Shows jslint outcomes, based on [jslint npm package][12b]
 ### [malta-json-minify][12bis]  
 Minifies json files  
 
-
 ---
 ### [malta-less][13]  
 Creates css files from less files, based on [less npm package][13b]  
@@ -89,6 +88,10 @@ Creates html files from md files, based on [markdown npm package][14b]
 ---
 ### [malta-markdown-pdf][15]  
 Creates pdf files from md files, based on [markdown-pdf npm package][15b]  
+
+---
+### [malta-mocha][15bis]  
+Runs mocha test at build, based on [mocha npm package][15bisb]  
 
 ---
 ### [malta-notify][16]  
@@ -145,6 +148,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [13]: https://www.npmjs.com/package/malta-less
 [14]: https://www.npmjs.com/package/malta-markdown
 [15]: https://www.npmjs.com/package/malta-markdown-pdf
+[15bis]: https://www.npmjs.com/package/malta-mocha
 [16]: https://www.npmjs.com/package/malta-notify
 [17]: https://www.npmjs.com/package/malta-pdf-merge
 [18]: https://www.npmjs.com/package/malta-pug
@@ -169,6 +173,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [13b]: https://www.npmjs.com/package/less
 [14b]: https://www.npmjs.com/package/markdown
 [15b]: https://www.npmjs.com/package/markdown-pdf
+[15bisb]: https://www.npmjs.com/package/mocha
 [16b]: https://www.npmjs.com/package/nodemailer
 [17b]: https://www.npmjs.com/package/easy-pdf-merge
 [18b]: https://www.npmjs.com/package/pug
