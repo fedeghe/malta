@@ -220,10 +220,6 @@ Malta.execute = function (tmpExe, then) {
 		exec = child_process.exec,
 		// command = exec(c + ' ' +  opt.length ? opt.split(' ') : null);
 		command = exec(exe.join(' '));
-	console.log('========')	
-	console.log("exe", exe)
-	console.log("c", c)
-	console.log("opt", opt)
 
 	command.stdout.on( 'data', function (data) {
 	    console.log(`${data}`);
