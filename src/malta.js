@@ -217,8 +217,13 @@ Malta.execute = function (tmpExe, then) {
 	var exe = tmpExe, //.join(' '),
 		c = tmpExe[0];
 		opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
-		spawn = child_process.spawn,
-		command = spawn(c, opt.length ? opt.split(' ') : null);
+		exec = child_process.exec,
+		// command = exec(c + ' ' +  opt.length ? opt.split(' ') : null);
+		command = exec(exe.join(' '));
+	console.log('========')	
+	console.log("exe", exe)
+	console.log("c", c)
+	console.log("opt", opt)
 
 	command.stdout.on( 'data', function (data) {
 	    console.log(`${data}`);

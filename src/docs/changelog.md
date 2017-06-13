@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.6.1** Fixed a bug when EXE contains wildcards.
 - **3.6.0** Added wired __LINE__ variable.
 - **3.5.8** small fix to allow single and multi line comments in build json file.
 - **3.5.7**  
@@ -17,7 +18,7 @@ Changelog
 - **3.3.4** Yes I forgot to save the readme... so whaat? #missingThe-fOption  
 - **3.3.3** Added a `then` function which accetps a function that will be executed after the last plugin will terminate his job; this applies only in `programmatic mode`.  
 - **3.3.2** EXE precedence added.
-- **3.3.1** EXE option in molti-mode added for executing multiple commands.
+- **3.3.1** EXE option in multi-mode added for executing multiple commands.
 - **3.3.0** bugfix on no-Demon mode.
 - **3.2.9** the watching on foldersworks again, to disable the demon mode just prefix with # the template.
 - **3.2.8** the watching on folders has a problem with `demon:false` option, here is disabled till I find the time for a solution
