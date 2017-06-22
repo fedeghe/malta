@@ -30,6 +30,7 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 - [placeholders](#placeholders)
 - [something more about placeholders](#smplaceholders)
 - [plugins list][3]
+- [something more about plugins](#smplugins)
 - [write your plugin in 5 minutes](#writeyourplugin)
 - [changelog][4]
 
@@ -195,13 +196,13 @@ _Malta_ is shipped with a number of plugins to do as post-processing job every s
 To use one plugin a `-require` or `-plugins` argument must be specified when invoking _malta_ and if the plugin allows it, some parameters can be passed to it. On the same file more than one plugin can act serially:  a 3dot separated list of elements, one for each plugin with the following structure: `plugin-name(key:value,...)` will ensure each plugin start only when the previous one has finished his job and it will receive the right filename and content.
 Whenever some parameters are needed to be passed to the plugin, i9n case of string value, then You need to pass the string just wrap it into escaped double quotes \".  
 
+<a name="smplugins"></a>
 
-### something more about plugins  
+### Something more about plugins  
 
 The version 3 of _malta_ aims to simplify any post-processing needed to be done on the composed file. In fact now _malta_ just do the job of creating the big file from the template and all files and variables involved... nothing else, no packing for js, no less/sass compiling, only the clean plain big file.
 Whatever work is needed afterwards it needs to be done by a plugin. 
 When a plugin `myplugin` is requested the first place malta will search for it is `executionfolder/plugins/myplugin.js` if not found will be searched as `plugins/myplugin.js` into the local malta package path, otherwise will be searched as a local/global package.  
-
 
 ##### no demon (only _multi-mode_)  
 
@@ -262,7 +263,7 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 
 --- 
 
-<a name="something more about placeholders"></a> 
+<a name="smplaceholders"></a> 
 
 ### Something more about placeholders
 

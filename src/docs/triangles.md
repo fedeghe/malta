@@ -37,6 +37,10 @@ file: **triangles.svg**
 </svg>
 ```
 
-now run `malta triangle.svg outputfolder` and in the outputfolder we'll find the **triangles.svg** as follows  
+now run  
+```
+$ malta triangle.svg outputfolder
+```
+and in the outputfolder we'll find the **triangles.svg** as follows  
 
 ![triangles](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/triangles.png)
