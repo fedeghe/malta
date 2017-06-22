@@ -26,7 +26,7 @@ file : **triangle.svg**
 
 here, in addition to the `!{expression}!` placeholder, we use a special placeholder which looks like `$varname$` or, if a default value is needed, like `$varname|defaultValue$`.  
 
-Now we have just to get back to the triagles.svg template and add as many triangles we want as change their parameters values as needed:
+Now we have just to get back to the _triangles.svg_ template and add as many triangles we want and change their parameters values as needed:
 
 file: **triangles.svg**  
 ```
