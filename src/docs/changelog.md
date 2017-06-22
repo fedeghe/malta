@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.6.3** File placeholders accepts variables within the file.
 - **3.6.2** Fixed a bug when EXE contains wildcards.
 - **3.6.0** Added wired __LINE__ variable.
 - **3.5.8** small fix to allow single and multi line comments in build json file.

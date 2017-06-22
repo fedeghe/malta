@@ -1050,8 +1050,6 @@ Malta.prototype.parse = function(path) {
 };
 
 
-
-
 Malta.prototype.microTpl = function (cnt) {
 
 	var rx = {
@@ -1141,17 +1139,37 @@ Malta.prototype.replace_all = function(tpl) {
 		// 	
 		tmp = self.files[fname].content.toString();
 
-
-		
-
-
 		if ($4) {
 			innerVars = self.utils.jsonFromStr($4);	
+
+			/*
+			// this is the simple one with no fallback value
 			for (n in innerVars) {
 				while (tmp.match(new RegExp('\\\$' + n + '\\\$'))) {
 					tmp = tmp.replace(new RegExp('\\\$' + n + '\\\$'), innerVars[n]);								
 				}
 			}
+			*/
+			
+			// first for each innervar name xxx search for $xxx$ or $xxx|val$
+			// and replace with the value of xxx
+			//
+			for (n in innerVars) {
+				tmp = tmp.replace(
+					new RegExp('\\\$' + n + '\(\\\|\(\[\^\$\]\*\)\)\?' + '\\\$', 'g'),
+					function () {return innerVars[n];}
+				);
+			}
+
+			// can happen that for placeholder $yyy$ does not exists innerVars.yyy
+			// in this case either the placeholder has a default value
+			// that can be specified like $yyy|defaultValue$
+			// either it will be replaced with an empty string (thus removed)
+			//
+			tmp = tmp.replace(
+				new RegExp(/\$\w*(\|([^\$]*))?\$/g),
+				function (str, $1, $2) {return $2 || '';}
+			);
 		}
 
 		// maybe add path tip in build just before file inclusion

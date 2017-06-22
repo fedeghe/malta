@@ -27,6 +27,8 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 - [parameters](#parameters)
 - [complete example of usage][2]
 - [microtemplating](#microtemplating)
+- [placeholders](#placeholders)
+- [something more about placeholders](#smplaceholders)
 - [plugins list][3]
 - [write your plugin in 5 minutes](#writeyourplugin)
 - [changelog][4]
@@ -243,19 +245,43 @@ now the Malta rebuild will include the right file depending on the `my.config.bo
 
 ---
 
+<a name="placeholders"></a> 
+
 ### Placeholders  
 
 Malta uses three kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **$$filePath$$**  
-  _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder
+  _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder.
 
 - **$varname$**  
   _varname_ is the key for a variable that Malta will search in a _vars.json_ file that should be found in the template folder (or wherever the -vars options indicates)  
 
 - **!{expression}!**
   _expression_ can contain anything that must be evaluated (`eval` function is used)
- 
+
+--- 
+
+<a name="something more about placeholders"></a> 
+
+### Something more about placeholders
+
+The `$$filePath$$` placeholder can optionally accept simple parameters:  
+
+`$$triangles.svg{cx:100,cy:100,s:30,rot:30}$$`
+
+now within the `triangle.svg` we can use those vars:
+```
+<polygon
+    points="0,!{-$s$}! !{$s$*Math.cos(Math.PI/6)}!,!{$s$*Math.sin(Math.PI/6)}! !{-$s$*Math.cos(Math.PI/6)}!,!{$s$*Math.sin(Math.PI/6)}!"
+    fill="$fill|red$"
+    stroke-width="$strkW|2$"
+    stroke="$strkC|black$"
+    transform="translate($cx$ $cy$) rotate($rot$ 0 0)  ">
+</polygon>
+```
+
+the comlete example about triangles can be found [here][6]
 
 ---
 
@@ -301,3 +327,4 @@ There are some placeholders that can be used within any involved file:
 [3]: https://github.com/fedeghe/malta/blob/master/src/docs/plugin-list.md
 [4]: https://github.com/fedeghe/malta/blob/master/src/docs/changelog.md
 [5]: https://github.com/fedeghe/malta/blob/master/src/docs/create-a-plugin.md
+[6]: https://github.com/fedeghe/malta/blob/master/src/docs/triangles.md

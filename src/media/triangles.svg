@@ -1,0 +1,32 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 300 300"  xmlns:svg="http://www.w3.org/2000/svg"  style="outline: 1px solid black;">
+	<!--
+	[Malta] triangle.svg
+	-->
+	<polygon
+		points="0,-100 86.60254037844388,49.99999999999999 -86.60254037844388,49.99999999999999"
+		fill="red"
+		stroke-width="2"
+		stroke="black"
+		transform="translate(110 110) rotate(-45 0 0)  ">
+	</polygon>
+	<!--
+	[Malta] triangle.svg
+	-->
+	<polygon
+		points="0,-80 69.2820323027551,39.99999999999999 -69.2820323027551,39.99999999999999"
+		fill="green"
+		stroke-width="2"
+		stroke="black"
+		transform="translate(160 160) rotate(-45 0 0)  ">
+	</polygon>
+	<!--
+	[Malta] triangle.svg
+	-->
+	<polygon
+		points="0,-60 51.96152422706632,29.999999999999996 -51.96152422706632,29.999999999999996"
+		fill="blue"
+		stroke-width="2"
+		stroke="black"
+		transform="translate(210 210) rotate(-45 0 0)  ">
+	</polygon>
+</svg>
