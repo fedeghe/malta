@@ -481,27 +481,27 @@ Malta.prototype.reg = {
 function getCommentFn(pre, post) {
 	return function(cnt) {return pre + cnt + post; };
 }
+
+function objMultiKey(o) {
+	var ret = {}, i, j, jl, ks;
+	for (i in o) {
+		ks = i.split('|');
+		for (j = 0, jl = ks.length; j < jl; j++)
+			ret[ks[j]] = o[i];
+	}
+	return ret;
+}
+
 /**
  * [comments description]
  * @type {Object}
  */
-Malta.prototype.comments = {
-	"html" : getCommentFn("<!--\n", "\n-->\n"),
-	"xml" : getCommentFn("<!--\n", "\n-->\n"),
-	"svg" : getCommentFn("<!--\n", "\n-->\n"),
-	"pug" : getCommentFn("//\n//", "\n//\n"),
-	"c" : getCommentFn("/*\n", "\n*/\n"),
-	"cpp" : getCommentFn("/*\n", "\n*/\n"),
-	"js" : getCommentFn("/*\n", "\n*/\n"),
-	"css" : getCommentFn("/*\n", "\n*/\n"),
-	"less" : getCommentFn("/*\n", "\n*/\n"),
-	"scss" : getCommentFn("/*\n", "\n*/\n"),
-	"php" : getCommentFn("/*\n", "\n*/\n"),
-	"java" : getCommentFn("/*\n", "\n*/\n"),
-	"ts" : getCommentFn("/*\n", "\n*/\n"),
+Malta.prototype.comments = objMultiKey({
+	"html|xml|svg" : getCommentFn("<!--\n", "\n-->\n"),
+	"pug|c|cpp|js|jsx|css|less|scss|php|java|ts" : getCommentFn("/*\n", "\n*/\n"),
 	"rb" : getCommentFn("=begin\n", "\n=end\n"),
 	"hs" : getCommentFn("{-\n", "\n-}\n")
-};
+});
 
 /**
  * [build description]
@@ -1102,8 +1102,6 @@ Malta.prototype.microTpl = function (cnt) {
 Malta.prototype.replace_all = function(tpl) {
 	'use strict';
 	var self = this;
-
-	
 
 	return tpl.replace(new RegExp(self.reg.files, 'g'), function(str, $1, $2, $3, $4) {
 
