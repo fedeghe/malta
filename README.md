@@ -2,9 +2,13 @@
 [![Dependencies](https://david-dm.org/fedeghe/malta.svg)](https://david-dm.org/fedeghe/malta)
 [![npm downloads](https://img.shields.io/npm/dt/malta.svg)](https://npmjs.org/package/malta)
 [![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
+[![Build Status](https://travis-ci.org/fedeghe/malta.svg?branch=master)](https://travis-ci.org/fedeghe/malta)
 [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
   
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
+
+
+
 
 
 # Malta is ...  
