@@ -2,7 +2,8 @@ var fs = require('fs'),
     path = require('path');
 
 describe('folder observing', function () {
-    var trgFolder = path.resolve(path.dirname(__filename) + '/tmp/observed');
+    var trgFolder = path.resolve(path.dirname(__filename) + '/tmp/observed'),
+        ob;
 
     before(function(){
         ob = require('../src/observe');

@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.6.7**
+- **3.6.8**
     - bwatch file added... needed by malta-browser-refresh plugin, was missing :(
     - basic test for observe folder, more test will come soon. 
 - **3.6.5** Better handling for file comments on file placeholder, also added .jsx :)
