@@ -1,11 +1,10 @@
 node_modules
 plugins/*.js
-test/local
 malta.sublime-project
 malta.sublime-workspace
 npm-debug.log
-test/src/*.buildNum
-test/out/*
 .buildNum.json
 .printVersion
 plugin_ideas.md
+!/test/**
+/xtest/

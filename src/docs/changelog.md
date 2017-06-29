@@ -1,5 +1,8 @@
 Changelog
 --------- 
+- **3.6.6**
+    - bwatch file added... needed by malta-browser-refresh plugin, was missing :(
+    - basic test for observe folder, more test will come soon. 
 - **3.6.5** Better handling for file comments on file placeholder, also added .jsx :)
 - **3.6.4** File placeholders accepts variables within the file (e.g. triangles sample).
 - **3.6.2** Fixed a bug when EXE contains wildcards.

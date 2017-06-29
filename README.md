@@ -148,7 +148,7 @@ _multi-mode_ is not available within a script, then the following code **will no
 // ...
 Malta.get().check(["multifile.json"]).start();
 ```
-moreover since 3.0.16 a simpla kind of wildcards can be used in the json keys : 
+moreover since 3.0.16 a simple kind of wildcards can be used in the json keys : 
 ``` json
 {
     "src/controllers/*.js" : "../../public_html/js -plugins=malta-js-uglify"
