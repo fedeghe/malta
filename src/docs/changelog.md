@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.6.9** more tests
 - **3.6.8**
     - bwatch file added... needed by malta-browser-refresh plugin, was missing :(
     - basic test for observe folder, more test will come soon. 
