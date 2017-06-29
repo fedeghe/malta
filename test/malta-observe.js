@@ -8,10 +8,10 @@ describe('folder observing', function () {
         ob = require('../src/observe');
     })
     after(function(){
-        // fs.unlink(trgFolder + '/message1.txt', (err) => {
+        // fs.unlink(trgFolder + '/message1.txt', function (err) {
         //     if (err) throw err;
         // });
-        // fs.unlink(trgFolder + '/message2.txt', (err) => {
+        // fs.unlink(trgFolder + '/message2.txt', function (err) {
         //     if (err) throw err;
         // });
     })
@@ -25,7 +25,7 @@ describe('folder observing', function () {
         });
 
         setTimeout(function () {
-            fs.writeFile(trgFolder + '/message1.txt', 'Hello Node.js', (err) => {
+            fs.writeFile(trgFolder + '/message1.txt', 'Hello Node.js', function (err) {
                 if (err) throw err;
             });    
         }, 100)
@@ -41,7 +41,7 @@ describe('folder observing', function () {
         });
 
         setTimeout(function () {
-            fs.unlink(trgFolder + '/message1.txt', (err) => {
+            fs.unlink(trgFolder + '/message1.txt', function (err) {
                 if (err) throw err;
             });    
         }, 100)
@@ -55,10 +55,10 @@ describe('folder observing', function () {
         ob.unobserve(trgFolder);
 
         setTimeout(function () {
-            fs.writeFile(trgFolder + '/message2.txt', 'Hello Node.js', (err) => {
+            fs.writeFile(trgFolder + '/message2.txt', 'Hello Node.js', function (err) {
                 if (err) throw err;
                 setTimeout(function (){
-                    fs.unlink(trgFolder + '/message2.txt', (err) => {
+                    fs.unlink(trgFolder + '/message2.txt', function (err) {
                         if (err) throw err;
                         done();
                     });    
