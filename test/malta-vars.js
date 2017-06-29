@@ -1,6 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
-    malta = require('malta');
+    malta = require('../node_modules/malta/src/index.js');
 
 describe('vars.json params', function () {
     var trgFolder = path.resolve('test/tmp'),
