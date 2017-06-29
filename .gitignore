@@ -3,8 +3,8 @@ plugins/*.js
 malta.sublime-project
 malta.sublime-workspace
 npm-debug.log
-.buildNum.json
-.printVersion
 plugin_ideas.md
 !/test/**
 /xtest/
+.buildNum.json
+.printVersion
