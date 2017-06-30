@@ -8,3 +8,5 @@ plugin_ideas.md
 /xtest/
 .buildNum.json
 .printVersion
+.coveralls.yml
+/coverage
