@@ -28,7 +28,7 @@ describe('EXE param in build file', function () {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeremove.json']);
 			ls.on('exit', function (code) {
 				assert.equal(code, 0);
-				fs.access('test/fs/exefile.txt', fs.constants.F_OK, function (err, cnt) {
+				fs.access('test/fs/exefile.txt', function (err, cnt) {
 					assert.ok(err && err.code === 'ENOENT');
 					done();
 				});
