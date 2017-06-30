@@ -4,10 +4,10 @@ var assert = require('assert'),
     malta = require('../src/index.js');
 
 describe('expressions placeholders', function () {
-    var trgFolder = path.resolve('test/tmp'),
+    var trgFolder = path.resolve('test/fs'),
         m = malta.get();
     it("some expression evaluated vars should contain the expected value", function (done) {
-        m.check(['#' + trgFolder + '/source/expression.js', trgFolder + '/build', '-vars=test/tmp/vars2.json', '-options=verbose:0']).start(function (o){
+        m.check(['#' + trgFolder + '/source/expressions/expression.js', trgFolder + '/build', '-vars=test/fs/vars2.json', '-options=verbose:0']).start(function (o){
             fs.readFile(trgFolder + '/build/expression.js', function (err, cnt) {
                 if (err) throw err;
                 eval(cnt + "");

@@ -18,15 +18,18 @@ function check(inst) {
 function MPromise (f) {
 	this.f = f;
 	this.solved = false;
+	this.reject = true;
 }
+
 MPromise.prototype.then = function (f) {
-	// console.log('DOING THEN'.rainbow())
-	this.solve = f;
+	this.solve = f || true;
 	check(this);
 	return this;
 };
+
 MPromise.prototype.catch = function (f) {
 	this.reject = f;
 	return this;
 };
+
 module.exports = MPromise;

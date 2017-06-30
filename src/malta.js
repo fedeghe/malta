@@ -1159,16 +1159,17 @@ Malta.prototype.replace_all = function(tpl) {
 				);
 			}
 
-			// can happen that for placeholder $yyy$ does not exists innerVars.yyy
-			// in this case either the placeholder has a default value
-			// that can be specified like $yyy|defaultValue$
-			// either it will be replaced with an empty string (thus removed)
-			//
-			tmp = tmp.replace(
-				new RegExp(/\$\w*(\|([^\$]*))?\$/g),
-				function (str, $1, $2) {return $2 || '';}
-			);
+
 		}
+		// can happen that for placeholder $yyy$ does not exists innerVars.yyy
+		// in this case either the placeholder has a default value
+		// that can be specified like $yyy|defaultValue$
+		// either it will be replaced with an empty string (thus removed)
+		//
+		tmp = tmp.replace(
+			new RegExp(/\$\w*(\|([^\$]*))?\$/g),
+			function (str, $1, $2) {return $2 || '';}
+		);
 
 		// maybe add path tip in build just before file inclusion
 		// 

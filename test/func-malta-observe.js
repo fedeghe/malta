@@ -1,8 +1,9 @@
-var fs = require('fs'),
+var assert = require('assert'),
+    fs = require('fs'),
     path = require('path');
 
 describe('folder observing', function () {
-    var trgFolder = path.resolve(path.dirname(__filename) + '/tmp/observed'),
+    var trgFolder = path.resolve(path.dirname(__filename) + '/fs/observed'),
         ob;
 
     before(function(){
@@ -18,13 +19,12 @@ describe('folder observing', function () {
     })
 
     it('observe function add', function (done) {
-        ob.observe(trgFolder, function () {
-            console.assert(arguments[0].added.length === 1);
-            console.assert(arguments[0].removed.length === 0);
-            ob.unobserve(trgFolder)
-            done()
+        ob.observe(trgFolder, function (a) {
+            assert.equal(a.added.length, 1);
+            assert.equal(a.removed.length, 0);
+            ob.unobserve(trgFolder);
+            done();
         });
-
         setTimeout(function () {
             fs.writeFile(trgFolder + '/message1.txt', 'Hello Node.js', function (err) {
                 if (err) throw err;
@@ -34,13 +34,12 @@ describe('folder observing', function () {
 
 
     it('observe function remove', function (done) {
-        ob.observe(trgFolder, function () {
-            console.assert(arguments[0].added.length === 0);
-            console.assert(arguments[0].removed.length === 1);
+        ob.observe(trgFolder, function (a) {
+            assert.equal(a.added.length, 0);
+            assert.equal(a.removed.length, 1);
             ob.unobserve(trgFolder)
             done()
         });
-
         setTimeout(function () {
             fs.unlink(trgFolder + '/message1.txt', function (err) {
                 if (err) throw err;
@@ -64,10 +63,7 @@ describe('folder observing', function () {
                         done();
                     });    
                 }, 100)
-                
             });    
         }, 100)
     });
-
-
 });

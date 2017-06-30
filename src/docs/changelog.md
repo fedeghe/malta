@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.6.11** augmenting test coverage
 - **3.6.10** coveralls added, just the beginning :)
 - **3.6.9** more tests
 - **3.6.8**
