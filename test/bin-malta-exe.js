@@ -3,10 +3,7 @@ var assert = require('assert'),
 	fs = require('fs'),
 	child_process = require('child_process');
 
-
-
 describe('EXE param in build file', function () {
-
     it('should add a file named exefile.txt containing "hello world" in test/fs', function (done) {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeadd.json']);
@@ -22,7 +19,6 @@ describe('EXE param in build file', function () {
 			throw err;
 		}
     });
-
     it('should remove the file just created', function (done) {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeremove.json']);
@@ -37,6 +33,4 @@ describe('EXE param in build file', function () {
 			throw err;
 		}
     });
-
 });
-
