@@ -12,9 +12,10 @@ describe('tpl', function () {
             fs.readFile(trgFolder + '/build/tpl0.js', function (err, cnt) {
                 if (err) throw err;
                 eval(cnt+"");
-                console.assert(typeof tpl0 == 'function' && tpl0() == 5);
-                console.assert(typeof tpl1 == 'function');
-                console.assert(typeof tpl2 == 'function');
+                assert.equal(typeof tpl0, 'function')
+                assert.equal(tpl0(), 5);
+                assert.equal(typeof tpl1, 'function');
+                assert.equal(typeof tpl2, 'function');
                 done();
             });
         });
@@ -25,9 +26,10 @@ describe('tpl', function () {
             fs.readFile(trgFolder + '/build/tpl1.js', function (err, cnt) {
                 if (err) throw err;
                 eval(cnt+"");
-                console.assert(typeof tpl0 == 'function' && tpl0() == 3);
-                console.assert(typeof tpl1 == 'function');
-                console.assert(typeof tpl2 == 'function');
+                assert.equal(typeof tpl0, 'function')
+                assert.equal(tpl0(), 3);
+                assert.equal(typeof tpl1, 'function');
+                assert.equal(typeof tpl2, 'function');
                 done();
             });
         });

@@ -1,7 +1,9 @@
 var assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
-	child_process = require('child_process');
+	child_process = require('child_process'),
+
+	funcs = require('../src/functions.js');
 
 
 
@@ -12,17 +14,14 @@ describe('multi nested.json', function () {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/nested.json']);
 			ls.on('exit', function (code) {
 				assert.equal(code, 0);
-				//check the files
-				
-
-				done()
+				//check the files?
+				done();
 			});
 			ls.stderr.on('data', function(err) {
-				console.log(err+"")
+				assert.ok(false)
 			});
 		} catch (err) {
 			throw err;
 		}
     });
 });
-
