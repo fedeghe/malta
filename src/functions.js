@@ -10,21 +10,7 @@ var Malta = require('./malta'),
 	TAB = "\t";
 	proc = 0;
 
-function isArray(o) {
-    if (Array.isArray && Array.isArray(o)) {
-        return true;
-    }
-    var t1 = String(o) !== o,
-        t2 = {}.toString.call(o).match(/\[object\sArray\]/);
-
-    return t1 && !!(t2 && t2.length);
-}
-function isString(o) {
-    return typeof o === 'string' || o instanceof String;
-}
-
 function multi(key, el) {
-	
 	var noDemon = key.match(/#(.*)/),
 		multi = key.match(/(.*)\/\*\.(.*)$/),
 		folder, ext,
@@ -34,19 +20,7 @@ function multi(key, el) {
 			return filename.match(/\.buildNum\.json$/);
 		}, i, l;
 
-	if (isCommand) {
-/*
-		if (isArray(el)) {
-			for (i = 0, l = el.length; i < l; i++) {
-				execute(el[i].split(/\s/));
-			}
-		} else if(isString(el)){
-			execute(el.split(/\s/));
-		}
-*/
-		// console.log("COMMAND `" + (isCommand[1] + el).blue() + " EXECUTED");
-
-	} else if (multi) {
+	if (!isCommand && multi) {
 		
 		noDemon = multi[0].match(/#(.*)/);
 
