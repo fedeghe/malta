@@ -212,6 +212,8 @@ Malta.showPath = true;
  */
 Malta.printfile = '.printVersion';
 
+Malta.executeCheck = 0;
+
 Malta.execute = function (tmpExe, then) {
 	//'use strict'; not here
 	var exe = tmpExe, //.join(' '),
@@ -226,6 +228,8 @@ Malta.execute = function (tmpExe, then) {
 	});
 	
 	command.on( 'close', function (code) {
+		Malta.executeCheck += code;
+		if (code) process.exit(1);
 		console.log(`\`${exe}\` child process exited with code ${code}`);
 		typeof then !== 'undefined' && then();
 	});
@@ -1163,7 +1167,8 @@ Malta.prototype.replace_all = function(tpl) {
 		// can happen that for placeholder $yyy$ does not exists innerVars.yyy
 		// in this case either the placeholder has a default value
 		// that can be specified like $yyy|defaultValue$
-		// either it will be replaced with an empty string (thus removed)
+		// either leave it so that if it is a normal variable (from vars.json)
+		// will be processes and replaced afterward
 		//
 		tmp = tmp.replace(
 			new RegExp(/\$\w*(\|([^\$]*))?\$/g),
