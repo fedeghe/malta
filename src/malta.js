@@ -384,6 +384,15 @@ Malta.getRunsFromPath = function (p) {
 	return ret;
 };
 
+Malta.replaceLinenumbers = function (tpl) {
+	return tpl.split(/\n/).map(function(line, i){
+		return line.replace(/__LINE__/g, i + 1);
+	}).join("\n");
+}
+
+
+// PROTO
+
 /**
  * [date description]
  * @param  {[type]} ) {return      new Date( [description]
@@ -1233,7 +1242,7 @@ Malta.prototype.replace_wiredvars = function(tpl) {
 	var self = this;
 	tpl = self.replace_vars(tpl);
 	if (tpl.match(/__LINE__/)){
-		tpl = self.replaceLinenumbers(tpl);
+		tpl = Malta.replaceLinenumbers(tpl);
 	}
 	return self.utils.replaceAll(tpl,{
 		TIME : self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds(),
@@ -1243,23 +1252,14 @@ Malta.prototype.replace_wiredvars = function(tpl) {
 		NAME : Malta.name,
 		VERSION : Malta.version,
 		BUILDNUMBER : self.buildnumber,
+		BUILDNUM : self.buildnumber,
 		FILE : self.tplName
 	},{
 		delim : ['__', '__']
 	});
 };
 
-/**
- * Replace __LINENUMBER__
- *
- * @param      {String}  tpl     The tpl
- * @return     {String}  with LN replaced
- */
-Malta.prototype.replaceLinenumbers = function (tpl) {
-	return tpl.split(/\n/).map(function(line, i){
-		return line.replace(/__LINE__/g, i + 1);
-	}).join("\n");
-}
+
 
 /**
  * Must be called after check, to start Malta demon
@@ -1364,14 +1364,10 @@ Malta.prototype.utils = {
 	 */
 	uniquearr: function(a) {
 		'use strict';
-		var r = [],
-			l = a.length,
-			i = 0, j;
-		for (i = 0; i < l; i++) {
-			for (j = i + 1; j < l; j++)
-				if (a[i] === a[j]) j = ++i;
-			r.push(a[i]);
-		}
+		var r = [];
+		a.map(function (el) {
+			r.indexOf(el) < 0 && r.push(el);
+		});
 		return r;
 	},
 
@@ -1413,7 +1409,7 @@ Malta.prototype.utils = {
 	},
 
 	/**
-	 * checks is a ns exists
+	 * checks if a ns exists
 	 *
 	 * @param      {<type>}           ns      { parameter_description }
 	 * @param      {(number|string)}  ctx     The context
@@ -1489,18 +1485,19 @@ Malta.prototype.utils = {
 	getIterator : function (els) {
 		'use strict';
 		var i = 0,
-			l = els.length;
+			elements = els,
+			l = elements.length;
 		return {
 			hasNext : function () {
 				return i < l;
 			},
 			next : function () {
-				var r = els[i];
+				var r = elements[i];
 				i++;
 				return r;
 			},
 			size : function () {
-				return els.length;
+				return elements.length;
 			}
 		};
 	},
