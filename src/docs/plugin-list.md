@@ -121,6 +121,10 @@ Creates a png files from a svg, based on [svg-to-png npm package][21b]
 ### [malta-typescript][22]  
 Transpills typescript code to javascript code, based on [tsc npm package][22b] 
 
+---
+### [malta-umd][23]  
+Umd plugin 
+
 -------
 
 [0]: https://www.npmjs.org
@@ -156,6 +160,7 @@ Transpills typescript code to javascript code, based on [tsc npm package][22b]
 [20]: https://www.npmjs.com/package/malta-sass
 [21]: https://www.npmjs.com/package/malta-svg2png
 [22]: https://www.npmjs.com/package/malta-typescript
+[23]: https://www.npmjs.com/package/malta-umd
 
 [1b]: https://www.npmjs.com/package/babel
 [2b]: https://www.npmjs.com/package/js-beautify
