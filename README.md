@@ -1,8 +1,10 @@
 [![npm version](https://badge.fury.io/js/malta.svg)](http://badge.fury.io/js/malta)
 [![Dependencies](https://david-dm.org/fedeghe/malta.svg)](https://david-dm.org/fedeghe/malta)
 [![npm downloads](https://img.shields.io/npm/dt/malta.svg)](https://npmjs.org/package/malta)
-[![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)  
-[![Coverage Status](https://coveralls.io/repos/github/fedeghe/malta/badge.svg?branch=master)](https://coveralls.io/github/fedeghe/malta?branch=master) [![Build Status](https://travis-ci.org/fedeghe/malta.svg?branch=master)](https://travis-ci.org/fedeghe/malta) [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
+[![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
+[![bitHound Overall Score](https://www.bithound.io/github/fedeghe/malta/badges/score.svg)](https://www.bithound.io/github/fedeghe/malta)
+[![Coverage Status](https://coveralls.io/repos/github/fedeghe/malta/badge.svg?branch=master)](https://coveralls.io/github/fedeghe/malta?branch=master)
+[![Build Status](https://travis-ci.org/fedeghe/malta.svg?branch=master)](https://travis-ci.org/fedeghe/malta) [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
   
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
 
