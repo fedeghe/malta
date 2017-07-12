@@ -118,6 +118,10 @@ Creates css files from sass files, based on [sass npm package][20b]
 Creates a png files from a svg, based on [svg-to-png npm package][21b]  
 
 ---
+### [malta-translate][24]  
+Translates labels contained in i18n\[\] placeholder from/to many languages, based on [google-translate-api npm package][24b] 
+
+---
 ### [malta-typescript][22]  
 Transpills typescript code to javascript code, based on [tsc npm package][22b] 
 
@@ -161,6 +165,7 @@ Umd plugin
 [21]: https://www.npmjs.com/package/malta-svg2png
 [22]: https://www.npmjs.com/package/malta-typescript
 [23]: https://www.npmjs.com/package/malta-umd
+[24]: https://www.npmjs.com/package/malta-translate
 
 [1b]: https://www.npmjs.com/package/babel
 [2b]: https://www.npmjs.com/package/js-beautify
@@ -185,3 +190,4 @@ Umd plugin
 [20b]: https://www.npmjs.com/package/sass
 [21b]: https://www.npmjs.com/package/svg-to-png
 [22b]: https://www.npmjs.com/package/tsc
+[24b]: https://www.npmjs.com/package/google-translate-api
