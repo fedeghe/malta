@@ -208,6 +208,11 @@ Malta.verbose = 1;
 Malta.showPath = true;
 
 /**
+ * allow simple promise to be used (eg malta-translate plugin)
+ */
+Malta.Promise = Promise;
+
+/**
  * { item_description }
  */
 Malta.printfile = '.printVersion';
