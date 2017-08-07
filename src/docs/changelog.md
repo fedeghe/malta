@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.6.16** removed some repeated code used both by bin and required versions
 - **3.6.15** simple Promise available statically as Malta.Promise (used by malta-translate plugin)
 - **3.6.14** bithound added
 - **3.6.12** fixed a bug in vars replacing
