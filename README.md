@@ -124,7 +124,7 @@ Malta.get().check(["templatefile", "outDirectory"]).start();
 
 ### Multi mode  
 
-The _multi-mode_ purpose is to launch Malta on more that one build in one command. In this case it take just one parameter that is the path to a json file which contains for each file the same informations. It uses as key the templateFile path and as value all other parameters space separated. E.g.:
+The _multi-mode_ purpose is to launch Malta on more that one build in one command. In this case it takes just one parameter that is the path to a json file which contains for each file the same informations. It uses as key the templateFile path and as value all other parameters space separated. E.g.:
 
 multifile.json:  
 ``` json
