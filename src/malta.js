@@ -225,7 +225,6 @@ Malta.execute = function (tmpExe, then) {
 		c = tmpExe[0];
 		opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
 		exec = child_process.exec,
-		// command = exec(c + ' ' +  opt.length ? opt.split(' ') : null);
 		command = exec(exe.join(' '));
 
 	command.stdout.on( 'data', function (data) {
@@ -235,11 +234,10 @@ Malta.execute = function (tmpExe, then) {
 	command.on( 'close', function (code) {
 		Malta.executeCheck += code;
 		if (code) process.exit(1);
-		console.log(`\`${exe}\` child process exited with code ${code}`);
+		console.log(`> \`${exe}\` child process exited with code ${code}`);
 		typeof then !== 'undefined' && then();
 	});
 };
-
 
 /**
  * [badargs description]
@@ -422,12 +420,12 @@ Malta.prototype.doErr = function (err, obj, pluginName) {
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.log_debug = function (msg){
+Malta.log_debug = Malta.prototype.log_debug = function (msg){
 	'use strict';
 	if (Malta.verbose < 2){
 		return;
 	}
-	console.log(this.proc + " " + msg);
+	console.log((this.proc ? this.proc + " " : '') + msg);
 }; 
 
 /**
@@ -435,12 +433,12 @@ Malta.prototype.log_debug = function (msg){
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.log_dir = function (msg){
+Malta.log_dir = Malta.prototype.log_dir = function (msg){
 	'use strict';
 	if (Malta.verbose < 2){
 		return;
 	}
-	console.log(this.proc + " " + JSON.stringify(msg));
+	console.log((this.proc ? this.proc + " " : '') + JSON.stringify(msg));
 };
 
 /**
@@ -448,13 +446,13 @@ Malta.prototype.log_dir = function (msg){
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.log_info = function (msg){
+Malta.log_info = Malta.prototype.log_info = function (msg){
 	'use strict';
 	if (Malta.verbose === 0){
 		return;
 	}
 	var self = this;
-	console.log(this.proc + " " + msg);
+	console.log((this.proc ? this.proc + " " : '') + msg);
 };
 
 /**
@@ -462,12 +460,12 @@ Malta.prototype.log_info = function (msg){
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.log_warn = function (msg) {
+Malta.log_warn = Malta.prototype.log_warn = function (msg) {
 	'use strict';
 	if (Malta.verbose === 0){
 		return;
 	}
-	console.log(this.proc + " " + msg);
+	console.log((this.proc ? this.proc + " " : '') + msg);
 };
 
 /**
@@ -475,10 +473,10 @@ Malta.prototype.log_warn = function (msg) {
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.log_err = function (msg) {
+Malta.log_err = Malta.prototype.log_err = function (msg) {
 	'use strict';
 	if (Malta.verbose > 0){
-		console.log(this.proc + " " + "[ERROR]: ".red() + msg.red());
+		console.log((this.proc ? this.proc + " ": '') + "[ERROR]: ".red() + msg.red());
 	}
 	Malta.stop();
 };
