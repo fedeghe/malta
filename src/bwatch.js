@@ -25,8 +25,6 @@
 			} else {
 				response.end(';');
 			}
-
-
 		}).listen(srvPort);
 	};
 	Bwatch.prototype.addFile = function (path) {
@@ -66,9 +64,6 @@
 		}, 1000);
 	})()`;
 
-
 	module.exports = Bwatch;
+	
 })();
-
-
-
