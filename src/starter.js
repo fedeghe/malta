@@ -37,6 +37,9 @@ if (len == 0) {
 				} else {
 					Malta.execute(commands[i].split(/\s/), function (){delete runs.EXE; go(runs);});
 				}
+				if (i == clen - 1){
+					console.log('...done!');
+				}
 			})(i) : go(runs);
 		})(runs.EXE);
 	} else {
