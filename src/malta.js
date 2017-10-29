@@ -230,12 +230,16 @@ Malta.execute = function (tmpExe, then) {
 	command.stdout.on( 'data', function (data) {
 	    console.log(`${data}`);
 	});
-	
 	command.on( 'close', function (code) {
 		Malta.executeCheck += code;
 		if (code) process.exit(1);
-		console.log(`> \`${exe}\` child process exited with code ${code}`);
+		// console.log(`\b.`);
 		typeof then !== 'undefined' && then();
+	});
+	command.on( 'error', function (code) {
+		Malta.executeCheck += code;
+		console.log(`> \`${exe}\` child process exited with code ${code}`);
+		process.exit(1);
 	});
 };
 
