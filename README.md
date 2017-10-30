@@ -143,7 +143,7 @@ multifile.json:
 }  
 ```
 
-`nested.json` is allowd ONLY since v 3.2.4 (malta will not take care about reference loops)
+`nested.json` is allowed ONLY since v 3.2.4 (malta will not take care about reference loops)
 where nested.json :
 ``` json
 {
