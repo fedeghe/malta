@@ -32,7 +32,7 @@ function M(_args, _len) {
 
 		if ('EXE' in runs) {
 			(function (commands) {
-				Malta.log_info('Executing command in EXE section for ' + _args[0])
+				Malta.log_info('EXE section for ' + _args[0])
 				var c,
 					i = 0
 					clen = commands.length;
