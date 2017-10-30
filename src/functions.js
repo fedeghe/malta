@@ -71,14 +71,22 @@ function multi(key, el) {
 	}
 
 	function proceed(tpl, options){
-		var o = [tpl],
-			ls;
-		// if (typeof options !== 'undefined' && options !== true) {
-			o = o.concat(options.split(/\s/));
-		// }
-		o = o.concat(["proc="+proc]);
-		ls = Malta.get().check(o).start();
-		return ls;
+		var i = 0, l;
+		if (options instanceof Array) {
+			l = options.length;
+			for (null; i < l; i++) {
+				proceed(tpl, options[i]);
+			}
+		} else {
+			var o = [tpl],
+				ls;
+			// if (typeof options !== 'undefined' && options !== true) {
+				o = o.concat(options.split(/\s/));
+			// }
+			o = o.concat(["proc="+proc]);
+			ls = Malta.get().check(o).start();
+			return ls;
+		}
 	}
 
 }
