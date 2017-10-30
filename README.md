@@ -175,7 +175,7 @@ once started, Malta will start/stop on new files that could be added/removed to/
 
 ### More destinations for one file. 
 Since version 3.7.0 it is possible to write more files starting from the same template just specifying an array of destinations:
-```
+``` json
 {
 	"src/mybook.md" : [
         "dist/uk -plugins=malta-translate[input:\"en\",output:\"it\"]...malta-markdown-pdf -vars=vars_it.json",
@@ -256,7 +256,7 @@ Before version 3.7.0 this feature is available only on the main called json, not
 Since version 3.7.0 it is possible to specify a EXE section in any nested json.  
   
 For example:
-```
+``` json
 {
 	"EXE" : [
 		"rm -rf dist",
@@ -267,7 +267,7 @@ For example:
 }
 ```
 then _dist/require.json_ can contain something like:
-```
+``` json
 {
 	"EXE" : [
 		"mkdir dist/js"

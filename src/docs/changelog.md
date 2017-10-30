@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.7.0** 
+- **3.7.1** 
     - nested json files now can wisely use more than one single level
     - EXE section can be used in any of the nested json
     - multi destinations available
