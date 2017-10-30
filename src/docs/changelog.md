@@ -1,5 +1,9 @@
 Changelog
 --------- 
+- **3.7.0** 
+    - nested json files now can wisely use more than one single level
+    - EXE section can be used in any of the nested json
+    - multi destinations available
 - **3.6.18** better messages on the console, and some cleanup
 - **3.6.16** removed some repeated code used both by bin and required versions
 - **3.6.15** simple Promise available statically as Malta.Promise (used by malta-translate plugin)
