@@ -29,6 +29,9 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 - [installation](#installation)
 - [command line](#commandline)
 - [programmatic](#programmatic)
+- [single mode](#single_mode)
+- [multi mode](#multi_mode)
+- [multi destinations](#multi_destinations)
 - [parameters](#parameters)
 - [complete example of usage][2]
 - [microtemplating](#microtemplating)
@@ -109,6 +112,8 @@ From version __3.3.3__ is possible to pass a function to a `then` function; it w
 ```
 ---
 
+<a name="single_mode"></a>
+
 ### Single mode  
 
 The purpose of `single-mode` is just to build one file and in this case there are two mandatory parameters: _templateFile_ and _outDirectory_
@@ -121,6 +126,8 @@ var Malta = require("malta");
 Malta.get().check(["templatefile", "outDirectory"]).start();
 ```
 ---
+
+<a name="multi_mode"></a>
 
 ### Multi mode  
 
@@ -160,6 +167,24 @@ moreover since 3.0.16 a simple kind of wildcards can be used in the json keys :
 }
 ```
 once started, Malta will start/stop on new files that could be added/removed to/from the `controllers` folder.  
+
+
+---
+
+<a name="multi_destinations"></a>
+
+### More destinations for one file. 
+Since version 3.7.0 it is possible to write more files starting from the same template just specifying an array of destinations:
+```
+{
+	"src/mybook.md" : [
+        "dist/uk -plugins=malta-translate[input:\"en\",output:\"it\"]...malta-markdown-pdf -vars=vars_it.json",
+        "dist/de -plugins=malta-translate[input:\"en\",output:\"de\"]...malta-markdown-pdf -vars=vars_de.json"
+    ]
+}
+```
+This will produce two different pdf files automatically translated (standing the right placeholder are used passing short English sentences) using the same template and allowing to use different variables on each of them.
+
 
 ---
 
@@ -226,7 +251,33 @@ Is possible to execute one or more commands using the `EXE` key in the json file
     "all other" : "stuff"
 } 
 ```
-hint: this feature is available only on the main called json, not in a nested one.  
+
+Before version 3.7.0 this feature is available only on the main called json, not in a nested one.  
+Since version 3.7.0 it is possible to specify a EXE section in any nested json.  
+  
+For example:
+```
+{
+	"EXE" : [
+		"rm -rf dist",
+		"mkdir dist"
+	],
+	"dist/require.json" : true,
+	...
+}
+```
+then _dist/require.json_ can contain something like:
+```
+{
+	"EXE" : [
+		"mkdir dist/js"
+	],
+	"src/tpl/main.js" : "dist/js", // or even go deeper
+	...
+}
+```
+
+Another feature introduced since 3.7.0 is the possibility to specify more than one destination directory.
 
 ---
 
