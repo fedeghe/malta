@@ -5,12 +5,11 @@ var assert = require('assert'),
 	malta = require('../src/index.js');
 
 describe('EXE param in build file', function () {
-	it('should add a file named exefile.txt containing "hello world" in test/fs', function (done) {
+	it('should create a file test/fs/exefile.txt containing "hello world"', function (done) {
 		try {
-			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeadd.json']);
-			ls.on('exit', function (code) {
-				assert.equal(malta.executeCheck, 0);
-				assert.equal(code, 0);
+			var ls = child_process.spawn('malta',  ['test/fs/exe/exeadd.json']);
+			ls.on('close', function (code) {
+				assert.equal(malta.executeCheck, code); // 0
 				fs.readFile('test/fs/exefile.txt',  'utf8', function(err, cnt){
 					if (err) throw err;
 					assert.equal(cnt.split(/\n/)[0], 'hello world')
@@ -21,12 +20,12 @@ describe('EXE param in build file', function () {
 			throw err;
 		}
 	});
+
 	it('should remove the file just created', function (done) {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeremove.json']);
-			ls.on('exit', function (code) {
-				assert.equal(malta.executeCheck, 0);
-				assert.equal(code, 0);
+			ls.on('close', function (code) {
+				assert.equal(malta.executeCheck, code); // 0
 				fs.access('test/fs/exefile.txt', function (err, cnt) {
 					assert.ok(err && err.code === 'ENOENT');
 					done();
@@ -40,8 +39,8 @@ describe('EXE param in build file', function () {
 	it('should fail to execute the command set', function (done) {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeallfail.json']);
-			ls.on('exit', function (code) {
-				assert.notEqual(malta.executeCheck, code);
+			ls.on('close', function (code) {
+				assert.notEqual(malta.executeCheck, code); // 0
 				done();
 			});
 		} catch (err) {
@@ -52,8 +51,8 @@ describe('EXE param in build file', function () {
 	it('should execute successfully all commands', function (done) {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeall.json']);
-			ls.on('exit', function (code) {
-				assert.equal(malta.executeCheck, 0);
+			ls.on('close', function (code) {
+				assert.equal(malta.executeCheck, code); // 0
 				done();
 			});
 		} catch (err) {
