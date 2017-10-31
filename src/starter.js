@@ -11,6 +11,17 @@ module.exports = Malta;
 
 M(args, len);
 
+function print(msg, i, tot) {
+	var perc = (typeof i !== 'undefined' && typeof tot !== 'undefined') ?
+		(parseInt(100*i/tot, 10) + '% ').white()
+		:
+		"";
+	process.stdout.clearLine();  // clear current text
+	process.stdout.cursorTo(0);  // move cursor to beginning of line
+	process.stdout.write(perc + msg);
+}
+
+
 function M(_args, _len) {
 	// no params -> print help and exit
 	if (_len == 0) {
@@ -32,18 +43,19 @@ function M(_args, _len) {
 
 		if ('EXE' in runs) {
 			(function (commands) {
-				Malta.log_info('EXE section for ' + _args[0])
+				Malta.log_info("\n" + "EXE".red() + " section for " + _args[0])
 				var c,
-					i = 0
+					i = 0,
 					clen = commands.length;
 				clen ? (function start() {
-					if (i < clen - 1) {
+					if (i < clen-1) {
+						print("execution: " + commands[i+1], i+1, clen-1);
 						Malta.execute(commands[i].split(/\s/), function (){++i; start();});
 					} else {
 						Malta.execute(commands[i].split(/\s/), function (){delete runs.EXE; go(runs);});
 					}
 					if (i == clen - 1){
-						console.log('...done!');
+						print("...done!\n");
 					}
 				})(i) : go(runs);
 			})(runs.EXE);
