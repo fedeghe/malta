@@ -7,7 +7,7 @@ var assert = require('assert'),
 describe('EXE param in build file', function () {
 	it('should create a file test/fs/exefile.txt containing "hello world"', function (done) {
 		try {
-			var ls = child_process.spawn('malta',  ['test/fs/exe/exeadd.json']);
+			var ls = child_process.spawn('node',  ['src/bin.js', 'test/fs/exe/exeadd.json']);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
 				fs.readFile('test/fs/exefile.txt',  'utf8', function(err, cnt){
