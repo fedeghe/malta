@@ -16,9 +16,7 @@ function print(msg, i, tot) {
 		(parseInt(100*i/tot, 10) + '% ').white()
 		:
 		"";
-	process.stdout.clearLine();  // clear current text
-	process.stdout.cursorTo(0);  // move cursor to beginning of line
-	process.stdout.write(perc + msg);
+	console.log(perc + msg);
 }
 
 
