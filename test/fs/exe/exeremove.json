@@ -1,5 +1,5 @@
 {
 	"EXE" : [
-		"rm test/fs/exefile.txt"
+		"rm -rf test/fs/exefile.txt"
 	]
 }
