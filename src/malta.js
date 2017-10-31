@@ -231,13 +231,12 @@ Malta.execute = function (tmpExe, then) {
 	    console.log(`${data}`);
 	});
 	command.on( 'close', function (code) {
-		Malta.executeCheck += code;
+		Malta.executeCheck += ~~code;
 		if (code) process.exit(1);
-		// console.log(`\b.`);
 		typeof then !== 'undefined' && then();
 	});
 	command.on( 'error', function (code) {
-		Malta.executeCheck += code;
+		Malta.executeCheck += ~~code;
 		console.log(`> \`${exe}\` child process exited with code ${code}`);
 		process.exit(1);
 	});
