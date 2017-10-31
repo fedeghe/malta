@@ -27,7 +27,7 @@
     "malta": "src/bin.js"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.11.5"
   },
   "devDependencies": {
     "coveralls": "~2.13.1",
