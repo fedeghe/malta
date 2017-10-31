@@ -174,7 +174,7 @@ once started, Malta will start/stop on new files that could be added/removed to/
 <a name="multi_destinations"></a>
 
 ### More destinations for one file. 
-Since version 3.7.0 it is possible to write more files starting from the same template just specifying an array of destinations:
+Since version 3.7.2.0 it is possible to write more files starting from the same template just specifying an array of destinations:
 ``` json
 {
 	"src/mybook.md" : [
@@ -252,8 +252,8 @@ Is possible to execute one or more commands using the `EXE` key in the json file
 } 
 ```
 
-Before version 3.7.0 this feature is available only on the main called json, not in a nested one.  
-Since version 3.7.0 it is possible to specify a EXE section in any nested json.  
+Before version 3.7.2 this feature is available only on the main called json, not in a nested one.  
+Since version 3.7.2 it is possible to specify a EXE section in any nested json.  
   
 For example:
 ``` json
@@ -262,8 +262,7 @@ For example:
 		"rm -rf dist",
 		"mkdir dist"
 	],
-	"dist/require.json" : true,
-	...
+	"dist/require.json" : true
 }
 ```
 then _dist/require.json_ can contain something like:
@@ -272,12 +271,11 @@ then _dist/require.json_ can contain something like:
 	"EXE" : [
 		"mkdir dist/js"
 	],
-	"src/tpl/main.js" : "dist/js", // or even go deeper
-	...
+    "src/tpl/main.js" : "dist/js", // or even go deeper  
 }
 ```
 
-Another feature introduced since 3.7.0 is the possibility to specify more than one destination directory.
+Another feature introduced since 3.7.2 is the possibility to specify more than one destination directory.
 
 ---
 
