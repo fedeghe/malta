@@ -72,12 +72,13 @@ function multi(key, el) {
 
 	function proceed(tpl, options){
 		var i = 0, l;
-		if (options instanceof Array) {
+		if (typeof options !== 'undefined' &&  options instanceof Array) {
 			l = options.length;
 			for (null; i < l; i++) {
 				proceed(tpl, options[i]);
 			}
 		} else {
+			options = options || "";
 			var o = [tpl],
 				ls;
 			// if (typeof options !== 'undefined' && options !== true) {
