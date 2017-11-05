@@ -14,5 +14,6 @@
 	],
 	"shpere" : {
 		"radius" : 10
-	}
+	},
+	"sentence": "ciao mondo"
 }

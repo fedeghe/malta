@@ -12,7 +12,6 @@ let proc = 0;
 
 function multi(key, el) {
 	"use strict";
-	
 	const multi = key.match(/(.*)\/\*\.(.*)$/),
 		isCommand = Malta.isCommand(key),
 		exclude = function (filename) {

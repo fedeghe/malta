@@ -3,10 +3,10 @@ var assert = require('assert'),
 	path = require('path'),
 	pro = require('../src/maltapromise');
 
-describe('Father I promise', function () {
+describe('Father ... I promise', function () {
 	var trgFolder = path.resolve(path.dirname(__filename) + '/fs/observed');
 
-	it('honouring a promise', function (done) {
+	it('honour a promise', function (done) {
 		var p = new pro(function (_done) {
 			setTimeout(function () {
 				_done(101);

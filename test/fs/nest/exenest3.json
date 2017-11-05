@@ -1,0 +1,6 @@
+{
+	"EXE" : [
+		"touch test/fs/build/nest0/nest1/nest2/file.txt",
+		"echo 'hello world' > test/fs/build/nest0/nest1/nest2/file.txt"
+	]
+}

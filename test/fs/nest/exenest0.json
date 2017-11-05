@@ -1,0 +1,7 @@
+{
+	"EXE" : [
+		"rm -rf test/fs/build/nest0",
+		"mkdir -p test/fs/build/nest0"
+	],
+	"test/fs/nest/exenest1.json": true
+}

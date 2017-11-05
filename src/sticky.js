@@ -15,8 +15,11 @@ const os = require('os'),
 		return false;
 	})();
 
-module.exports = function (title, message) {
+module.exports = function (title, message, testcb, testcb2) {
 	'use strict';
+	if (typeof testcb === 'undefined') {
+		testcb = function () {return null;};
+	}
 	if (!(currentOs in tools)) return;
 	const exeData = tools[currentOs],
 		exec = exeData[0],
@@ -25,7 +28,11 @@ module.exports = function (title, message) {
 	child_process.exec("which " + exec, function (error) {
 		if (error === null) {
 			child_process.exec(exec + ' ' + params, function (error) {
-				if (error) console.log(error);
+				if (error) {
+					console.log(error);
+				} else {
+					testcb(title + "___" + message);
+				}
 			});
 		}
 	});

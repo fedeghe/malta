@@ -168,6 +168,12 @@ function Malta () {
 	 */
 	this.notifyBuild = true;
 
+
+	this.content_and_name = {
+		content: null,
+		name: null
+	};
+
 }
 
 /**
@@ -400,8 +406,9 @@ Malta.replaceLinenumbers = function (tpl) {
 	}).join("\n");
 };
 
-
-// PROTO
+//
+// PROTO METHODS
+//
 
 /**
  * [date description]
@@ -540,15 +547,13 @@ Malta.prototype.comments = objMultiKey({
  */
 Malta.prototype.build = function() {
 	"use strict";
-
 	const self = this;
-	let baseTplContent = self.files[self.tplPath].content;
-		// start = self.date(),
-		// end,
-		//ext;
+	// let baseTplContent = self.files[self.tplPath].content;
+	// let baseTplContent = self.tplCnt;
 
 	self.t_start = self.date();
 
+	// reset content and name
 	self.content_and_name = {
 		content : null,
 		name : null
@@ -561,23 +566,20 @@ Malta.prototype.build = function() {
 
 	self.involvedFiles += self.hasVars();
 
+	while (self.tplCnt.match(new RegExp(self.reg.files, 'g'))) self.replace_all();
 
-	while (baseTplContent.match(new RegExp(self.reg.files, 'g')))
-		baseTplContent = self.replace_all(baseTplContent);
-
+	/**
+	 * replace variables, wired ones, expressions and microtpl
+	 */
+	self.replace_vars()
+		.replace_wiredvars()
+		.replace_calc()
+		.microTpl();
 	
-
-	// wiredvars
-	// 
-	baseTplContent = self.replace_vars(baseTplContent);
-	baseTplContent = self.replace_wiredvars(baseTplContent);
-	baseTplContent = self.replace_calc(baseTplContent);
-	
-
-	baseTplContent = self.microTpl(baseTplContent);
-
-
-	self.content_and_name.content = baseTplContent;
+	/**
+	 * set content and name
+	 */
+	self.content_and_name.content = self.tplCnt;
 	self.content_and_name.name = self.outName;
 
 	// do write
@@ -1089,13 +1091,14 @@ Malta.prototype.parse = function(path) {
 };
 
 
-Malta.prototype.microTpl = function (cnt) {
+Malta.prototype.microTpl = function () {
 	// "use strict" /// not here cause eval
-	const rx = {
+	const self = this,
+		rx = {
 			outer : /(\<malta\%.*\%malta\>)/gm,
 			inner : /\<malta\%(.*)\%malta\>/
 		},
-		m = (cnt+'').split(rx.outer);
+		m = (self.tplCnt + '').split(rx.outer);
 
 	let r,
 		ev = ['r = [];'];
@@ -1121,17 +1124,15 @@ Malta.prototype.microTpl = function (cnt) {
 			console.log("---\n");
 			Malta.stop();	
 		}
-
-		
 		/*
 		// remove empty lines from r
 		r = r.filter(function (v) {
 			return v.length;
 		});
 		*/
-		return r.join("\n");
+		self.tplCnt = r.join("\n");
 	}
-	return cnt;
+	return this;
 };
 
 
@@ -1140,11 +1141,11 @@ Malta.prototype.microTpl = function (cnt) {
  * @param  {[type]} tpl [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.replace_all = function(tpl) {
+Malta.prototype.replace_all = function() {
 	"use strict";
 	const self = this;
 
-	return tpl.replace(new RegExp(self.reg.files, 'g'), function(str, $1, $2, $3, $4) {
+	self.tplCnt = self.tplCnt.replace(new RegExp(self.reg.files, 'g'), function(str, $1, $2, $3, $4) {
 
 		let tmp,
 			n,
@@ -1231,6 +1232,7 @@ Malta.prototype.replace_all = function(tpl) {
 			$1 + tmp.replace(/\n/g, NL + $1) :
 			tmp;
 	});
+	return this;
 };
 
 /**
@@ -1238,12 +1240,13 @@ Malta.prototype.replace_all = function(tpl) {
  * @param  {[type]} tpl [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.replace_calc = function (tpl) {
+Malta.prototype.replace_calc = function () {
 	"use strict";
 	const self = this;
-	return tpl.replace(new RegExp(self.reg.calc, 'g'), function(str, $1) {
+	self.tplCnt = self.tplCnt.replace(new RegExp(self.reg.calc, 'g'), function(str, $1) {
 		return eval($1);
 	});
+	return this;
 };
 
 /**
@@ -1251,16 +1254,17 @@ Malta.prototype.replace_calc = function (tpl) {
  * @param  {[type]} tpl [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.replace_vars = function(tpl) {
+Malta.prototype.replace_vars = function() {
 	"use strict";
 	const self = this;
-	return tpl.replace(new RegExp(self.reg.vars, 'g'), function(str, $1) {
+	self.tplCnt = self.tplCnt.replace(new RegExp(self.reg.vars, 'g'), function(str, $1) {
 		let t = self.utils.checkns($1 + '', self.vars);
 		if (typeof t === 'object') {
 			t = JSON.stringify(t);
 		}
 		return typeof t !== "undefined" ? t : '$' + $1 + '$';
 	});
+	return this;
 };
 
 /**
@@ -1268,14 +1272,13 @@ Malta.prototype.replace_vars = function(tpl) {
  * @param  {[type]} tpl [description]
  * @return {[type]}     [description]
  */
-Malta.prototype.replace_wiredvars = function(tpl) {
+Malta.prototype.replace_wiredvars = function() {
 	"use strict";
 	const self = this;
-	tpl = self.replace_vars(tpl);
-	if (tpl.match(/__LINE__/)){
-		tpl = Malta.replaceLinenumbers(tpl);
+	if (self.tplCnt.match(/__LINE__/)){
+		self.tplCnt = Malta.replaceLinenumbers(tpl);
 	}
-	return self.utils.replaceAll(tpl,{
+	self.tplCnt = self.utils.replaceAll(self.tplCnt, {
 		TIME : self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds(),
 		DATE : self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear(),
 		YEAR : self.date().getFullYear(),
@@ -1288,9 +1291,8 @@ Malta.prototype.replace_wiredvars = function(tpl) {
 	},{
 		delim : ['__', '__']
 	});
+	return this;
 };
-
-
 
 /**
  * Must be called after check, to start Malta demon
@@ -1413,14 +1415,13 @@ Malta.prototype.utils = {
 	/**
 	 * solves internal references in the json vars file
 	 *
-	 * @param      {<type>}  obj     The object
-	 * @return     {<type>}  { description_of_the_return_value }
+	 * @param      {obi}  obj	thie vars json with self references
+	 * @return     {obj}	the content of the file qith all self references solved
 	 */
 	solveJson: function(obj) {
 		"use strict";
 		const self = this,
 			maxSub = 1E3;
-
 		let i = 0;
 
 		return (function _(o) {

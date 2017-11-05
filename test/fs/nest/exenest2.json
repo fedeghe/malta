@@ -1,0 +1,6 @@
+{
+	"EXE": [
+		"mkdir -p test/fs/build/nest0/nest1/nest2"
+	],
+	"test/fs/nest/exenest3.json": true
+}

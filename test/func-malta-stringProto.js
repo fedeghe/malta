@@ -21,7 +21,7 @@ describe('string proto', function () {
         i;
     it ("should have the right color (" + k.length + ")", function () {
         for (i in map) {
-            assert.equal(str[i](), "\u001b[1;" + map[i] + "mhello\u001b[0m")
+            assert.equal(str[i](), "\u001b[1;" + map[i] + "mhello\u001b[0m");
         }
     });
     it ("should have the bainbow color", function () {
