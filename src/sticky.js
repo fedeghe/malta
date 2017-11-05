@@ -1,4 +1,4 @@
-var os = require('os'),
+const os = require('os'),
 	child_process = require('child_process'),
 	platform = os.platform(),
 	// Basso,Blow,Bottle,Frog,Funk,Glass,Hero,Morse,Ping,Pop,Purr,Sosumi,Submarine,Tink
@@ -8,6 +8,7 @@ var os = require('os'),
 		linux : ["notify-send", "-t 1000 \"{title}\" \"{message}\""]
 	},
 	currentOs = (function () {
+		"use strict";
 		if (/^win32/.test(platform)) return "win";
 		if (/^linux/.test(platform)) return "linux";
 		if (/^darwin/.test(platform)) return "mac";
@@ -17,13 +18,15 @@ var os = require('os'),
 module.exports = function (title, message) {
 	'use strict';
 	if (!(currentOs in tools)) return;
-	var exeData = tools[currentOs],
+	const exeData = tools[currentOs],
 		exec = exeData[0],
 		params = exeData[1].replace(/\{title\}/, title).replace(/\{message\}/, message);
 
-	child_process.exec("which " + exec, function (error, stdout, stderr) {
-		if (error == null) {
-			child_process.exec(exec + ' ' + params, function (error, stdout, stderr) { error && console.log(error); });
+	child_process.exec("which " + exec, function (error) {
+		if (error === null) {
+			child_process.exec(exec + ' ' + params, function (error) {
+				if (error) console.log(error);
+			});
 		}
 	});
 };

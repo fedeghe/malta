@@ -1,28 +1,28 @@
-var fs = require('fs');
+const fs = require('fs');
 
 module.exports = (function() {
-
-    var elements = {};
+    "use strict";
+    let elements = {};
 
     function arrDiff(a, b) {
-        var b_added = [],
+        let b_added = [],
             b_removed = [],
             astr = a.join(':::'),
             bstr = b.join(':::'),
             i, l;
 
         for (i = 0, l = a.length; i < l; i++) {
-            if (bstr.indexOf(a[i]) < 0) b_removed.push(a[i])
+            if (bstr.indexOf(a[i]) < 0) b_removed.push(a[i]);
         }
         for (i = 0, l = b.length; i < l; i++) {
-            if (astr.indexOf(b[i]) < 0) b_added.push(b[i])
+            if (astr.indexOf(b[i]) < 0) b_added.push(b[i]);
         }
         return {added : b_added, removed : b_removed};
     }
 
     function observe(folder, cb) {
 
-        var actual = {},
+        let actual = {},
             previous = false;
 
         if (folder in elements) return false;
@@ -37,7 +37,7 @@ module.exports = (function() {
                         previous = {
                             files: files,
                             n: files.length,
-                            time: new Date
+                            time: new Date()
                         };
                     }
 
@@ -45,7 +45,7 @@ module.exports = (function() {
                     actual.n = files.length;
 
                     if (previous.files.length !== actual.files.length) {
-                        actual.time = new Date;
+                        actual.time = new Date();
 
                         cb(arrDiff(previous.files, actual.files));
                     }

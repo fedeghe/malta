@@ -1,11 +1,11 @@
 (function () {
-	
-	var http = require('http'),
-		fs = require('fs')
+	"use strict";
+	const http = require('http'),
+		fs = require('fs'),
 		getMtime = function(stat_response) {
 			return +stat_response.mtime;
 		},
-		srvStarted = false,
+		// srvStarted = false,
 		srvHost = 'http://127.0.0.1',
 		srvPort = 1234;
 
@@ -13,7 +13,7 @@
 		this.files = {};
 	}
 	Bwatch.prototype.start = function () {
-		var BW = this;
+		const BW = this;
 		http.createServer(function (request, response) {
 			response.writeHead(200, {
 				'Content-Type': 'application/javascript',
@@ -28,26 +28,29 @@
 		}).listen(srvPort);
 	};
 	Bwatch.prototype.addFile = function (path) {
-		var BW = this;
+		const BW = this;
 		if (!(path in this.files)) {
 			fs.stat(path, function (err, stats) {
 				BW.files[path] = getMtime(stats);
-			})
-			
+			});
 		}
 	};
 
 	Bwatch.prototype.check = function () {
-		var res = false,
-			BW = this,
-			path,
+		const BW = this;
+
+		let res = false,
+			fpath,
 			tmp;
-		for (path in BW.files) {
-			tmp = fs.statSync(path);
-			if (BW.files[path] < getMtime(tmp)) {
-				BW.files[path] = getMtime(tmp);
-				console.log('Malta-browser-refresh (modified ' + path.white() + ')')
-				return true;
+
+		for (fpath in BW.files) {
+			if (BW.files.hasOwnProperty(fpath)) {
+				tmp = fs.statSync(fpath);
+				if (BW.files[fpath] < getMtime(tmp)) {
+					BW.files[fpath] = getMtime(tmp);
+					console.log('Malta-browser-refresh (modified ' + fpath.white() + ')');
+					return true;
+				}
 			}
 		}
 		return res;

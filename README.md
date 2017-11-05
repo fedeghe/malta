@@ -8,19 +8,13 @@
   
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
 
-
-
-
-
 # Malta is ...  
 
-a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
-
+A super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
 ### ... plugin based   
 
 Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows for example to transpil es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_ and a lot more. 
-
 
 ---
 
@@ -59,7 +53,6 @@ then install malta running:
 ```
 $ [sudo] npm install malta [-g]
 ```
-
 
 ---
 
@@ -168,7 +161,6 @@ moreover since 3.0.16 a simple kind of wildcards can be used in the json keys :
 ```
 once started, Malta will start/stop on new files that could be added/removed to/from the `controllers` folder.  
 
-
 ---
 
 <a name="multi_destinations"></a>
@@ -184,7 +176,6 @@ Since version 3.7.2.0 it is possible to write more files starting from the same 
 }
 ```
 This will produce two different pdf files automatically translated (standing the right placeholder are used passing short English sentences) using the same template and allowing to use different variables on each of them.
-
 
 ---
 
@@ -271,7 +262,7 @@ then _dist/require.json_ can contain something like:
 	"EXE" : [
 		"mkdir dist/js"
 	],
-    "src/tpl/main.js" : "dist/js", // or even go deeper  
+    "src/tpl/main.js" : "dist/js"
 }
 ```
 
@@ -369,10 +360,6 @@ There are some placeholders that can be used within any involved file:
 - \_\_BUILDNUMBER\_\_ : build number  
 - \_\_FILE\_\_ : template name  
 - \_\_LINE\_\_ : line number  
-
-
-
-
 
 --------
 

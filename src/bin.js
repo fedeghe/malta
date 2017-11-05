@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-var Malta = require("./malta");
+const Malta = require("./malta");
 
-BIN_MODE = true;
+global.BIN_MODE = true;
 
 require("./starter.js");
 

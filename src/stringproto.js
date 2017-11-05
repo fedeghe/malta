@@ -1,8 +1,8 @@
 function rainbowize (offset) {
+	// "use strict"; //no octal lit
 	offset = offset || 0;
 	return function () {
-		var els = this,
-			i = 0, j = 0,
+		const els = this,
 			l = els.length,
 			tpl = '\033[1;%code%m%char%\033[0m',
 			cols = [
@@ -18,13 +18,15 @@ function rainbowize (offset) {
 				94 + offset, // lightblue
 				95 + offset, // lightmagenta
 				96 + offset  // lightcyan
-			],
+			];
+		let	i = 0, j = 0,
 			out = [];
 		for (null; i < l; i++) out.push(els[i] !== ' ' ? tpl.replace('%code%', cols[j++ % cols.length]).replace('%char%', els[i]) : els[i]);
 		return out.join('');
-	}	
+	};
 }
-String.prototype.normal = function () {return '\033[1;0m' + this + '\033[0m'; };
+
+String.prototype.normal = function () {return '\033[1;0m' + this + '\033[0m';};
 String.prototype.darken = function () {return '\033[1;2m' + this + '\033[0m'; };
 String.prototype.italic = function () {return '\033[1;54m' + this + '\033[0m'; };
 String.prototype.underline = function () {return '\033[1;4m' + this + '\033[0m'; };
