@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.7.6** some tests added for latest features added from 3.7
 - **3.7.5** a lot of lints
 - **3.7.4** small fix when dealing with parameters passed
 - **3.7.3** mocha tests updated
