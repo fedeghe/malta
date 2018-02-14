@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.8.0** # can be used in nested json to avoid watching what the nested file commit to build
 - **3.7.9** Malta header is always shown at start
 - **3.7.7** I had to remove a test (until I understand) to free travis
 - **3.7.6** some tests added for latest features added from 3.7

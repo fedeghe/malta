@@ -228,7 +228,7 @@ When a plugin `myplugin` is requested the first place malta will search for it i
 ##### no demon (only _multi-mode_)  
 
 In case the process must end after the first build just prefix with #
-the template (only in _multi-mode_)  
+the template (only in _multi-mode_). Can be used as well in the nested.json avoiding to watch all files committed to be built by the nested json content.
 
 ##### execute a terminal command (only _multi-mode_)  
 

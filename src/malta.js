@@ -384,11 +384,28 @@ Malta.stop = function () {
 
 Malta.getRunsFromPath = function (p) {
 	"use strict";
-	let ret = false;
+	let ret = false,
+		demonRet = {},
+		i,
+		demon = p.match(/#/);
+	if (demon) {
+		p = p.replace('#', '');
+	}
+
 	if (fs.existsSync(p)) {
 		ret = fs.readFileSync(p, { encoding: "UTF8" });
 		ret = ret.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
 		ret = JSON.parse(ret);
+	}
+	if (demon) {
+		for (i in ret) {	
+			if (i.match(/^(#|EXE)/)) {
+				demonRet[i] = ret[i];
+			} else {
+				demonRet['#' + i] = ret[i];
+			}
+		}
+		return demonRet;
 	}
 	return ret;
 };
