@@ -48,6 +48,9 @@ function M(_args, _len) {
 	} else if (_len === 1){
 
 		Malta.outVersion();
+
+		_args[0].match(/^-/) && functions.subCommand(_args[0]);
+
 		const p = path.resolve(execPath, _args[0]),
 			runs = Malta.getRunsFromPath(p);
 

@@ -219,6 +219,8 @@ Malta.printfile = '.printVersion';
 
 Malta.executeCheck = 0;
 
+Malta.running = true;
+
 Malta.execute = function (tmpExe, then) {
 	"use strict"; //not here couse of slice on tmpExe
 	const exe = tmpExe, //.join(' '),
@@ -377,8 +379,10 @@ Malta.isCommand = function (s) {
  */
 Malta.stop = function () {
 	"use strict";
+	if (!Malta.running) return;
 	console.log(Malta.name + ' has stopped' + NL);
 	fs.unlink(Malta.printfile);
+	Malta.running = false;
 	process.exit();
 };
 

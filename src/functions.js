@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const Malta = require('./malta'),
 	watcher = require('./observe'),
+	spawn = require('child_process').spawn,
 	fs = require("fs"),
 	//path = require("path"),
 	// child_process = require('child_process'),
@@ -100,6 +101,21 @@ function multi(key, el) {
 
 }
 
+function subCommand(command) {
+	switch (command) {
+		case '-clean':
+			console.log('Removing all .buildNum.json files');
+			spawn('find . -name "*.buildNum.json" -type f -delete');
+			console.log('... done');
+			break;
+		default:
+			console.log(`Command "${command}" not available`);
+		break;
+	}
+	Malta.stop();
+} 
+
 module.exports = {
-	multi : multi
+	multi : multi,
+	subCommand : subCommand
 };
