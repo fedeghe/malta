@@ -72,15 +72,17 @@ function M(_args, _len) {
 				if (clen) {
 					(function start() {
 						if (i < clen-1) {
-							print("execution: " + commands[i+1], i+1, clen-1);
+							print("execution: " + commands[i], i+1, clen);
 							Malta.execute(commands[i].split(/\s/), function (){++i; start();});
 						} else {
-							Malta.execute(commands[i].split(/\s/), function (){delete runs.EXE; go(runs);});
+							print("execution: " + commands[i], i + 1, clen);
+							Malta.execute(commands[i].split(/\s/), function (){
+								print("...done!\n");
+								delete runs.EXE;
+								go(runs);
+							});
 						}
-						if (i === clen - 1) {
-							print("...done!\n");
-						}
-					})(i);
+					})();
 				} else {
 					 go(runs);
 				}
