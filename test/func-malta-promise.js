@@ -26,7 +26,6 @@ describe('Father ... I promise', function () {
 		}).then().catch(function () {
 			done();
 		});
-		// p.reject();
 	});
 
 	it('reject a promise', function (done) {
@@ -36,8 +35,7 @@ describe('Father ... I promise', function () {
 			},10);
 		}).catch(function () {
 			done();
-		});
-		p.reject();
+		}).reject();
 	});
 
 	// });

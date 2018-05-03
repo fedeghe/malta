@@ -3,7 +3,8 @@ var assert = require('assert'),
 	fs = require('fs'),
 	child_process = require('child_process'),
 	malta = require('../src/index.js'),
-	funcs = require('../src/functions.js');
+	funcs = require('../src/functions.js'),
+	promise = require('promise');
 
 describe('multi destinations', function () {
 
@@ -11,9 +12,24 @@ describe('multi destinations', function () {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/multidestination.json']);
 			ls.on('exit', function (code) {
+
 				assert.equal(code, 0);
-				//check the files?
-				done();
+				
+				// check the files
+				//
+				promise.all([(d) => {
+					fs.stat('test/fs/build/d1/multidest.js', function (err, cnt) {
+						assert.ok(cnt);
+						d();
+					});
+				}, (d) => {
+					fs.stat('test/fs/build/d2/multidest.js', function (err, cnt) {
+						assert.ok(cnt);
+						d();
+					});
+				}]).then(() => {
+					done();
+				});
 			});
 			ls.stderr.on('data', function(err) {
 				assert.ok(false)
@@ -28,11 +44,11 @@ describe('multi destinations', function () {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/multidestinationClear.json']);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
-				done();
-				// fs.stat('test/fs/build/d1', function (err, cnt) {
-				// 	assert.ok(err);
-				// 	done();
-				// });
+				
+				fs.stat('test/fs/build/d1', function (err, cnt) {
+					assert.ok(err);
+					done();
+				});
 			});
 		} catch (err) {
 			throw err;
