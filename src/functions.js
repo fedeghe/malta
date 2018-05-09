@@ -102,6 +102,7 @@ function multi(key, el) {
 }
 
 function subCommand(command) {
+	"use strict";
 	switch (command) {
 		case '-clean':
 			console.log('Removing all .buildNum.json files');

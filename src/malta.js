@@ -1490,7 +1490,7 @@ Malta.prototype.utils = {
 
 		let i = 0;
 
-		ctx = (ctx !== undefined) ? ctx : W;
+		ctx = (ctx !== undefined) ? ctx : {};
 
 		if (!ns) return ctx;
 
@@ -1733,6 +1733,7 @@ Malta.prototype.watch = function () {
 };
 
 Malta.prototype.validateJson = (json) => {
+	"use strict";
 	try {
 		JSON.parse(json);
 	}catch(e){

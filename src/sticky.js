@@ -15,7 +15,7 @@ const os = require('os'),
 		return false;
 	})();
 
-module.exports = function (title, message, testcb, testcb2) {
+module.exports = function (title, message, testcb) {
 	'use strict';
 	if (typeof testcb === 'undefined') {
 		testcb = function () {return null;};

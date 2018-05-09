@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.8.6** 
+- **3.8.7** 
     - now vars file is simply ignored whenever contains non valid json; a message will notify it
     - some vulnerabilities solved (thx npm audit)
 - **3.8.4** Dependencies update
