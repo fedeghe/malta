@@ -1,5 +1,8 @@
 Changelog
 --------- 
+- **3.8.5** 
+    - now vars file is simply ignored whenever contains non valid json; a message will notify it
+    - some vulnerabilities solved (thx npm audit)
 - **3.8.4** Dependencies update
 - **3.8.3** Small fix on EXE section console messages
 - **3.8.1** "commands" added, for the moment only 'clean' is available, will remove all .buildNum.json files (affects only the usage of the ___BUILDNUM___ placeholder). To use it run `malta -clean`

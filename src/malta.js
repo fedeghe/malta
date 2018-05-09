@@ -1000,9 +1000,17 @@ Malta.prototype.loadVars = function () {
 	// 
 	if (fs.existsSync(self.varPath)) {
 		try {
-			tmp = self.utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
-			self.log_debug('Loaded vars file '.yellow() + NL + self.varPath);
-			self.vars = tmp;
+			
+			
+			tmp = fs.readFileSync(self.varPath);
+			if (self.validateJson(tmp)) {
+				tmp = JSON.parse(tmp);
+				self.vars = self.utils.solveJson(tmp);
+				self.log_debug('Loaded vars file '.yellow() + NL + self.varPath);
+			} else {
+				console.log(`${self.varPath} not valid`.red());
+				self.vars = {};
+			}
 		} catch (e) {
 			self.vars = {};
 		}
@@ -1659,7 +1667,7 @@ Malta.prototype.watch = function () {
 
 
 	const self = this;
-	let d, f;
+	let d, f, varsContent;
 
 	function watch() {
 		// empty queue
@@ -1692,7 +1700,13 @@ Malta.prototype.watch = function () {
 				if (f === self.varPath) {
 					// update vars
 					// 
-					self.vars = self.utils.solveJson(JSON.parse(fs.readFileSync(self.varPath)));
+					varsContent = fs.readFileSync(self.varPath);
+					if (self.validateJson(varsContent)) {
+						varsContent = JSON.parse(varsContent);
+						self.vars = self.utils.solveJson(varsContent);
+					} else {
+						console.log(`${self.varPath} not valid`.red());
+					}
 				}
 
 				self.parse(f);
@@ -1716,6 +1730,15 @@ Malta.prototype.watch = function () {
 	// chain
 	//
 	return this;
+};
+
+Malta.prototype.validateJson = (json) => {
+	try {
+		JSON.parse(json);
+	}catch(e){
+		return false;
+	} 
+	return true;
 };
 
 Malta.prototype.shut = function () {
