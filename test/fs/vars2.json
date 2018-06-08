@@ -12,7 +12,11 @@
 			"what" : "just a string"
 		}
 	],
+	// asdasd
 	"shpere" : {
+		/*
+		hello there
+		*/
 		"radius" : 10
 	},
 	"sentence": "ciao mondo"

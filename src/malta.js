@@ -386,6 +386,8 @@ Malta.stop = function () {
 	process.exit();
 };
 
+Malta.cleanJson = json => json.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
+
 Malta.getRunsFromPath = function (p) {
 	"use strict";
 	let ret = false,
@@ -398,7 +400,7 @@ Malta.getRunsFromPath = function (p) {
 
 	if (fs.existsSync(p)) {
 		ret = fs.readFileSync(p, { encoding: "UTF8" });
-		ret = ret.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
+		ret = Malta.cleanJson(ret);
 		ret = JSON.parse(ret);
 	}
 	if (demon) {
@@ -1000,9 +1002,7 @@ Malta.prototype.loadVars = function () {
 	// 
 	if (fs.existsSync(self.varPath)) {
 		try {
-			
-			
-			tmp = fs.readFileSync(self.varPath);
+			tmp = Malta.cleanJson(fs.readFileSync(self.varPath, { encoding: "UTF8" }));
 			if (self.validateJson(tmp)) {
 				tmp = JSON.parse(tmp);
 				self.vars = self.utils.solveJson(tmp);
@@ -1700,7 +1700,7 @@ Malta.prototype.watch = function () {
 				if (f === self.varPath) {
 					// update vars
 					// 
-					varsContent = fs.readFileSync(self.varPath);
+					varsContent = Malta.cleanJson(fs.readFileSync(self.varPath, { encoding: "UTF8" }));
 					if (self.validateJson(varsContent)) {
 						varsContent = JSON.parse(varsContent);
 						self.vars = self.utils.solveJson(varsContent);

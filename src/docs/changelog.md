@@ -1,5 +1,9 @@
 Changelog
 --------- 
+- **3.8.8**
+    - process has a proper name now
+    - possible to write comments on the vars file
+    - some known vulnerabilities fixed
 - **3.8.7** 
     - now vars file is simply ignored whenever contains non valid json; a message will notify it
     - some vulnerabilities solved (thx npm audit)

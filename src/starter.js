@@ -7,6 +7,8 @@ const Malta = require("./malta"),
 	args = process.argv.splice(2),
 	len = args.length;
 
+process.title = 'Malta';
+
 module.exports = Malta;
 
 M(args, len);
