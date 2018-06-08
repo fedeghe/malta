@@ -12,10 +12,11 @@
 			"what" : "just a string"
 		}
 	],
-	// asdasd
+	// in line
 	"shpere" : {
 		/*
-		hello there
+			multi
+			line
 		*/
 		"radius" : 10
 	},
