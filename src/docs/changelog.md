@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.8.10** fixed `malta -clean` command
+- **3.8.11** fixed `malta -clean` command
 - **3.8.9**
     - process has a proper name now
     - possible to write comments on the vars file
