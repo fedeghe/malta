@@ -106,8 +106,10 @@ function subCommand(command) {
 	switch (command) {
 		case '-clean':
 			console.log('Removing all .buildNum.json files');
-			spawn('find . -name "*.buildNum.json" -type f -delete');
-			console.log('... done');
+			spawn('find', ['.', '-name', '*.buildNum.json', '-type', 'f', '-delete']).on('exit', (code) => {
+				!code && console.log('... done');
+			});
+			
 			break;
 		default:
 			console.log(`Command "${command}" not available`);
