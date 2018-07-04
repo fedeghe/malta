@@ -14,7 +14,7 @@ describe('EXE nested param in build file', function () {
 
 				fs.readFile('test/fs/build/nest0/nest1/nest2/file.txt',  'utf8', function(err, cnt){
 					if (err) throw err;
-					assert.equal(cnt.split(/\n/)[0], 'hello world   ')
+					assert.equal(cnt.split(/\n/)[0], 'hello world  ')
 					done();
 				});
 			});
