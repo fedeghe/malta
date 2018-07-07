@@ -23,10 +23,13 @@ Uglifies css markup,  based on [uglifycss npm package][4b]
 ---
 ### [malta-del][5]  
 Deletes a file 
+---
+### [malta-dev-srv][5bis]  
+Launches a raw basic development server
 
 ---
-### [malta-epub][5bis]  
-Creates a ebup file from md files, based on [epub-gen npm package][5bisb]  
+### [malta-epub][5tris]  
+Creates a ebup file from md files, based on [epub-gen npm package][5trisb]  
 
 ---
 ### [malta-haml][6pre]  
@@ -139,7 +142,8 @@ Umd plugin
 [3]: https://www.npmjs.com/package/malta-coffeescript
 [4]: https://www.npmjs.com/package/malta-css-uglify
 [5]: https://www.npmjs.com/package/malta-del
-[5bis]: https://www.npmjs.com/package/malta-epub
+[5bis]: https://www.npmjs.com/package/malta-dev-srv
+[5tris]: https://www.npmjs.com/package/malta-epub
 [6pre]: https://www.npmjs.com/package/malta-haml
 
 [6]: https://www.npmjs.com/package/malta-header-comment
@@ -171,7 +175,7 @@ Umd plugin
 [2b]: https://www.npmjs.com/package/js-beautify
 [3b]: https://www.npmjs.com/package/coffee
 [4b]: https://www.npmjs.com/package/uglifycss
-[5bisb]: https://www.npmjs.com/package/epub-gen
+[5trisb]: https://www.npmjs.com/package/epub-gen
 [6preb]: https://www.npmjs.com/package/hamljs
 [7b]: https://www.npmjs.com/package/html-minifier
 [8preb]: https://www.npmjs.com/package/javascript-obfuscator
