@@ -22,7 +22,8 @@ Uglifies css markup,  based on [uglifycss npm package][4b]
 
 ---
 ### [malta-del][5]  
-Deletes a file 
+Deletes a file  
+
 ---
 ### [malta-dev-srv][5bis]  
 Launches a raw basic development server
