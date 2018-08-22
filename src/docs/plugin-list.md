@@ -41,6 +41,10 @@ Creates html files from haml files, based on [hamljs npm package][6preb]
 Adds a commented preamble given a file for getting the content
 
 ---
+### [malta-html2pdf][7pre]  
+Get a pdf from an html, based on [html-pdf npm package][7preb] 
+
+---
 ### [malta-html-minify][7]  
 Minifies html markup, based on [html-minifier npm package][7b]  
 
@@ -149,6 +153,7 @@ Umd plugin
 
 [6]: https://www.npmjs.com/package/malta-header-comment
 [7]: https://www.npmjs.com/package/malta-html-minify
+[7pre]: https://www.npmjs.com/package/malta-html2pdf
 [7post]: https://www.npmjs.com/package/malta-js-bookmarklet
 [8]: https://www.npmjs.com/package/malta-js-packer
 [8pre]: https://www.npmjs.com/package/malta-js-obfuscator
@@ -178,6 +183,7 @@ Umd plugin
 [4b]: https://www.npmjs.com/package/uglifycss
 [5trisb]: https://www.npmjs.com/package/epub-gen
 [6preb]: https://www.npmjs.com/package/hamljs
+[7preb]: https://www.npmjs.com/package/html-pdf
 [7b]: https://www.npmjs.com/package/html-minifier
 [8preb]: https://www.npmjs.com/package/javascript-obfuscator
 [8b]: https://www.npmjs.com/package/packer
