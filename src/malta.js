@@ -839,16 +839,14 @@ Malta.prototype.getPluginsManager = function () {
 
 	return {
 		add: function (fname, params) {
-			const fpath = "/../plugins/" + fname + '.js',
-				// reqName = "../plugins/" + fname,
-				user_path = execPath + fpath,
-				malta_path = __dirname + fpath;
+			const user_path = execPath + "/plugins/" + fname + '.js',
+				malta_path = __dirname + "/../plugins/" + fname + '.js';
 
 			let plugin;
 
 			try {
 				// first the user execution dir
-				// 
+				//
 				if (fs.existsSync(user_path)) {
 					plugin = require(user_path);
 
