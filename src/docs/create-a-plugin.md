@@ -7,7 +7,7 @@ A plugin is structured basically as follows:
      * load dependencies and whatever needed
      */
     var dep = require('lib'),
-        path = require('path')
+        path = require('path'),
         fs = require('fs');
     
     function myplugin(obj, options) {
