@@ -98,6 +98,10 @@ Creates html files from md files, based on [markdown npm package][14b]
 Creates pdf files from md files, based on [markdown-pdf npm package][15b]  
 
 ---
+### [malta-millijs][15abis]  
+Reduce a bit the size of script files
+
+---
 ### [malta-mocha][15bis]  
 Runs mocha test at build, based on [mocha npm package][15bisb]  
 
@@ -166,6 +170,7 @@ Umd plugin
 [13]: https://www.npmjs.com/package/malta-less
 [14]: https://www.npmjs.com/package/malta-markdown
 [15]: https://www.npmjs.com/package/malta-markdown-pdf
+[15abis]: https://www.npmjs.com/package/malta-millijs
 [15bis]: https://www.npmjs.com/package/malta-mocha
 [16]: https://www.npmjs.com/package/malta-notify
 [17]: https://www.npmjs.com/package/malta-pdf-merge

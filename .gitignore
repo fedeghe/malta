@@ -1,9 +1,9 @@
 node_modules
-plugins/*.js
+/plugins/
 npm-debug.log
 plugin_ideas.md
 !/test/**
-/xtest/
+/devtest/
 .buildNum.json
 .printVersion
 .coveralls.yml
