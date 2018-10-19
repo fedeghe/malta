@@ -381,7 +381,7 @@ Malta.stop = function () {
 	"use strict";
 	if (!Malta.running) return;
 	console.log(Malta.name + ' has stopped' + NL);
-	fs.unlink(Malta.printfile);
+	fs.unlink(Malta.printfile, () => {});
 	Malta.running = false;
 	process.exit();
 };

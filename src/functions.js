@@ -65,7 +65,7 @@ function multi(key, el) {
 
 					// remove out file if exists
 					//
-					if (fs.existsSync(outFile)) fs.unlink(outFile);
+					if (fs.existsSync(outFile)) fs.unlink(outFile, () => {});
 
 					multiElements[v].shut();
 					multiElements[v] = null;

@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.8.13** some fixes for deprecated calls
 - **3.8.12** fixed plugins local path
 - **3.8.11** fixed `malta -clean` command
 - **3.8.9**
