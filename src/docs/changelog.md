@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.8.15** fixed EXE now working also with one command
+- **3.8.16** fixed EXE now working also with one command
 - **3.8.14** updated 3rd party vulnerability version
 - **3.8.13** some fixes for deprecated calls
 - **3.8.12** fixed plugins local path

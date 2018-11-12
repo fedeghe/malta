@@ -2,7 +2,7 @@
 [![Dependencies](https://david-dm.org/fedeghe/malta.svg)](https://david-dm.org/fedeghe/malta)
 [![npm downloads](https://img.shields.io/npm/dt/malta.svg)](https://npmjs.org/package/malta)
 [![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
-[![Package Quality](http://npm.packagequality.com/badge/malta.png)](http://packagequality.com/#?package=malta)
+[![Package Quality](https://npm.packagequality.com/shield/malta.svg)](https://packagequality.com/#?package=malta)
 
 [![Coverage Status](https://coveralls.io/repos/github/fedeghe/malta/badge.svg?branch=master)](https://coveralls.io/github/fedeghe/malta?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/fedeghe/malta/badge.svg)](https://snyk.io/test/github/fedeghe/malta)
