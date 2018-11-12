@@ -69,24 +69,26 @@ function M(_args, _len) {
 				// let c,
 				let	i = 0;
 				
-				const clen = commands.length;
-
+				const isArray = commands instanceof Array,
+					clen = commands.length;
 				if (clen) {
-					(function start() {
-						if (i < clen-1) {
-							print("execution: " + commands[i], i+1, clen);
-							Malta.execute(commands[i].split(/\s/), function (){++i; start();});
-						} else {
-							print("execution: " + commands[i], i + 1, clen);
-							Malta.execute(commands[i].split(/\s/), function (){
-								print("...done!\n");
-								delete runs.EXE;
-								go(runs);
-							});
-						}
-					})();
-				} else {
-					 go(runs);
+					if (isArray) {
+						(function start() {
+							if (i < clen-1) {
+								print("execution: " + commands[i], i+1, clen);
+								Malta.execute(commands[i].split(/\s/), function (){++i; start();});
+							} else {
+								print("execution: " + commands[i], i + 1, clen);
+								Malta.execute(commands[i].split(/\s/), function (){
+									print("...done!\n");
+									delete runs.EXE;
+									go(runs);
+								});
+							}
+						})();
+					} else {
+						go(runs);
+					}
 				}
 			})(runs.EXE);
 		} else {

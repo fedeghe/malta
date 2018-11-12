@@ -59,4 +59,16 @@ describe('EXE param in build file', function () {
 			throw err;
 		}
 	});
+
+	it('should execute successfully one command', function (done) {
+		try {
+			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/exe/exeone.json']);
+			ls.on('close', function (code) {
+				assert.equal(malta.executeCheck, code); // 0
+				done();
+			});
+		} catch (err) {
+			throw err;
+		}
+	});
 });
