@@ -19,7 +19,7 @@ function print(msg, i, tot) {
 		(parseInt(100*i/tot, 10) + '% ').white()
 		:
 		"";
-	console.log(perc + msg);
+	Malta.log_debug(perc + msg);
 }
 
 

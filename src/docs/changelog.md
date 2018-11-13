@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.8.18** all console.log properly obey to verbose option value
 - **3.8.17** fixed EXE now working also with one command
 - **3.8.14** updated 3rd party vulnerability version
 - **3.8.13** some fixes for deprecated calls
