@@ -55,7 +55,7 @@ function multi(key, el) {
 					if (exclude(v)) return;
 					++proc;
 					multiElements[v] = proceed(folder + '/' + v, el);
-					console.log('ADDED '.yellow() + folder + '/' + v + NL);
+					Malta.log_debug('ADDED '.yellow() + folder + '/' + v + NL);
 				});
 
 				diff.removed.filter(function (v) {
@@ -69,7 +69,7 @@ function multi(key, el) {
 
 					multiElements[v].shut();
 					multiElements[v] = null;
-					console.log('REMOVED '.yellow() + folder + '/' + v + NL);
+					Malta.log_debug('REMOVED '.yellow() + folder + '/' + v + NL);
 				});
 			});
 		}
@@ -105,12 +105,12 @@ function subCommand(command) {
 	"use strict";
 	switch (command) {
 		case '-clean':
-			console.log('Removing all .buildNum.json files');
+			Malta.log_debug('Removing all .buildNum.json files');
 			spawn('find', ['.', '-name', '*.buildNum.json', '-type', 'f', '-delete']);
-			console.log('... done');
+			Malta.log_debug('... done');
 			break;
 		default:
-			console.log(`Command "${command}" not available`);
+			Malta.log_debug(`Command "${command}" not available`);
 		break;
 	}
 	Malta.stop();
