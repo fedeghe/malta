@@ -39,7 +39,7 @@ file: **triangles.svg**
 
 now run  
 ```
-$ malta triangle.svg outputfolder
+$ malta triangles.svg outputfolder
 ```
 and in the outputfolder we'll find the **triangles.svg** as follows  
 

@@ -329,7 +329,7 @@ now within the `triangle.svg` we can use those vars:
 </polygon>
 ```
 
-the comlete example about triangles can be found [here][6]
+the complete example about triangles can be found [here][6]
 
 ---
 
