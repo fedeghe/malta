@@ -521,7 +521,7 @@ Malta.log_err = Malta.prototype.log_err = function (msg) {
  * @type {Object}
  */
 Malta.prototype.reg = {
-	files: '(.*)\\\$\\\$([A-z0-9-_/.]+)({([^}]*)})?\\\$\\\$',
+	files: '(.*)\\\$\\\$([@A-z0-9-_/.]+)({([^}]*)})?\\\$\\\$',
 	vars: '\\\$([A-z0-9-_/.\\\[\\\]]+)\\\$',
 	calc: '\!{([^{}]*)}\!'
 };
