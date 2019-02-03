@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.8.20** handle @ prepended paths in file imports
 - **3.8.19** npm audit vuln fix
 - **3.8.18** all console.log properly obey to verbose option value
 - **3.8.17** fixed EXE now working also with one command
