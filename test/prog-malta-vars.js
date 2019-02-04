@@ -14,6 +14,8 @@ describe('vars.json params', function () {
                 assert.equal(JSON.stringify(env), '{"name":"production","version":"1.0","full":"production v.1.0"}')
                 assert.equal(author, 'Federico Ghedina');
                 assert.equal(env.version, '1.0');
+                assert.equal(fromPackageName, 'malta');
+                assert.equal(fromPackageMain, 'src/index.js');
                 done();
             });
         });
