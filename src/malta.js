@@ -7,6 +7,7 @@ const fs = require("fs"),
 	Sticky = require('./sticky.js'),
 	execPath = process.cwd(),
 	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
+	execPackageInfo = fs.existsSync(execPath + '/package.json') ? require(execPath + '/package.json') : {},
 	DS = path.sep,
 	NL = "\n",
 	TAB = "\t";
@@ -46,6 +47,12 @@ function Malta() {
 	 * register for the content of vars.json, if found
 	 */
 	this.vars = {};
+
+
+	/**
+	 * variables found in a package.json file, if present
+	 */
+	this.execPackageVars = {};
 
 	/**
 	 * basename for the base template, path and content
@@ -810,6 +817,7 @@ Malta.prototype.check = function (a) {
 	return this
 		.loadOptions()
 		.loadPlugins()
+		.loadExecPackageInfo()
 		.loadVars();
 };
 
@@ -972,6 +980,12 @@ Malta.prototype.listen = function (fpath) {
 	if (!(fpath in self.files)) {
 		self.files[fpath] = self.utils.createEntry(fpath);
 	}
+};
+
+Malta.prototype.loadExecPackageInfo = function () {
+	"use strict"
+	this.execPackageVars = execPackageInfo;
+	return this;
 };
 
 /**
@@ -1282,9 +1296,20 @@ Malta.prototype.replace_vars = function (tpl) {
 	"use strict";
 	const self = this;
 	return tpl.replace(new RegExp(self.reg.vars, 'g'), function (str, $1) {
+		let isPackageVar = false;
+		if (/^PACKAGE\./.test($1)) {
+			isPackageVar = true;
+			$1 = $1.replace('PACKAGE.', '')
+		}
 		let t = self.utils.checkns($1 + '', self.vars);
 		if (typeof t === 'object') {
 			t = JSON.stringify(t);
+			if (typeof t !== "undefined") {
+				return t;
+			}
+		}
+		if (isPackageVar) {
+			t = self.utils.checkns($1 + '', self.execPackageVars);
 		}
 		return typeof t !== "undefined" ? t : '$' + $1 + '$';
 	});
