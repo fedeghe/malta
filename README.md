@@ -80,7 +80,10 @@ $ malta conf.json
 To use _malta_ within a javascript file just require it, _get_ a instance, pass a suitable array of parameters to the _check_ function and invoke _start_.
 ``` js
 var Malta = require("malta");
-Malta.get().check(["templateFile", "outDirectory", "-plugins=...", "-vars=...", "-options=..."]).start(/**
+Malta.get().check([
+    "templateFile", "outDirectory",
+    "-plugins=...", "-vars=...", "-options=..."
+]).start(/**
     here You can specify a function which will be called at every build step, with the Malta instance as context and will receive an object containing the current file _name_ and _content_
     eg:
      function (o) {
@@ -90,14 +93,12 @@ Malta.get().check(["templateFile", "outDirectory", "-plugins=...", "-vars=...", 
      }
 */);
 ```
-From version __3.3.3__ is possible to pass a function to a `then` function; it will be executed as far as _all_ involved plugins have terminated their job:
+Since version __3.3.3__ the start function returns a _thenable_, so is possible to pass a function through a `then` call; it will be executed as far as _all_ involved plugins have terminated their job:
 ``` js
-... same code as previous, but in the end
-...
-"-vars=...", "-options=..."]).start(/*
+Malta_CheckedParams_Instance
+.start(/*
     everybuild code, each plugin end, even first plain build
 */)
-
 .then(function (){
     /*
     this code will be executed when ALL plugin terminated the job;
