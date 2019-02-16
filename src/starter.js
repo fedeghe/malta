@@ -56,17 +56,12 @@ function M(_args, _len) {
 		const p = path.resolve(execPath, _args[0]),
 			runs = Malta.getRunsFromPath(p);
 
-		// let	tpl;
-			// tmp,
-			// nest;
-
 		if (!runs) Malta.badargs(p);
 
 		if ('EXE' in runs) {
 			(function (commands) {
 				Malta.log_info("\n" + "EXE".red() + " section for " + _args[0]);
 				
-				// let c,
 				let	i = 0;
 				
 				const isArray = commands instanceof Array,
@@ -101,8 +96,6 @@ function M(_args, _len) {
 		} else {
 			go(runs);
 		}
-
-
 
 	// single build
 	} else {
