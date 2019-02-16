@@ -9,14 +9,6 @@ describe('folder observing', function () {
     before(function(){
         ob = require('../src/observe');
     })
-    after(function(){
-        // fs.unlink(trgFolder + '/message1.txt', function (err) {
-        //     if (err) throw err;
-        // });
-        // fs.unlink(trgFolder + '/message2.txt', function (err) {
-        //     if (err) throw err;
-        // });
-    })
 
     it('observe function add', function (done) {
         ob.observe(trgFolder, function (a) {
