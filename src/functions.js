@@ -3,12 +3,8 @@ const Malta = require('./malta'),
 	watcher = require('./observe'),
 	spawn = require('child_process').spawn,
 	fs = require("fs"),
-	//path = require("path"),
-	// child_process = require('child_process'),
-	//DS = path.sep,
 	NL = "\n";
 
-	//TAB = "\t";
 let proc = 0;
 
 function multi(key, el) {
@@ -23,16 +19,11 @@ function multi(key, el) {
 		folder,
 		ext,
 		multiElements = {};
-		//, i, l;
 
 	if (!isCommand && multi) {
-		
 		noDemon = multi[0].match(/#(.*)/);
-
 		folder = multi[1];
-
 		ext = multi[2];
-
 		fs.readdir(folder.replace(/^#/, ''), function (err, files) {
 			if (files) {
 				files.forEach(function (file) {
@@ -46,7 +37,7 @@ function multi(key, el) {
 		});
 
 		// if demon mode then observe folder, add/remove 
-		//		
+		//
 		if (!noDemon) {
 			watcher.observe(folder, function (diff) {
 				diff.added.filter(function (v) {
@@ -98,7 +89,6 @@ function multi(key, el) {
 			return ls;
 		}
 	}
-
 }
 
 function subCommand(command) {
@@ -113,7 +103,8 @@ function subCommand(command) {
 			Malta.log_debug(`Command "${command}" not available`);
 		break;
 	}
-	Malta.stop();
+	// Malta.stop();
+	return true;
 } 
 
 module.exports = {
