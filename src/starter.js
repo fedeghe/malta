@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const Malta = require("./malta"),
-	// fs = require("fs"),
 	path = require("path"),
 	functions = require("./functions"),
 	execPath = process.cwd(),
@@ -8,10 +7,6 @@ const Malta = require("./malta"),
 	len = args.length;
 
 process.title = 'Malta';
-
-module.exports = Malta;
-
-M(args, len);
 
 function print(msg, i, tot) {
 	"use strict";
@@ -22,16 +17,14 @@ function print(msg, i, tot) {
 	Malta.log_debug(perc + msg);
 }
 
-
-function M(_args, _len) {
+(function _M(_args, _len) {
 	"use strict";
-
 	function go(_runs) {
 		for (let tpl in _runs) {
 			//check if is inclusion {whatever.json : true}
 			// 
 			if (tpl.match(/\.json$/) && _runs[tpl] === true) {
-				M([tpl], 1);
+				_M([tpl], 1);
 			} else {
 				//skip if key begins with !
 				if (tpl.match(/^\!/)) continue;
@@ -42,8 +35,7 @@ function M(_args, _len) {
 
 	// no params -> print help and exit
 	if (_len === 0) {
-
-		if (global.BIN_MODE) Malta.log_help();
+		global.BIN_MODE && Malta.log_help();
 
 	// just one param is given -> is a build json file
 	//
@@ -102,4 +94,6 @@ function M(_args, _len) {
 		Malta.outVersion();
 		Malta.get().check(_args).start();
 	}
-}
+})(args, len);
+	
+module.exports = Malta
