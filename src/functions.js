@@ -5,7 +5,7 @@ const Malta = require('./malta'),
 	fs = require("fs"),
 	NL = "\n";
 
-let proc = 0;
+let processNum = 0;
 
 function multi(key, el) {
 	"use strict";
@@ -29,7 +29,7 @@ function multi(key, el) {
 				files.forEach(function (file) {
 					if (!exclude(file) && file.match(new RegExp(".*\." + ext + "$"))){
 						// store the process
-						++proc;
+						++processNum;
 						multiElements[file] = proceed(folder + '/' + file, el);
 					}
 				});
@@ -44,7 +44,7 @@ function multi(key, el) {
 					return v.match(new RegExp(".*\\." + ext + '$'));
 				}).forEach(function (v){
 					if (exclude(v)) return;
-					++proc;
+					++processNum;
 					multiElements[v] = proceed(folder + '/' + v, el);
 					Malta.log_debug('ADDED '.yellow() + folder + '/' + v + NL);
 				});
@@ -65,7 +65,7 @@ function multi(key, el) {
 			});
 		}
 	} else {
-		++proc;
+		++processNum;
 		proceed(key, el);
 	}
 
@@ -84,7 +84,7 @@ function multi(key, el) {
 			// if (typeof options !== 'undefined' && options !== true) {
 				o = o.concat(options.split(/\s/));
 			// }
-			o = o.concat(["proc="+proc]);
+			o = o.concat(["proc=" + processNum]);
 			ls = Malta.get().check(o).start();
 			return ls;
 		}
