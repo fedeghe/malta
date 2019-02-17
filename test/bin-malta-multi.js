@@ -2,14 +2,11 @@ var assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
-
-	funcs = require('../src/functions.js');
-
-
+	funcs = require('../src/functions.js'),
+	malta = require('../src/index.js');
 
 describe('multi nested.json', function () {
-
-    it('should output correctly all files', function (done) {
+	it('should output correctly all files', function (done) {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/nested.json']);
 			ls.on('exit', function (code) {
@@ -23,5 +20,5 @@ describe('multi nested.json', function () {
 		} catch (err) {
 			throw err;
 		}
-    });
+	});
 });

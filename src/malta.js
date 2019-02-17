@@ -175,6 +175,10 @@ function Malta() {
 	 */
 	this.notifyBuild = true;
 
+	/**
+	 * attache the Sticky to che instance so any plugin can use it, e.g. test notifications
+	 */
+	this.sticky = Sticky;
 }
 
 /**
@@ -573,9 +577,6 @@ Malta.prototype.build = function () {
 
 	const self = this;
 	let baseTplContent = self.files[self.tplPath].content;
-	// start = self.date(),
-	// end,
-	//ext;
 
 	self.t_start = self.date();
 
@@ -595,17 +596,12 @@ Malta.prototype.build = function () {
 	while (baseTplContent.match(new RegExp(self.reg.files, 'g')))
 		baseTplContent = self.replace_all(baseTplContent);
 
-
-
 	// wiredvars
 	// 
 	baseTplContent = self.replace_vars(baseTplContent);
 	baseTplContent = self.replace_wiredvars(baseTplContent);
 	baseTplContent = self.replace_calc(baseTplContent);
-
-
 	baseTplContent = self.microTpl(baseTplContent);
-
 
 	self.content_and_name.content = baseTplContent;
 	self.content_and_name.name = self.outName;
@@ -715,6 +711,7 @@ Malta.prototype.build = function () {
 		self.doBuild = true;
 		// actually I dont` need to pass content_and_name, since it can be retrieved by the context,
 		// but is better (and I don`t have to modify every plugin and the documentation)
+
 		return p.func.bind(self)(self.content_and_name, p.params);
 	}
 
@@ -757,47 +754,45 @@ Malta.prototype.checkInvolved = function () {
  */
 Malta.prototype.check = function (a) {
 	"use strict";
-	let i, j, t,
+	let tmp,
 		badArgs = [],
 		argTemplate,
 		argOutDir;
-	// buildFile;
 
 	// stop with usage info in case not enough args are given
 	//
 	if (a.length < 2) Malta.log_help();
 
-	t = a[0].match(/#(.*)/);
-	if (t) {
+	// demon ? 
+	tmp = a[0].match(/#(.*)/);
+	if (tmp) {
 		this.demon = false;
-		a[0] = t[1];
+		a[0] = tmp[1];
 	}
 
-	this.args = a;
-
+	// this.args = a;
 
 	// template and outdir params
 	// 
 	argTemplate = a[0];
-
 	argOutDir = a[1];
 
 	// check tpl and destination
 	// if called badargs will stop malta
 	// 
-	i = path.resolve(execPath, argTemplate);
-	j = path.resolve(execPath, argOutDir);
+	this.tplPath = path.resolve(execPath, argTemplate);
+	this.outDir = path.resolve(execPath, argOutDir);
 
-	if (!(fs.existsSync(i))) badArgs.push(i);
-	if (!(fs.existsSync(j))) badArgs.push(j);
+	if (!(fs.existsSync(this.tplPath))) badArgs.push(this.tplPath);
+	if (!(fs.existsSync(this.outDir))) badArgs.push(this.outDir);
 
 	if (badArgs.length) Malta.badargs.apply(null, badArgs);
 
-	this.tplName = path.basename(argTemplate);
-	this.tplPath = path.resolve(execPath, argTemplate);
+	this.tplName = path.basename(this.tplPath);
+	// this.tplName = path.basename(argTemplate);
+	
 	this.baseDir = path.dirname(this.tplPath);
 	this.tplCnt = fs.readFileSync(this.tplPath).toString();
-	this.outDir = path.resolve(execPath, argOutDir);
 	this.execDir = execPath;
 
 	if (this.baseDir + "" === this.outDir + "") {
@@ -807,9 +802,9 @@ Malta.prototype.check = function (a) {
 	this.inName = this.baseDir + DS + this.tplName;
 	this.outName = this.outDir + DS + this.tplName;
 
-	t = a.join(' ').match(/proc=(\d*)/);
+	tmp = a.join(' ').match(/proc=(\d*)/);
 
-	this.procNum = t ? t[1] : 0;
+	this.procNum = tmp ? tmp[1] : 0;
 	this.proc = "[" + this.procNum + "] " + this.tplName.white();
 
 	this.args = a.splice(2);
