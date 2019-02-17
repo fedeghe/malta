@@ -53,11 +53,8 @@ function multi(key, el) {
 					return v.match(new RegExp(".*\\." + ext + '$'));
 				}).forEach(function (v){
 					const outFile = multiElements[v].content_and_name.name;
-
 					// remove out file if exists
-					//
 					if (fs.existsSync(outFile)) fs.unlink(outFile, () => {});
-
 					multiElements[v].shut();
 					multiElements[v] = null;
 					Malta.log_debug('REMOVED '.yellow() + folder + '/' + v + NL);
@@ -68,26 +65,23 @@ function multi(key, el) {
 		++processNum;
 		proceed(key, el);
 	}
+}
 
-	function proceed(tpl, options){
-		let i = 0,
-			l;
-		if (typeof options !== 'undefined' &&  options instanceof Array) {
-			l = options.length;
-			for (null; i < l; i++) {
-				proceed(tpl, options[i]);
-			}
-		} else {
-			options = options || "";
-			let o = [tpl],
-				ls;
-			// if (typeof options !== 'undefined' && options !== true) {
-				o = o.concat(options.split(/\s/));
-			// }
-			o = o.concat(["proc=" + processNum]);
-			ls = Malta.get().check(o).start();
-			return ls;
+function proceed(tpl, options) {
+	let i = 0,
+		l;
+	if (typeof options !== 'undefined' && options instanceof Array) {
+		l = options.length;
+		for (null; i < l; i++) {
+			proceed(tpl, options[i]);
 		}
+	} else {
+		options = options || "";
+		let o = [tpl];
+		
+		o = o.concat(options.split(/\s/))
+			.concat(["proc=" + processNum]);
+		return Malta.get().check(o).start();
 	}
 }
 
@@ -109,5 +103,6 @@ function subCommand(command) {
 
 module.exports = {
 	multi : multi,
-	subCommand : subCommand
+	subCommand : subCommand,
+	proceed: proceed
 };
