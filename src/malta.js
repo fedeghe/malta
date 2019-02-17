@@ -13,7 +13,6 @@ const fs = require("fs"),
 	TAB = "\t";
 
 // string proto for console colors
-
 require('./stringproto');
 
 /**
@@ -696,7 +695,7 @@ Malta.prototype.build = function () {
 	}
 
 	function maybeNotifyBuild() {
-		// console.log('✅')
+		// console.log('✅') //
 		if (Malta.verbose > 0 && self.notifyBuild) {
 			Sticky(
 				"Malta @ " + ("" + new Date()).replace(/(GMT.*)$/, ''),
@@ -711,7 +710,7 @@ Malta.prototype.build = function () {
 		self.doBuild = true;
 		// actually I dont` need to pass content_and_name, since it can be retrieved by the context,
 		// but is better (and I don`t have to modify every plugin and the documentation)
-
+		//
 		return p.func.bind(self)(self.content_and_name, p.params);
 	}
 
@@ -769,8 +768,6 @@ Malta.prototype.check = function (a) {
 		this.demon = false;
 		a[0] = tmp[1];
 	}
-
-	// this.args = a;
 
 	// template and outdir params
 	// 
@@ -1682,8 +1679,6 @@ Malta.prototype.utils = {
  */
 Malta.prototype.watch = function () {
 	"use strict";
-
-
 	const self = this;
 	let d, f, varsContent;
 
