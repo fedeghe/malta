@@ -1,7 +1,8 @@
 var assert = require('assert'),
 	fs = require('fs'),
 	path = require('path'),
-	functions = require('../src/functions');
+	functions = require('../src/functions'),
+	malta = require('../src/index.js');
 
 describe('check subCommands', function () {
 	var trgFolder = path.resolve(path.dirname(__filename) + '/fs');
@@ -14,5 +15,8 @@ describe('check subCommands', function () {
 			}
 			done();
 		});
+	});
+	it('-clean is the only command', function (done) {
+		!functions.subCommand('-unclean') && done();
 	});
 });
