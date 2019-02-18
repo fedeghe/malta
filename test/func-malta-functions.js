@@ -1,8 +1,7 @@
 var assert = require('assert'),
 	fs = require('fs'),
 	path = require('path'),
-	functions = require('../src/functions'),
-	malta = require('../src/index.js');
+	functions = require('../src/functions');
 
 describe('check subCommands', function () {
 	var trgFolder = path.resolve(path.dirname(__filename) + '/fs');
