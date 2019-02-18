@@ -92,13 +92,11 @@ function subCommand(command) {
 			Malta.log_debug('Removing all .buildNum.json files');
 			spawn('find', ['.', '-name', '*.buildNum.json', '-type', 'f', '-delete']);
 			Malta.log_debug('... done');
-			break;
+			return true;
 		default:
 			Malta.log_debug(`Command "${command}" not available`);
-		break;
+			return false;
 	}
-	// Malta.stop();
-	return true;
 } 
 
 module.exports = {
