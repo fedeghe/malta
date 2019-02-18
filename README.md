@@ -1,6 +1,5 @@
 [![npm version](https://badge.fury.io/js/malta.svg)](http://badge.fury.io/js/malta)
 [![Dependencies](https://david-dm.org/fedeghe/malta.svg)](https://david-dm.org/fedeghe/malta)
-[![npm downloads](https://img.shields.io/npm/dt/malta.svg)](https://npmjs.org/package/malta)
 [![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
 [![Package Quality](https://npm.packagequality.com/shield/malta.svg)](https://packagequality.com/#?package=malta)
 
@@ -11,8 +10,7 @@
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
 
 # Malta is ...  
-
-A super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
+a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
 ### ... plugin based   
 
