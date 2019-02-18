@@ -469,7 +469,7 @@ Malta.log_debug = Malta.prototype.log_debug = function (msg) {
 	if (Malta.verbose < 2) {
 		return;
 	}
-	const msg = (this.proc ? this.proc + " " : '') + msg;
+	msg = (this.proc ? this.proc + " " : '') + msg;
 	if (Malta.spyLog) Malta.spyLog(msg);
 	console.log(msg);
 };
@@ -484,7 +484,7 @@ Malta.log_dir = Malta.prototype.log_dir = function (msg) {
 	if (Malta.verbose < 2) {
 		return;
 	}
-	var msg = (this.proc ? this.proc + " " : '') + JSON.stringify(msg);
+	msg = (this.proc ? this.proc + " " : '') + JSON.stringify(msg);
 	if (Malta.spyLog) Malta.spyLog(msg);
 	console.log(msg);
 };
@@ -499,7 +499,7 @@ Malta.log_info = Malta.prototype.log_info = function (msg) {
 	if (Malta.verbose === 0) {
 		return;
 	}
-	const msg = (this.proc ? this.proc + " " : '') + msg;
+	msg = (this.proc ? this.proc + " " : '') + msg;
 	if (Malta.spyLog) Malta.spyLog(msg);
 	console.log(msg);
 };
@@ -514,7 +514,7 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
 	if (Malta.verbose === 0) {
 		return;
 	}
-	const msg = (this.proc ? this.proc + " " : '') + msg;
+	msg = (this.proc ? this.proc + " " : '') + msg;
 	if (Malta.spyLog) Malta.spyLog(msg);
 	console.log(msg);
 };
@@ -527,10 +527,9 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
 Malta.log_err = Malta.prototype.log_err = function (msg) {
 	"use strict";
 	if (Malta.verbose > 0) {
-		const msg = (this.proc ? this.proc + " " : '') + "[ERROR]: ".red() + msg.red();
+		msg = (this.proc ? this.proc + " " : '') + "[ERROR]: ".red() + msg.red();
 		if (Malta.spyLog) Malta.spyLog(msg);
 		console.log(msg);
-		console.log();
 	}
 	Malta.stop();
 };
