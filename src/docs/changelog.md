@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.9.2** test coverage improved
 - **3.9.1** dependency vulnerability patch  
 - **3.9.0** added `PACKAGE` vars special placeholder, see the placeholder section of readme 
 - **3.8.20** handle @ prepended paths in file imports

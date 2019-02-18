@@ -7,5 +7,6 @@ plugin_ideas.md
 .buildNum.json
 .printVersion
 .coveralls.yml
+.nyc_output
 /coverage
 TODO.TEST
