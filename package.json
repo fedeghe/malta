@@ -4,7 +4,7 @@
   "description": "Lightning builder allows to compose on the fly and update packed and full coded huge files, edit its parts as files, splitted and glued as You need.",
   "main": "src/index.js",
   "scripts": {
-    "test": "rm -rf test/fs/build && nyc --reporter=html --reporter=text mocha",
+    "test": "rm -rf test/fs/build && mocha",
     "cover": "nyc report --reporter=html --reporter=text mocha",
     "coveralls": "nyc report --reporter=text && cat ./coverage/lcov.info | coveralls"
   },
