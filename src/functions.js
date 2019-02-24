@@ -52,7 +52,7 @@ function multi(key, el) {
 				diff.removed.filter(function (v) {
 					return v.match(new RegExp(".*\\." + ext + '$'));
 				}).forEach(function (v){
-					const outFile = multiElements[v].content_and_name.name;
+					const outFile = multiElements[v].data.name;
 					// remove out file if exists
 					if (fs.existsSync(outFile)) fs.unlink(outFile, () => {});
 					multiElements[v].shut();
