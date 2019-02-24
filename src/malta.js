@@ -4,6 +4,8 @@ const fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
 	Mpromise = require('./maltapromise.js'),
+	utils = require('./utils.js'),
+	// PluginManager = require('./pluginManager.js'),
 	Sticky = require('./sticky.js'),
 	execPath = process.cwd(),
 	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
@@ -107,7 +109,6 @@ function Malta() {
 	 * for sure the template
 	 */
 	this.involvedFiles = 1;
-
 	/**
 	 * every second the watch function loops over files literal 
 	 * triggering the build as far as t least one file is updated
@@ -175,6 +176,12 @@ function Malta() {
 	this.notifyBuild = true;
 
 	/**
+	 * plugin manager
+	 */
+	// this.pluginsManager = null;
+
+
+	/**
 	 * attache the Sticky to che instance so any plugin can use it, e.g. test notifications
 	 */
 	this.sticky = Sticky;
@@ -205,7 +212,6 @@ Malta.author = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
  * default values for all options that can be passed throug the -options parameter
  */
 Malta.watchInterval = 1E3;
-
 
 /**
  * 0 nothing, 1 some, 2 a lot
@@ -359,8 +365,6 @@ Malta.checkExec = function (ex) {
 	return this;
 };
 
-
-
 /**
  * Factory method for Malta
  * 
@@ -396,7 +400,6 @@ Malta.stop = function () {
 	process.exit();
 };
 
-Malta.cleanJson = json => json.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
 
 Malta.getRunsFromPath = function (p) {
 	"use strict";
@@ -410,7 +413,7 @@ Malta.getRunsFromPath = function (p) {
 
 	if (fs.existsSync(p)) {
 		ret = fs.readFileSync(p, { encoding: "UTF8" });
-		ret = Malta.cleanJson(ret);
+		ret = utils.cleanJson(ret);
 		ret = JSON.parse(ret);
 	}
 	if (demon) {
@@ -591,11 +594,8 @@ Malta.prototype.build = function () {
 
 	// for sure the tpl is involved
 	self.involvedFiles = 1;
-
 	self.signBuildNumber();
-
 	self.involvedFiles += self.hasVars();
-
 
 	while (baseTplContent.match(new RegExp(self.reg.files, 'g')))
 		baseTplContent = self.replace_all(baseTplContent);
@@ -634,13 +634,14 @@ Malta.prototype.build = function () {
 	});
 
 	function doPlugin() {
+		// self.plugins = self.pluginsManager.plugins;
 		const pluginKeys = Object.keys(self.plugins);
 
 		if (pluginKeys.length) self.log_info('Starting plugins'.yellow());
 
 		if (self.hasPlugins) {
 			self.log_debug('on ' + self.outName.underline() + ' called plugins:');
-			plugin4ext(self.utils.getIterator(pluginKeys));
+			plugin4ext(utils.getIterator(pluginKeys));
 		} else {
 			maybeNotifyBuild();
 		}
@@ -657,7 +658,7 @@ Malta.prototype.build = function () {
 				//    ----
 				if (self.outName.match(new RegExp(".*\\." + ext + '$'))) {
 
-					let iterator = self.utils.getIterator(pins);
+					let iterator = utils.getIterator(pins);
 
 					(function go() {
 
@@ -738,7 +739,7 @@ Malta.prototype.checkInvolved = function () {
 	"use strict";
 	// look for circular inclusion
 	// 
-	if (this.queue.length > 10 * this.utils.uniquearr(this.queue).length) {
+	if (this.queue.length > 10 * utils.uniquearr(this.queue).length) {
 		this.log_info(('OOOOUCH: it seems like running a circular file inclusion ' + NL +
 			TAB + 'try to look at the following inclusion queue to spot it quickly:' + NL +
 			this.queue).red());
@@ -822,6 +823,12 @@ Malta.prototype.check = function (a) {
  * [getPluginsManager description]
  * @return {[type]} [description]
  */
+
+// Malta.prototype.getPluginsManager = function (){
+// 	this.pluginsManager = new PluginManager();
+// 	return this.pluginsManager;
+// };
+
 Malta.prototype.getPluginsManager = function () {
 	"use strict";
 	const self = this;
@@ -871,11 +878,11 @@ Malta.prototype.getPluginsManager = function () {
 			}
 
 			if ('ext' in plugin) {
-				if (self.utils.isArray(plugin.ext)) {
+				if (utils.isArray(plugin.ext)) {
 					plugin.ext.forEach(function (el) {
 						add(el, plugin, params);
 					});
-				} else if (self.utils.isString(plugin.ext)) {
+				} else if (utils.isString(plugin.ext)) {
 					add(plugin.ext, plugin, params);
 				}
 			} else {
@@ -884,6 +891,7 @@ Malta.prototype.getPluginsManager = function () {
 		}
 	};
 };
+
 
 /**
  * Gets the size.
@@ -926,7 +934,6 @@ Malta.prototype.loadOptions = function () {
 		if ('notifyBuild' in opts) self.notifyBuild = !!(opts.notifyBuild);
 	}
 
-
 	if (tmp) {
 		self.log_debug('Loading options'.yellow());
 		self.log_debug(JSON.stringify(opts));
@@ -953,7 +960,7 @@ Malta.prototype.loadPlugins = function () {
 
 	for (null; i < l; i++) {
 		parts = p[i].match(/([^\[]*)(\[(.*)\])?/);
-		pluginsManager.add(parts[1], self.utils.jsonFromStr(parts[3]) || false);
+		pluginsManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
 		self.hasPlugins = true;
 	}
 
@@ -975,7 +982,7 @@ Malta.prototype.listen = function (fpath) {
 	const self = this;
 	// listen to changes
 	if (!(fpath in self.files)) {
-		self.files[fpath] = self.utils.createEntry(fpath);
+		self.files[fpath] = utils.createEntry(fpath);
 	}
 };
 
@@ -1011,10 +1018,14 @@ Malta.prototype.loadVars = function () {
 	// 
 	if (fs.existsSync(self.varPath)) {
 		try {
-			tmp = Malta.cleanJson(fs.readFileSync(self.varPath, { encoding: "UTF8" }));
-			if (self.validateJson(tmp)) {
+			tmp = utils.cleanJson(fs.readFileSync(self.varPath, { encoding: "UTF8" }));
+			if (utils.validateJson(tmp)) {
 				tmp = JSON.parse(tmp);
-				self.vars = self.utils.solveJson(tmp);
+				try {
+					self.vars = utils.solveJson(tmp);
+				} catch(e) {
+					e.stop && Malta.stop();
+				}
 				self.log_debug('Loaded vars file '.yellow() + NL + self.varPath);
 			} else {
 				console.log(`${self.varPath} not valid`.red());
@@ -1072,7 +1083,7 @@ Malta.prototype.parse = function (path) {
 	// that at first cycle will be always the tpl, but
 	// then will be any modified file
 	// 
-	self.files[path] = self.utils.createEntry(path);
+	self.files[path] = utils.createEntry(path);
 
 	// get updated content
 	// 
@@ -1108,7 +1119,7 @@ Malta.prototype.parse = function (path) {
 
 					// if the entry is created, store it 
 					// 
-					tmp = self.utils.createEntry(fname);
+					tmp = utils.createEntry(fname);
 					if (tmp) {
 						self.files[fname] = tmp;
 
@@ -1189,7 +1200,7 @@ Malta.prototype.replace_all = function (tpl) {
 			innerVars;
 
 
-		const ext = self.utils.getFileExtension($2),
+		const ext = utils.getFileExtension($2),
 			fname = $2.match(/^\//) ?
 				execPath + $2
 				:
@@ -1219,7 +1230,7 @@ Malta.prototype.replace_all = function (tpl) {
 		tmp = self.files[fname].content.toString();
 
 		if ($4) {
-			innerVars = self.utils.jsonFromStr($4);
+			innerVars = utils.jsonFromStr($4);
 
 			/*
 			// this is the simple one with no fallback value
@@ -1298,7 +1309,7 @@ Malta.prototype.replace_vars = function (tpl) {
 			isPackageVar = true;
 			$1 = $1.replace('PACKAGE.', '')
 		}
-		let t = self.utils.checkns($1 + '', self.vars);
+		let t = utils.checkns($1 + '', self.vars);
 		if (typeof t === 'object') {
 			t = JSON.stringify(t);
 			if (typeof t !== "undefined") {
@@ -1306,7 +1317,7 @@ Malta.prototype.replace_vars = function (tpl) {
 			}
 		}
 		if (isPackageVar) {
-			t = self.utils.checkns($1 + '', self.execPackageVars);
+			t = utils.checkns($1 + '', self.execPackageVars);
 		}
 		return typeof t !== "undefined" ? t : '$' + $1 + '$';
 	});
@@ -1324,7 +1335,7 @@ Malta.prototype.replace_wiredvars = function (tpl) {
 	if (tpl.match(/__LINE__/)) {
 		tpl = Malta.replaceLinenumbers(tpl);
 	}
-	return self.utils.replaceAll(tpl, {
+	return utils.replaceAll(tpl, {
 		TIME: self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds(),
 		DATE: self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear(),
 		YEAR: self.date().getFullYear(),
@@ -1336,7 +1347,7 @@ Malta.prototype.replace_wiredvars = function (tpl) {
 		FILE: self.tplName
 	}, {
 			delim: ['__', '__']
-		});
+	});
 };
 
 
@@ -1350,7 +1361,7 @@ Malta.prototype.start = function (userWatch) {
 	"use strict";
 	const self = this;
 	if (self.varPath) {
-		self.files[self.varPath] = self.utils.createEntry(self.varPath);
+		self.files[self.varPath] = utils.createEntry(self.varPath);
 	}
 	if (userWatch) {
 		self.userWatch = userWatch;
@@ -1369,21 +1380,17 @@ Malta.prototype.start = function (userWatch) {
  */
 Malta.prototype.signBuildNumber = function () {
 	"use strict";
-	const self = this,
-		// hidden = true,
-		fname = this.baseDir + DS + '.buildNum.json';
+	const fname = this.baseDir + DS + '.buildNum.json';
 	let cnt;
-	// buildno = 0;
 	if (!fs.existsSync(fname)) {
 		cnt = '{}';
 		fs.writeFileSync(fname, cnt);
 	}
 	try {
 		cnt = JSON.parse(fs.readFileSync(fname));
-
-		if (!(self.inName in cnt)) cnt[self.inName] = 0;
-		cnt[self.inName] = (parseInt(cnt[self.inName], 10) || 0) + 1;
-		this.buildnumber = cnt[self.inName];
+		if (!(this.inName in cnt)) cnt[this.inName] = 0;
+		cnt[this.inName] = (parseInt(cnt[this.inName], 10) || 0) + 1;
+		this.buildnumber = cnt[this.inName];
 		fs.writeFileSync(fname, JSON.stringify(cnt));
 	} catch (e) {
 		fs.writeFileSync(fname, '{}');
@@ -1400,283 +1407,7 @@ Malta.prototype.stop = Malta.stop;
  * [utils description]
  * @type {Object}
  */
-Malta.prototype.utils = {
-
-	/**
-	 * Creates an entry.
-	 *
-	 * @param      {<type>}            path    The path
-	 * @return     {(Object|boolean)}  { description_of_the_return_value }
-	 */
-	createEntry: function (path) {
-		"use strict";
-		if (!fs.existsSync(path)) {
-			return false;
-		}
-		return {
-			content: fs.readFileSync(path).toString(),
-			time: fs.statSync(path).mtime.getTime(),
-			cachevalid: true
-		};
-	},
-
-	/**
-	 * Gets the file extension.
-	 *
-	 * @param      {<type>}  fname   The filename
-	 * @return     {<type>}  The file extension.
-	 */
-	getFileExtension: function (fname) {
-		"use strict";
-		return fname.split('.').pop();
-	},
-
-	/**
-	 * Gets the file time.
-	 *
-	 * @param      {<type>}  path    The path
-	 * @return     {<type>}  The file time.
-	 */
-	getFileTime: function (path) {
-		"use strict";
-		return fs.existsSync(path) && fs.statSync(path).mtime.getTime();
-	},
-
-	/**
-	 * get a unique array given an array
-	 *
-	 * @param      {<type>}  a       { parameter_description }
-	 * @return     {Array}   { description_of_the_return_value }
-	 */
-	uniquearr: function (a) {
-		"use strict";
-		let r = [];
-		a.map(function (el) {
-			if (r.indexOf(el) < 0) {
-				r.push(el);
-			}
-		});
-		return r;
-	},
-
-	/**
-	 * solves internal references in the json vars file
-	 *
-	 * @param      {<type>}  obj     The object
-	 * @return     {<type>}  { description_of_the_return_value }
-	 */
-	solveJson: function (obj) {
-		"use strict";
-		const self = this,
-			maxSub = 1E3;
-
-		let i = 0;
-
-		return (function _(o) {
-			let y, j;
-			for (j in o) {
-				switch (typeof o[j]) {
-					case 'string':
-						while (y = o[j].match(/\$([A-z0-9-_/.]+)\$/)) {
-							o[j] = o[j].replace(
-								'$' + y[1] + '$',
-								self.checkns(y[1], obj) || ""
-							);
-							if (i++ > maxSub) {
-								console.log('[ERROR] it seems like variable json has looping placeholders!');
-								Malta.stop();
-							}
-						}
-						break;
-					case 'object':
-						o[j] = _(o[j]);
-						break;
-				}
-			}
-			return o;
-		})(obj);
-	},
-
-	/**
-	 * checks if a ns exists
-	 *
-	 * @param      {<type>}           ns      { parameter_description }
-	 * @param      {(number|string)}  ctx     The context
-	 */
-	checkns: function (ns, ctx) {
-		"use strict";
-		const els = ns.split(/\.|\//),
-			l = els.length;
-
-		let i = 0;
-
-		ctx = (ctx !== undefined) ? ctx : {};
-
-		if (!ns) return ctx;
-
-		for (null; i < l; i += 1) {
-			if (typeof ctx[els[i]] !== 'undefined') {
-				ctx = ctx[els[i]];
-			} else {
-				// break it
-				return undefined;
-			}
-		}
-		return ctx;
-	},
-
-	/**
-	 * json from a string
-	 *
-	 * @param      {string}   s       { parameter_description }
-	 * @return     {boolean}  { description_of_the_return_value }
-	 */
-	jsonFromStr: function (s) {
-		"use strict";
-		let r;
-		if (s === undefined) {
-			return false;
-		}
-		eval('r = {' + s + '}');
-		return r;
-	},
-
-	/**
-	 * [isArray description]
-	 * @param  {[type]}  o [description]
-	 * @return {Boolean}   [description]
-	 */
-	isArray: function (o) {
-		"use strict";
-		if (Array.isArray && Array.isArray(o)) {
-			return true;
-		}
-		const t1 = String(o) !== o,
-			t2 = {}.toString.call(o).match(/\[object\sArray\]/);
-
-		return t1 && !!(t2 && t2.length);
-	},
-
-    /**
-     * [isString description]
-     * @param  {[type]}  o [description]
-     * @return {Boolean}   [description]
-     */
-	isString: function (o) {
-		"use strict";
-		return typeof o === 'string' || o instanceof String;
-	},
-
-	/**
-	 * [getIterator description]
-	 * @param  {[type]} els [description]
-	 * @return {[type]}     [description]
-	 */
-	getIterator: function (els) {
-		"use strict";
-		let i = 0;
-
-		const elements = els,
-			l = elements.length;
-
-		return {
-			hasNext: function () {
-				return i < l;
-			},
-			next: function () {
-				const r = elements[i];
-				i++;
-				return r;
-			},
-			size: function () {
-				return elements.length;
-			}
-		};
-	},
-
-	/**
-	 * [replaceAll description]
-	 * @param  {[type]} tpl     [description]
-	 * @param  {[type]} obj     [description]
-	 * @param  {[type]} options [description]
-	 * @return {[type]}         [description]
-	 */
-	replaceAll: function (tpl, obj, options) {
-		"use strict";
-		const self = this;
-
-		let start = '%',
-			end = '%',
-			fb = null,
-			clean = false,
-			reg,
-			straight = true,
-			// str,
-			tmp, last;
-
-		if ('undefined' !== typeof options) {
-			if ('delim' in options) {
-				start = options.delim[0];
-				end = options.delim[1];
-			}
-			if ('fb' in options) {
-				fb = options.fb;
-			}
-			clean = !!options.clean;
-		}
-
-		reg = new RegExp(start + '(\\\+)?([A-z0-9-_\.]*)' + end, 'g');
-
-		while (straight) {
-			if (!(tpl.match(reg))) {
-				return tpl;
-			}
-			tpl = tpl.replace(reg, function (str, enc, $1, _t) {
-
-				if (typeof obj === 'function') {
-                    /**
-                     * avoid silly infiloops */
-					tmp = obj($1);
-					_t = (tmp !== start + $1 + end) ? obj($1) : $1;
-
-				} else if ($1 in obj) {
-
-					_t = typeof obj[$1];
-					if (_t === 'function') {
-						_t = obj[$1]($1);
-					} else if (_t === 'object') {
-						_t = '';
-					} else {
-						_t = obj[$1];
-					}
-					// incomplete when the placeholder points to a object (would print)
-					// _t = typeof obj[$1] === 'function' ? obj[$1]($1) : obj[$1];
-
-					/**
-					 * not a function and not found in literal
-					 * use fallback if passed or get back the placeholder
-					 * switching off before returning
-					 */
-				} else {
-                    /* @ least check for ns, in case of dots
-                    */
-					if ($1.match(/\./)) {
-						last = self.checkns($1, obj);
-						if (last) {
-							_t = enc ? encodeURIComponent(last) : last;
-							return typeof last === 'function' ? last($1) : last;
-						}
-					}
-					// but do not go deeper   
-					straight = false;
-					_t = fb !== null ? fb : clean ? '' : start + $1 + end;
-				}
-				return enc ? encodeURIComponent(_t) : _t;
-			});
-		}
-		return tpl;
-	}
-};
+Malta.prototype.utils = utils;
 
 /**
  * [watch description]
@@ -1701,13 +1432,13 @@ Malta.prototype.watch = function () {
 
 				// something changed ?
 				//
-			} else if (self.files[f].time < self.utils.getFileTime(f)) {
+			} else if (self.files[f].time < utils.getFileTime(f)) {
 				d = self.date();
 
 				self.log_info('[' + 'MODIFIED'.yellow() + ' @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, '').underline());
 				// renew entry
 				// 
-				self.files[f] = self.utils.createEntry(f);
+				self.files[f] = utils.createEntry(f);
 
 				// active flag rebuild
 				// 
@@ -1718,10 +1449,14 @@ Malta.prototype.watch = function () {
 				if (f === self.varPath) {
 					// update vars
 					// 
-					varsContent = Malta.cleanJson(fs.readFileSync(self.varPath, { encoding: "UTF8" }));
-					if (self.validateJson(varsContent)) {
+					varsContent = utils.cleanJson(fs.readFileSync(self.varPath, { encoding: "UTF8" }));
+					if (utils.validateJson(varsContent)) {
 						varsContent = JSON.parse(varsContent);
-						self.vars = self.utils.solveJson(varsContent);
+						try {
+							self.vars = utils.solveJson(varsContent);
+						} catch(e) {
+							e.stop && Malta.stop();
+						}
 					} else {
 						console.log(`${self.varPath} not valid`.red());
 					}
@@ -1748,16 +1483,6 @@ Malta.prototype.watch = function () {
 	// chain
 	//
 	return this;
-};
-
-Malta.prototype.validateJson = (json) => {
-	"use strict";
-	try {
-		JSON.parse(json);
-	}catch(e){
-		return false;
-	} 
-	return true;
 };
 
 Malta.prototype.shut = function () {
