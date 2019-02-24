@@ -8,13 +8,11 @@ function check(inst) {
 		self.f(
 			function () {
 				self.solved = 1;
-				if (self.solve)
-					self.solve.apply(null, [].slice.call(arguments, 0));
+				self.solve && self.solve.apply(null, [].slice.call(arguments, 0));
 			},
 			function () {
 				self.solved = 0;
-				if (self.reject)
-					self.reject.apply(null, [].slice.call(arguments, 0));
+				self.reject && self.reject.apply(null, [].slice.call(arguments, 0));
 			}
 		);
 	}
