@@ -37,5 +37,4 @@ describe('EXE nested param in build file', function () {
 			throw err;
 		}
 	});
-
 });
