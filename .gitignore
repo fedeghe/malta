@@ -10,3 +10,4 @@ plugin_ideas.md
 .nyc_output
 /coverage
 TODO.TEST
+launch.json
