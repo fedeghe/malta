@@ -1,4 +1,4 @@
-var assert = require('assert'),
+const assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
@@ -10,8 +10,7 @@ describe('utilty functions', function () {
 
 	it('createEntry', function () {
 		try {
-			var entry = utils.createEntry('test/fs/vars1.json');
-
+			const entry = utils.createEntry('test/fs/vars1.json');
 			assert.ok(entry.content.length > 0)
 			assert.ok(entry.time > 0)
 			assert.ok(entry.cachevalid)
@@ -41,7 +40,7 @@ describe('utilty functions', function () {
 
 	it('getFileTime', function () {
 		try {
-			var ext1 = m.utils.getFileTime('test/fs/vars1.json'),
+			const ext1 = m.utils.getFileTime('test/fs/vars1.json'),
 				ext2 = m.utils.getFileTime('test/fs/vars2.json');
 
 			assert.equal(typeof ext1, 'number')
@@ -53,7 +52,7 @@ describe('utilty functions', function () {
 
 	it('uniquearr', function () {
 		try {
-			var arr1 = m.utils.uniquearr([1,2,3,4,1,2,3,4,5]),
+			const arr1 = m.utils.uniquearr([1,2,3,4,1,2,3,4,5]),
 				arr2 = m.utils.uniquearr(['a','b','c','a','d','d','e','f','g','f','a']);
 			
 			assert.equal(arr1.length, 5);
@@ -73,7 +72,7 @@ describe('utilty functions', function () {
 
 	it('solveJson', function () {
 		try {
-			var trans1 = m.utils.solveJson({
+			const trans1 = m.utils.solveJson({
 					name : "malta",
 					version : "unknown",
 					full : "$name$ v.$version$"
@@ -103,7 +102,7 @@ describe('utilty functions', function () {
 			throw err;
 		}
 		try {
-			var trans2 = m.utils.solveJson({
+			m.utils.solveJson({
 				a: "a",
 				_: {
 					b: "b",
