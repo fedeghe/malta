@@ -20,7 +20,6 @@ const createEntry = path => fs.existsSync(path) && {
  */
 const getFileExtension = fname => (fname.split('.').pop());
 
-
 /**
  * Gets the file time.
  *
@@ -228,8 +227,8 @@ const solveJson = (obj, lim) => {
                             checkns(y[1], obj) || ""
                         );
                         if (maxSub-- < 0) {
-                            console.log('[ERROR] it seems like variable json has looping placeholders!');
-                            const e = new Error()
+                            // console.log('[ERROR] it seems like variable json has looping placeholders!');
+                            const e = new Error('[ERROR] it seems like variable json has looping placeholders!');
                             e.stop = true;
                             throw e;
                         }
@@ -244,8 +243,6 @@ const solveJson = (obj, lim) => {
     })(obj);
 };
 
-const cleanJson = json => json.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
-
 const replaceLinenumbers = tpl => (
     tpl.split(/\n/)
     .map(
@@ -253,19 +250,36 @@ const replaceLinenumbers = tpl => (
     ).join("\n")
 );
 
+const objMultiKey = o => {
+    let ret = {}, i, j, jl, ks;
+    for (i in o) {
+        if (o.hasOwnProperty(i)) {
+            ks = i.split('|');
+            for (j = 0, jl = ks.length; j < jl; j++) ret[ks[j]] = o[i];
+        }
+    }
+    return ret;
+};
+
+const cleanJson = json => json.replace(/(^[\s\t]*\/\*([\s\S]*?)\*\/)|(^[\s\t]*\/\/(.*)$)/gm, '');
+
+const getCommentFn = (pre, post) => cnt => (pre + cnt + post);
+
 module.exports = {
+    checkns,
     cleanJson,
     createEntry,
     getFileExtension,
     getFileTime,
-    uniquearr,
-    checkns,
-    jsonFromStr,
+    getCommentFn,
+    getIterator,
     isArray,
     isString,
-    getIterator,
+    jsonFromStr,
+    objMultiKey,
     replaceAll,
     replaceLinenumbers,
-    validateJson,
-    solveJson
+    solveJson,
+    uniquearr,
+    validateJson
 };

@@ -364,4 +364,28 @@ number four`,
 		assert.equal(/^3/.test(res[2]), true);
 	});
 
+
+	it('getCommentFn', () => {
+		const fn = utils.getCommentFn('START', 'STOP');
+		assert.equal(fn('foo'), 'STARTfooSTOP')
+	})
+
+	it('objMultiKey', () => {
+		const obj = utils.objMultiKey({
+			"html|xml|svg": 1,
+			"pug|c|cpp|js|jsx|css|less|scss|php|java|ts": 2,
+			"rb": 3,
+			"hs": 4
+		});
+		assert.equal(Object.keys(obj).length, 16)
+		assert.equal(obj.html, 1)
+		assert.equal(obj.xml, 1)
+		assert.equal(obj.svg, 1)
+		assert.equal(obj.pug, 2)
+		assert.equal(obj.c, 2)
+		assert.equal(obj.cpp, 2)
+		assert.equal(obj.rb, 3)
+		assert.equal(obj.hs, 4)
+	})
+
 });
