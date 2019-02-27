@@ -26,8 +26,8 @@ const getFileExtension = fname => (fname.split('.').pop());
  * @param      {<type>}  path    The path
  * @return     {<type>}  The file time.
  */
-const getFileTime = thepath => fs.existsSync(thepath)
-    && fs.statSync(thepath).mtime.getTime();
+const getFileTime = thepath =>
+    fs.existsSync(thepath) && fs.statSync(thepath).mtime.getTime();
 
 /**
  * get a unique array given an array
@@ -36,10 +36,10 @@ const getFileTime = thepath => fs.existsSync(thepath)
  * @return     {Array}   { description_of_the_return_value }
  */
 // uniquearr: a => a.filter((el, i) => a.indexOf(el) == i),
-const uniquearr = a => {
-    const h = {};
-    return a.filter(el => h[el] ? false : (h[el] = true))
-};
+const uniquearr = (a, h = {}) =>
+    a.filter(el => h[el] ?
+        false
+        : (h[el] = true));
 
 /**
  * checks if a ns exists
@@ -119,7 +119,7 @@ const getIterator = els => {
         hasNext: () => i < els.length,
         next: () => els[i++],
         size: () => els.length
-    }
+    };
 };
 
 /**
@@ -131,8 +131,6 @@ const getIterator = els => {
  */
 const replaceAll = (tpl, obj, options) => {
     "use strict";
-    const self = this;
-
     let start = '%',
         end = '%',
         fb = null,
@@ -140,9 +138,51 @@ const replaceAll = (tpl, obj, options) => {
         reg,
         straight = true,
         // str,
-        tmp, last;
+        last;
+    const fromFunction = S1 => {
+            const tmp = obj(S1);
+            return (tmp !== start + S1 + end) ? obj(S1) : S1;
+        },
+        fromObj = S1 => {
+            const tmp = typeof obj[S1];
+            switch(tmp) {
+                case 'function':
+                    return obj[S1](S1);
+                case 'object':
+                    return '';
+                default:
+                    return obj[S1];
+            }
+        },
+        maybeFromNs = S1 => {
+            if (S1.match(/\./)) {
+                last = checkns(S1, obj);
+                if (last) {
+                    return typeof last === 'function'
+                        ? last(S1)
+                        : last;
+                }
+            }
+            // but do not go deeper
+            straight = false;
+            return fb !== null
+                ? fb(S1)
+                : clean
+                    ? ''
+                    : start + S1 + end;
+        },
+        doReplace = (str, enc, $1, _t) => {
+            if (typeof obj === 'function') {
+                _t = fromFunction($1);
+            } else if ($1 in obj) {
+                _t = fromObj($1);
+            } else {
+                _t = maybeFromNs($1);
+            }
+            return enc ? encodeURIComponent(_t) : _t;
+        };
 
-    if ('undefined' !== typeof options) {
+    if (typeof options !== 'undefined') {
         if ('delim' in options) {
             start = options.delim[0];
             end = options.delim[1];
@@ -159,51 +199,11 @@ const replaceAll = (tpl, obj, options) => {
         if (!(tpl.match(reg))) {
             return tpl;
         }
-        tpl = tpl.replace(reg, (str, enc, $1, _t) => {
-
-            if (typeof obj === 'function') {
-                /**
-                 * avoid silly infiloops */
-                tmp = obj($1);
-                _t = (tmp !== start + $1 + end) ? obj($1) : $1;
-
-            } else if ($1 in obj) {
-
-                _t = typeof obj[$1];
-                if (_t === 'function') {
-                    _t = obj[$1]($1);
-                } else if (_t === 'object') {
-                    _t = '';
-                } else {
-                    _t = obj[$1];
-                }
-                // incomplete when the placeholder points to a object (would print)
-                // _t = typeof obj[$1] === 'function' ? obj[$1]($1) : obj[$1];
-
-                /**
-                    * not a function and not found in literal
-                    * use fallback if passed or get back the placeholder
-                    * switching off before returning
-                    */
-            } else {
-                /* @ least check for ns, in case of dots
-                */
-                if ($1.match(/\./)) {
-                    last = checkns($1, obj);
-                    if (last) {
-                        _t = enc ? encodeURIComponent(last) : last;
-                        return typeof last === 'function' ? last($1) : last;
-                    }
-                }
-                // but do not go deeper   
-                straight = false;
-                _t = fb !== null ? fb($1) : clean ? '' : start + $1 + end;
-            }
-            return enc ? encodeURIComponent(_t) : _t;
-        });
+        tpl = tpl.replace(reg, doReplace);
     }
     return tpl;
 };
+
 
 const validateJson = json => {
     try {
@@ -237,6 +237,7 @@ const solveJson = (obj, lim) => {
                 case 'object':
                     o[j] = _(o[j]);
                     break;
+                default: break;
             }
         }
         return o;
