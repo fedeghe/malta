@@ -36,7 +36,7 @@ function multi(key, el) {
 			}
 		});
 
-		// if demon mode then observe folder, add/remove 
+		// if demon mode then observe folder, add/remove
 		//
 		if (!noDemon) {
 			watcher.observe(folder, function (diff) {
@@ -78,7 +78,7 @@ function proceed(tpl, options) {
 	} else {
 		options = options || "";
 		let o = [tpl];
-		
+
 		o = o.concat(options.split(/\s/))
 			.concat(["proc=" + processNum]);
 		return Malta.get().check(o).start();
@@ -97,7 +97,7 @@ function subCommand(command) {
 			Malta.log_debug(`Command "${command}" not available`);
 			return false;
 	}
-} 
+}
 
 module.exports = {
 	multi : multi,
