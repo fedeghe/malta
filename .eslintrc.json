@@ -1,0 +1,23 @@
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "no-console": 0,
+        "no-extra-semi": 1,
+        "no-useless-escape": 0,
+        "no-cond-assign": 0,
+        "semi": 2,
+        "use-isnan": 2,
+        "default-case": 2,
+        "complexity": ["error", { "max": 5 }],
+        "no-unused-vars": 2,
+        "lines-around-comment": 2,
+        "lines-between-class-members": 2,
+        "no-multiple-empty-lines": 2,
+        "no-trailing-spaces": 2,
+        "yoda": 2
+    }
+}
