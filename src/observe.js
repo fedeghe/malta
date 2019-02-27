@@ -30,7 +30,6 @@ module.exports = (function() {
         elements[folder] = setInterval(function() {
             try {
                 fs.readdir(folder, function(err, files) {
-                    
                     if (!files) return;
 
                     if (!previous) {
