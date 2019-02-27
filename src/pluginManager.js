@@ -2,7 +2,7 @@ const fs = require('fs'),
     path = require('path');
 
 const execPath = process.cwd();
-const utils = require('./utils.js')
+const utils = require('./utils.js');
 
 function PluginManager() {
     this.user_path = execPath + "/plugins/";
@@ -23,7 +23,7 @@ PluginManager.prototype.run = function (instance, Malta) {
     } else {
         maybeNotifyBuild();
     }
-    
+
 
     function plugin4ext(extIterator) {
 
@@ -53,7 +53,7 @@ PluginManager.prototype.run = function (instance, Malta) {
 
                                     // replace the name given by the plugin fo the file
                                     // produced and to be passed to the next plugin
-                                    // 
+                                    //
                                     mself.data.content = "" + obj.content;
                                     go();
                                 }).catch(function (msg) {
@@ -99,13 +99,10 @@ PluginManager.prototype.run = function (instance, Malta) {
     }
 };
 
-PluginManager.prototype.add = function (fname, params) {
-
-    const self = this,
-        user_path = this.user_path + fname + '.js',
-        malta_path = this.malta_path + fname + '.js';
+PluginManager.prototype.require = function (fname) {
     let plugin;
-    
+    const user_path = this.user_path + fname + '.js',
+        malta_path = this.malta_path + fname + '.js';
     try {
         // first the user execution dir
         //`
@@ -123,8 +120,15 @@ PluginManager.prototype.add = function (fname, params) {
         }
     } catch (e) {
         console.log(e);
-        // self.log_err("`" + fname + "` required plugin not found!");
     }
+    return plugin;
+};
+
+
+PluginManager.prototype.add = function (fname, params) {
+
+    const self = this;
+    let plugin = self.require(fname);
 
     if ('ext' in plugin) {
         if (utils.isArray(plugin.ext)) {
