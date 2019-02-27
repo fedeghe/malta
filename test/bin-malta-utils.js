@@ -1,56 +1,53 @@
 const assert = require('assert'),
-	path = require('path'),
-	fs = require('fs'),
-	child_process = require('child_process'),
 	utils = require('./../src/utils.js'),
 	malta = require('../src/index.js');
 
-describe('utilty functions', function () {
-	m = malta.get();
-
-	it('createEntry', function () {
+describe('utilty functions', () => {
+	"use strict";
+	const m = malta.get();
+	it('createEntry', () => {
 		try {
 			const entry = utils.createEntry('test/fs/vars1.json');
-			assert.ok(entry.content.length > 0)
-			assert.ok(entry.time > 0)
-			assert.ok(entry.cachevalid)
+			assert.ok(entry.content.length > 0);
+			assert.ok(entry.time > 0);
+			assert.ok(entry.cachevalid);
 		} catch (err) {
 			throw err;
 		}
 	});
 
-	it('getFileExtension', function () {
+	it('getFileExtension', () => {
 		try {
 			assert.equal(
 				utils.getFileExtension('test/fs/vars1.json'),
 				'json'
-			)
+			);
 			assert.equal(
 				utils.getFileExtension('test/fs/vars1.java'),
 				'java'
-			)
+			);
 			assert.equal(
 				utils.getFileExtension('test/fs/vars1.cpp'),
 				'cpp'
-			)
+			);
 		} catch (err) {
 			throw err;
 		}
 	});
 
-	it('getFileTime', function () {
+	it('getFileTime', () => {
 		try {
 			const ext1 = m.utils.getFileTime('test/fs/vars1.json'),
 				ext2 = m.utils.getFileTime('test/fs/vars2.json');
 
-			assert.equal(typeof ext1, 'number')
-			assert.equal(typeof ext2, 'number')
+			assert.equal(typeof ext1, 'number');
+			assert.equal(typeof ext2, 'number');
 		} catch (err) {
 			throw err;
 		}
 	});
 
-	it('uniquearr', function () {
+	it('uniquearr', () => {
 		try {
 			const arr1 = m.utils.uniquearr([1,2,3,4,1,2,3,4,5]),
 				arr2 = m.utils.uniquearr(['a','b','c','a','d','d','e','f','g','f','a']);
@@ -70,7 +67,7 @@ describe('utilty functions', function () {
 		}
 	});
 
-	it('solveJson', function () {
+	it('solveJson', () => {
 		try {
 			const trans1 = m.utils.solveJson({
 					name : "malta",
@@ -126,7 +123,7 @@ describe('utilty functions', function () {
 		assert.equal(f1, false);
 		assert.equal(f2, true);
 	});
-
+	const trrr = 'sdfsdf';
 	it('isArray', () => {
 		const benchs = [{
 			in : {},
@@ -148,6 +145,7 @@ describe('utilty functions', function () {
 			assert.equal(utils.isArray(bench.in), bench.out);
 		});
 	});
+
 	it('isString', () => {
 		const benchs = [{
 			in: new String('foo'),
@@ -205,14 +203,14 @@ describe('utilty functions', function () {
 		}];
 
 		benchs.forEach(bench => 
-			it(bench.label, () => {
+			it(bench.label, () => 
 				assert.equal(
 					JSON.stringify(utils.jsonFromStr(bench.in)),
 					JSON.stringify(bench.out)
-				);
-			})
+				)
+			)
 		);
-	})
+	});
 
 	describe('replaceAll', () => {
 		const benchs = [{
@@ -231,7 +229,7 @@ describe('utilty functions', function () {
 			],
 			out: 'ciao Federico'
 		}, {
-				label: 'one replace, again different delimiters',
+			label: 'one replace, again different delimiters',
 			in: [
 				'ciao _name- f.g. _nome-',
 				{ name: 'Federico' },
@@ -308,13 +306,12 @@ describe('utilty functions', function () {
 			],
 			out: 'ciao person.name hello!'
 		}];
-		benchs.forEach(bench => {
-			it (bench.label, () => {
+		benchs.forEach(bench => 
+			it (bench.label, () => 
 				assert.equal(utils.replaceAll(...bench.in), bench.out)
-			})
-		});
+			)
+		);
 	});
-
 
 	describe('check namespaces', () => {
 		const ns = {
@@ -344,12 +341,12 @@ describe('utilty functions', function () {
 		}];
 
 		benchs.forEach(bench =>
-			it(bench.label, () => {
+			it(bench.label, () => 
 				assert.equal(
 					JSON.stringify(utils.checkns.apply(null, bench.in)),
 					JSON.stringify(bench.out)
-				);
-			})
+				)
+			)
 		);
 	});
 
@@ -364,11 +361,10 @@ number four`,
 		assert.equal(/^3/.test(res[2]), true);
 	});
 
-
 	it('getCommentFn', () => {
 		const fn = utils.getCommentFn('START', 'STOP');
-		assert.equal(fn('foo'), 'STARTfooSTOP')
-	})
+		assert.equal(fn('foo'), 'STARTfooSTOP');
+	});
 
 	it('objMultiKey', () => {
 		const obj = utils.objMultiKey({
@@ -377,15 +373,14 @@ number four`,
 			"rb": 3,
 			"hs": 4
 		});
-		assert.equal(Object.keys(obj).length, 16)
-		assert.equal(obj.html, 1)
-		assert.equal(obj.xml, 1)
-		assert.equal(obj.svg, 1)
-		assert.equal(obj.pug, 2)
-		assert.equal(obj.c, 2)
-		assert.equal(obj.cpp, 2)
-		assert.equal(obj.rb, 3)
-		assert.equal(obj.hs, 4)
-	})
-
+		assert.equal(Object.keys(obj).length, 16);
+		assert.equal(obj.html, 1);
+		assert.equal(obj.xml, 1);
+		assert.equal(obj.svg, 1);
+		assert.equal(obj.pug, 2);
+		assert.equal(obj.c, 2);
+		assert.equal(obj.cpp, 2);
+		assert.equal(obj.rb, 3);
+		assert.equal(obj.hs, 4);
+	});
 });

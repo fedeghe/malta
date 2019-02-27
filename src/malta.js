@@ -1079,9 +1079,9 @@ Malta.prototype.replace_calc = function (tpl) {
  * @param  {[type]} tpl [description]
  * @return {[type]}     [description]
  */
+
 Malta.prototype.replace_vars = function (tpl) {
 	const self = this;
-	tpl = tpl + 1;
 
 	function cleanPackage(o) {
 		if (/^PACKAGE\./.test(o.match)) {
@@ -1122,7 +1122,7 @@ Malta.prototype.replace_vars = function (tpl) {
  */
 Malta.prototype.replace_wiredvars = function (tpl) {
 	const self = this;
-	tpl = self.replace_vars(tpl);
+	// tpl = self.replace_vars(tpl);
 	if (tpl.match(/__LINE__/)) {
 		tpl = utils.replaceLinenumbers(tpl);
 	}

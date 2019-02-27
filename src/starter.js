@@ -22,7 +22,7 @@ function print(msg, i, tot) {
 	function go(_runs) {
 		for (let tpl in _runs) {
 			//check if is inclusion {whatever.json : true}
-			// 
+			//
 			if (tpl.match(/\.json$/) && _runs[tpl] === true) {
 				_M([tpl], 1);
 			} else {
@@ -53,9 +53,9 @@ function print(msg, i, tot) {
 		if ('EXE' in runs) {
 			(function (commands) {
 				Malta.log_info("\n" + "EXE".red() + " section for " + _args[0]);
-				
+
 				let	i = 0;
-				
+
 				const isArray = commands instanceof Array,
 					clen = commands.length;
 				if (clen) {
@@ -95,5 +95,5 @@ function print(msg, i, tot) {
 		Malta.get().check(_args).start();
 	}
 })(args, len);
-	
-module.exports = Malta
+
+module.exports = Malta;
