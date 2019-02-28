@@ -24,7 +24,7 @@ function print(msg, i, tot) {
 			//check if is inclusion {whatever.json : true}
 			//
 			if (tpl.match(/\.json$/) && _runs[tpl] === true) {
-				_M([tpl], 1);
+				_M([ tpl ], 1);
 			} else {
 				//skip if key begins with !
 				if (tpl.match(/^\!/)) continue;

@@ -1,8 +1,7 @@
 const fs = require('fs'),
-    path = require('path');
-
-const execPath = process.cwd();
-const utils = require('./utils.js');
+    path = require('path'),
+    execPath = process.cwd(),
+    utils = require('./utils.js');
 
 function PluginManager() {
     this.user_path = execPath + "/plugins/";
@@ -11,93 +10,94 @@ function PluginManager() {
 }
 
 PluginManager.prototype.run = function (instance, Malta) {
-    const self = this;
-    const mself = instance;
-    const pluginKeys = Object.keys(self.plugins);
+    const self = this,
+        pluginKeys = Object.keys(self.plugins);
+    this.mself = instance;
+    this.Malta = Malta;
 
-    if (pluginKeys.length) mself.log_info('Starting plugins'.yellow());
+    if (pluginKeys.length) self.mself.log_info('Starting plugins'.yellow());
 
-    if (mself.hasPlugins) {
-        mself.log_debug('on ' + mself.outName.underline() + ' called plugins:');
-        plugin4ext(utils.getIterator(pluginKeys));
+    if (self.mself.hasPlugins) {
+        self.mself.log_debug('on ' + self.mself.outName.underline() + ' called plugins:');
+        self.plugin4ext(utils.getIterator(pluginKeys));
     } else {
-        maybeNotifyBuild();
-    }
-
-
-    function plugin4ext(extIterator) {
-
-        (function checknext() {
-            if (extIterator.hasNext()) {
-                const ext = extIterator.next(),
-                    pins = self.plugins[ext];
-
-                // if ends with the extension
-                //    ----
-                if (mself.outName.match(new RegExp(".*\\." + ext + '$'))) {
-
-                    let iterator = utils.getIterator(pins);
-
-                    (function go() {
-
-                        let res,
-                            pl;
-
-                        if (iterator.hasNext()) {
-                            pl = iterator.next();
-                            res = callPlugin(pl);
-                            if (res) {
-                                (new Promise(res)).then(function (obj) {
-                                    if (mself.userWatch) mself.userWatch.call(mself, obj, pl);
-                                    mself.data.name = obj.name;
-
-                                    // replace the name given by the plugin fo the file
-                                    // produced and to be passed to the next plugin
-                                    //
-                                    mself.data.content = "" + obj.content;
-                                    go();
-                                }).catch(function (msg) {
-                                    console.log(`Plugin '${pl.name}' error: `);
-                                    console.log("\t" + msg);
-                                    Malta.stop();
-                                });
-                            } else {
-                                go();
-                            }
-                        } else {
-                            plugin4ext(extIterator);
-                        }
-                    })();
-                } else {
-                    checknext();
-                }
-            } else {
-                if (typeof mself.endCb === 'function') mself.endCb();
-                maybeNotifyBuild();
-            }
-        })();
-    }
-
-    function maybeNotifyBuild() {
-        // console.log('✅') //
-        if (Malta.verbose > 0 && mself.notifyBuild) {
-            mself.sticky(
-                "Malta @ " + ("" + new Date()).replace(/(GMT.*)$/, ''),
-                path.basename(mself.outName) + " build completed in " + (mself.t_end - mself.t_start) + "ms"
-            );
-        }
-    }
-
-    function callPlugin(p) {
-        mself.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : ''));
-
-        mself.doBuild = true;
-        // actually I dont` need to pass data, since it can be retrieved by the context,
-        // but is better (and I don`t have to modify every plugin and the documentation)
-        //
-        return p.func.bind(mself)(mself.data, p.params);
+        self.maybeNotifyBuild();
     }
 };
+
+PluginManager.prototype.plugin4ext = function (extIterator) {
+    const self = this;
+    (function checknext() {
+        if (extIterator.hasNext()) {
+            const ext = extIterator.next(),
+                pins = self.plugins[ext];
+
+            // if ends with the extension
+            //    ----
+            if (self.mself.outName.match(new RegExp(".*\\." + ext + '$'))) {
+                let iterator = utils.getIterator(pins);
+
+                (function go() {
+
+                    let res, pl;
+
+                    if (iterator.hasNext()) {
+                        pl = iterator.next();
+                        res = self.callPlugin(pl);
+                        if (res) {
+                            (new Promise(res)).then(function (obj) {
+                                if (self.mself.userWatch) self.mself.userWatch.call(self.mself, obj, pl);
+                                self.mself.data.name = obj.name;
+
+                                // replace the name given by the plugin fo the file
+                                // produced and to be passed to the next plugin
+                                //
+                                self.mself.data.content = "" + obj.content;
+                                go();
+                            }).catch(function (msg) {
+                                console.log(`Plugin '${pl.name}' error: `);
+                                console.log("\t" + msg);
+                                self.Malta.stop();
+                            });
+                        } else {
+                            go();
+                        }
+                    } else {
+                        self.plugin4ext(extIterator);
+                    }
+                })();
+            } else {
+                checknext();
+            }
+        } else {
+            if (typeof self.mself.endCb === 'function') self.mself.endCb();
+            self.maybeNotifyBuild();
+        }
+    })();
+};
+
+PluginManager.prototype.maybeNotifyBuild = function () {
+    const self = this;
+    // console.log('✅') //
+    if (self.Malta.verbose > 0 && self.mself.notifyBuild) {
+        self.mself.sticky(
+            "Malta @ " + ("" + new Date()).replace(/(GMT.*)$/, ''),
+            path.basename(self.mself.outName) + " build completed in " + (self.mself.t_end - self.mself.t_start) + "ms"
+        );
+    }
+};
+
+PluginManager.prototype.callPlugin = function (p) {
+    const self = this;
+    self.mself.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : ''));
+
+    self.mself.doBuild = true;
+    // actually I dont` need to pass data, since it can be retrieved by the context,
+    // but is better (and I don`t have to modify every plugin and the documentation)
+    //
+    return p.func.bind(self.mself)(self.mself.data, p.params);
+};
+
 
 PluginManager.prototype.require = function (fname) {
     let plugin;
@@ -155,7 +155,7 @@ PluginManager.prototype.doAdd = function(el, plu, params) {
         this.plugins[el].push({
             name: plu.name,
             func: plu,
-            params: params
+            params
         });
     }
 };

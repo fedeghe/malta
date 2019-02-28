@@ -7,6 +7,7 @@ const Malta = require('./malta'),
 
 let processNum = 0;
 
+// eslint-disable-next-line max-lines-per-function
 function multi(key, el) {
 	"use strict";
 	const multi = key.match(/(.*)\/\*\.(.*)$/),
@@ -27,10 +28,10 @@ function multi(key, el) {
 		fs.readdir(folder.replace(/^#/, ''), function (err, files) {
 			if (files) {
 				files.forEach(function (file) {
-					if (!exclude(file) && file.match(new RegExp(".*\." + ext + "$"))){
+					if (!exclude(file) && file.match(new RegExp(`.*\.${ext}$`))){
 						// store the process
 						++processNum;
-						multiElements[file] = proceed(folder + '/' + file, el);
+						multiElements[file] = proceed(`${folder}/${file}`, el);
 					}
 				});
 			}
@@ -77,10 +78,10 @@ function proceed(tpl, options) {
 		}
 	} else {
 		options = options || "";
-		let o = [tpl];
+		let o = [ tpl ];
 
 		o = o.concat(options.split(/\s/))
-			.concat(["proc=" + processNum]);
+			.concat([ "proc=" + processNum ]);
 		return Malta.get().check(o).start();
 	}
 }
@@ -90,7 +91,7 @@ function subCommand(command) {
 	switch (command) {
 		case '-clean':
 			Malta.log_debug('Removing all .buildNum.json files');
-			spawn('find', ['.', '-name', '*.buildNum.json', '-type', 'f', '-delete']);
+			spawn('find', [ '.', '-name', '*.buildNum.json', '-type', 'f', '-delete' ]);
 			Malta.log_debug('... done');
 			return true;
 		default:
@@ -100,7 +101,7 @@ function subCommand(command) {
 }
 
 module.exports = {
-	multi : multi,
-	subCommand : subCommand,
-	proceed: proceed
+	multi,
+	subCommand,
+	proceed
 };

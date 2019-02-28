@@ -25,6 +25,7 @@ function MPromise (f) {
 	this.reject = true;
 }
 
+
 MPromise.prototype.then = function (f) {
 	"use strict";
 	this.solve = f || true;

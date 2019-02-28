@@ -17,7 +17,10 @@ module.exports = (function() {
         for (i = 0, l = b.length; i < l; i++) {
             if (astr.indexOf(b[i]) < 0) b_added.push(b[i]);
         }
-        return {added : b_added, removed : b_removed};
+        return {
+            added : b_added,
+            removed : b_removed
+        };
     }
 
     function observe(folder, cb) {
