@@ -4,16 +4,18 @@ const Malta = require("./malta"),
 	functions = require("./functions"),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
-	len = args.length;
+	len = args.length,
+	// DS = path.sep,
+	NL = "\n";
+	// TAB = "\t"
 
 process.title = 'Malta';
 
 function print(msg, i, tot) {
 	"use strict";
-	const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined') ?
-		(parseInt(100*i/tot, 10) + '% ').white()
-		:
-		"";
+	const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined')
+		? (parseInt(100 * i / tot, 10) + '% ').white()
+		: "";
 	Malta.log_debug(perc + msg);
 }
 
@@ -50,7 +52,7 @@ function print(msg, i, tot) {
 		!runs && Malta.badargs(p);
 		if ('EXE' in runs) {
 			(function (commands) {
-				Malta.log_info("\n" + "EXE".red() + " section for " + _args[0]);
+				Malta.log_info(`${NL}${'EXE'.red()} section for ${_args[0]}`);
 
 				let	i = 0;
 
@@ -63,9 +65,9 @@ function print(msg, i, tot) {
 								print(`execution: ${commands[i]}`, i + 1, clen);
 								Malta.execute(commands[i].split(/\s/), function () { ++i; start(); });
 							} else {
-								print("execution: " + commands[i], i + 1, clen);
+								print(`execution: ${commands[i]}`, i + 1, clen);
 								Malta.execute(commands[i].split(/\s/), function () {
-									print("...done!\n");
+									print(`...done!${NL}`);
 									delete runs.EXE;
 									go(runs);
 								});
@@ -74,7 +76,7 @@ function print(msg, i, tot) {
 					} else {
 						print(`execution: ${commands}`, 1, 1);
 						Malta.execute(commands.split(/\s/), function () {
-							print("...done!\n");
+							print(`...done!${NL}`);
 							delete runs.EXE;
 							go(runs);
 						});
