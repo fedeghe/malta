@@ -37,7 +37,7 @@ module.exports = (function() {
 
                     if (!previous) {
                         previous = {
-                            files: files,
+                            files,
                             n: files.length,
                             time: new Date()
                         };
@@ -72,7 +72,7 @@ module.exports = (function() {
     }
 
     return {
-        observe: observe,
-        unobserve: unobserve
+        observe,
+        unobserve
     };
 })();

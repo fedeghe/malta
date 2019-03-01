@@ -1,5 +1,5 @@
-#!/usr/bin/env node
 
+#!/usr/bin/env node
 const fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
@@ -8,8 +8,8 @@ const fs = require("fs"),
 	PluginManager = require('./pluginManager.js'),
 	Sticky = require('./sticky.js'),
 	execPath = process.cwd(),
-	packageInfo = fs.existsSync(__dirname + '/../package.json') ? require(__dirname + '/../package.json') : {},
-	execPackageInfo = fs.existsSync(execPath + '/package.json') ? require(execPath + '/package.json') : {},
+	packageInfo = fs.existsSync(`${__dirname}/../package.json`) ? require(`${__dirname}/../package.json`) : {},
+	execPackageInfo = fs.existsSync(`${execPath}/package.json`) ? require(`${execPath}/package.json`) : {},
 	DS = path.sep,
 	NL = "\n",
 	TAB = "\t";
@@ -238,7 +238,7 @@ Malta.running = true;
 
 Malta.execute = function (tmpExe, then) { //not here couse of slice on tmpExe
 	const exe = tmpExe, //.join(' '),
-		exec = child_process.exec,
+		{ exec } = child_process,
 		command = exec(exe.join(' ')),
 		doExit = code => {
 			Malta.executeCheck += ~~code;
@@ -272,6 +272,7 @@ Malta.execute = function (tmpExe, then) { //not here couse of slice on tmpExe
  * @return {[type]}     [description]
  */
 Malta.badargs = function (tpl, dst) {
+	// eslint-disable-next-line prefer-template
 	console.log(('ERR : It looks like' + NL +
 		(tpl ? tpl + NL : "") +
 		(dst ? dst + NL : "") +
@@ -286,7 +287,7 @@ Malta.badargs = function (tpl, dst) {
  */
 Malta.log_help = function () {
 	Malta.outVersion(true);
-	console.log('Usage:' + NL + '> malta [templatefile] [outdir] {options}' + NL + '> malta [buildfile.json]' + NL);
+	console.log(`Usage:${NL}> malta [templatefile] [outdir] {options}${NL}> malta [buildfile.json]${NL}`);
 	Malta.stop();
 };
 
@@ -333,7 +334,7 @@ Malta.checkDeps = function () {
 		}
 	}
 	for (i = 0, l = errs.length; i < l; i++) {
-		console.log(errs[i].err.code.red() + ': ' + errs[i].msg);
+		console.log(`${errs[i].err.code.red()}: ${errs[i].msg}`);
 	}
 	if (errs.length) Malta.stop('deps');
 	return this;
@@ -393,10 +394,10 @@ Malta.stop = function (msg) {
 	if (!Malta.running) return;
 	switch (msg) {
 		case 'SIGINT':
-			console.log("\n" + Malta.name + ' has been stopped by user' + NL);
+			console.log(`\n${Malta.name} has been stopped by user${NL}`);
 			break;
 		default:
-			console.log("\n" + Malta.name + ' has stopped' + NL);
+			console.log(`\n${Malta.name} has stopped${NL}`);
 			msg && console.log(`message: ${msg}`);
 			break;
 	}
@@ -427,7 +428,7 @@ Malta.getRunsFromPath = function (p) {
 			if (i.match(/^(#|EXE)/)) {
 				demonRet[i] = ret[i];
 			} else {
-				demonRet['#' + i] = ret[i];
+				demonRet[`#${i}`] = ret[i];
 			}
 		}
 		return demonRet;
@@ -454,7 +455,7 @@ Malta.prototype.date = function () {
  * @param      {string}  pluginName  The plugin name
  */
 Malta.prototype.doErr = function (err, obj, pluginName) {
-	console.log(('[ERROR on ' + obj.name + ' using ' + pluginName + '] :').red());
+	console.log((`[ERROR on ${obj.name} using ${pluginName}] :`.red()));
 	console.dir(err);
 };
 
@@ -628,7 +629,7 @@ Malta.prototype.checkInvolved = function () {
 	// look for too many files limit
 	//
 	if (this.involvedFiles > this.MAX_INVOLVED) {
-		this.log_err(('OUCH: it seems like trying to involve too many files : ' + this.queue.length).white());
+		this.log_err(`OUCH: it seems like trying to involve too many files : ${this.queue.length}`.white());
 	}
 };
 
@@ -663,8 +664,7 @@ Malta.prototype.check = function (a) {
 
 	// template and outdir params
 	//
-	argTemplate = a[0];
-	argOutDir = a[1];
+	[ argTemplate, argOutDir ]= a;
 
 	// check tpl and destination
 	// if called badargs will stop malta
@@ -1134,8 +1134,8 @@ Malta.prototype.replace_wiredvars = function (tpl) {
 		tpl = utils.replaceLinenumbers(tpl);
 	}
 	return utils.replaceAll(tpl, {
-		TIME: self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds(),
-		DATE: self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear(),
+		TIME: `${self.date().getHours()}:${self.date().getMinutes()}:${self.date().getSeconds()}`,
+		DATE: `${self.date().getDate()}/${self.date().getMonth() + 1}/${self.date().getFullYear()}`,
 		YEAR: self.date().getFullYear(),
 		FILES: self.involvedFiles,
 		NAME: Malta.name,
@@ -1174,7 +1174,7 @@ Malta.prototype.start = function (userWatch) {
  * @return {[type]} [description]
  */
 Malta.prototype.signBuildNumber = function () {
-	const fname = this.baseDir + DS + '.buildNum.json';
+	const fname = `${this.baseDir}${DS}.buildNum.json`;
 	let cnt;
 	if (!fs.existsSync(fname)) {
 		cnt = '{}';
@@ -1262,7 +1262,7 @@ Malta.prototype.watch = function () {
 
 	// every second, if nothing is building, watch files
 	//
-	self.log_debug('Watch interval used : '.yellow() + ('' + Malta.watchInterval).red());
+	self.log_debug(`${'Watch interval used:'.yellow()} ${Malta.watchInterval.red()}`);
 
 	// save the interval fucntion so that if the element is removed (wildcard)
 	// then the interval is cleared by the shut function

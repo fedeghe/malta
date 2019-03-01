@@ -4,8 +4,8 @@ const fs = require('fs'),
     utils = require('./utils.js');
 
 function PluginManager() {
-    this.user_path = execPath + "/plugins/";
-    this.malta_path = __dirname + "/../plugins/";
+    this.user_path = `${execPath}/plugins/`;
+    this.malta_path = `${__dirname}/../plugins/`;
     this.plugins = {};
 }
 
@@ -18,7 +18,7 @@ PluginManager.prototype.run = function (instance, Malta) {
     if (pluginKeys.length) self.mself.log_info('Starting plugins'.yellow());
 
     if (self.mself.hasPlugins) {
-        self.mself.log_debug('on ' + self.mself.outName.underline() + ' called plugins:');
+        self.mself.log_debug(`on ${self.mself.outName.underline()} called plugins:`);
         self.plugin4ext(utils.getIterator(pluginKeys));
     } else {
         self.maybeNotifyBuild();
@@ -89,7 +89,7 @@ PluginManager.prototype.maybeNotifyBuild = function () {
 
 PluginManager.prototype.callPlugin = function (p) {
     const self = this;
-    self.mself.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : ''));
+    self.mself.log_debug(`> ${p.name.yellow()} ${p.params ? ` called passing ${JSON.stringify(p.params).darkgray()}` : ''}`);
 
     self.mself.doBuild = true;
     // actually I dont` need to pass data, since it can be retrieved by the context,
@@ -101,8 +101,8 @@ PluginManager.prototype.callPlugin = function (p) {
 
 PluginManager.prototype.require = function (fname) {
     let plugin;
-    const user_path = this.user_path + fname + '.js',
-        malta_path = this.malta_path + fname + '.js';
+    const user_path = `${this.user_path}${fname}.js`,
+        malta_path = `${this.malta_path}${fname}.js`;
     try {
         // first the user execution dir
         //`

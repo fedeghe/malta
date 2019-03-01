@@ -78,7 +78,7 @@ const fs = require('fs'),
             return false;
         }
         try {
-            eval('r = {' + s + '}');
+            eval(`r = {${s}}`);
         } catch (e) {
             return r;
         }
@@ -184,8 +184,7 @@ const fs = require('fs'),
 
         if (typeof options !== 'undefined') {
             if ('delim' in options) {
-                start = options.delim[0];
-                end = options.delim[1];
+                [ start, end ] = options.delim;
             }
             if ('fb' in options) {
                 fb = options.fb;
@@ -193,6 +192,7 @@ const fs = require('fs'),
             clean = !!options.clean;
         }
 
+        // eslint-disable-next-line prefer-template
         reg = new RegExp('\\' + start + '(\\\+)?([A-z0-9-_\.]*)' + '\\' + end, 'g');
 
         while (straight) {
@@ -222,7 +222,7 @@ const fs = require('fs'),
                     case 'string':
                         while (y = o[j].match(/\$([A-z0-9-_/.]+)\$/)) {
                             o[j] = o[j].replace(
-                                '$' + y[1] + '$',
+                                `$${y[1]}$`,
                                 checkns(y[1], obj) || ""
                             );
                             if (maxSub-- < 0) {

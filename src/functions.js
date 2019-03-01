@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const Malta = require('./malta'),
 	watcher = require('./observe'),
-	spawn = require('child_process').spawn,
+	{ spawn } = require('child_process'),
 	fs = require("fs"),
 	NL = "\n";
 
@@ -23,8 +23,9 @@ function multi(key, el) {
 
 	if (!isCommand && multi) {
 		noDemon = multi[0].match(/#(.*)/);
-		folder = multi[1];
-		ext = multi[2];
+
+		[ , folder, ext ]= multi;
+
 		fs.readdir(folder.replace(/^#/, ''), function (err, files) {
 			if (files) {
 				files.forEach(function (file) {
@@ -42,15 +43,17 @@ function multi(key, el) {
 		if (!noDemon) {
 			watcher.observe(folder, function (diff) {
 				diff.added.filter(function (v) {
+					// eslint-disable-next-line prefer-template
 					return v.match(new RegExp(".*\\." + ext + '$'));
 				}).forEach(function (v){
 					if (exclude(v)) return;
 					++processNum;
-					multiElements[v] = proceed(folder + '/' + v, el);
-					Malta.log_debug('ADDED '.yellow() + folder + '/' + v + NL);
+					multiElements[v] = proceed(`${folder}/${v}`, el);
+					Malta.log_debug(`${'ADDED '.yellow()}${folder}/${v}${NL}`);
 				});
 
 				diff.removed.filter(function (v) {
+					// eslint-disable-next-line prefer-template
 					return v.match(new RegExp(".*\\." + ext + '$'));
 				}).forEach(function (v){
 					const outFile = multiElements[v].data.name;
@@ -58,7 +61,7 @@ function multi(key, el) {
 					if (fs.existsSync(outFile)) fs.unlink(outFile, () => {});
 					multiElements[v].shut();
 					multiElements[v] = null;
-					Malta.log_debug('REMOVED '.yellow() + folder + '/' + v + NL);
+					Malta.log_debug(`${'REMOVED '.yellow()}${folder}/${v}${NL}`);
 				});
 			});
 		}
@@ -81,7 +84,7 @@ function proceed(tpl, options) {
 		let o = [ tpl ];
 
 		o = o.concat(options.split(/\s/))
-			.concat([ "proc=" + processNum ]);
+			.concat([ `proc=${processNum}` ]);
 		return Malta.get().check(o).start();
 	}
 }
