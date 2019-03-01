@@ -1,5 +1,5 @@
-
 #!/usr/bin/env node
+
 const fs = require("fs"),
 	path = require("path"),
 	child_process = require('child_process'),
@@ -659,6 +659,7 @@ Malta.prototype.check = function (a) {
 
 	if (tmp) {
 		this.demon = false;
+		// eslint-disable-next-line prefer-destructuring
 		a[0] = tmp[1];
 	}
 

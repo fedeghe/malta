@@ -42,14 +42,12 @@ function print(msg, i, tot) {
 	} else if (_len === 1){
 
 		Malta.outVersion();
-
 		_args[0].match(/^-/) && functions.subCommand(_args[0]);
 
 		const p = path.resolve(execPath, _args[0]),
 			runs = Malta.getRunsFromPath(p);
 
-		if (!runs) Malta.badargs(p);
-
+		!runs && Malta.badargs(p);
 		if ('EXE' in runs) {
 			(function (commands) {
 				Malta.log_info("\n" + "EXE".red() + " section for " + _args[0]);
@@ -62,7 +60,7 @@ function print(msg, i, tot) {
 					if (isArray) {
 						(function start() {
 							if (i < clen - 1) {
-								print("execution: " + commands[i], i + 1, clen);
+								print(`execution: ${commands[i]}`, i + 1, clen);
 								Malta.execute(commands[i].split(/\s/), function () { ++i; start(); });
 							} else {
 								print("execution: " + commands[i], i + 1, clen);
@@ -74,7 +72,7 @@ function print(msg, i, tot) {
 							}
 						})();
 					} else {
-						print("execution: " + commands, 1, 1);
+						print(`execution: ${commands}`, 1, 1);
 						Malta.execute(commands.split(/\s/), function () {
 							print("...done!\n");
 							delete runs.EXE;
