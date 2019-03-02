@@ -16,13 +16,13 @@ const Malta = require('./malta'),
 				return filename.match(/\.buildNum\.json$/);
 			};
 
-		let noDemon = key.match(/#(.*)/),
+		let noDemon = key.match(/^#(.*)/),
 			folder,
 			ext,
 			multiElements = {};
 
 		if (!isCommand && multi) {
-			noDemon = multi[0].match(/#(.*)/);
+			noDemon = multi[0].match(/^#(.*)/);
 
 			[ , folder, ext ]= multi;
 

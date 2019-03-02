@@ -1,7 +1,9 @@
 const fs = require('fs'),
     path = require('path'),
     execPath = process.cwd(),
-    utils = require('./utils.js');
+    utils = require('./utils.js'),
+    // eslint-disable-next-line quotes
+    TAB = "\t";
 
 function PluginManager() {
     this.user_path = `${execPath}/plugins/`;
@@ -34,7 +36,7 @@ PluginManager.prototype.plugin4ext = function (extIterator) {
 
             // if ends with the extension
             //    ----
-            if (self.mself.outName.match(new RegExp(".*\\." + ext + '$'))) {
+            if (self.mself.outName.match(new RegExp([ '.*\\.', ext, '$' ].join('')))) {
                 let iterator = utils.getIterator(pins);
 
                 (function go() {
@@ -52,11 +54,11 @@ PluginManager.prototype.plugin4ext = function (extIterator) {
                                 // replace the name given by the plugin fo the file
                                 // produced and to be passed to the next plugin
                                 //
-                                self.mself.data.content = "" + obj.content;
+                                self.mself.data.content = `${obj.content}`;
                                 go();
                             }).catch(function (msg) {
                                 console.log(`Plugin '${pl.name}' error: `);
-                                console.log("\t" + msg);
+                                console.log(`${TAB}${msg}`);
                                 self.Malta.stop();
                             });
                         } else {
@@ -80,9 +82,10 @@ PluginManager.prototype.maybeNotifyBuild = function () {
     const self = this;
     // console.log('✅') //
     if (self.Malta.verbose > 0 && self.mself.notifyBuild) {
+        let t = self.mself.t_end - self.mself.t_start;
         self.mself.sticky(
-            "Malta @ " + ("" + new Date()).replace(/(GMT.*)$/, ''),
-            path.basename(self.mself.outName) + " build completed in " + (self.mself.t_end - self.mself.t_start) + "ms"
+            [ 'Malta @ ', `${new Date()}`.replace(/(GMT.*)$/, '') ].join(''),
+            `${path.basename(self.mself.outName)} build completed in ${t}ms`
         );
     }
 };
