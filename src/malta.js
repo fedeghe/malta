@@ -1157,8 +1157,8 @@ Malta.prototype.replace_wiredvars = function (tpl) {
 		BUILDNUM: self.buildnumber,
 		FILE: self.tplName
 	}, {
-			delim: [ '__', '__' ]
-		});
+		delim: [ '__', '__' ]
+	});
 };
 
 /**
