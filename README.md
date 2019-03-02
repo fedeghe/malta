@@ -131,7 +131,7 @@ multifile.json:
 ``` json
 {  
     "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
-    "common.less" : "../../public_html/css -plugins=malta-less[compress:false] -options=skipPlain=true", 
+    "common.less" : "../../public_html/css -plugins=malta-less[compress:false]", 
     "controllers/*.js" : "app/controllers/  -plugins=malta-js-uglify",
     "nested.json" : true 
 }  
