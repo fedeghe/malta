@@ -14,7 +14,7 @@
         "default-case": 2,
         "complexity": [
             "error", {
-                "max": 10
+                "max": 9
             }
         ],
         "no-unused-vars": 2,
@@ -75,6 +75,14 @@
             {"VariableDeclarator": { "object": true},"AssignmentExpression": { "array": true}}
         ],
         "new-cap": ["error", { "newIsCap": true }],
-        "prefer-template": "error"
+        "prefer-template": "error",
+        "quotes": [
+            "warn",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "no-new-object": "error"
     }
 }
