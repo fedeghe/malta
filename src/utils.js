@@ -1,4 +1,6 @@
 const fs = require('fs'),
+    // eslint-disable-next-line quotes
+    NL = "\n",
 
     /**
     * Creates an entry. element
@@ -47,7 +49,6 @@ const fs = require('fs'),
      * @param      {(number|string)}  ctx     The context
      */
     checkns = (ns, ctx) => {
-        "use strict";
         const els = ns.split(/\.|\//),
             l = els.length;
 
@@ -130,7 +131,6 @@ const fs = require('fs'),
      */
     // eslint-disable-next-line max-lines-per-function
     replaceAll = (tpl, obj, options) => {
-        "use strict";
         let start = '%',
             end = '%',
             fb = null,
@@ -223,7 +223,7 @@ const fs = require('fs'),
                         while (y = o[j].match(/\$([A-z0-9-_/.]+)\$/)) {
                             o[j] = o[j].replace(
                                 `$${y[1]}$`,
-                                checkns(y[1], obj) || ""
+                                checkns(y[1], obj) || ''
                             );
                             if (maxSub-- < 0) {
                                 // console.log('[ERROR] it seems like variable json has looping placeholders!');
@@ -247,7 +247,7 @@ const fs = require('fs'),
         tpl.split(/\n/)
         .map(
             (line, i) => line.replace(/__LINE__/g, i + 1)
-        ).join("\n")
+        ).join(NL)
     ),
 
     objMultiKey = o => {

@@ -2,7 +2,6 @@
  * really simple one level promise
  */
 function check(inst) {
-	"use strict";
 	const self = inst;
 	if (!self.solved) {
 		self.f(
@@ -19,7 +18,6 @@ function check(inst) {
 }
 
 function MPromise (f) {
-	"use strict";
 	this.f = f;
 	this.solved = false;
 	this.reject = true;
@@ -27,14 +25,12 @@ function MPromise (f) {
 
 
 MPromise.prototype.then = function (f) {
-	"use strict";
 	this.solve = f || true;
 	check(this);
 	return this;
 };
 
 MPromise.prototype.catch = function (f) {
-	"use strict";
 	this.reject = f;
 	return this;
 };

@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 module.exports = (function() {
-    "use strict";
     let elements = {};
 
     function arrDiff(a, b) {
@@ -24,7 +23,6 @@ module.exports = (function() {
     }
 
     function observe(folder, cb) {
-
         let actual = {},
             previous = false;
 
@@ -48,7 +46,6 @@ module.exports = (function() {
 
                     if (previous.files.length !== actual.files.length) {
                         actual.time = new Date();
-
                         cb(arrDiff(previous.files, actual.files));
                     }
                     previous.files = actual.files;
@@ -58,7 +55,6 @@ module.exports = (function() {
                 process.exit();
             }
         }, 100);
-
         return true;
     }
 

@@ -1,26 +1,23 @@
 #!/usr/bin/env node
-const Malta = require("./malta"),
-	path = require("path"),
-	functions = require("./functions"),
+const Malta = require('./malta'),
+	path = require('path'),
+	functions = require('./functions'),
 	execPath = process.cwd(),
 	args = process.argv.splice(2),
 	len = args.length,
-	// DS = path.sep,
+	// eslint-disable-next-line quotes
 	NL = "\n";
-	// TAB = "\t"
 
 process.title = 'Malta';
 
 function print(msg, i, tot) {
-	"use strict";
-	const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined')
-		? (parseInt(100 * i / tot, 10) + '% ').white()
-		: "";
+	const perc = (typeof i !== Malta.undef && typeof tot !== Malta.undef)
+		? `${parseInt(100 * i / tot, 10)}% `.white()
+		: '';
 	Malta.log_debug(perc + msg);
 }
 
 (function _M(_args, _len) {
-	"use strict";
 	function go(_runs) {
 		for (let tpl in _runs) {
 			//check if is inclusion {whatever.json : true}

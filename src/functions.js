@@ -4,7 +4,8 @@ let processNum = 0;
 const Malta = require('./malta'),
 	watcher = require('./observe'),
 	{ spawn } = require('child_process'),
-	fs = require("fs"),
+	fs = require('fs'),
+	// eslint-disable-next-line quotes
 	NL = "\n",
 
 	// eslint-disable-next-line max-lines-per-function
@@ -38,12 +39,15 @@ const Malta = require('./malta'),
 			});
 
 			// if demon mode then observe folder, add/remove
-			//
+			// (whoever wrote the first inverted condition was a noob, I'm the pro!!!)
 			if (!noDemon) {
 				watcher.observe(folder, function (diff) {
 					diff.added.filter(function (v) {
-						// eslint-disable-next-line prefer-template
-						return v.match(new RegExp(".*\\." + ext + '$'));
+						// const a = v.match(new RegExp(".*\\." + ext + '$')),
+							// b = v.match(new RegExp([ '.*\\.', ext, '$' ].join('')));
+						// console.log('diff.added')
+						// console.log(b)
+						return v.match(new RegExp([ '.*\\.', ext, '$' ].join('')));
 					}).forEach(function (v){
 						if (exclude(v)) return;
 						++processNum;
@@ -52,8 +56,11 @@ const Malta = require('./malta'),
 					});
 
 					diff.removed.filter(function (v) {
-						// eslint-disable-next-line prefer-template
-						return v.match(new RegExp(".*\\." + ext + '$'));
+						// const a = v.match(new RegExp(".*\\." + ext + '$')),
+							// b = v.match(new RegExp([ '.*\\.', ext, '$'].join('')));
+						// console.log('diff.remove')
+						// console.log(b)
+						return v.match(new RegExp([ '.*\\.', ext, '$' ].join('')));
 					}).forEach(function (v){
 						const outFile = multiElements[v].data.name;
 						// remove out file if exists
@@ -79,7 +86,7 @@ const Malta = require('./malta'),
 				proceed(tpl, options[i]);
 			}
 		} else {
-			options = options || "";
+			options = options || '';
 			let o = [ tpl ];
 
 			o = o.concat(options.split(/\s/))
@@ -89,7 +96,6 @@ const Malta = require('./malta'),
 	},
 
 	subCommand = command => {
-		"use strict";
 		switch (command) {
 			case '-clean':
 				Malta.log_debug('Removing all .buildNum.json files');
