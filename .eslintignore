@@ -1,2 +1,4 @@
 test
+*.git
 .git
+node_modules
