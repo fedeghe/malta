@@ -12,9 +12,7 @@ const Malta = require('./malta'),
 	multi = (key, el) => {
 		const multi = key.match(/(.*)\/\*\.(.*)$/),
 			isCommand = Malta.isCommand(key),
-			exclude = function (filename) {
-				return filename.match(/\.buildNum\.json$/);
-			};
+			exclude = filename => filename.match(/\.buildNum\.json$/);
 
 		let noDemon = key.match(/^#(.*)/),
 			folder,
@@ -26,9 +24,9 @@ const Malta = require('./malta'),
 
 			[ , folder, ext ]= multi;
 
-			fs.readdir(folder.replace(/^#/, ''), function (err, files) {
+			fs.readdir(folder.replace(/^#/, ''), (err, files) => {
 				if (files) {
-					files.forEach(function (file) {
+					files.forEach(file => {
 						if (!exclude(file) && file.match(new RegExp(`.*\.${ext}$`))){
 							// store the process
 							++processNum;
@@ -41,27 +39,19 @@ const Malta = require('./malta'),
 			// if demon mode then observe folder, add/remove
 			// (whoever wrote the first inverted condition was a noob, I'm the pro!!!)
 			if (!noDemon) {
-				watcher.observe(folder, function (diff) {
-					diff.added.filter(function (v) {
-						// const a = v.match(new RegExp(".*\\." + ext + '$')),
-							// b = v.match(new RegExp([ '.*\\.', ext, '$' ].join('')));
-						// console.log('diff.added')
-						// console.log(b)
-						return v.match(new RegExp([ '.*\\.', ext, '$' ].join('')));
-					}).forEach(function (v){
+				watcher.observe(folder, diff => {
+					diff.added.filter(
+						v => v.match(new RegExp([ '.*\\.', ext, '$' ].join('')))
+					).forEach(v => {
 						if (exclude(v)) return;
 						++processNum;
 						multiElements[v] = proceed(`${folder}/${v}`, el);
 						Malta.log_debug(`${'ADDED '.yellow()}${folder}/${v}${NL}`);
 					});
 
-					diff.removed.filter(function (v) {
-						// const a = v.match(new RegExp(".*\\." + ext + '$')),
-							// b = v.match(new RegExp([ '.*\\.', ext, '$'].join('')));
-						// console.log('diff.remove')
-						// console.log(b)
-						return v.match(new RegExp([ '.*\\.', ext, '$' ].join('')));
-					}).forEach(function (v){
+					diff.removed.filter(
+						v => v.match(new RegExp([ '.*\\.', ext, '$' ].join('')))
+					).forEach(v => {
 						const outFile = multiElements[v].data.name;
 						// remove out file if exists
 						if (fs.existsSync(outFile)) fs.unlink(outFile, () => {});
@@ -80,7 +70,7 @@ const Malta = require('./malta'),
 	proceed = (tpl, options) => {
 		let i = 0,
 			l;
-		if (typeof options !== 'undefined' && options instanceof Array) {
+		if (typeof options !== Malta.undef && options instanceof Array) {
 			l = options.length;
 			for (null; i < l; i++) {
 				proceed(tpl, options[i]);
