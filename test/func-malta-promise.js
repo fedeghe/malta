@@ -1,7 +1,7 @@
 var assert = require('assert'),
 	fs = require('fs'),
 	path = require('path'),
-	pro = require('../src/maltapromise');
+	pro = require('src/maltapromise');
 
 describe('Father ... I promise', function () {
 	var trgFolder = path.resolve(path.dirname(__filename) + '/fs/observed');

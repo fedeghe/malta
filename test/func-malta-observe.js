@@ -7,7 +7,7 @@ describe('folder observing', function () {
         ob;
 
     before(function(){
-        ob = require('../src/observe');
+        ob = require('src/observe');
     })
 
     it('observe function add', function (done) {

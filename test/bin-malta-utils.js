@@ -1,6 +1,6 @@
 const assert = require('assert'),
-	utils = require('./../src/utils.js'),
-	malta = require('../src/index.js');
+	utils = require('src/utils.js'),
+	malta = require('src/index.js');
 
 describe('utilty functions', () => {
 	"use strict";

@@ -69,12 +69,14 @@ const Malta = require('./malta'),
 
 	proceed = (tpl, options) => {
 		let i = 0,
-			l;
+			l,
+			ret = []
 		if (typeof options !== Malta.undef && options instanceof Array) {
 			l = options.length;
 			for (null; i < l; i++) {
-				proceed(tpl, options[i]);
+				ret.push(proceed(tpl, options[i]));
 			}
+			return ret;
 		} else {
 			options = options || '';
 			let o = [ tpl ];

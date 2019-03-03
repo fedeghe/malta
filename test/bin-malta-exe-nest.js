@@ -1,7 +1,7 @@
 var assert = require('assert'),
 	fs = require('fs'),
 	child_process = require('child_process'),
-	malta = require('../src/index.js');
+	malta = require('src/index.js');
 
 describe('EXE nested param in build file', function () {
 

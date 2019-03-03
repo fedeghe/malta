@@ -1,7 +1,7 @@
 var assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
-    malta = require('../src/index.js');
+    malta = require('src/index.js');
 
 describe('expressions placeholders', function () {
     var trgFolder = path.resolve('test/fs'),

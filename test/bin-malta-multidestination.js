@@ -2,8 +2,8 @@ var assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
-	malta = require('../src/index.js'),
-	funcs = require('../src/functions.js'),
+	malta = require('src/index.js'),
+	funcs = require('src/functions.js'),
 	promise = require('promise');
 
 describe('multi destinations', function () {

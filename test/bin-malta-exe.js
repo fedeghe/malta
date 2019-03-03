@@ -2,7 +2,7 @@ var assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
-	malta = require('../src/index.js');
+	malta = require('src/index.js');
 
 describe('EXE param in build file', function () {
 	it('should create a file test/fs/exefile.txt containing "hello world"', function (done) {

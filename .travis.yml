@@ -1,6 +1,8 @@
 install: npm install
 language: node_js
-script: npm test
+script:
+  - npm run lint
+  - npm test
 after_success:
 - npm run coveralls
 node_js:
