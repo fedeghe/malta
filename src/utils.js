@@ -30,7 +30,6 @@ const fs = require('fs'),
      */
     getFileTime = thepath => fs.existsSync(thepath) && fs.statSync(thepath).mtime.getTime(),
 
-
     /**
      * get a unique array given an array
      *
@@ -193,7 +192,8 @@ const fs = require('fs'),
         }
 
         // eslint-disable-next-line prefer-template
-        reg = new RegExp('\\' + start + '(\\\+)?([A-z0-9-_\.]*)' + '\\' + end, 'g');
+        // reg = new RegExp('\\' + start + '(\\\+)?([A-z0-9-_\.]*)' + '\\' + end, 'g');
+        reg = new RegExp([ '\\', start, '(\\\+)?([A-z0-9-_\.]*)',  '\\',  end ].join(''), 'g');
 
         while (straight) {
             if (!(tpl.match(reg))) {
