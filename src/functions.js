@@ -24,16 +24,23 @@ const Malta = require('./malta'),
 
 			[ , folder, ext ]= multi;
 
-			fs.readdir(folder.replace(/^#/, ''), (err, files) => {
-				if (files) {
-					files.filter(
-						file => !exclude(file) && file.match(new RegExp(`.*\.${ext}$`))
-					)
-					.forEach(file => {
-						// store the process
-						++processNum;
-						multiElements[file] = proceed(`${folder}/${file}`, el);
-					});
+			// fs.readdir(folder.replace(/^#/, ''), (err, files) => {
+			// 	if (files) {
+			// 		files.filter(
+			// 			file => !exclude(file) && file.match(new RegExp(`.*\.${ext}$`))
+			// 		)
+			// 		.forEach(file => {
+			// 			// store the process
+			// 			++processNum;
+			// 			multiElements[file] = proceed(`${folder}/${file}`, el);
+			// 		});
+			// 	}
+			// });
+			fs.readdirSync(folder.replace(/^#/, '')).forEach(file => {
+				if (!exclude(file) && file.match(new RegExp(`.*\.${ext}$`))) {
+					// store the process
+					++processNum;
+					multiElements[file] = proceed(`${folder}/${file}`, el);
 				}
 			});
 
@@ -63,9 +70,10 @@ const Malta = require('./malta'),
 					});
 				});
 			}
+			return multiElements;
 		} else {
 			++processNum;
-			proceed(key, el);
+			return proceed(key, el);
 		}
 	},
 
@@ -73,6 +81,8 @@ const Malta = require('./malta'),
 		let i = 0,
 			l,
 			ret = [];
+
+		// multi destination?
 		if (typeof options !== Malta.undef && options instanceof Array) {
 			l = options.length;
 			for (null; i < l; i++) {
