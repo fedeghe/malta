@@ -26,12 +26,13 @@ const Malta = require('./malta'),
 
 			fs.readdir(folder.replace(/^#/, ''), (err, files) => {
 				if (files) {
-					files.forEach(file => {
-						if (!exclude(file) && file.match(new RegExp(`.*\.${ext}$`))){
-							// store the process
-							++processNum;
-							multiElements[file] = proceed(`${folder}/${file}`, el);
-						}
+					files.filter(
+						file => !exclude(file) && file.match(new RegExp(`.*\.${ext}$`))
+					)
+					.forEach(file => {
+						// store the process
+						++processNum;
+						multiElements[file] = proceed(`${folder}/${file}`, el);
 					});
 				}
 			});
@@ -41,12 +42,13 @@ const Malta = require('./malta'),
 			if (!noDemon) {
 				watcher.observe(folder, diff => {
 					diff.added.filter(
-						v => v.match(new RegExp([ '.*\\.', ext, '$' ].join('')))
-					).forEach(v => {
-						if (exclude(v)) return;
+						file => file.match(new RegExp([ '.*\\.', ext, '$' ].join('')))
+					).filter(
+						file => !exclude(file)
+					).forEach(file => {
 						++processNum;
-						multiElements[v] = proceed(`${folder}/${v}`, el);
-						Malta.log_debug(`${'ADDED '.yellow()}${folder}/${v}${NL}`);
+						multiElements[file] = proceed(`${folder}/${file}`, el);
+						Malta.log_debug(`${'ADDED '.yellow()}${folder}/${file}${NL}`);
 					});
 
 					diff.removed.filter(
