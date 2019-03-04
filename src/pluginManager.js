@@ -23,8 +23,15 @@ PluginManager.prototype.run = function (instance, Malta) {
         self.mself.log_debug(`on ${self.mself.outName.underline()} called plugins:`);
         self.plugin4ext(utils.getIterator(pluginKeys));
     } else {
-        self.maybeNotifyBuild();
+        self.maybeEndCbAndNotifyBuild();
     }
+};
+
+PluginManager.prototype.maybeEndCbAndNotifyBuild = function () {
+    if (typeof this.mself.endCb === 'function') {
+        this.mself.endCb.call(this.mself);
+    }
+    this.maybeNotifyBuild();
 };
 
 PluginManager.prototype.plugin4ext = function (extIterator) {
@@ -72,8 +79,7 @@ PluginManager.prototype.plugin4ext = function (extIterator) {
                 checknext();
             }
         } else {
-            if (typeof self.mself.endCb === 'function') self.mself.endCb();
-            self.maybeNotifyBuild();
+            self.maybeEndCbAndNotifyBuild();
         }
     })();
 };
