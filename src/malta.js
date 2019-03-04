@@ -240,7 +240,7 @@ Malta.running = true;
 
 Malta.undef = 'undefined';
 
-Malta.execute = function (tmpExe, then) { //not here couse of slice on tmpExe
+Malta.execute = function (tmpExe, then) { //not here cause of slice on tmpExe
 	const exe = tmpExe, //.join(' '),
 		{ exec } = child_process,
 		command = exec(exe.join(' ')),
@@ -618,7 +618,8 @@ Malta.prototype.build = function () {
 };
 
 Malta.prototype.then = function (cb) {
-	this.endCb = cb;
+	const self = this;
+	this.endCb = function () {return cb.call(self); };
 };
 
 /**
