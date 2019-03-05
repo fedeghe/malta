@@ -6,8 +6,8 @@ const fs = require('fs'),
     TAB = "\t";
 
 function PluginManager() {
-    this.user_path = `${execPath}/plugins/`;
-    this.malta_path = `${__dirname}/../plugins/`;
+    this.user_path = path.resolve(execPath, 'plugins');
+    this.malta_path = path.resolve(__dirname, '../plugins');
     this.plugins = {};
 }
 
@@ -110,8 +110,8 @@ PluginManager.prototype.callPlugin = function (p) {
 
 PluginManager.prototype.require = function (fname) {
     let plugin;
-    const user_path = `${this.user_path}${fname}.js`,
-        malta_path = `${this.malta_path}${fname}.js`;
+    const user_path = `${this.user_path}/${fname}.js`,
+        malta_path = `${this.malta_path}/${fname}.js`;
     try {
         // first the user execution dir
         //`
