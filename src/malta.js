@@ -180,7 +180,7 @@ function Malta() {
 	/**
 	 * plugin manager
 	 */
-	this.pluginsManager = new PluginManager();
+	this.pluginManager = new PluginManager();
 
 	/**
 	 * attache the Sticky to che instance so any plugin can use it, e.g. test notifications
@@ -610,7 +610,7 @@ Malta.prototype.build = function () {
 
 		if (self.userWatch) self.userWatch.call(self, self.data, self);
 
-		self.pluginsManager.run(self, Malta);
+		self.pluginManager.run(self, Malta);
 	});
 	// chain
 	//
@@ -776,12 +776,12 @@ Malta.prototype.loadPlugins = function () {
 
 	for (null; i < l; i++) {
 		parts = p[i].match(/([^\[]*)(\[(.*)\])?/);
-		this.pluginsManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
+		this.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
 		self.hasPlugins = true;
 	}
 
 	if (self.hasPlugins) {
-		self.log_dir(self.pluginsManager.plugins);
+		self.log_dir(self.pluginManager.plugins);
 	} else {
 		self.log_debug(('... no plugins needed').white());
 	}
