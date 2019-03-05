@@ -54,7 +54,8 @@ describe('multi', () => {
 				});
 			});
 		}
-	}).timeout(10000);
+	});
+	//.timeout(3000);
 });
 /*
 describe('multi demon', () => {
