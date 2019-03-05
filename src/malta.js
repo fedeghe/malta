@@ -683,6 +683,7 @@ Malta.prototype.check = function (a) {
 	manageBadArgs(this.tplPath, this.outDir);
 
 	this.tplName = path.basename(this.tplPath);
+	this.pluginManager.tplName = this.tplName;
 	this.baseDir = path.dirname(this.tplPath);
 	this.tplCnt = fs.readFileSync(this.tplPath).toString();
 	// this.execDir = execPath;

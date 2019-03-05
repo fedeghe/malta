@@ -25,6 +25,7 @@ PluginManager.prototype.run = function (instance, Malta) {
     } else {
         self.maybeEndCbAndNotifyBuild();
     }
+    return true;
 };
 
 PluginManager.prototype.maybeEndCbAndNotifyBuild = function () {
@@ -107,7 +108,6 @@ PluginManager.prototype.callPlugin = function (p) {
     return p.func.bind(self.mself)(self.mself.data, p.params);
 };
 
-
 PluginManager.prototype.require = function (fname) {
     let plugin;
     const user_path = `${this.user_path}/${fname}.js`,
@@ -133,9 +133,7 @@ PluginManager.prototype.require = function (fname) {
     return plugin;
 };
 
-
 PluginManager.prototype.add = function (fname, params) {
-
     const self = this;
     let plugin = self.require(fname);
 
@@ -151,7 +149,6 @@ PluginManager.prototype.add = function (fname, params) {
         self.doAdd('*', plugin, params);
     }
 };
-
 
 PluginManager.prototype.doAdd = function(el, plu, params) {
     // handle * wildcard
