@@ -24,18 +24,6 @@ const Malta = require('./malta'),
 
 			[ , folder, ext ]= multi;
 
-			// fs.readdir(folder.replace(/^#/, ''), (err, files) => {
-			// 	if (files) {
-			// 		files.filter(
-			// 			file => !exclude(file) && file.match(new RegExp(`.*\.${ext}$`))
-			// 		)
-			// 		.forEach(file => {
-			// 			// store the process
-			// 			++processNum;
-			// 			multiElements[file] = proceed(`${folder}/${file}`, el);
-			// 		});
-			// 	}
-			// });
 			fs.readdirSync(folder.replace(/^#/, '')).forEach(file => {
 				if (!exclude(file) && file.match(new RegExp(`.*\.${ext}$`))) {
 					// store the process

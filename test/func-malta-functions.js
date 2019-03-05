@@ -56,3 +56,46 @@ describe('multi', () => {
 		}
 	}).timeout(10000);
 });
+/*
+describe('multi demon', () => {
+	it('should use wildcard as source tpl, add', (done) => {
+		const dest = 'test/fs/functions/multi/dest',
+			maltas = functions.multi('test/fs/functions/multi/*.js', dest);
+
+		let mkeys = Object.keys(maltas);
+
+		let fname = `test/fs/functions/multi/aZERO.js`;
+		maltas[mkeys[0]].then(function () { // need this here, leave the es5
+			const self = this;
+			// console.log(this)
+			fs.writeFileSync(fname, 'alert("some content");')
+
+			setTimeout(() => {
+				self.stop();
+				done();
+			}, 200);
+		});
+	}).timeout(20000);
+});
+
+describe('multi demon2', () => {	
+	it('should use wildcard as source tpl, remove', (done) => {
+		const dest = 'test/fs/functions/multi/dest',
+			maltas = functions.multi('test/fs/functions/multi/*.js', dest);
+
+		let mkeys = Object.keys(maltas);
+
+		let fname = `test/fs/functions/multi/aZERO.js`;
+		maltas[mkeys[0]].then(function () { // need this here, leave the es5
+			const self = this;
+			// console.log(this)
+			fs.unlinkSync(fname)
+
+			setTimeout(() => {
+				self.stop();
+				done();
+			}, 200);
+		});
+	}).timeout(30000);
+});
+*/
