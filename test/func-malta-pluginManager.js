@@ -7,7 +7,8 @@ describe('PluginManager', () => {
 	var m = malta.get().check([
 			'test/fs/pluginmanager/one.js',
 			'test/fs/pluginmanager/out',
-			'-plugins=test1[string:\"hello\"]'
+			'-plugins=test1[string:\"hello\"]',
+			'-options=verbose:2'
 		]);
 	let mpm = m.pluginManager;
 	it('constructor should give right paths', () => {

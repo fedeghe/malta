@@ -698,7 +698,7 @@ Malta.prototype.check = function (a) {
 	tmp = a.join(' ').match(/proc=(\d*)/);
 
 	this.procNum = tmp ? tmp[1] : 0;
-	this.proc = `[${this.procNum}] ${this.tplName.white()}`;
+	this.proc = `[#${this.procNum}] ${this.tplName.white()}`;
 
 	this.args = a.splice(2);
 
