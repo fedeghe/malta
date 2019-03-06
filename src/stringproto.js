@@ -1,10 +1,11 @@
+/* eslint-disable no-control-regex */
 function rainbowize (offset) {
 	// "use strict"; //no octal lit
 	offset = offset || 0;
 	return function () {
 		const els = this,
 			l = els.length,
-			tpl = '\033[1;%code%m%char%\033[0m',
+			tpl = '\x1b[1;%code%m%char%\x1b[0m',
 			cols = [
 				31 + offset, // red
 				32 + offset, // green
@@ -26,45 +27,47 @@ function rainbowize (offset) {
 	};
 }
 
-String.prototype.normal = function () {return [ '\033[1;0m', this, '\033[0m' ].join(''); };
-String.prototype.darken = function () {return [ '\033[1;2m', this, '\033[0m' ].join(''); };
-String.prototype.italic = function () {return [ '\033[1;54m', this, '\033[0m' ].join(''); };
-String.prototype.underline = function () {return [ '\033[1;4m', this, '\033[0m' ].join(''); };
-String.prototype.blink = function () {return [ '\033[1;5m', this, '\033[0m' ].join(''); };
-String.prototype.invert = function () {return [ '\033[1;7m', this, '\033[0m' ].join(''); };
-String.prototype.gray = function () {return [ '\033[1;30m', this, '\033[0m' ].join(''); };
-String.prototype.red = function () {return [ '\033[1;31m', this, '\033[0m' ].join(''); };
-String.prototype.green = function () {return [ '\033[1;32m', this, '\033[0m' ].join(''); };
-String.prototype.yellow = function () {return [ '\033[1;33m', this, '\033[0m' ].join(''); };
-String.prototype.blue = function () {return [ '\033[1;34m', this, '\033[0m' ].join(''); };
-String.prototype.magenta = function () {return [ '\033[1;35m', this, '\033[0m' ].join(''); };
-String.prototype.cyan = function () {return [ '\033[1;36m', this, '\033[0m' ].join(''); };
-String.prototype.lightgray = function () {return [ '\033[1;37m', this, '\033[0m' ].join(''); };
-String.prototype.darkgray = function () {return [ '\033[1;90m', this, '\033[0m' ].join(''); };
-String.prototype.lightred = function () {return [ '\033[1;91m', this, '\033[0m' ].join(''); };
-String.prototype.lightgreen = function () {return [ '\033[1;92m', this, '\033[0m' ].join(''); };
-String.prototype.lightyellow = function () {return [ '\033[1;93m', this, '\033[0m' ].join(''); };
-String.prototype.lightblue = function () {return [ '\033[1;94m', this, '\033[0m' ].join(''); };
-String.prototype.lightmagenta = function () {return [ '\033[1;95m', this, '\033[0m' ].join(''); };
-String.prototype.lightcyan = function () {return [ '\033[1;96m', this, '\033[0m' ].join(''); };
-String.prototype.white = function () {return [ '\033[1;97m', this, '\033[0m' ].join(''); };
+
+
+String.prototype.normal = function () {return [ '\x1b[1;0m', this, '\x1b[0m' ].join(''); };
+String.prototype.darken = function () {return [ '\x1b[1;2m', this, '\x1b[0m' ].join(''); };
+String.prototype.italic = function () {return [ '\x1b[1;54m', this, '\x1b[0m' ].join(''); };
+String.prototype.underline = function () {return [ '\x1b[1;4m', this, '\x1b[0m' ].join(''); };
+String.prototype.blink = function () {return [ '\x1b[1;5m', this, '\x1b[0m' ].join(''); };
+String.prototype.invert = function () {return [ '\x1b[1;7m', this, '\x1b[0m' ].join(''); };
+String.prototype.gray = function () {return [ '\x1b[1;30m', this, '\x1b[0m' ].join(''); };
+String.prototype.red = function () {return [ '\x1b[1;31m', this, '\x1b[0m' ].join(''); };
+String.prototype.green = function () {return [ '\x1b[1;32m', this, '\x1b[0m' ].join(''); };
+String.prototype.yellow = function () {return [ '\x1b[1;33m', this, '\x1b[0m' ].join(''); };
+String.prototype.blue = function () {return [ '\x1b[1;34m', this, '\x1b[0m' ].join(''); };
+String.prototype.magenta = function () {return [ '\x1b[1;35m', this, '\x1b[0m' ].join(''); };
+String.prototype.cyan = function () {return [ '\x1b[1;36m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightgray = function () {return [ '\x1b[1;37m', this, '\x1b[0m' ].join(''); };
+String.prototype.darkgray = function () {return [ '\x1b[1;90m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightred = function () {return [ '\x1b[1;91m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightgreen = function () {return [ '\x1b[1;92m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightyellow = function () {return [ '\x1b[1;93m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightblue = function () {return [ '\x1b[1;94m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightmagenta = function () {return [ '\x1b[1;95m', this, '\x1b[0m' ].join(''); };
+String.prototype.lightcyan = function () {return [ '\x1b[1;96m', this, '\x1b[0m' ].join(''); };
+String.prototype.white = function () {return [ '\x1b[1;97m', this, '\x1b[0m' ].join(''); };
 String.prototype.rainbow = rainbowize();
 
-String.prototype.bgblack = function () {return [ '\033[1;40m', this, '\033[0m' ].join(''); };
-String.prototype.bgred = function () {return [ '\033[1;41m', this, '\033[0m' ].join(''); };
-String.prototype.bggreen = function () {return [ '\033[1;42m', this, '\033[0m' ].join(''); };
-String.prototype.bgyellow = function () {return [ '\033[1;43m', this, '\033[0m' ].join(''); };
-String.prototype.bgblue = function () {return [ '\033[1;44m', this, '\033[0m' ].join(''); };
-String.prototype.bgmagenta = function () {return [ '\033[1;45m', this, '\033[0m' ].join(''); };
-String.prototype.bgcyan = function () {return [ '\033[1;46m', this, '\033[0m' ].join(''); };
-String.prototype.bglightgray = function () {return [ '\033[1;47m', this, '\033[0m' ].join(''); };
-String.prototype.bgdefault = function () {return [ '\033[1;49m', this, '\033[0m' ].join(''); };
-String.prototype.bgdarkgray = function () {return [ '\033[1;100m', this, '\033[0m' ].join(''); };
-String.prototype.bglightred = function () {return [ '\033[1;101m', this, '\033[0m' ].join(''); };
-String.prototype.bglightgreen = function () {return [ '\033[1;102m', this, '\033[0m' ].join(''); };
-String.prototype.bglightyellow = function () {return [ '\033[1;103m', this, '\033[0m' ].join(''); };
-String.prototype.bglightblue = function () {return [ '\033[1;104m', this, '\033[0m' ].join(''); };
-String.prototype.bglightmagenta = function () {return [ '\033[1;105m', this, '\033[0m' ].join(''); };
-String.prototype.bglightcyan = function () {return [ '\033[1;106m', this, '\033[0m' ].join(''); };
-String.prototype.bgwhite = function () {return [ '\033[1;107m', this, '\033[0m' ].join(''); };
+String.prototype.bgblack = function () {return [ '\x1b[1;40m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgred = function () {return [ '\x1b[1;41m', this, '\x1b[0m' ].join(''); };
+String.prototype.bggreen = function () {return [ '\x1b[1;42m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgyellow = function () {return [ '\x1b[1;43m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgblue = function () {return [ '\x1b[1;44m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgmagenta = function () {return [ '\x1b[1;45m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgcyan = function () {return [ '\x1b[1;46m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightgray = function () {return [ '\x1b[1;47m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgdefault = function () {return [ '\x1b[1;49m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgdarkgray = function () {return [ '\x1b[1;100m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightred = function () {return [ '\x1b[1;101m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightgreen = function () {return [ '\x1b[1;102m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightyellow = function () {return [ '\x1b[1;103m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightblue = function () {return [ '\x1b[1;104m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightmagenta = function () {return [ '\x1b[1;105m', this, '\x1b[0m' ].join(''); };
+String.prototype.bglightcyan = function () {return [ '\x1b[1;106m', this, '\x1b[0m' ].join(''); };
+String.prototype.bgwhite = function () {return [ '\x1b[1;107m', this, '\x1b[0m' ].join(''); };
 String.prototype.bgrainbow = rainbowize(10);
