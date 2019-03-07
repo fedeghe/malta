@@ -30,6 +30,9 @@
   "engines": {
     "node": ">=4.0.0"
   },
+  "nyc": {
+    "include": "src"
+  },
   "devDependencies": {
     "coveralls": "~3.0.2",
     "cryptiles": ">=4.1.2",
