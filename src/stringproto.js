@@ -27,8 +27,6 @@ function rainbowize (offset) {
 	};
 }
 
-
-
 String.prototype.normal = function () {return [ '\x1b[1;0m', this, '\x1b[0m' ].join(''); };
 String.prototype.darken = function () {return [ '\x1b[1;2m', this, '\x1b[0m' ].join(''); };
 String.prototype.italic = function () {return [ '\x1b[1;54m', this, '\x1b[0m' ].join(''); };
