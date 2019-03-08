@@ -48,9 +48,13 @@ describe('multi', () => {
 
 		for (var m in maltas) {
 			maltas[m].then(function () { // need this here, leave the es5
+				console.log(this.outName)
 				fs.unlink(this.outName, () => {
 					num--;
-					if (num === 0) done();
+					if (num === 0) {
+						// maltas[m].stop();
+						done();
+					}
 				});
 			});
 		}
@@ -58,28 +62,23 @@ describe('multi', () => {
 	//.timeout(3000);
 });
 
-
 // describe('multi demon create', () => {
 // 	it('should use wildcard as source tpl', (done) => {
 // 		const dest = 'test/fs/functions/multi/dest',
 // 			maltas = functions.multi('test/fs/functions/multi/*.js', dest),
 // 			keys = Object.keys(maltas);
-
 // 		console.log('prima')
 // 		console.log(Object.keys(maltas))
 // 		function add() { // need this here, leave the es5
 // 			fs.writeFileSync('test/fs/functions/multi/x.js');
 // 			setTimeout(() => {
-				
 // 				console.log('---------------')
 // 				console.log('dopo')
 // 				console.log(Object.keys(maltas))
 // 				// fs.unlinkSync('test/fs/functions/multi/x.js');
 // 				done();
-
 // 			}, 2000);
 // 		}
-		
 // 	}).timeout(5000);
 // });
 
