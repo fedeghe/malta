@@ -1,19 +1,24 @@
 const assert = require('assert'),
 	fs = require('fs'),
 	path = require('path'),
+	os = require('os'),
 	malta = require('src/index.js');
 
+const home = os.homedir();
+
 describe('PluginManager', () => {
-	var m = malta.get().check([
+	let m, mpm;
+
+	it('constructor should give right paths', () => {
+		m = malta.get().check([
 			'test/fs/pluginmanager/one.js',
 			'test/fs/pluginmanager/out',
 			'-plugins=test1[string:\"hello\"]',
 			'-options=verbose:2'
 		]);
-	let mpm = m.pluginManager;
-	it('constructor should give right paths', () => {
-		assert.equal(mpm.user_path, '/Users/federicoghedina/node/malta/plugins');
-		assert.equal(mpm.malta_path, '/Users/federicoghedina/node/malta/plugins');
+		mpm = m.pluginManager;
+		assert.equal(mpm.user_path, `${home}/node/malta/plugins`);
+		assert.equal(mpm.malta_path, `${home}/node/malta/plugins`);
 		assert.equal(
 			JSON.stringify(mpm.plugins),
 			JSON.stringify({
@@ -36,20 +41,17 @@ describe('PluginManager', () => {
 	});
 	
 	it('should require as expected', () => {
-		var m = mpm.require('malta');
-		assert.equal(m.name, 'Malta');
+		var m = mpm.require('http');
+		assert.equal(typeof m.request, 'function');
 	});
-	/*
-	it('should run as expected', (done) => {
-		m.start();
-		// const res = mpm.run(m, malta);
-		assert.equal(m.hasPlugins, true);
-		// assert.equal(res, true);
-		setTimeout(() => {
-			
-			m.stop();
-			done();
-		}, 2000); 
+	
+	it('should run as expected', () => {
+		m.then( () => {
+			setTimeout(() => {
+				m.stop();
+				assert.equal(m.hasPlugins, true);
+			}, 3000);
+		}).start();
 	});
-	*/
+	
 });

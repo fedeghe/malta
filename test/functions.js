@@ -57,46 +57,49 @@ describe('multi', () => {
 	});
 	//.timeout(3000);
 });
-/*
-describe('multi demon', () => {
-	it('should use wildcard as source tpl, add', (done) => {
-		const dest = 'test/fs/functions/multi/dest',
-			maltas = functions.multi('test/fs/functions/multi/*.js', dest);
 
-		let mkeys = Object.keys(maltas);
 
-		let fname = `test/fs/functions/multi/aZERO.js`;
-		maltas[mkeys[0]].then(function () { // need this here, leave the es5
-			const self = this;
-			// console.log(this)
-			fs.writeFileSync(fname, 'alert("some content");')
+// describe('multi demon create', () => {
+// 	it('should use wildcard as source tpl', (done) => {
+// 		const dest = 'test/fs/functions/multi/dest',
+// 			maltas = functions.multi('test/fs/functions/multi/*.js', dest),
+// 			keys = Object.keys(maltas);
 
-			setTimeout(() => {
-				self.stop();
-				done();
-			}, 200);
-		});
-	}).timeout(20000);
-});
+// 		console.log('prima')
+// 		console.log(Object.keys(maltas))
+// 		function add() { // need this here, leave the es5
+// 			fs.writeFileSync('test/fs/functions/multi/x.js');
+// 			setTimeout(() => {
+				
+// 				console.log('---------------')
+// 				console.log('dopo')
+// 				console.log(Object.keys(maltas))
+// 				// fs.unlinkSync('test/fs/functions/multi/x.js');
+// 				done();
 
-describe('multi demon2', () => {	
-	it('should use wildcard as source tpl, remove', (done) => {
-		const dest = 'test/fs/functions/multi/dest',
-			maltas = functions.multi('test/fs/functions/multi/*.js', dest);
+// 			}, 2000);
+// 		}
+		
+// 	}).timeout(5000);
+// });
 
-		let mkeys = Object.keys(maltas);
 
-		let fname = `test/fs/functions/multi/aZERO.js`;
-		maltas[mkeys[0]].then(function () { // need this here, leave the es5
-			const self = this;
-			// console.log(this)
-			fs.unlinkSync(fname)
 
-			setTimeout(() => {
-				self.stop();
-				done();
-			}, 200);
-		});
-	}).timeout(30000);
-});
-*/
+// describe('multi demon delete', () => {
+// 	it('should use wildcard as source tpl', (done) => {
+// 		const dest = 'test/fs/functions/multi/dest',
+// 			maltas = functions.multi('test/fs/functions/multi/*.js', dest, remove),
+// 			keys = Object.keys(maltas);
+		
+// 		function remove() {
+// 			fs.unlinkSync('test/fs/functions/multi/x.js');
+// 			setTimeout(() => {
+// 				done();
+// 			}, 2000);
+// 		}
+
+// 	}).timeout(10000);
+// });
+
+
+

@@ -620,6 +620,7 @@ Malta.prototype.build = function () {
 Malta.prototype.then = function (cb) {
 	const self = this;
 	this.endCb = function () {return cb.call(self); };
+	return this;
 };
 
 /**

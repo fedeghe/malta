@@ -1,7 +1,8 @@
 var assert = require('assert'),
     fs = require('fs'),
-    path = require('path'),
-    malta = require('src/index.js');
+    path = require('path');
+
+const strfun = require('src/stringproto.js');
 
 describe('string proto', function () {
     var str = "hello",
@@ -17,14 +18,21 @@ describe('string proto', function () {
             "bglightred" : 101, "bglightgreen" : 102, "bglightyellow" : 103, "bglightblue" : 104,
             "bglightmagenta" : 105, "bglightcyan" : 106, "bgwhite" : 107
         },
-        k = Object.keys(map),
-        i;
-    it ("should have the right color (" + k.length + ")", function () {
-        for (i in map) {
-            assert.equal(str[i](), "\u001b[1;" + map[i] + "mhello\u001b[0m");
-        }
-    });
-    it ("should have the bainbow color", function () {
+        keys = Object.keys(map);
+    
+    keys.forEach((k) => {
+        it("should have the right color (" + k + ")", function () {
+            // console.log(String.prototype[k].call(str) + "")
+            // console.log("\x1b[1;" + map[k] + "m" + str + "\x1b[0m")
+            // console.log('------')
+            assert.equal(
+                strfun[k].call(str) + "",
+                "\x1b[1;" + map[k] + "m" + str + "\x1b[0m"
+            );
+        });
+    })
+
+    it ("should have the rainbow color", function () {
         assert.ok(str.rainbow().length > 0);
     });
 });
