@@ -27,50 +27,49 @@ function rainbowize (offset) {
 	};
 }
 
-function normal() { return ['\x1b[1;0m', this, '\x1b[0m'].join(''); };
-function darken() { return ['\x1b[1;2m', this, '\x1b[0m'].join(''); };
-function italic() { return ['\x1b[1;54m', this, '\x1b[0m'].join(''); };
+function normal() { return [ '\x1b[1;0m', this, '\x1b[0m' ].join(''); }
+function darken() { return [ '\x1b[1;2m', this, '\x1b[0m' ].join(''); }
+function italic() { return [ '\x1b[1;54m', this, '\x1b[0m' ].join(''); }
+function underline() { return [ '\x1b[1;4m', this, '\x1b[0m' ].join(''); }
+function blink() { return [ '\x1b[1;5m', this, '\x1b[0m' ].join(''); }
+function invert() { return [ '\x1b[1;7m', this, '\x1b[0m' ].join(''); }
+function gray() { return [ '\x1b[1;30m', this, '\x1b[0m' ].join(''); }
+function red() { return [ '\x1b[1;31m', this, '\x1b[0m' ].join(''); }
+function green() { return [ '\x1b[1;32m', this, '\x1b[0m' ].join(''); }
+function yellow() { return [ '\x1b[1;33m', this, '\x1b[0m' ].join(''); }
+function blue() { return [ '\x1b[1;34m', this, '\x1b[0m' ].join(''); }
+function magenta() { return [ '\x1b[1;35m', this, '\x1b[0m' ].join(''); }
+function cyan() { return [ '\x1b[1;36m', this, '\x1b[0m' ].join(''); }
+function lightgray() { return [ '\x1b[1;37m', this, '\x1b[0m' ].join(''); }
+function darkgray() { return [ '\x1b[1;90m', this, '\x1b[0m' ].join(''); }
+function lightred() { return [ '\x1b[1;91m', this, '\x1b[0m' ].join(''); }
+function lightgreen() { return [ '\x1b[1;92m', this, '\x1b[0m' ].join(''); }
+function lightyellow() { return [ '\x1b[1;93m', this, '\x1b[0m' ].join(''); }
+function lightblue() { return [ '\x1b[1;94m', this, '\x1b[0m' ].join(''); }
+function lightmagenta() { return [ '\x1b[1;95m', this, '\x1b[0m' ].join(''); }
+function lightcyan() { return [ '\x1b[1;96m', this, '\x1b[0m' ].join(''); }
+function white() { return [ '\x1b[1;97m', this, '\x1b[0m' ].join(''); }
 
-function underline() { return ['\x1b[1;4m', this, '\x1b[0m'].join(''); };
-function blink() { return ['\x1b[1;5m', this, '\x1b[0m'].join(''); };
-function invert() { return ['\x1b[1;7m', this, '\x1b[0m'].join(''); };
-function gray() { return ['\x1b[1;30m', this, '\x1b[0m'].join(''); };
-function red() { return ['\x1b[1;31m', this, '\x1b[0m'].join(''); };
-function green() { return ['\x1b[1;32m', this, '\x1b[0m'].join(''); };
-function yellow() { return ['\x1b[1;33m', this, '\x1b[0m'].join(''); };
-function blue() { return ['\x1b[1;34m', this, '\x1b[0m'].join(''); };
-function magenta() { return ['\x1b[1;35m', this, '\x1b[0m'].join(''); };
-function cyan() { return ['\x1b[1;36m', this, '\x1b[0m'].join(''); };
-function lightgray() { return ['\x1b[1;37m', this, '\x1b[0m'].join(''); };
-function darkgray() { return ['\x1b[1;90m', this, '\x1b[0m'].join(''); };
-function lightred() { return ['\x1b[1;91m', this, '\x1b[0m'].join(''); };
-function lightgreen() { return ['\x1b[1;92m', this, '\x1b[0m'].join(''); };
-function lightyellow() { return ['\x1b[1;93m', this, '\x1b[0m'].join(''); };
-function lightblue() { return ['\x1b[1;94m', this, '\x1b[0m'].join(''); };
-function lightmagenta() { return ['\x1b[1;95m', this, '\x1b[0m'].join(''); };
-function lightcyan() { return ['\x1b[1;96m', this, '\x1b[0m'].join(''); };
-function white() { return ['\x1b[1;97m', this, '\x1b[0m'].join(''); };
 
-
-function bgblack() { return ['\x1b[1;40m', this, '\x1b[0m'].join(''); };
-function bgred() { return ['\x1b[1;41m', this, '\x1b[0m'].join(''); };
-function bggreen() { return ['\x1b[1;42m', this, '\x1b[0m'].join(''); };
-function bgyellow() { return ['\x1b[1;43m', this, '\x1b[0m'].join(''); };
-function bgblue() { return ['\x1b[1;44m', this, '\x1b[0m'].join(''); };
-function bgmagenta() { return ['\x1b[1;45m', this, '\x1b[0m'].join(''); };
-function bgcyan() { return ['\x1b[1;46m', this, '\x1b[0m'].join(''); };
-function bglightgray() { return ['\x1b[1;47m', this, '\x1b[0m'].join(''); };
-function bgdefault() { return ['\x1b[1;49m', this, '\x1b[0m'].join(''); };
-function bgdarkgray() { return ['\x1b[1;100m', this, '\x1b[0m'].join(''); };
-function bglightred() { return ['\x1b[1;101m', this, '\x1b[0m'].join(''); };
-function bglightgreen() { return ['\x1b[1;102m', this, '\x1b[0m'].join(''); };
-function bglightyellow() { return ['\x1b[1;103m', this, '\x1b[0m'].join(''); };
-function bglightblue() { return ['\x1b[1;104m', this, '\x1b[0m'].join(''); };
-function bglightmagenta() { return ['\x1b[1;105m', this, '\x1b[0m'].join(''); };
-function bglightcyan() { return ['\x1b[1;106m', this, '\x1b[0m'].join(''); };
-function bgwhite() { return ['\x1b[1;107m', this, '\x1b[0m'].join(''); };
-const bgrainbow = rainbowize(10);
-const rainbow = rainbowize();
+function bgblack() { return [ '\x1b[1;40m', this, '\x1b[0m' ].join(''); }
+function bgred() { return [ '\x1b[1;41m', this, '\x1b[0m' ].join(''); }
+function bggreen() { return [ '\x1b[1;42m', this, '\x1b[0m' ].join(''); }
+function bgyellow() { return [ '\x1b[1;43m', this, '\x1b[0m' ].join(''); }
+function bgblue() { return [ '\x1b[1;44m', this, '\x1b[0m' ].join(''); }
+function bgmagenta() { return [ '\x1b[1;45m', this, '\x1b[0m' ].join(''); }
+function bgcyan() { return [ '\x1b[1;46m', this, '\x1b[0m' ].join(''); }
+function bglightgray() { return [ '\x1b[1;47m', this, '\x1b[0m' ].join(''); }
+function bgdefault() { return [ '\x1b[1;49m', this, '\x1b[0m' ].join(''); }
+function bgdarkgray() { return [ '\x1b[1;100m', this, '\x1b[0m' ].join(''); }
+function bglightred() { return [ '\x1b[1;101m', this, '\x1b[0m' ].join(''); }
+function bglightgreen() { return [ '\x1b[1;102m', this, '\x1b[0m' ].join(''); }
+function bglightyellow() { return [ '\x1b[1;103m', this, '\x1b[0m' ].join(''); }
+function bglightblue() { return [ '\x1b[1;104m', this, '\x1b[0m' ].join(''); }
+function bglightmagenta() { return [ '\x1b[1;105m', this, '\x1b[0m' ].join(''); }
+function bglightcyan() { return [ '\x1b[1;106m', this, '\x1b[0m' ].join(''); }
+function bgwhite() { return [ '\x1b[1;107m', this, '\x1b[0m' ].join(''); }
+const bgrainbow = rainbowize(10),
+	rainbow = rainbowize();
 
 
 String.prototype.normal = normal;
