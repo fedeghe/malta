@@ -4,6 +4,9 @@
         "node": true
     },
     "extends": "eslint:recommended",
+    "globals": {
+        "BIN_MODE": "writable"
+    },
     "rules": {
         "no-console": 0,
         "no-extra-semi": 1,

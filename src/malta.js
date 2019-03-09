@@ -277,12 +277,13 @@ Malta.execute = function (tmpExe, then) { //not here cause of slice on tmpExe
  */
 Malta.badargs = function (tpl, dst) {
 	// eslint-disable-next-line prefer-template
-	console.log(('ERR : It looks like' + NL +
+	const errMsg = 'ERR : It looks like' + NL +
 		(tpl ? tpl + NL : '') +
 		(dst ? dst + NL : '') +
 		'can`t be found!' + NL +
-		'... check, fix and rerun' + NL).red());
-	Malta.stop();
+		'... check, fix and rerun' + NL;
+	console.log(errMsg.red());
+	Malta.stop(errMsg);
 };
 
 /**
@@ -291,8 +292,9 @@ Malta.badargs = function (tpl, dst) {
  */
 Malta.log_help = function () {
 	Malta.outVersion(true);
-	console.log(`Usage:${NL}> malta [templatefile] [outdir] {options}${NL}> malta [buildfile.json]${NL}`);
-	Malta.stop();
+	const msg = `Usage:${NL}> malta [templatefile] [outdir] {options}${NL}> malta [buildfile.json]${NL}`;
+	console.log(msg);
+	Malta.stop(msg);
 };
 
 /**
@@ -412,8 +414,13 @@ Malta.stop = function (msg) {
 
 	fs.unlink(Malta.printfile, () => { });
 	Malta.running = false;
-	// process.exitCode = 0;
-	process.exit();
+	if (BIN_MODE) {
+		console.log('THROWING ERRRSSSSS');
+		console.log(msg);
+		process.exit();
+	} else {
+		throw new Error(msg);
+	}
 };
 
 
@@ -594,9 +601,9 @@ Malta.prototype.build = function () {
 	//
 	fs.writeFile(self.outName, self.data.content, function (err) {
 		if (err) {
-			console.log(`Malta error writing file '${self.outName}' error: `);
-			console.dir(err);
-			Malta.stop();
+			let errMsg = `Malta error writing file '${self.outName}' error: ${JSON.stringify(err)}`;
+			console.log(errMsg);
+			Malta.stop(errMsg);
 		}
 		const d = self.date(),
 			data = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
@@ -974,17 +981,14 @@ Malta.prototype.microTpl = function (cnt) {
 			} else {
 				// this is really dangerous
 				//
-				// ev.push('r.push(`' + el.replace(/\"/g, '\\\"').replace(/\'/g, '\\\'') + '`)');
 				ev.push(`r.push(\`${el.replace(/\"/g, '\\\"').replace(/\'/g, '\\\'')}\`)`);
 			}
 		});
 		try {
 			eval(ev.join(NL));
 		} catch (e) {
-			console.log('Malta microtemplating error evaluating code: '.red());
-			console.log(ev.join(NL));
-			console.log(`---${NL}`);
-			Malta.stop();
+			let errMsg = `${'Malta microtemplating error evaluating code:'.red()} ${ev.join(NL)}`;
+			Malta.stop(errMsg);
 		}
 
 
@@ -1300,7 +1304,7 @@ Malta.prototype.shut = function () {
 
 // be sure to call malta stop when the user CTRL+C
 //
-process.on('SIGINT', Malta.stop);
-process.on('exit', Malta.stop);
+process.on('SIGINT', () => { Malta.stop('SIGINT'); });
+process.on('exit', () => { Malta.stop('exit'); });
 
 module.exports = Malta;

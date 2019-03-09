@@ -13,7 +13,7 @@ describe('PluginManager', () => {
 		m = malta.get().check([
 			'test/fs/pluginmanager/one.js',
 			'test/fs/pluginmanager/out',
-			'-plugins=test1[string:\"hello\"]',
+			'-plugins=test1[string:\"hello1\"]',
 			'-options=verbose:2'
 		]);
 		mpm = m.pluginManager;
@@ -24,16 +24,16 @@ describe('PluginManager', () => {
 			JSON.stringify({
 				"js": [{
 					"name": "testPlugin1",
-					"params": { "string": "hello" }
+					"params": { "string": "hello1" }
 				}]
 			})
 		);
 	});
 	
 	it('should add the expected plugins', () => {
-		mpm.add('test2', {string: 'hello'});
-		mpm.add('test3', {string: 'hello'});
-		mpm.add('test4', {string: 'hello'});
+		mpm.add('test2', {string: 'hello2'});
+		mpm.add('test3', {string: 'hello3'});
+		mpm.add('test4', {string: 'hello4'});
 		// assert.equal(mpm.plugins['*'].length, 1);
 		
 		assert.equal(mpm.plugins['js'].length, 4);
