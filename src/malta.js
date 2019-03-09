@@ -419,7 +419,8 @@ Malta.stop = function (msg) {
 		console.log(msg);
 		process.exit();
 	} else {
-		throw new Error(msg);
+		process.exit();
+		//throw new Error(msg);
 	}
 };
 
