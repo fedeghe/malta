@@ -1,0 +1,18 @@
+{
+  "extends": "standard",
+  "globals": {
+    "BIN_MODE": true
+  },
+  "rules": {
+    "default-case": "error",
+    "indent": ["error", 4, { "SwitchCase": 1}],
+    "no-eval": 0,
+    "no-multiple-empty-lines": ["error", {"max": 2, "maxEOF": 1}],
+    "no-useless-call": 0,
+    "one-var": ["error", "always"],
+    "prefer-template": "error",
+    "semi": ["error", "always"],
+    "valid-typeof": 0
+  }
+}
+

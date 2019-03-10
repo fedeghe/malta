@@ -1,36 +1,34 @@
 const fs = require('fs');
 
-module.exports = (function() {
-    "use strict";
+module.exports = (function () {
     let elements = {};
 
-    function arrDiff(a, b) {
-        let b_added = [],
-            b_removed = [],
+    function arrDiff (a, b) {
+        let bAdded = [],
+            bRemoved = [],
             astr = a.join(':::'),
             bstr = b.join(':::'),
             i, l;
 
         for (i = 0, l = a.length; i < l; i++) {
-            if (bstr.indexOf(a[i]) < 0) b_removed.push(a[i]);
+            if (bstr.indexOf(a[i]) < 0) bRemoved.push(a[i]);
         }
         for (i = 0, l = b.length; i < l; i++) {
-            if (astr.indexOf(b[i]) < 0) b_added.push(b[i]);
+            if (astr.indexOf(b[i]) < 0) bAdded.push(b[i]);
         }
-        return {added : b_added, removed : b_removed};
+        return { added: bAdded, removed: bRemoved };
     }
 
-    function observe(folder, cb) {
-
+    function observe (folder, cb) {
         let actual = {},
             previous = false;
 
         if (folder in elements) return false;
 
-        elements[folder] = setInterval(function() {
+        elements[folder] = setInterval(function () {
             try {
-                fs.readdir(folder, function(err, files) {
-                    
+                fs.readdir(folder, function (err, files) {
+                    if (err) throw err;
                     if (!files) return;
 
                     if (!previous) {
@@ -60,7 +58,7 @@ module.exports = (function() {
         return true;
     }
 
-    function unobserve(folder) {
+    function unobserve (folder) {
         if (folder in elements) {
             clearInterval(elements[folder]);
             delete elements[folder];
