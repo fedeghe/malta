@@ -5,16 +5,16 @@ const fs = require('fs'),
     childProcess = require('child_process'),
     Mpromise = require('./maltapromise.js'),
     utils = require('./utils.js'),
-    // PluginManager = require('./pluginManager.js'),
+    PluginManager = require('./pluginManager.js'),
     Sticky = require('./sticky.js'),
     execPath = process.cwd(),
     packageInfo = fs.existsSync(path.join(__dirname, '../package.json')) ? require(path.join(__dirname, '../package.json')) : {},
     execPackageInfo = fs.existsSync(execPath + '/package.json') ? require(execPath + '/package.json') : {},
     DS = path.sep,
     // eslint-disable-next-line quotes
-    NL = "\n",
+    NL = '\n',
     // eslint-disable-next-line quotes
-    TAB = "\t",
+    TAB = '\t',
     UNDEFINED = 'undefined';
 
 // string proto for console colors
@@ -176,10 +176,10 @@ function Malta () {
     /**
      * plugin manager
      */
-    // this.pluginsManager = null;
+    this.pluginManager = new PluginManager(this);
 
     /**
-     * attache the Sticky to che instance so any plugin can use it, e.g. test notifications
+     * attach the Sticky to che instance so any plugin can use it, e.g. test notifications
      */
     this.sticky = Sticky;
 }
@@ -233,6 +233,10 @@ Malta.printfile = '.printVersion';
 Malta.executeCheck = 0;
 
 Malta.running = true;
+
+Malta.NL = NL;
+
+Malta.TAB = TAB;
 
 Malta.execute = function (tmpExe, then) {
     const exe = tmpExe, // .join(' '),
@@ -385,9 +389,10 @@ Malta.isCommand = function (s) {
 /**
  * { function_description }
  */
-Malta.stop = function () {
+Malta.stop = function (msg) {
     if (!Malta.running) return;
     console.log(Malta.name + ' has stopped' + NL);
+    msg && console.log(`msg: ${msg}`);
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
     process.exit();
@@ -511,7 +516,7 @@ Malta.log_err = Malta.prototype.log_err = function (msg) {
         msg = (this.proc ? this.proc + ' ' : '') + '[ERROR]: '.red() + msg.red();
         console.log(msg);
     }
-    Malta.stop();
+    Malta.stop('log_err');
 };
 
 /**
@@ -564,7 +569,7 @@ Malta.prototype.build = function () {
 
     self.t_start = self.date();
 
-    self.content_and_name = {
+    self.data = {
         content: null,
         name: null
     };
@@ -585,122 +590,32 @@ Malta.prototype.build = function () {
     baseTplContent = self.replace_calc(baseTplContent);
     baseTplContent = self.microTpl(baseTplContent);
 
-    self.content_and_name.content = baseTplContent;
-    self.content_and_name.name = self.outName;
+    self.data.content = baseTplContent;
+    self.data.name = self.outName;
 
     // do write
     //
-    fs.writeFile(self.outName, self.content_and_name.content, function (err) {
+    fs.writeFile(self.outName, self.data.content, function (err) {
         if (err) {
             console.log(`Malta error writing file '${self.outName}' error: `);
             console.dir(err);
             Malta.stop();
         }
+
         const d = self.date(),
-            data = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+            data = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+
         let msg = '';
 
-        msg += '@ ' + data + NL;
-        msg += Malta.name + ' compiled ' + self.outName + ' (' + self.getSize(self.outName) + ')';
+        msg += `@ ${data}${NL}`;
+        msg += `${Malta.name} compiled ${self.outName} (${self.getSize(self.outName)})`;
         self.t_end = self.date();
 
         self.notifyAndUnlock(self.t_start, msg);
-
-        self.userWatch && self.userWatch.call(self, self.content_and_name, self);
-
-        doPlugin();
+        self.userWatch && self.userWatch.call(self, self.data, self);
+        self.pluginManager.run();
     });
 
-    function doPlugin () {
-        // self.plugins = self.pluginsManager.plugins;
-        const pluginKeys = Object.keys(self.plugins);
-
-        if (pluginKeys.length) self.log_info('Starting plugins'.yellow());
-
-        if (self.hasPlugins) {
-            self.log_debug('on ' + self.outName.underline() + ' called plugins:');
-            plugin4ext(utils.getIterator(pluginKeys));
-        } else {
-            maybeNotifyBuild();
-        }
-    }
-
-    function plugin4ext (extIterator) {
-        (function checknext () {
-            if (extIterator.hasNext()) {
-                const ext = extIterator.next(),
-                    pins = self.plugins[ext];
-
-                // if ends with the extension
-                //    ----
-                if (self.outName.match(new RegExp(`.*\\.${ext}$`))) {
-                    let iterator = utils.getIterator(pins);
-
-                    (function go () {
-                        let res,
-                            pl;
-
-                        if (iterator.hasNext()) {
-                            pl = iterator.next();
-                            res = callPlugin(pl);
-                            if (res) {
-                                (new Promise(res)).then(function (obj) {
-                                    if (self.userWatch) self.userWatch.call(self, obj, pl);
-                                    self.content_and_name.name = obj.name;
-
-                                    // replace the name given by the plugin fo the file
-                                    // produced and to be passed to the next plugin
-                                    //
-                                    self.content_and_name.content = `${obj.content}`;
-                                    go();
-                                }).catch(function (msg) {
-                                    console.log(`Plugin '${pl.name}' error: `);
-                                    console.log(TAB + msg);
-                                    Malta.stop();
-                                });
-                            } else {
-                                go();
-                            }
-                        } else {
-                            plugin4ext(extIterator);
-                        }
-                    })();
-                } else {
-                    checknext();
-                }
-            } else {
-                if (typeof self.endCb === 'function') self.endCb();
-                maybeNotifyBuild();
-            }
-        })();
-    }
-
-    function maybeNotifyBuild () {
-        if (Malta.verbose > 0 && self.notifyBuild) {
-            Sticky(
-                `Malta @ ${(new Date()).replace(/(GMT.*)$/, '')}`,
-                [
-                    path.basename(self.outName),
-                    'build completed in',
-                    self.t_end - self.t_start,
-                    'ms'
-                ].join(' ')
-            );
-        }
-    }
-
-    function callPlugin (p) {
-        self.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : ''));
-
-        self.doBuild = true;
-        // actually I dont` need to pass content_and_name, since it can be retrieved by the context,
-        // but is better (and I don`t have to modify every plugin and the documentation)
-        //
-        return p.func.bind(self)(self.content_and_name, p.params);
-    }
-
-    // chain
-    //
     return this;
 };
 
@@ -716,15 +631,21 @@ Malta.prototype.checkInvolved = function () {
     // look for circular inclusion
     //
     if (this.queue.length > 10 * utils.uniquearr(this.queue).length) {
-        this.log_info(('OOOOUCH: it seems like running a circular file inclusion ' + NL +
-            TAB + 'try to look at the following inclusion queue to spot it quickly:' + NL +
-            this.queue).red());
+        this.log_info([
+            'OOOOUCH: it seems like running a circular file inclusion',
+            NL, TAB,
+            'try to look at the following inclusion queue to spot it quickly:',
+            NL, this.queue
+        ].join('').red());
     }
 
     // look for too many files limit
     //
     if (this.involvedFiles > this.MAX_INVOLVED) {
-        this.log_err(('OUCH: it seems like trying to involve too many files : ' + this.queue.length).white());
+        this.log_err([
+            'OUCH: it seems like trying to involve too many files: ',
+            this.queue.length
+        ].join('').white());
     }
 };
 
@@ -795,79 +716,6 @@ Malta.prototype.check = function (a) {
 };
 
 /**
- * [getPluginsManager description]
- * @return {[type]} [description]
- */
-
-// Malta.prototype.getPluginsManager = function (){
-//  this.pluginsManager = new PluginManager();
-//  return this.pluginsManager;
-// };
-
-Malta.prototype.getPluginsManager = function () {
-    const self = this;
-
-    function add (el, plu, params) {
-        // handle * wildcard
-        el = el === '*' ? self.tplName.split('.').pop() : el;
-
-        if (!(el in self.plugins)) {
-            self.plugins[el] = [];
-        }
-        if (!(plu.name in self.plugins[el])) {
-            self.plugins[el].push({
-                name: plu.name,
-                func: plu,
-                params: params
-            });
-        }
-    }
-
-    return {
-        add: function (fname, params) {
-            const userPath = [execPath, '/plugins/', fname, '.js'].join(''),
-                maltaPath = [__dirname, '/../plugins/', fname, '.js'].join('');
-
-            let plugin;
-
-            try {
-                // first the user execution dir
-                //
-                if (fs.existsSync(userPath)) {
-                    plugin = require(userPath);
-
-                    // then check if malta package has it
-                    //
-                } else if (fs.existsSync(maltaPath)) {
-                    plugin = require(maltaPath);
-
-                    // otherwise most likely is available as package if installed
-                    //
-                } else {
-                    plugin = require(fname);
-                }
-            } catch (e) {
-                console.log(e);
-                self.log_err(`\`${fname}\` required plugin not found!`);
-            }
-
-            if ('ext' in plugin) {
-                if (utils.isArray(plugin.ext)) {
-                    plugin.ext.forEach(function (el) {
-                        add(el, plugin, params);
-                    });
-                } else if (utils.isString(plugin.ext)) {
-                    add(plugin.ext, plugin, params);
-                }
-            } else {
-                add('*', plugin, params);
-            }
-        }
-    };
-};
-
-
-/**
  * Gets the size.
  *
  * @param      {<type>}   path    The path
@@ -920,8 +768,7 @@ Malta.prototype.loadPlugins = function () {
     const self = this,
         allargs = self.args.join(' '),
         reqs = allargs.match(/-(plugins|require)=([^\s$]*)/),
-        p = reqs ? reqs[2].split('...') : [],
-        pluginsManager = self.getPluginsManager();
+        p = reqs ? reqs[2].split('...') : [];
 
     let i = 0, l = p.length,
         parts;
@@ -931,12 +778,12 @@ Malta.prototype.loadPlugins = function () {
     for (null; i < l; i++) {
         // parts = p[i].match(/([^\[]*)(\[(.*)\])?/);
         parts = p[i].match(/([^[]*)(\[(.*)\])?/);
-        pluginsManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
+        self.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
         self.hasPlugins = true;
     }
 
     if (self.hasPlugins) {
-        self.log_dir(self.plugins);
+        self.log_dir(self.pluginManager.plugins);
     } else {
         self.log_debug(('... no plugins needed').white());
     }
@@ -992,7 +839,7 @@ Malta.prototype.loadVars = function () {
                 try {
                     self.vars = utils.solveJson(tmp);
                 } catch (e) {
-                    e.stop && Malta.stop();
+                    e.stop && Malta.stop(e.message);
                 }
                 self.log_debug('Loaded vars file '.yellow() + NL + self.varPath);
             } else {
@@ -1129,7 +976,7 @@ Malta.prototype.microTpl = function (cnt) {
         } catch (e) {
             console.log('Malta microtemplating error evaluating code: '.red());
             console.log(ev.join(NL));
-            Malta.stop();
+            Malta.stop(e.message);
         }
 
 
@@ -1405,7 +1252,7 @@ Malta.prototype.watch = function () {
                         try {
                             self.vars = utils.solveJson(varsContent);
                         } catch (e) {
-                            e.stop && Malta.stop();
+                            e.stop && Malta.stop(e.message);
                         }
                     } else {
                         console.log(`${self.varPath} not valid`.red());
@@ -1441,7 +1288,7 @@ Malta.prototype.shut = function () {
 
 // be sure to call malta stop when the user CTRL+C
 //
-process.on('SIGINT', Malta.stop);
+process.on('SIGINT', () => { Malta.stop('SIGINT'); });
 process.on('exit', Malta.stop);
 
 module.exports = Malta;
