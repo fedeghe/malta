@@ -6,6 +6,7 @@
   "rules": {
     "default-case": "error",
     "indent": ["error", 4, { "SwitchCase": 1}],
+    "no-console": "warn",
     "no-eval": 0,
     "no-multiple-empty-lines": ["error", {"max": 2, "maxEOF": 1}],
     "no-useless-call": 0,

@@ -12,9 +12,6 @@ describe('multi destinations', function () {
 		try {
 			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/multidestination.json']);
 			ls.on('exit', function (code) {
-
-				assert.equal(code, 0);
-				
 				// check the files
 				//
 				promise.all([(d) => {

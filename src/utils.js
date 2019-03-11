@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs'),
     // eslint-disable-next-line quotes
     NL = "\n",
@@ -152,7 +153,7 @@ const fs = require('fs'),
         }
 
         // reg = new RegExp('\\' + start + '(\\\+)?([A-z0-9-_\.]*)' + '\\' + end, 'g');
-        reg = new RegExp('\\' + start + '(\\+)?([A-z0-9-_.]*)' + '\\' + end, 'g');
+        reg = new RegExp(`\\${start}(\\+)?([A-z0-9-_.]*)\\${end}`, 'g');
 
         while (straight) {
             if (!(tpl.match(reg))) {

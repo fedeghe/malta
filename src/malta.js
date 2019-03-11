@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+/* eslint-disable no-console */
 const fs = require('fs'),
     path = require('path'),
     childProcess = require('child_process'),
@@ -8,12 +8,14 @@ const fs = require('fs'),
     PluginManager = require('./pluginManager.js'),
     Sticky = require('./sticky.js'),
     execPath = process.cwd(),
-    packageInfo = fs.existsSync(path.join(__dirname, '../package.json')) ? require(path.join(__dirname, '../package.json')) : {},
-    execPackageInfo = fs.existsSync(execPath + '/package.json') ? require(execPath + '/package.json') : {},
+    packageInfo = fs.existsSync(path.join(__dirname, '../package.json'))
+        ? require(path.join(__dirname, '../package.json'))
+        : {},
+    execPackageInfo = fs.existsSync(`${execPath}/package.json`)
+        ? require(`${execPath}/package.json`)
+        : {},
     DS = path.sep,
-    // eslint-disable-next-line quotes
     NL = '\n',
-    // eslint-disable-next-line quotes
     TAB = '\t',
     UNDEFINED = 'undefined';
 
@@ -286,7 +288,11 @@ Malta.badargs = function (tpl, dst) {
  */
 Malta.log_help = function () {
     Malta.outVersion(true);
-    console.log('Usage:' + NL + '> malta [templatefile] [outdir] {options}' + NL + '> malta [buildfile.json]' + NL);
+    console.log([
+        'Usage:',
+        '> malta [templatefile] [outdir] {options}',
+        '> malta [buildfile.json]'
+    ].join(NL));
     Malta.stop();
 };
 
@@ -296,12 +302,15 @@ Malta.log_help = function () {
  */
 Malta.outVersion = function (doNotWrite) {
     if (Malta.verbose === 0 || fs.existsSync(Malta.printfile)) return;
-    const str = Malta.name.rainbow() + ' v.' + Malta.version,
-        l = (Malta.name + ' v.' + Malta.version).length + 4,
-        top = NL +
-            '╔' + (new Array(l - 1)).join('═') + '╗' + NL +
-            '║' + ' ' + str + ' ' + '║' + NL +
-            '╚' + (new Array(l - 1)).join('═') + '╝' + NL;
+    const str = `${Malta.name.rainbow()} v.${Malta.version}`,
+        l = `${Malta.name} v.${Malta.version}`.length + 4,
+        line = (new Array(l - 1)).join('═'),
+        top = [
+            NL,
+            '╔', line, '╗', NL,
+            '║ ', str, ' ║', NL,
+            '╚', line, '╝', NL
+        ].join('');
     if (!doNotWrite) fs.writeFileSync(Malta.printfile, '');
     console.log(top);
 };
@@ -325,15 +334,17 @@ Malta.checkDeps = function () {
         } catch (e) {
             errs.push({
                 err: e,
-                msg: NL + deps[i].underline() + ' package is needed' +
-                    NL + 'by a plugin ' +
-                    NL + 'but cannot be found'.italic() +
-                    NL + ('run `npm install ' + deps[i] + '`').yellow()
+                msg: [
+                    NL, deps[i].underline(), ' package is needed',
+                    NL, 'by a plugin ',
+                    NL, 'but cannot be found'.italic(),
+                    NL, `run \`npm install ${deps[i]}\``.yellow()
+                ].join('')
             });
         }
     }
     for (i = 0, l = errs.length; i < l; i++) {
-        console.log(errs[i].err.code.red() + ': ' + errs[i].msg);
+        console.log(`${errs[i].err.code.red()}: ${errs[i].msg}`);
     }
     if (errs.length) Malta.stop();
     return this;
@@ -350,15 +361,17 @@ Malta.checkDeps = function () {
 Malta.checkExec = function (ex) {
     let err;
 
-    childProcess.exec('which ' + ex, function (error) {
+    childProcess.exec(`which ${ex}`, function (error) {
         if (error !== null) {
             err = {
-                err: error + '',
-                msg: NL + ex.underline() + ' executable is needed' + NL +
-                    'but cannot be found'.italic() + NL +
-                    ('install `' + ex + '` and try again').yellow()
+                err: `${error}`,
+                msg: [
+                    NL, ex.underline(), ' executable is needed', NL,
+                    'but cannot be found'.italic(), NL,
+                    `install \`${ex}\` and try again`.yellow()
+                ].join('')
             };
-            console.log(err.err.red() + ' ' + err.msg);
+            console.log(`${err.err.red()} ${err.msg}`);
             Malta.stop();
         }
     });
@@ -391,7 +404,7 @@ Malta.isCommand = function (s) {
  */
 Malta.stop = function (msg) {
     if (!Malta.running) return;
-    console.log(Malta.name + ' has stopped' + NL);
+    console.log(`${Malta.name} has stopped ${NL}`);
     msg && console.log(`msg: ${msg}`);
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
@@ -417,7 +430,7 @@ Malta.getRunsFromPath = function (p) {
             if (i.match(/^(#|EXE)/)) {
                 demonRet[i] = ret[i];
             } else {
-                demonRet['#' + i] = ret[i];
+                demonRet[`#${i}`] = ret[i];
             }
         }
         return demonRet;
@@ -450,7 +463,7 @@ Malta.prototype.date = function () {
  * @param      {string}  pluginName  The plugin name
  */
 Malta.prototype.doErr = function (err, obj, pluginName) {
-    console.log(('[ERROR on ' + obj.name + ' using ' + pluginName + '] :').red());
+    console.log(`[ERROR on ${obj.name} using ${pluginName}] :`.red());
     console.dir(err);
 };
 
@@ -463,7 +476,7 @@ Malta.log_debug = Malta.prototype.log_debug = function (msg) {
     if (Malta.verbose < 2) {
         return;
     }
-    msg = (this.proc ? this.proc + ' ' : '') + msg;
+    msg = (this.proc ? `${this.proc} ` : '') + msg;
     console.log(msg);
 };
 
@@ -476,7 +489,7 @@ Malta.log_dir = Malta.prototype.log_dir = function (msg) {
     if (Malta.verbose < 2) {
         return;
     }
-    msg = (this.proc ? this.proc + ' ' : '') + JSON.stringify(msg);
+    msg = (this.proc ? `${this.proc} ` : '') + JSON.stringify(msg);
     console.log(msg);
 };
 
@@ -489,7 +502,7 @@ Malta.log_info = Malta.prototype.log_info = function (msg) {
     if (Malta.verbose === 0) {
         return;
     }
-    msg = (this.proc ? this.proc + ' ' : '') + msg;
+    msg = (this.proc ? `${this.proc} ` : '') + msg;
     console.log(msg);
 };
 
@@ -502,7 +515,7 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
     if (Malta.verbose === 0) {
         return;
     }
-    msg = (this.proc ? this.proc + ' ' : '') + msg;
+    msg = (this.proc ? `${this.proc} ` : '') + msg;
     console.log(msg);
 };
 
@@ -513,7 +526,7 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
  */
 Malta.log_err = Malta.prototype.log_err = function (msg) {
     if (Malta.verbose > 0) {
-        msg = (this.proc ? this.proc + ' ' : '') + '[ERROR]: '.red() + msg.red();
+        msg = (this.proc ? `${this.proc} ` : '') + '[ERROR]: '.red() + msg.red();
         console.log(msg);
     }
     Malta.stop('log_err');
@@ -724,7 +737,7 @@ Malta.prototype.check = function (a) {
 Malta.prototype.getSize = function (path) {
     const byted = fs.statSync(path).size,
         kbyted = byted / 1024;
-    return kbyted < 1 ? (byted.toFixed(2) + ' B') : (kbyted.toFixed(2) + ' KB');
+    return kbyted < 1 ? `${byted.toFixed(2)} B` : `${kbyted.toFixed(2)} KB`;
 };
 
 /**
@@ -822,11 +835,11 @@ Malta.prototype.loadVars = function () {
     // Hint: even if it expected to be in that position
     // it must be prefixed by -vars=json_relative_to_exec_folder
     //
-    self.varPath = self.baseDir + DS + 'vars.json';
+    self.varPath = path.join(self.baseDir, '/vars.json');
 
     tmp = allargs.match(/-vars=([^\s$]*)/);
     if (tmp) {
-        self.varPath = execPath + DS + tmp[1];
+        self.varPath = path.join(execPath, tmp[1]);
     }
 
     // get the content
@@ -850,7 +863,7 @@ Malta.prototype.loadVars = function () {
             self.vars = {};
         }
     } else {
-        self.log_debug(('No vars file to load' + NL).yellow());
+        self.log_debug(`No vars file to load${NL}`.yellow());
         self.varPath = false;
     }
     return this;
@@ -867,8 +880,16 @@ Malta.prototype.notifyAndUnlock = function (start, msg) {
         end = self.date();
 
     msg = (msg ? (msg + NL) : '') +
-        'build #' + this.buildnumber + ' in ' + (end - start + '').white() + 'ms' + NL +
-        'watching ' + (self.involvedFiles + '').white() + ' files' + NL;
+        [
+            'build #',
+            this.buildnumber,
+            ' in ',
+            `${end - start}`.white(),
+            'ms', NL,
+            'watching ',
+            `${self.involvedFiles}`.white(),
+            ' files', NL
+        ].join('');
 
     self.log_info(msg);
     self.doBuild = false;
@@ -954,7 +975,7 @@ Malta.prototype.microTpl = function (cnt) {
             outer: /(<malta%.*%malta>)/gm,
             inner: /<malta%(.*)%malta>/
         },
-        m = (cnt + '').split(rx.outer);
+        m = `${cnt}`.split(rx.outer);
 
     let r,
         ev = ['r = [];'];
@@ -968,7 +989,11 @@ Malta.prototype.microTpl = function (cnt) {
             } else {
                 // this is really dangerous
                 //
-                ev.push('r.push(`' + el.replace(/"/g, '\\"').replace(/'/g, '\\\'') + '`)');
+                ev.push([
+                    'r.push(`',
+                    el.replace(/"/g, '\\"').replace(/'/g, '\\\''),
+                    '`)'
+                ].join(''));
             }
         });
         try {
@@ -1014,13 +1039,17 @@ Malta.prototype.replace_all = function (tpl) {
         if (!fs.existsSync(fname)) {
             // warn the user through console
             //
-            self.log_info('[WARNING]'.red() + ' missing file ' + fname);
+            self.log_info([
+                '[WARNING]'.red(),
+                'missing file',
+                fname
+            ].join(' '));
 
             // file missing, replace a special placeholder
             // if ext is compatible
             //
             if (ext in self.comments) {
-                return self.comments[ext](' ### ' + $2 + ' ### ');
+                return self.comments[ext](` ### ${$2} ### `);
             }
 
             // remove it
@@ -1050,7 +1079,11 @@ Malta.prototype.replace_all = function (tpl) {
                 /// DO NOT filter here with hasOwnProperty
                 tmp = tmp.replace(
                     // new RegExp('\\\$' + n + '\(\\\|\(\[\^\$\]\*\)\)\?' + '\\\$', 'g'),
-                    new RegExp('\\$' + n + '(\\|([^$]*))?' + '\\$', 'g'),
+                    new RegExp([
+                        '\\$',
+                        n, '(\\|([^$]*))?',
+                        '\\$'
+                    ].join(''), 'g'),
                     function () { return innerVars[n]; }
                 );
             }
@@ -1071,7 +1104,7 @@ Malta.prototype.replace_all = function (tpl) {
         // maybe add path tip in build just before file inclusion
         //
         if (Malta.showPath && ext in self.comments) {
-            tmp = self.comments[ext]('[' + Malta.name + '] ' + $2) + tmp;
+            tmp = self.comments[ext](`[${Malta.name}] ${$2}`) + tmp;
         }
 
         // add a unit to the involved files count
@@ -1121,9 +1154,9 @@ Malta.prototype.replace_vars = function (tpl) {
             }
         }
         if (isPackageVar) {
-            t = utils.checkns($1 + '', self.execPackageVars);
+            t = utils.checkns(`${$1}`, self.execPackageVars);
         }
-        return typeof t !== UNDEFINED ? t : '$' + $1 + '$';
+        return typeof t !== UNDEFINED ? t : `$${$1}$`;
     });
 };
 
@@ -1139,8 +1172,8 @@ Malta.prototype.replace_wiredvars = function (tpl) {
         tpl = Malta.replaceLinenumbers(tpl);
     }
     return utils.replaceAll(tpl, {
-        TIME: self.date().getHours() + ':' + self.date().getMinutes() + ':' + self.date().getSeconds(),
-        DATE: self.date().getDate() + '/' + (self.date().getMonth() + 1) + '/' + self.date().getFullYear(),
+        TIME: `${self.date().getHours()}:${self.date().getMinutes()}:${self.date().getSeconds()}`,
+        DATE: `${self.date().getDate()}/${self.date().getMonth() + 1}/${self.date().getFullYear()}`,
         YEAR: self.date().getFullYear(),
         FILES: self.involvedFiles,
         NAME: Malta.name,
@@ -1179,7 +1212,7 @@ Malta.prototype.start = function (userWatch) {
  * @return {[type]} [description]
  */
 Malta.prototype.signBuildNumber = function () {
-    const fname = this.baseDir + DS + '.buildNum.json';
+    const fname = path.join(this.baseDir, '.buildNum.json');
     let cnt;
     if (!fs.existsSync(fname)) {
         cnt = '{}';
@@ -1233,7 +1266,7 @@ Malta.prototype.watch = function () {
             } else if (self.files[f].time < utils.getFileTime(f)) {
                 d = self.date();
 
-                self.log_info('[' + 'MODIFIED'.yellow() + ' @ ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() + '] ' + f.replace(self.baseDir + DS, '').underline());
+                self.log_info(`[${'MODIFIED'.yellow()} @ ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}] ${f.replace(self.baseDir + DS, '').underline()}`);
                 // renew entry
                 //
                 self.files[f] = utils.createEntry(f);
@@ -1267,7 +1300,7 @@ Malta.prototype.watch = function () {
 
     // every second, if nothing is building, watch files
     //
-    self.log_debug('Watch interval used : '.yellow() + ('' + Malta.watchInterval).red());
+    self.log_debug('Watch interval used : '.yellow() + `${Malta.watchInterval}`.red());
 
     // save the interval fucntion so that if the element is removed (wildcard)
     // then the interval is cleared by the shut function

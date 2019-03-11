@@ -4,15 +4,13 @@ const Malta = require('./malta'),
     functions = require('./functions'),
     execPath = process.cwd(),
     args = process.argv.splice(2),
-    len = args.length,
-    // eslint-disable-next-line quotes
-    NL = "\n";
+    len = args.length;
 
 process.title = 'Malta';
 
 function print (msg, i, tot) {
     const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined')
-        ? (parseInt(100 * i / tot, 10) + '% ').white()
+        ? [parseInt(100 * i / tot, 10), '% '].join('').white()
         : '';
     Malta.log_debug(perc + msg);
 }
@@ -50,7 +48,12 @@ function print (msg, i, tot) {
 
         if ('EXE' in runs) {
             (function (commands) {
-                Malta.log_info('\n' + 'EXE'.red() + ' section for ' + _args[0]);
+                Malta.log_info([
+                    Malta.NL,
+                    'EXE'.red(),
+                    'section for',
+                    _args[0]
+                ].join(''));
 
                 let i = 0;
 
@@ -58,12 +61,12 @@ function print (msg, i, tot) {
                     clen = commands.length;
                 if (clen) {
                     if (isArray) {
-                        (function start() {
+                        (function start () {
                             if (i < clen - 1) {
-                                print('execution: ' + commands[i], i + 1, clen);
+                                print(`execution: ${commands[i]}`, i + 1, clen);
                                 Malta.execute(commands[i].split(/\s/), function () { ++i; start(); });
                             } else {
-                                print('execution: ' + commands[i], i + 1, clen);
+                                print(`execution: ${commands[i]}`, i + 1, clen);
                                 Malta.execute(commands[i].split(/\s/), function () {
                                     print('...done!\n');
                                     delete runs.EXE;
@@ -74,7 +77,7 @@ function print (msg, i, tot) {
                     } else {
                         print(`execution: ${commands}`, 1, 1);
                         Malta.execute(commands.split(/\s/), function () {
-                            print(`...done!${NL}`);
+                            print(`...done!${Malta.NL}`);
                             delete runs.EXE;
                             go(runs);
                         });

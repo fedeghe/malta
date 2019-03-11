@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs'),
     path = require('path'),
     Malta = require('./malta.js'),
@@ -21,7 +22,7 @@ PluginManager.prototype.run = function () {
     if (pluginKeys.length) mself.log_info('Starting plugins'.yellow());
 
     if (mself.hasPlugins) {
-        mself.log_debug('on ' + mself.outName.underline() + ' called plugins:');
+        mself.log_debug(`on ${mself.outName.underline()} called plugins:`);
         iterator = utils.getIterator(pluginKeys);
         plugin4ext(iterator);
     } else {
@@ -92,7 +93,11 @@ PluginManager.prototype.run = function () {
     }
 
     function callPlugin (p) {
-        mself.log_debug('> ' + p.name.yellow() + (p.params ? ' called passing ' + JSON.stringify(p.params).darkgray() : ''));
+        mself.log_debug([
+            '> ',
+            p.name.yellow(),
+            (p.params ? `called passing ${JSON.stringify(p.params).darkgray()}` : '')
+        ].join(''));
 
         mself.doBuild = true;
         // actually I dont` need to pass data, since it can be retrieved by the context,
@@ -102,8 +107,7 @@ PluginManager.prototype.run = function () {
     }
 };
 
-PluginManager.prototype.add = function(fname, params) {
-
+PluginManager.prototype.add = function (fname, params) {
     const self = this,
         userPath = `${this.userPath}${fname}.js`,
         maltaPath = `${this.maltaPath}${fname}.js`;
