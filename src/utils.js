@@ -159,6 +159,7 @@ const fs = require('fs'),
             if (!(tpl.match(reg))) {
                 return tpl;
             }
+            // eslint-disable-next-line complexity
             tpl = tpl.replace(reg, (str, enc, $1, _t) => {
                 if (typeof obj === 'function') {
                     /**
