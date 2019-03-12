@@ -184,6 +184,21 @@ function Malta () {
      * attach the Sticky to che instance so any plugin can use it, e.g. test notifications
      */
     this.sticky = Sticky;
+
+    /**
+     * options passed
+     */
+    this.options = {};
+
+    /**
+     * by default show the inclusion path on the files where Malta knows how to comment
+     */
+    this.showPath = true;
+
+    /**
+     * default values for all options that can be passed throug the -options parameter
+     */
+    this.watchInterval = 1E3;
 }
 
 /**
@@ -208,19 +223,9 @@ Malta.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
 Malta.author = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
 
 /**
- * default values for all options that can be passed throug the -options parameter
- */
-Malta.watchInterval = 1E3;
-
-/**
  * 0 nothing, 1 some, 2 a lot
  */
 Malta.verbose = 1;
-
-/**
- * by default show the inclusion path on the files where Malta knows how to comment
- */
-Malta.showPath = true;
 
 /**
  * allow simple promise to be used (eg malta-translate plugin)
@@ -255,7 +260,7 @@ Malta.execute = function (tmpExe, then) {
         if (code) process.exit(1);
         if (typeof then !== UNDEFINED) then();
     });
-    command.on('error', function (code) {
+    command.on('error', function (code, err) {
         Malta.executeCheck += ~~code;
         console.log(`> \`${exe}\` child process exited with code ${code}`);
         process.exit(1);
@@ -618,14 +623,15 @@ Malta.prototype.build = function () {
         const d = self.date(),
             data = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
 
-        let msg = '';
+        let msg = `@ ${data}
+${Malta.name} compiled ${self.outName} (${self.getSize(self.outName)})`;
 
-        msg += `@ ${data}${NL}`;
-        msg += `${Malta.name} compiled ${self.outName} (${self.getSize(self.outName)})`;
         self.t_end = self.date();
 
         self.notifyAndUnlock(self.t_start, msg);
         self.userWatch && self.userWatch.call(self, self.data, self);
+
+        // plugins
         self.pluginManager.run();
     });
 
@@ -754,21 +760,20 @@ Malta.prototype.hasVars = function () {
  */
 Malta.prototype.loadOptions = function () {
     const self = this,
-        allargs = self.args.join(' ');
-    let tmp,
-        opts;
-    tmp = allargs.match(/-options=([^\s$]*)/);
+        allargs = self.args.join(' '),
+        tmp = allargs.match(/-options=([^\s$]*)/);
+
     if (tmp && tmp.length && tmp[1]) {
-        opts = utils.jsonFromStr(tmp[1]);
-        if ('verbose' in opts) Malta.verbose = parseInt(opts.verbose, 10);
-        if ('watchInterval' in opts) Malta.watchInterval = parseInt(opts.watchInterval, 10);
-        if ('showPath' in opts) Malta.showPath = !!(opts.showPath);
-        if ('notifyBuild' in opts) self.notifyBuild = !!(opts.notifyBuild);
+        self.options = utils.jsonFromStr(tmp[1]);
+        if ('verbose' in self.options) Malta.verbose = parseInt(self.options.verbose, 10);
+        if ('watchInterval' in self.options) self.watchInterval = parseInt(self.options.watchInterval, 10);
+        if ('showPath' in self.options) self.showPath = !!(self.options.showPath);
+        if ('notifyBuild' in self.options) self.notifyBuild = !!(self.options.notifyBuild);
     }
 
     if (tmp) {
         self.log_debug('Loading options'.yellow());
-        self.log_debug(JSON.stringify(opts));
+        self.log_debug(JSON.stringify(self.options));
     }
     return this;
 };
@@ -1103,7 +1108,7 @@ Malta.prototype.replace_all = function (tpl) {
 
         // maybe add path tip in build just before file inclusion
         //
-        if (Malta.showPath && ext in self.comments) {
+        if (self.showPath && ext in self.comments) {
             tmp = self.comments[ext](`[${Malta.name}] ${$2}`) + tmp;
         }
 
@@ -1300,7 +1305,7 @@ Malta.prototype.watch = function () {
 
     // every second, if nothing is building, watch files
     //
-    self.log_debug('Watch interval used : '.yellow() + `${Malta.watchInterval}`.red());
+    self.log_debug('Watch interval used : '.yellow() + `${self.watchInterval}`.red());
 
     // save the interval fucntion so that if the element is removed (wildcard)
     // then the interval is cleared by the shut function
@@ -1308,7 +1313,7 @@ Malta.prototype.watch = function () {
 
     this.watch_TI = setInterval(function () {
         if (!self.doBuild) watch();
-    }, Malta.watchInterval);
+    }, this.watchInterval);
 
     // chain
     //
@@ -1322,6 +1327,6 @@ Malta.prototype.shut = function () {
 // be sure to call malta stop when the user CTRL+C
 //
 process.on('SIGINT', () => { Malta.stop('SIGINT'); });
-process.on('exit', Malta.stop);
+process.on('exit', () => { Malta.stop('exit'); });
 
 module.exports = Malta;
