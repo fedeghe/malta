@@ -1,7 +1,7 @@
+
 /* eslint-disable no-console */
 const fs = require('fs'),
     path = require('path'),
-    Malta = require('./malta.js'),
     execPath = process.cwd();
 
 const utils = require('./utils.js');
@@ -11,6 +11,7 @@ function PluginManager (instance) {
     this.maltaPath = `${__dirname}/../plugins/`;
     this.mself = instance;
     this.plugins = {};
+    this.executor = null;
 }
 
 PluginManager.prototype.run = function () {
@@ -24,84 +25,27 @@ PluginManager.prototype.run = function () {
     if (mself.hasPlugins) {
         mself.log_debug(`on ${mself.outName.underline()} called plugins:`);
         iterator = utils.getIterator(pluginKeys);
-        plugin4ext(iterator);
+        this.executor = new Executor(iterator, mself, self);
+        this.executor.run();
     } else {
-        maybeNotifyBuild();
+        self.maybeNotifyBuild();
     }
+};
 
-    function plugin4ext (extIterator) {
-        (function checknext () {
-            if (extIterator.hasNext()) {
-                const ext = extIterator.next(),
-                    pins = self.plugins[ext] || [];
+PluginManager.prototype.maybeNotifyBuild = function () {
+    const mself = this.mself,
+        now = `${new Date()}`;
 
-                if (mself.outName.match(new RegExp(`.*\\.${ext}$`))) {
-                    let iterator = utils.getIterator(pins);
-                    (function go () {
-                        let res,
-                            pl;
-
-                        if (iterator.hasNext()) {
-                            pl = iterator.next();
-                            res = callPlugin(pl);
-                            if (res) {
-                                (new Promise(res)).then(function (obj) {
-                                    if (mself.userWatch) mself.userWatch.call(mself, obj, pl);
-                                    mself.data.name = obj.name;
-
-                                    // replace the name given by the plugin fo the file
-                                    // produced and to be passed to the next plugin
-                                    //
-                                    mself.data.content = `${obj.content}`;
-                                    go();
-                                }).catch(function (msg) {
-                                    console.log(`Plugin '${pl.name}' error: `);
-                                    console.log(Malta.TAB + msg);
-                                    Malta.stop();
-                                });
-                            } else {
-                                go();
-                            }
-                        } else {
-                            plugin4ext(extIterator);
-                        }
-                    })();
-                } else {
-                    checknext();
-                }
-            } else {
-                if (typeof mself.endCb === 'function') mself.endCb();
-                maybeNotifyBuild();
-            }
-        })();
-    }
-
-    function maybeNotifyBuild () {
-        if (Malta.verbose > 0 && mself.notifyBuild) {
-            mself.sticky(
-                `Malta @ ${(new Date()).replace(/(GMT.*)$/, '')}`,
-                [
-                    path.basename(mself.outName),
-                    'build completed in',
-                    mself.t_end - mself.t_start,
-                    'ms'
-                ].join(' ')
-            );
-        }
-    }
-
-    function callPlugin (p) {
-        mself.log_debug([
-            '> ',
-            p.name.yellow(),
-            (p.params ? `called passing ${JSON.stringify(p.params).darkgray()}` : '')
-        ].join(''));
-
-        mself.doBuild = true;
-        // actually I dont` need to pass data, since it can be retrieved by the context,
-        // but is better (and I don`t have to modify every plugin and the documentation)
-        //
-        return p.func.bind(mself)(mself.data, p.params);
+    if (mself.options.verbose > 0 && mself.notifyBuild) {
+        mself.sticky(
+            ['Malta @ ', now.replace(/(GMT.*)$/, '')].join(''),
+            [
+                path.basename(mself.outName),
+                'build completed in',
+                mself.t_end - mself.t_start,
+                'ms'
+            ].join(' ')
+        );
     }
 };
 
@@ -129,7 +73,6 @@ PluginManager.prototype.add = function (fname, params) {
             plugin = require(fname);
         }
     } catch (e) {
-        console.log(e);
         this.mself.log_err(`\`${fname}\` required plugin not found!`);
     }
 
@@ -163,3 +106,73 @@ PluginManager.prototype.doAdd = function (el, plu, params) {
 };
 
 module.exports = PluginManager;
+
+function Executor (iterator, maltaInstance, pmInstance) {
+    this.iterator = iterator;
+    this.malta = maltaInstance;
+    this.pm = pmInstance;
+}
+
+Executor.prototype.run = function () {
+    const self = this,
+        malta = this.malta;
+
+    if (this.iterator.hasNext()) {
+        const ext = this.iterator.next(),
+            pins = self.pm.plugins[ext] || [];
+
+        if (malta.outName.match(new RegExp(`.*\\.${ext}$`))) {
+            let iterator = utils.getIterator(pins);
+            (function go () {
+                let res,
+                    pl;
+
+                if (iterator.hasNext()) {
+                    pl = iterator.next();
+                    res = self.callPlugin(pl);
+                    if (res) {
+                        (new Promise(res)).then(function (obj) {
+                            if (malta.userWatch) malta.userWatch.call(malta, obj, pl);
+                            malta.data.name = obj.name;
+
+                            // replace the name given by the plugin fo the file
+                            // produced and to be passed to the next plugin
+                            //
+                            malta.data.content = `${obj.content}`;
+                            go();
+                        }).catch(function (msg) {
+                            console.log(`Plugin '${pl.name}' error: `);
+                            // console.log(Malta.TAB + msg);
+                            console.log(msg);
+                            malta.stop();
+                        });
+                    } else {
+                        go();
+                    }
+                } else {
+                    self.run();
+                }
+            })();
+        } else {
+            self.run();
+        }
+    } else {
+        if (typeof malta.endCb === 'function') malta.endCb();
+        self.pm.maybeNotifyBuild();
+    }
+};
+
+Executor.prototype.callPlugin = function (p) {
+    const malta = this.malta;
+    malta.log_debug([
+        '> ',
+        p.name.yellow(),
+        (p.params ? `called passing ${JSON.stringify(p.params).darkgray()}` : '')
+    ].join(''));
+
+    malta.doBuild = true;
+    // actually I dont` need to pass data, since it can be retrieved by the context,
+    // but is better (and I don`t have to modify every plugin and the documentation)
+    //
+    return p.func.bind(malta)(malta.data, p.params);
+};
