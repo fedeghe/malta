@@ -35,8 +35,6 @@ PluginManager.prototype.run = function () {
                 const ext = extIterator.next(),
                     pins = self.plugins[ext] || [];
 
-                // if ends with the extension
-                //    ----
                 if (mself.outName.match(new RegExp(`.*\\.${ext}$`))) {
                     let iterator = utils.getIterator(pins);
                     (function go () {
