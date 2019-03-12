@@ -1,1 +1,4 @@
 test/
+devtest/
+plugins/
+node_modules/
