@@ -45,7 +45,6 @@ function print (msg, i, tot) {
             runs = Malta.getRunsFromPath(p);
 
         if (!runs) Malta.badargs(p);
-
         if ('EXE' in runs) {
             (function (commands) {
                 Malta.log_info([
@@ -53,7 +52,7 @@ function print (msg, i, tot) {
                     'EXE'.red(),
                     'section for',
                     _args[0]
-                ].join(''));
+                ].join(' '));
 
                 let i = 0;
 
@@ -64,10 +63,13 @@ function print (msg, i, tot) {
                         (function start () {
                             if (i < clen - 1) {
                                 print(`execution: ${commands[i]}`, i + 1, clen);
-                                Malta.execute(commands[i].split(/\s/), function () { ++i; start(); });
+                                Malta.execute(commands[i].split(/\s/), () => {
+                                    ++i;
+                                    start();
+                                });
                             } else {
                                 print(`execution: ${commands[i]}`, i + 1, clen);
-                                Malta.execute(commands[i].split(/\s/), function () {
+                                Malta.execute(commands[i].split(/\s/), () => {
                                     print('...done!\n');
                                     delete runs.EXE;
                                     go(runs);
