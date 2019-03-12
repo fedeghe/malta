@@ -2,5 +2,5 @@
     "EXE": [
         "mkdir -p test/fs/build/wildcard"
     ],
-    "#test/source/multi/*.js" : "test/fs/build/wildcard"
+    "#test/fs/multi/*.js" : "test/fs/build/wildcard"
 }

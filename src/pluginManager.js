@@ -1,34 +1,71 @@
-const execPath = process.cwd();
 
-const utils = require('./utils.js')
+/* eslint-disable no-console */
+const fs = require('fs'),
+    path = require('path'),
+    execPath = process.cwd();
 
+const utils = require('./utils.js');
 
-function PluginManager(tplName) {
-    this.user_path = execPath + "/plugins/";
-    this.malta_path = __dirname + "/../plugins/";
-    this.tplName = tplName;
+function PluginManager (instance) {
+    this.userPath = `${execPath}/plugins/`;
+    this.maltaPath = `${__dirname}/../plugins/`;
+    this.mself = instance;
     this.plugins = {};
+    this.executor = null;
 }
 
-PluginManager.prototype.run = instance => {
+PluginManager.prototype.run = function () {
+    const self = this,
+        mself = this.mself,
+        pluginKeys = Object.keys(this.plugins);
+    let iterator;
+
+    if (pluginKeys.length) mself.log_info('Starting plugins'.yellow());
+
+    if (mself.hasPlugins) {
+        mself.log_debug(`on ${mself.outName.underline()} called plugins:`);
+        iterator = utils.getIterator(pluginKeys);
+        this.executor = new Executor(iterator, mself, self);
+        this.executor.run();
+    } else {
+        self.maybeNotifyBuild();
+    }
 };
 
-PluginManager.prototype.add = (fname, params) => {
-    const user_path = this.user_path + fname + '.js',
-        malta_path = this.malta_path + fname + '.js';
+PluginManager.prototype.maybeNotifyBuild = function () {
+    const mself = this.mself,
+        now = `${new Date()}`;
+
+    if (mself.options.verbose > 0 && mself.notifyBuild) {
+        mself.sticky(
+            ['Malta @ ', now.replace(/(GMT.*)$/, '')].join(''),
+            [
+                path.basename(mself.outName),
+                'build completed in',
+                mself.t_end - mself.t_start,
+                'ms'
+            ].join(' ')
+        );
+    }
+};
+
+PluginManager.prototype.add = function (fname, params) {
+    const self = this,
+        userPath = `${this.userPath}${fname}.js`,
+        maltaPath = `${this.maltaPath}${fname}.js`;
 
     let plugin;
 
     try {
         // first the user execution dir
-        //`
-        if (fs.existsSync(user_path)) {
-            plugin = require(user_path);
+        //
+        if (fs.existsSync(userPath)) {
+            plugin = require(userPath);
 
             // then check if malta package has it
             //
-        } else if (fs.existsSync(malta_path)) {
-            plugin = require(malta_path);
+        } else if (fs.existsSync(maltaPath)) {
+            plugin = require(maltaPath);
 
             // otherwise most likely is available as package if installed
             //
@@ -36,14 +73,13 @@ PluginManager.prototype.add = (fname, params) => {
             plugin = require(fname);
         }
     } catch (e) {
-        console.log(e);
-        self.log_err("`" + fname + "` required plugin not found!");
+        this.mself.log_err(`\`${fname}\` required plugin not found!`);
     }
 
     if ('ext' in plugin) {
         if (utils.isArray(plugin.ext)) {
             plugin.ext.forEach(function (ext) {
-                this.doAdd(ext, plugin, params);
+                self.doAdd(ext, plugin, params);
             });
         } else if (utils.isString(plugin.ext)) {
             this.doAdd(plugin.ext, plugin, params);
@@ -53,10 +89,9 @@ PluginManager.prototype.add = (fname, params) => {
     }
 };
 
-
-PluginManager.prototype.doAdd = (el, plu, params) => {
+PluginManager.prototype.doAdd = function (el, plu, params) {
     // handle * wildcard
-    el = el === '*' ? this.tplName.split('.').pop() : el;
+    el = el === '*' ? this.mself.tplName.split('.').pop() : el;
 
     if (!(el in this.plugins)) {
         this.plugins[el] = [];
@@ -68,8 +103,76 @@ PluginManager.prototype.doAdd = (el, plu, params) => {
             params: params
         });
     }
-}
+};
 
 module.exports = PluginManager;
 
+function Executor (iterator, maltaInstance, pmInstance) {
+    this.iterator = iterator;
+    this.malta = maltaInstance;
+    this.pm = pmInstance;
+}
 
+Executor.prototype.run = function () {
+    const self = this,
+        malta = this.malta;
+
+    if (this.iterator.hasNext()) {
+        const ext = this.iterator.next(),
+            pins = self.pm.plugins[ext] || [];
+
+        if (malta.outName.match(new RegExp(`.*\\.${ext}$`))) {
+            let iterator = utils.getIterator(pins);
+            (function go () {
+                let res,
+                    pl;
+
+                if (iterator.hasNext()) {
+                    pl = iterator.next();
+                    res = self.callPlugin(pl);
+                    if (res) {
+                        (new Promise(res)).then(function (obj) {
+                            if (malta.userWatch) malta.userWatch.call(malta, obj, pl);
+                            malta.data.name = obj.name;
+
+                            // replace the name given by the plugin fo the file
+                            // produced and to be passed to the next plugin
+                            //
+                            malta.data.content = `${obj.content}`;
+                            go();
+                        }).catch(function (msg) {
+                            console.log(`Plugin '${pl.name}' error: `);
+                            // console.log(Malta.TAB + msg);
+                            console.log(msg);
+                            malta.stop();
+                        });
+                    } else {
+                        go();
+                    }
+                } else {
+                    self.run();
+                }
+            })();
+        } else {
+            self.run();
+        }
+    } else {
+        if (typeof malta.endCb === 'function') malta.endCb();
+        self.pm.maybeNotifyBuild();
+    }
+};
+
+Executor.prototype.callPlugin = function (p) {
+    const malta = this.malta;
+    malta.log_debug([
+        '> ',
+        p.name.yellow(),
+        (p.params ? `called passing ${JSON.stringify(p.params).darkgray()}` : '')
+    ].join(''));
+
+    malta.doBuild = true;
+    // actually I dont` need to pass data, since it can be retrieved by the context,
+    // but is better (and I don`t have to modify every plugin and the documentation)
+    //
+    return p.func.bind(malta)(malta.data, p.params);
+};

@@ -6,16 +6,19 @@ const assert = require('assert'),
 describe('microtpl', function () {
     const trgFolder = path.resolve('test/fs'),
         m = malta.get();
-    it('the output file should have right content', function (done) {
+    it('the output file should have right content', () => {
         m.check(['#' + trgFolder + '/source/mtpl/mtpl.js', trgFolder + '/build', '-vars=test/fs/vars2.json', '-options=verbose:0,showPath:false']).start(function (o){
-            fs.readFile(trgFolder + '/build/mtpl.js', function (err, cnt) {
-                if (err) throw err;
-                eval(cnt+"");
-                assert.equal(typeof tpl0, 'function');
-                assert.equal(typeof tpl1, 'undefined');
-                assert.equal(typeof tpl2, 'function');
-                done();
-            });
+            fs.readFile(
+                trgFolder + '/build/mtpl.js',
+                'utf8',
+                (err, cnt) => {
+                    if (err) throw err;
+                    eval(cnt+"");
+                    assert.equal(typeof tpl0, 'function');
+                    assert.equal(typeof tpl1, 'undefined');
+                    assert.equal(typeof tpl2, 'function');
+                }
+            );
         });
     });
 });

@@ -7,10 +7,17 @@ var assert = require('assert'),
 describe('Wildcard tpl', function () {
 	it('should create one file for each tpl found', function (done) {
 		try {
-			var ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/wildCardFile.json']);
+            const ls = child_process.spawn('node', ['src/bin.js', 'test/fs/multi/wildCardFile.json']),
+                aFile = 'test/fs/build/wildcard/a.js',
+                bFile = 'test/fs/build/wildcard/b.js';
 			ls.on('close', function (code) {
-				assert.equal(malta.executeCheck, code); // 0
-				done();
+                const a = fs.existsSync(aFile),
+                    b = fs.existsSync(bFile);
+                if(a && b) {
+                    fs.unlinkSync(aFile)
+                    fs.unlinkSync(bFile)
+                    done();
+                }
 			});
 		} catch (err) {
 			throw err;

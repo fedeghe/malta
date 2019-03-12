@@ -1,70 +1,82 @@
 function rainbowize (offset) {
-	// "use strict"; //no octal lit
-	offset = offset || 0;
-	return function () {
-		const els = this,
-			l = els.length,
-			tpl = '\033[1;%code%m%char%\033[0m',
-			cols = [
-				31 + offset, // red
-				32 + offset, // green
-				33 + offset, // yellow
-				34 + offset, // blue
-				35 + offset, // magenta
-				36 + offset, // cyan
-				91 + offset, // lightred
-				92 + offset, // lightgreen
-				93 + offset, // lightyellow
-				94 + offset, // lightblue
-				95 + offset, // lightmagenta
-				96 + offset  // lightcyan
-			];
-		let	i = 0, j = 0,
-			out = [];
-		for (null; i < l; i++) out.push(els[i] !== ' ' ? tpl.replace('%code%', cols[j++ % cols.length]).replace('%char%', els[i]) : els[i]);
-		return out.join('');
-	};
+    // "use strict"; //no octal lit
+    offset = offset || 0;
+    return function () {
+        const els = this,
+            l = els.length,
+            tpl = '\x1b[1;%code%m%char%\x1b[0m',
+            cols = [
+                31 + offset, // red
+                32 + offset, // green
+                33 + offset, // yellow
+                34 + offset, // blue
+                35 + offset, // magenta
+                36 + offset, // cyan
+                91 + offset, // lightred
+                92 + offset, // lightgreen
+                93 + offset, // lightyellow
+                94 + offset, // lightblue
+                95 + offset, // lightmagenta
+                96 + offset // lightcyan
+            ];
+        let i = 0, j = 0,
+            out = [];
+        for (null; i < l; i++) out.push(els[i] !== ' ' ? tpl.replace('%code%', cols[j++ % cols.length]).replace('%char%', els[i]) : els[i]);
+        return out.join('');
+    };
 }
 
-String.prototype.normal = function () {return '\033[1;0m' + this + '\033[0m';};
-String.prototype.darken = function () {return '\033[1;2m' + this + '\033[0m'; };
-String.prototype.italic = function () {return '\033[1;54m' + this + '\033[0m'; };
-String.prototype.underline = function () {return '\033[1;4m' + this + '\033[0m'; };
-String.prototype.blink = function () {return '\033[1;5m' + this + '\033[0m'; };
-String.prototype.invert = function () {return '\033[1;7m' + this + '\033[0m'; };
-String.prototype.gray = function () {return '\033[1;30m' + this + '\033[0m'; };
-String.prototype.red = function () {return '\033[1;31m' + this + '\033[0m'; };
-String.prototype.green = function () {return '\033[1;32m' + this + '\033[0m'; };
-String.prototype.yellow = function () {return '\033[1;33m' + this + '\033[0m'; };
-String.prototype.blue = function () {return '\033[1;34m' + this + '\033[0m'; };
-String.prototype.magenta = function () {return '\033[1;35m' + this + '\033[0m'; };
-String.prototype.cyan = function () {return '\033[1;36m' + this + '\033[0m'; };
-String.prototype.lightgray = function () {return '\033[1;37m' + this + '\033[0m'; };
-String.prototype.darkgray = function () {return '\033[1;90m' + this + '\033[0m'; };
-String.prototype.lightred = function () {return '\033[1;91m' + this + '\033[0m'; };
-String.prototype.lightgreen = function () {return '\033[1;92m' + this + '\033[0m'; };
-String.prototype.lightyellow = function () {return '\033[1;93m' + this + '\033[0m'; };
-String.prototype.lightblue = function () {return '\033[1;94m' + this + '\033[0m'; };
-String.prototype.lightmagenta = function () {return '\033[1;95m' + this + '\033[0m'; };
-String.prototype.lightcyan = function () {return '\033[1;96m' + this + '\033[0m'; };
-String.prototype.white = function () {return '\033[1;97m' + this + '\033[0m'; };
+function conc (n, inst) {
+    return [
+        '\x1b[1;',
+        n,
+        'm',
+        inst,
+        '\x1b[0m'
+    ].join('');
+}
+
+/* eslint-disable no-extend-native */
+String.prototype.normal = function () { return conc(0, this); };
+String.prototype.darken = function () { return conc(2, this); };
+String.prototype.italic = function () { return conc(54, this); };
+String.prototype.underline = function () { return conc(4, this); };
+String.prototype.blink = function () { return conc(5, this); };
+String.prototype.invert = function () { return conc(7, this); };
+String.prototype.gray = function () { return conc(30, this); };
+String.prototype.red = function () { return conc(31, this); };
+String.prototype.green = function () { return conc(32, this); };
+String.prototype.yellow = function () { return conc(33, this); };
+String.prototype.blue = function () { return conc(34, this); };
+String.prototype.magenta = function () { return conc(35, this); };
+String.prototype.cyan = function () { return conc(36, this); };
+String.prototype.lightgray = function () { return conc(37, this); };
+String.prototype.darkgray = function () { return conc(90, this); };
+String.prototype.lightred = function () { return conc(91, this); };
+String.prototype.lightgreen = function () { return conc(92, this); };
+String.prototype.lightyellow = function () { return conc(93, this); };
+String.prototype.lightblue = function () { return conc(94, this); };
+String.prototype.lightmagenta = function () { return conc(95, this); };
+String.prototype.lightcyan = function () { return conc(96, this); };
+String.prototype.white = function () { return conc(97, this); };
 String.prototype.rainbow = rainbowize();
 
-String.prototype.bgblack = function () {return '\033[1;40m' + this + '\033[0m'; };
-String.prototype.bgred = function () {return '\033[1;41m' + this + '\033[0m'; };
-String.prototype.bggreen = function () {return '\033[1;42m' + this + '\033[0m'; };
-String.prototype.bgyellow = function () {return '\033[1;43m' + this + '\033[0m'; };
-String.prototype.bgblue = function () {return '\033[1;44m' + this + '\033[0m'; };
-String.prototype.bgmagenta = function () {return '\033[1;45m' + this + '\033[0m'; };
-String.prototype.bgcyan = function () {return '\033[1;46m' + this + '\033[0m'; };
-String.prototype.bglightgray = function () {return '\033[1;47m' + this + '\033[0m'; };
-String.prototype.bgdefault = function () {return '\033[1;49m' + this + '\033[0m'; };
-String.prototype.bgdarkgray = function () {return '\033[1;100m' + this + '\033[0m'; };
-String.prototype.bglightred = function () {return '\033[1;101m' + this + '\033[0m'; };
-String.prototype.bglightgreen = function () {return '\033[1;102m' + this + '\033[0m'; };
-String.prototype.bglightyellow = function () {return '\033[1;103m' + this + '\033[0m'; };
-String.prototype.bglightblue = function () {return '\033[1;104m' + this + '\033[0m'; };
-String.prototype.bglightmagenta = function () {return '\033[1;105m' + this + '\033[0m'; };
-String.prototype.bglightcyan = function () {return '\033[1;106m' + this + '\033[0m'; };
-String.prototype.bgwhite = function () {return '\033[1;107m' + this + '\033[0m'; };
+String.prototype.bgblack = function () { return conc(40, this); };
+String.prototype.bgred = function () { return conc(41, this); };
+String.prototype.bggreen = function () { return conc(42, this); };
+String.prototype.bgyellow = function () { return conc(43, this); };
+String.prototype.bgblue = function () { return conc(44, this); };
+String.prototype.bgmagenta = function () { return conc(45, this); };
+String.prototype.bgcyan = function () { return conc(46, this); };
+String.prototype.bglightgray = function () { return conc(47, this); };
+String.prototype.bgdefault = function () { return conc(49, this); };
+String.prototype.bgdarkgray = function () { return conc(100, this); };
+String.prototype.bglightred = function () { return conc(101, this); };
+String.prototype.bglightgreen = function () { return conc(102, this); };
+String.prototype.bglightyellow = function () { return conc(103, this); };
+String.prototype.bglightblue = function () { return conc(104, this); };
+String.prototype.bglightmagenta = function () { return conc(105, this); };
+String.prototype.bglightcyan = function () { return conc(106, this); };
+String.prototype.bgwhite = function () { return conc(107, this); };
 String.prototype.bgrainbow = rainbowize(10);
+/* eslint-enable no-extend-native */
