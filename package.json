@@ -1,12 +1,12 @@
 {
   "name": "malta",
-  "version": "3.9.4",
+  "version": "3.9.5",
   "description": "Lightning builder allows to compose on the fly and update packed and full coded huge files, edit its parts as files, splitted and glued as You need.",
   "main": "src/index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint --ignore-path .eslintignore .",
     "precommit": "npm lint",
-    "test": "rm -rf test/fs/build && NODE_PATH=. mocha",
+    "test": "rm -rf test/fs/build && NODE_PATH=. NODE_ENV=test mocha",
     "cover": "nyc npm test && nyc report --reporter=html",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },

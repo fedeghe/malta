@@ -91,12 +91,12 @@ function proceed (tpl, options) {
 function subCommand (command) {
     switch (command) {
         case '-clean':
-            Malta.log_debug('Removing all .buildNum.json files');
+            Malta.log('Removing all .buildNum.json files');
             spawn('find', ['.', '-name', '*.buildNum.json', '-type', 'f', '-delete']);
-            Malta.log_debug('... done');
+            Malta.log('... done');
             return true;
         default:
-            Malta.log_debug(`Command "${command}" not available`);
+            Malta.log(`Command "${command}" not available`);
             return false;
     }
 }

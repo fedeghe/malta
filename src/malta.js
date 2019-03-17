@@ -536,6 +536,16 @@ Malta.log_err = Malta.prototype.log_err = function (msg) {
     }
     Malta.stop('log_err');
 };
+/**
+ * [log description]
+ * @param  {[type]} msg [description]
+ * @return {[type]}     [description]
+ */
+Malta.log = Malta.prototype.log = function (msg) {
+    msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
+    // console.dir(process.env)
+    process.env.NODE_ENV !== 'test' && console.log(msg);
+};
 
 /**
  * basic string used to create regular expressions for
@@ -884,17 +894,17 @@ Malta.prototype.notifyAndUnlock = function (start, msg) {
     const self = this,
         end = self.date();
 
-    msg = (msg ? (msg + NL) : '') +
-        [
-            'build #',
-            this.buildnumber,
-            ' in ',
-            `${end - start}`.white(),
-            'ms', NL,
-            'watching ',
-            `${self.involvedFiles}`.white(),
-            ' files', NL
-        ].join('');
+    msg = [
+        msg ? (msg + NL) : '',
+        'build #',
+        this.buildnumber,
+        ' in ',
+        `${end - start}`.white(),
+        'ms', NL,
+        'watching ',
+        `${self.involvedFiles}`.white(),
+        ' files', NL
+    ].join('');
 
     self.log_info(msg);
     self.doBuild = false;
