@@ -894,17 +894,17 @@ Malta.prototype.notifyAndUnlock = function (start, msg) {
     const self = this,
         end = self.date();
 
-    msg = (msg ? (msg + NL) : '') +
-        [
-            'build #',
-            this.buildnumber,
-            ' in ',
-            `${end - start}`.white(),
-            'ms', NL,
-            'watching ',
-            `${self.involvedFiles}`.white(),
-            ' files', NL
-        ].join('');
+    msg = [
+        msg ? (msg + NL) : '',
+        'build #',
+        this.buildnumber,
+        ' in ',
+        `${end - start}`.white(),
+        'ms', NL,
+        'watching ',
+        `${self.involvedFiles}`.white(),
+        ' files', NL
+    ].join('');
 
     self.log_info(msg);
     self.doBuild = false;
