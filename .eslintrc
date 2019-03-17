@@ -30,6 +30,10 @@
             "error",
             "always"
         ],
+        "operator-linebreak": [
+            "error",
+            "before"
+        ],
         "prefer-template": "error",
         "semi": [
             "error",
