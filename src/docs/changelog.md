@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.9.4** test coverage improved, couple of debugging fixes
 - **3.9.3** test coverage improved 
 - **3.9.1** dependency vulnerability patch  
 - **3.9.0** added `PACKAGE` vars special placeholder, see the placeholder section of readme 
