@@ -39,9 +39,10 @@ function print (msg, i, tot) {
     } else if (_len === 1) {
         Malta.outVersion();
 
-        _args[0].match(/^-/)
-        && functions.subCommand(_args[0])
-        && Malta.stop();
+        if (_args[0].match(/^-/)) {
+            functions.subCommand(_args[0]);
+            Malta.stop();
+        }
 
         const p = path.resolve(execPath, _args[0]),
             runs = Malta.getRunsFromPath(p);
