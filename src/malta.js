@@ -536,6 +536,16 @@ Malta.log_err = Malta.prototype.log_err = function (msg) {
     }
     Malta.stop('log_err');
 };
+/**
+ * [log description]
+ * @param  {[type]} msg [description]
+ * @return {[type]}     [description]
+ */
+Malta.log = Malta.prototype.log = function (msg) {
+    msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
+    // console.dir(process.env)
+    process.env.NODE_ENV !== 'test' && console.log(msg);
+};
 
 /**
  * basic string used to create regular expressions for
