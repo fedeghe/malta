@@ -2,11 +2,13 @@
 /* eslint-disable no-console */
 const fs = require('fs'),
     path = require('path'),
+
     execPath = process.cwd();
 
 const utils = require('./utils.js');
 
 function PluginManager (instance) {
+    
     this.userPath = `${execPath}/plugins/`;
     this.maltaPath = `${__dirname}/../plugins/`;
     this.mself = instance;
@@ -35,8 +37,7 @@ PluginManager.prototype.run = function () {
 PluginManager.prototype.maybeNotifyBuild = function () {
     const mself = this.mself,
         now = `${new Date()}`;
-
-    if (mself.options.verbose > 0 && mself.notifyBuild) {
+    if (mself.constructor.verbose > 0 && mself.notifyBuild) {
         mself.sticky(
             ['Malta @ ', now.replace(/(GMT.*)$/, '')].join(''),
             [
