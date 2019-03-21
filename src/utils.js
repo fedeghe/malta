@@ -29,8 +29,8 @@ const fs = require('fs'),
      * @param      {<type>}  path    The path
      * @return     {<type>}  The file time.
      */
-    getFileTime = thepath => fs.existsSync(thepath) &&
-        fs.statSync(thepath).mtime.getTime(),
+    getFileTime = thepath => fs.existsSync(thepath)
+        && fs.statSync(thepath).mtime.getTime(),
 
     /**
      * get a unique array given an array

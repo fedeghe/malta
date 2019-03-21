@@ -8,7 +8,6 @@ const fs = require('fs'),
 const utils = require('./utils.js');
 
 function PluginManager (instance) {
-    
     this.userPath = `${execPath}/plugins/`;
     this.maltaPath = `${__dirname}/../plugins/`;
     this.mself = instance;
