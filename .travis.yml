@@ -1,4 +1,5 @@
 install: npm install
+- travis_retry npm install
 language: node_js
 script: npm test
 after_success:
