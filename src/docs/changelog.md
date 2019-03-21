@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **3.9.6** fix Ting build sound
+- **3.9.7** fix Ting build sound, remove unuseful exit message
 - **3.9.5** test coverage improved, couple of debugging fixes
 - **3.9.3** test coverage improved 
 - **3.9.1** dependency vulnerability patch  
