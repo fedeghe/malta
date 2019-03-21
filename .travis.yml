@@ -4,4 +4,4 @@ script: npm test
 after_success:
 - npm run coveralls
 node_js:
-  - "6.17.0"
+  - "8.10.0"
