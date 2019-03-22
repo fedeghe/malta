@@ -1337,6 +1337,6 @@ Malta.prototype.shut = function () {
 // be sure to call malta stop when the user CTRL+C
 //
 process.on('SIGINT', () => { Malta.stop('SIGINT'); });
-// process.on('exit', () => { });
+process.on('exit', Malta.stop);
 
 module.exports = Malta;
