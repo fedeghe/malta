@@ -196,7 +196,7 @@ is the base template used as base file.
 is the folder where the output files will be written in.
 
 - **-vars=_non/default/myvars.json_**  
-here is possible to tell Malta to consider a different file for variables (default would be searched as _templateFolded_/vars.json); if used the path specified must be relative to the execution folder.
+here is possible to tell Malta to consider a different file for variables (default would be searched as _templateFolder_/vars.json); if used the path specified must be relative to the execution folder.
 
 
 - **-options=_key1:value1,..._**  
