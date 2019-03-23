@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.9.9** no messages at at if verbose is 0 in options
 - **3.9.8** fix Ting build sound, remove unuseful exit message, small improvements
 - **3.9.5** test coverage improved, couple of debugging fixes
 - **3.9.3** test coverage improved 

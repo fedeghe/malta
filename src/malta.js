@@ -409,8 +409,10 @@ Malta.isCommand = function (s) {
  */
 Malta.stop = function (msg) {
     if (!Malta.running) return;
-    console.log(`${Malta.name} has stopped ${NL}`);
-    msg && console.log(`msg: ${msg}`);
+    if (Malta.verbose > 0) {
+        console.log(`${Malta.name} has stopped ${NL}`);
+        msg && console.log(`msg: ${msg}`);
+    }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
     process.exit();
@@ -542,9 +544,11 @@ Malta.log_err = Malta.prototype.log_err = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log = Malta.prototype.log = function (msg) {
-    msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
-    // console.dir(process.env)
-    process.env.NODE_ENV !== 'test' && console.log(msg);
+    if (Malta.verbose > 0) {
+        msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
+        // console.dir(process.env)
+        process.env.NODE_ENV !== 'test' && console.log(msg);
+    }
 };
 
 /**
