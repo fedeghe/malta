@@ -26,6 +26,7 @@ function multi (key, el) {
         ext = multi[2];
         fs.readdir(folder.replace(/^#/, ''), function (err, files) {
             if (err) {
+                console.log(err)
                 throw err;
             }
             if (files) {
