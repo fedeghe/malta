@@ -176,6 +176,11 @@ function Malta () {
     this.notifyBuild = true;
 
     /**
+     * by default justCopy is disabled, if true prevents from all placeholders processing
+     */
+    this.justCopy = false;
+
+    /**
      * plugin manager
      */
     this.pluginManager = new PluginManager(this);
@@ -611,16 +616,18 @@ Malta.prototype.build = function () {
     self.signBuildNumber();
     self.involvedFiles += self.hasVars();
 
-    while (baseTplContent.match(new RegExp(self.reg.files, 'g'))) {
-        baseTplContent = self.replace_all(baseTplContent);
-    }
+    if (self.justCopy === false) {
+        while (baseTplContent.match(new RegExp(self.reg.files, 'g'))) {
+            baseTplContent = self.replace_all(baseTplContent);
+        }
 
-    // wiredvars
-    //
-    baseTplContent = self.replace_vars(baseTplContent);
-    baseTplContent = self.replace_wiredvars(baseTplContent);
-    baseTplContent = self.replace_calc(baseTplContent);
-    baseTplContent = self.microTpl(baseTplContent);
+        // wiredvars
+        //
+        baseTplContent = self.replace_vars(baseTplContent);
+        baseTplContent = self.replace_wiredvars(baseTplContent);
+        baseTplContent = self.replace_calc(baseTplContent);
+        baseTplContent = self.microTpl(baseTplContent);
+    }
 
     self.data.content = baseTplContent;
     self.data.name = self.outName;
@@ -783,6 +790,7 @@ Malta.prototype.loadOptions = function () {
         if ('watchInterval' in self.options) self.watchInterval = parseInt(self.options.watchInterval, 10);
         if ('showPath' in self.options) self.showPath = !!(self.options.showPath);
         if ('notifyBuild' in self.options) self.notifyBuild = !!(self.options.notifyBuild);
+        if ('justCopy' in self.options) self.justCopy = !!(self.options.justCopy);
     }
 
     if (tmp) {

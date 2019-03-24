@@ -209,8 +209,10 @@ here the following key:values are considered:
         0 no console messages
         1 default messages
         2 verbose messages
-    - *notifyBuild*: *boolean* (deafult : true)
+    - *notifyBuild*: *boolean* (deafult : true)  
         Only on MacOS. Use _osascript_ to show a sticky message at each build (verbose has to be > 0).
+    - *justCopy*: *boolean* (default : false) [from v.3.9.11]  
+        in case it is simply needed to skip the placeholders replacement, the file is simply copied (but still plugin processes if any)
         
 
 - **-plugins=**  
