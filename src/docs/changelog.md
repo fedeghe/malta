@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.9.12** small fix in params dealing
 - **3.9.11** `justCopy` option addded
 - **3.9.10** no messages at at if verbose is 0 in options, better err msg
 - **3.9.8** fix Ting build sound, remove unuseful exit message, small improvements

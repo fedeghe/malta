@@ -3,7 +3,7 @@ const Malta = require('./malta'),
     path = require('path'),
     functions = require('./functions'),
     execPath = process.cwd(),
-    args = process.argv.splice(2),
+    args = process.argv.slice(2),
     len = args.length;
 
 process.title = 'Malta';
