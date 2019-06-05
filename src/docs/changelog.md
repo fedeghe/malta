@@ -1,5 +1,6 @@
 Changelog
 --------- 
+- **3.9.15** audit vulnerability fix
 - **3.9.14** in programmatic mode avoid exit messages on stop
 - **3.9.13** in programmatic mode starter is not needed
 - **3.9.11** `justCopy` option addded
