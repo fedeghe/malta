@@ -815,11 +815,13 @@ Malta.prototype.loadPlugins = function () {
 
     self.log_debug('Loading plugins'.yellow());
 
+
     for (null; i < l; i++) {
-        // parts = p[i].match(/([^\[]*)(\[(.*)\])?/);
-        parts = p[i].match(/([^[]*)(\[(.*)\])?/);
-        self.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
-        self.hasPlugins = true;
+        (function (j) {
+            parts = p[j].match(/([^[]*)(\[(.*)\])?/);
+            self.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
+            self.hasPlugins = true;
+        })(i);
     }
 
     if (self.hasPlugins) {
