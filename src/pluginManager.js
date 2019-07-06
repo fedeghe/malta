@@ -33,7 +33,7 @@ PluginManager.prototype.run = function () {
     }
 };
 
-PluginManager.prototype.maybeNotifyBuild = function () {
+PluginManager.prototype.maybeNotifyBuild = function (gotErrs) {
     const mself = this.mself,
         now = `${new Date()}`;
     if (mself.constructor.verbose > 0 && mself.notifyBuild) {
@@ -44,7 +44,8 @@ PluginManager.prototype.maybeNotifyBuild = function () {
                 'build completed in',
                 mself.t_end - mself.t_start,
                 'ms'
-            ].join(' ')
+            ].join(' '),
+            gotErrs
         );
     }
 };
@@ -141,10 +142,12 @@ Executor.prototype.run = function () {
                             malta.data.content = `${obj.content}`;
                             go();
                         }).catch(function (msg) {
+                            self.pm.maybeNotifyBuild({ gotErrs: msg });
                             console.log(`Plugin '${pl.name}' error: `);
                             // console.log(Malta.TAB + msg);
                             console.log(msg);
-                            malta.stop();
+                            go();
+                            // malta.stop();
                         });
                     } else {
                         go();

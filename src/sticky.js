@@ -2,11 +2,12 @@ const os = require('os'),
     childProcess = require('child_process'),
     platform = os.platform(),
     // Basso,Blow,Bottle,Frog,Funk,Glass,Hero,Morse,Ping,Pop,Purr,Sosumi,Submarine,Tink
-    sound = 'Tink',
+    sounds = { success: 'Tink', failure: 'Blow' },
+    icons = { success: '✅', failure: '❌' },
     tools = {
         mac: [
             'osascript',
-            `-e 'display notification "✅ {message}" with title "{title}" sound name "${sound}"'`
+            `-e 'display notification "{icon} {message}" with title "{title}"{sound}'`
         ],
         linux: [
             'notify-send',
@@ -20,25 +21,32 @@ const os = require('os'),
         return false;
     })();
 
-module.exports = function (title, message, testcb) {
+module.exports = function (title, message, errs, testcb) {
     'use strict';
     if (typeof testcb === 'undefined') {
         testcb = function () { return null; };
     }
     if (!(currentOs in tools)) return;
     const exeData = tools[currentOs],
+        hasErrors = typeof errs !== 'undefined',
         exec = exeData[0],
-        params = exeData[1].replace(/\{title\}/, title).replace(/\{message\}/, message);
-
-    childProcess.exec(`which ${exec}`, function (error) {
-        if (error === null) {
-            childProcess.exec(`${exec} ${params}`, function (error) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    testcb(`${title}___${message}`);
-                }
-            });
-        }
+        params = exeData[1]
+            .replace(/\{title\}/, title)
+            .replace(/\{message\}/, message)
+            .replace(/\{icon\}/, icons[hasErrors ? 'failure' : 'success'])
+            .replace(/\{sound\}/, hasErrors ? `sound name "${sounds.failure}"` : '');
+    setImmediate(() => {
+        childProcess.exec(`which ${exec}`, error => {
+            if (error === null) {
+                childProcess.exec(`${exec} ${params}`, function (error) {
+                    if (error) {
+                        // eslint-disable-next-line no-console
+                        console.log(error);
+                    } else {
+                        testcb(`${title}___${message}`);
+                    }
+                });
+            }
+        });
     });
 };
