@@ -576,12 +576,19 @@ Malta.prototype.reg = {
     dolla: {
         files: '(.*)\\$\\$([@A-z0-9-_/.]+)({([^}]*)})?\\$\\$',
         vars: '\\$([A-z0-9-_/.\\[\\]]+)\\$',
-        calc: '!{([^{}]*)}!'
+        calc: '!{([^{}]*)}!',
+
+        innerVars: (n) => new RegExp([
+            '\\$',
+            n, '(\\|([^$]*))?',
+            '\\$'
+        ].join(''), 'g'),
+        innerVarsBackup: () => new RegExp(/\$\w*(\|([^$]*))?\$/g)
     },
     func: {
         // the regexp is
         // /(.*)maltaFile\('(.*)\'(?:\,(?:\s*)?(.*))?\)/
-        files: '(.*)maltaFile\\(\'(.*)\\\'(?:\\,(?:\\s*)?(.*))?\\)',
+        files: '(.*)maltaFile\\(\'(.*)\\\'(?:\\,(?:\\s*)?({(.*)}))?\\)',
 
         // the regExp is
         // /maltaVar\('([A-z0-9-_/.\[\]]+)'\)/
@@ -589,7 +596,13 @@ Malta.prototype.reg = {
 
         // the RegExp is
         // /maltaExpression\(([^{}]*)\)/
-        calc: 'maltaExpression\\((.*)\\)'
+        calc: 'maltaExpression\\((.*)\\)',
+
+
+        // the RegExp is (similar to the var one)
+        //
+        innerVars: (n) => new RegExp(`maltaVar\\('${n}',([^)]*)?\\)`, 'g'),
+        innerVarsBackup: () => new RegExp(/maltaVar\('[^,]*'(,(?:\s*)?([^)]*))?\)/g)
     }
 };
 
@@ -804,6 +817,7 @@ Malta.prototype.hasVars = function () {
  * [loadOptions description]
  * @return {[type]} [description]
  */
+// eslint-disable-next-line complexity
 Malta.prototype.loadOptions = function () {
     const self = this,
         allargs = self.args.join(' '),
@@ -1119,7 +1133,7 @@ Malta.prototype.replace_all = function (tpl) {
 
         if ($4) {
             innerVars = utils.jsonFromStr($4);
-
+            console.log('innerVars: ', innerVars, $4);
             /*
             // this is the simple one with no fallback value
             for (n in innerVars) {
@@ -1133,14 +1147,14 @@ Malta.prototype.replace_all = function (tpl) {
             // and replace with the value of xxx
             //
             for (n in innerVars) {
+                console.log('trying to replace ', n);
                 /// DO NOT filter here with hasOwnProperty
+                var tmpxxx = self.reg[self.placeholderMode].innerVars(n);
+                console.log('not matching here');
+                console.log(tmp);
+                console.log(tmpxxx);
                 tmp = tmp.replace(
-                    // new RegExp('\\\$' + n + '\(\\\|\(\[\^\$\]\*\)\)\?' + '\\\$', 'g'),
-                    new RegExp([
-                        '\\$',
-                        n, '(\\|([^$]*))?',
-                        '\\$'
-                    ].join(''), 'g'),
+                    tmpxxx,
                     function () { return innerVars[n]; }
                 );
             }
@@ -1154,8 +1168,9 @@ Malta.prototype.replace_all = function (tpl) {
         //
         tmp = tmp.replace(
             // eslint-disable-next-line no-useless-escape
-            new RegExp(/\$\w*(:?\|([^\$]*))?\$/g),
-            function (str, $1) { return $1 || str; }
+            // new RegExp(/\$\w*(\|([^\$]*))?\$/g),
+            self.reg[self.placeholderMode].innerVarsBackup(),
+            function (str, $1, $2) { return $2 || str; }
         );
 
         // maybe add path tip in build just before file inclusion
