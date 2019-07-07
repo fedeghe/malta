@@ -1133,7 +1133,6 @@ Malta.prototype.replace_all = function (tpl) {
 
         if ($4) {
             innerVars = utils.jsonFromStr($4);
-            console.log('innerVars: ', innerVars, $4);
             /*
             // this is the simple one with no fallback value
             for (n in innerVars) {
@@ -1147,14 +1146,9 @@ Malta.prototype.replace_all = function (tpl) {
             // and replace with the value of xxx
             //
             for (n in innerVars) {
-                console.log('trying to replace ', n);
                 /// DO NOT filter here with hasOwnProperty
-                var tmpxxx = self.reg[self.placeholderMode].innerVars(n);
-                console.log('not matching here');
-                console.log(tmp);
-                console.log(tmpxxx);
                 tmp = tmp.replace(
-                    tmpxxx,
+                    self.reg[self.placeholderMode].innerVars(n),
                     function () { return innerVars[n]; }
                 );
             }

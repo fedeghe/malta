@@ -11,7 +11,6 @@ describe('tpl, func placeholderMode', function () {
         m.check(['#' + trgFolder + '/source/tpl/tpl0ph.js', trgFolder + '/build', '-vars=test/fs/vars2.json', '-options=verbose:0,showPath:false,placeholderMode:\'func\'']).start(function (o){
             fs.readFile(trgFolder + '/build/tpl0ph.js', (err, cnt) => {
                 if (err) throw err;
-                
                 eval(cnt+"");
                 assert.equal(typeof tpl0, 'function')
                 assert.equal(tpl0(), 5);
@@ -25,7 +24,6 @@ describe('tpl, func placeholderMode', function () {
         m.check(['#' + trgFolder + '/source/tpl/tpl1ph.js', trgFolder + '/build', '-vars=test/fs/vars2.json', '-options=verbose:0,showPath:false,placeholderMode:\'func\'']).start(function (o){
             fs.readFile(trgFolder + '/build/tpl1ph.js', (err, cnt) => {
                 if (err) throw err;
-                console.log('content: ', `${cnt}`)
                 eval(cnt+"");
                 assert.equal(typeof tpl0, 'function')
                 assert.equal(tpl0(), 3);
