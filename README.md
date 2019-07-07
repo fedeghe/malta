@@ -300,13 +300,13 @@ now the Malta rebuild will include the right file depending on the `my.config.bo
 
 Malta uses three kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
-- **$$filePath$$**  
+- **\$\$filePath\$\$**  
   _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder.
 
-- **$varPath$**  
+- **\$varPath$\**  
   _varPath_ is the key path for a variable that Malta will search in a _vars.json_ file that should be found in the template folder (or wherever the -vars options indicates)  
 
-- **$PACKAGE.varpath$**  
+- **\$PACKAGE.varpath\$**  
     Starting from _v.3.9.0_ it is possible to use another placeholder to use anywhere all values contained in the `package.json` found in the folder where malta has been lanuched.  For example assume in the `root` folder we have a `package.json` and we would like to use the `version` and the `repository.url` within our source. Will be enough to add a special placeholder that contains the path of the value inside the `package.json` prepended with a `PACKAGE.` as follows:
     ```
     $PACKAGE.name$ 

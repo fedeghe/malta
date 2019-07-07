@@ -204,6 +204,16 @@ function Malta () {
      * default values for all options that can be passed throug the -options parameter
      */
     this.watchInterval = 1E3;
+
+    /**
+     * by default still the placeholders remain $$file$$ $var$ !{expression}!
+     * but passing the maltaPlaceholder=true
+     * one choose to opt instead for
+     * maltaFile('my/path/file', { 'options': 'here'})
+     * maltaVar('path/to/var/in/vars/js')
+     * maltaExpression(the Expression)
+     */
+    this.placeholderMode = 'dolla';
 }
 
 /**
@@ -563,9 +573,24 @@ Malta.log = Malta.prototype.log = function (msg) {
  * @type {Object}
  */
 Malta.prototype.reg = {
-    files: '(.*)\\$\\$([@A-z0-9-_/.]+)({([^}]*)})?\\$\\$',
-    vars: '\\$([A-z0-9-_/.\\[\\]]+)\\$',
-    calc: '!{([^{}]*)}!'
+    dolla: {
+        files: '(.*)\\$\\$([@A-z0-9-_/.]+)({([^}]*)})?\\$\\$',
+        vars: '\\$([A-z0-9-_/.\\[\\]]+)\\$',
+        calc: '!{([^{}]*)}!'
+    },
+    func: {
+        // the regexp is
+        // /(.*)maltaFile\('(.*)\'(?:\,(?:\s*)?(.*))?\)/
+        files: '(.*)maltaFile\\(\'(.*)\\\'(?:\\,(?:\\s*)?(.*))?\\)',
+
+        // the regExp is
+        // /maltaVar\('([A-z0-9-_/.\[\]]+)'\)/
+        vars: 'maltaVar\\(\'([A-z0-9-_/.\\[\\]]*)\'\\)',
+
+        // the RegExp is
+        // /maltaExpression\(([^{}]*)\)/
+        calc: 'maltaExpression\\((.*)\\)'
+    }
 };
 
 function getCommentFn (pre, post) {
@@ -617,7 +642,7 @@ Malta.prototype.build = function () {
     self.involvedFiles += self.hasVars();
 
     if (self.justCopy === false) {
-        while (baseTplContent.match(new RegExp(self.reg.files, 'g'))) {
+        while (baseTplContent.match(new RegExp(self.reg[self.placeholderMode].files, 'g'))) {
             baseTplContent = self.replace_all(baseTplContent);
         }
 
@@ -791,6 +816,9 @@ Malta.prototype.loadOptions = function () {
         if ('showPath' in self.options) self.showPath = !!(self.options.showPath);
         if ('notifyBuild' in self.options) self.notifyBuild = !!(self.options.notifyBuild);
         if ('justCopy' in self.options) self.justCopy = !!(self.options.justCopy);
+        if ('placeholderMode' in self.options && self.options.placeholderMode in self.reg) {
+            self.placeholderMode = self.options.placeholderMode;
+        }
     }
 
     if (tmp) {
@@ -957,13 +985,13 @@ Malta.prototype.parse = function (path) {
     (function dig (c) {
         // look for files placeholders
         //
-        const els = c.match(new RegExp(self.reg.files, 'gm'));
+        const els = c.match(new RegExp(self.reg[self.placeholderMode].files, 'gm'));
 
         if (els) {
             // loop over all found
             //
             for (let i = 0, l = els.length; i < l; i++) {
-                const p = els[i].match(new RegExp(self.reg.files)),
+                const p = els[i].match(new RegExp(self.reg[self.placeholderMode].files)),
                     f = p[2];
                 let tmp,
                     fname = f.match(/^\//)
@@ -1054,7 +1082,7 @@ Malta.prototype.microTpl = function (cnt) {
 Malta.prototype.replace_all = function (tpl) {
     const self = this;
 
-    return tpl.replace(new RegExp(self.reg.files, 'g'), function (str, $1, $2, $3, $4) {
+    return tpl.replace(new RegExp(self.reg[self.placeholderMode].files, 'g'), function (str, $1, $2, $3, $4) {
         let tmp,
             n,
             innerVars;
@@ -1126,8 +1154,8 @@ Malta.prototype.replace_all = function (tpl) {
         //
         tmp = tmp.replace(
             // eslint-disable-next-line no-useless-escape
-            new RegExp(/\$\w*(\|([^\$]*))?\$/g),
-            function (str, $1, $2) { return $2 || str; }
+            new RegExp(/\$\w*(:?\|([^\$]*))?\$/g),
+            function (str, $1) { return $1 || str; }
         );
 
         // maybe add path tip in build just before file inclusion
@@ -1155,7 +1183,7 @@ Malta.prototype.replace_all = function (tpl) {
  */
 Malta.prototype.replace_calc = function (tpl) {
     const self = this;
-    return tpl.replace(new RegExp(self.reg.calc, 'g'), function (str, $1) {
+    return tpl.replace(new RegExp(self.reg[self.placeholderMode].calc, 'g'), function (str, $1) {
         return eval($1);
     });
 };
@@ -1167,7 +1195,7 @@ Malta.prototype.replace_calc = function (tpl) {
  */
 Malta.prototype.replace_vars = function (tpl) {
     const self = this;
-    return tpl.replace(new RegExp(self.reg.vars, 'g'), function (str, $1) {
+    return tpl.replace(new RegExp(self.reg[self.placeholderMode].vars, 'g'), function (str, $1) {
         let isPackageVar = false,
             t;
         if (/^PACKAGE\./.test($1)) {
