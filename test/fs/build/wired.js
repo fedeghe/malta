@@ -1,5 +1,5 @@
-var time = '23:52:35',
-    date = '8/7/2019'
+var time = '0:2:53',
+    date = '9/7/2019'
     year = '2019',
     filesnum = '2',
     version = '3.9.17',

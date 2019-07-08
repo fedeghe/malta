@@ -1,4 +1,4 @@
-maltaFile('tpl00ph.js')
-maltaFile('tpl01ph.js')
-maltaFile('tpl02ph.js')
+maltaF('tpl00ph.js')
+maltaF('tpl01ph.js')
+maltaF('tpl02ph.js')
 

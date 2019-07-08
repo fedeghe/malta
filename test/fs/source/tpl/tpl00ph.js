@@ -1,3 +1,3 @@
 function tpl0(){
-	return maltaVar("a", 2) + maltaVar('b', 3);
+	return maltaV("a", 2) + maltaV('b', 3);
 }

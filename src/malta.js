@@ -209,9 +209,9 @@ function Malta () {
      * by default still the placeholders remain $$file$$ $var$ !{expression}!
      * but passing the maltaPlaceholder=true
      * one choose to opt instead for
-     * maltaFile('my/path/file', { 'options': 'here'})
-     * maltaVar('path/to/var/in/vars/js')
-     * maltaExpression(the Expression)
+     * maltaF('my/path/file', { 'options': 'here'})
+     * maltaV('path/to/var/in/vars/js')
+     * maltaE(the Expression)
      */
     this.placeholderMode = 'dolla';
 }
@@ -587,28 +587,28 @@ Malta.prototype.reg = {
     },
     func: {
         // the regexp is
-        // /(.*)maltaFile\('(.*)\'(?:\,(?:\s*)?(.*))?\)/
-        files: '(.*)maltaFile\\(\'(.*)\\\'(?:\\,(?:\\s*)?({(.*)}))?\\)',
+        // /(.*)maltaF\('(.*)\'(?:\,(?:\s*)?(.*))?\)/
+        files: '(.*)maltaF\\(\'(.*)\\\'(?:\\,(?:\\s*)?({(.*)}))?\\)',
 
         // the regExp is
-        // /maltaVar\('([A-z0-9-_/.\[\]]+)'\)/
+        // /maltaV\('([A-z0-9-_/.\[\]]+)'\)/
         // either
-        // vars: 'maltaVar\\(\'([A-z0-9-_/.\\[\\]]*)\'\\)',
+        // vars: 'maltaV\\(\'([A-z0-9-_/.\\[\\]]*)\'\\)',
         // either
-        vars: 'maltaVar\\(\'([^\']*)\'\\)',
+        vars: 'maltaV\\(\'([^\']*)\'\\)',
 
-        // nope fails the  maltaExpression
-        // vars: 'maltaVar\\(\'(.*)\'\\)',
+        // nope fails the maltaE
+        // vars: 'maltaV\\(\'(.*)\'\\)',
 
         // the RegExp is
-        // /maltaExpression\(([^{}]*)\)/
-        calc: 'maltaExpression\\(([^)]*)\\)',
+        // /maltaE\(([^{}]*)\)/
+        calc: 'maltaE\\(([^)]*)\\)',
 
 
         // the RegExp is (similar to the var one)
         //
-        innerVars: (n) => new RegExp(`maltaVar\\(['"]${n}['"],([^)]*)?\\)`, 'g'),
-        innerVarsBackup: () => new RegExp(/maltaVar\(['"][^,]*['"](,(?:\s*)?([^)]*))?\)/g)
+        innerVars: (n) => new RegExp(`maltaV\\(['"]${n}['"],([^)]*)?\\)`, 'g'),
+        innerVarsBackup: () => new RegExp(/maltaV\(['"][^,]*['"](,(?:\s*)?([^)]*))?\)/g)
     }
 };
 
@@ -1217,7 +1217,7 @@ Malta.prototype.replace_vars = function (tpl) {
                 case 'dolla':
                     return `$${val}$`;
                 case 'func':
-                    return `maltaVar('${val}')`;
+                    return `maltaV('${val}')`;
                 default: return val;
             }
         };
