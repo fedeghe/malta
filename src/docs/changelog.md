@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.0.0** new placeholders available
 - **3.9.17** allow plugins to pass an error message
 - **3.9.16** fix small issue message if a plugin is not found
 - **3.9.15** audit vulnerability fix

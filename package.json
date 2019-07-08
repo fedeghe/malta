@@ -1,46 +1,46 @@
 {
-  "name": "malta",
-  "version": "3.9.17",
-  "description": "Lightning builder allows to compose on the fly and update packed and full coded huge files, edit its parts as files, splitted and glued as You need.",
-  "main": "src/index.js",
-  "scripts": {
-    "lint": "./node_modules/.bin/eslint --ignore-path .eslintignore .",
-    "precommit": "npm lint",
-    "test": "rm -rf test/fs/build && NODE_PATH=. NODE_ENV=test mocha",
-    "cover": "nyc npm test && nyc report --reporter=html",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://fedeghe@github.com/fedeghe/malta.git"
-  },
-  "keywords": [
-    "builder",
-    "javascript builder",
-    "composer",
-    "javascript composer"
-  ],
-  "author": "Federico Ghedina <fedeghe@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fedeghe/malta/issues"
-  },
-  "bin": {
-    "malta": "src/bin.js"
-  },
-  "engines": {
-    "node": ">=4.0.0"
-  },
-  "devDependencies": {
-    "coveralls": "~3.0.2",
-    "eslint": "^5.15.1",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "mocha": "~5.1.1",
-    "mocha-lcov-reporter": "~1.3.0",
-    "nyc": "^14.1.1"
-  }
+    "name": "malta",
+    "version": "3.9.17",
+    "description": "Lightning builder allows to compose on the fly and update packed and full coded huge files, edit its parts as files, splitted and glued as You need.",
+    "main": "src/index.js",
+    "scripts": {
+        "lint": "./node_modules/.bin/eslint --ignore-path .eslintignore .",
+        "precommit": "yarn lint",
+        "test": "rm -rf test/fs/build && NODE_PATH=. NODE_ENV=test mocha",
+        "cover": "nyc npm test && nyc report --reporter=html",
+        "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://fedeghe@github.com/fedeghe/malta.git"
+    },
+    "keywords": [
+        "builder",
+        "javascript builder",
+        "composer",
+        "javascript composer"
+    ],
+    "author": "Federico Ghedina <fedeghe@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/fedeghe/malta/issues"
+    },
+    "bin": {
+        "malta": "src/bin.js"
+    },
+    "engines": {
+        "node": ">=4.0.0"
+    },
+    "devDependencies": {
+        "coveralls": "~3.0.2",
+        "eslint": "^5.15.1",
+        "eslint-config-standard": "^12.0.0",
+        "eslint-plugin-import": "^2.16.0",
+        "eslint-plugin-node": "^8.0.1",
+        "eslint-plugin-promise": "^4.0.1",
+        "eslint-plugin-standard": "^4.0.0",
+        "mocha": "~5.1.1",
+        "mocha-lcov-reporter": "~1.3.0",
+        "nyc": "^14.1.1"
+    }
 }

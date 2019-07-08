@@ -50,6 +50,7 @@ module.exports = (function () {
                     previous.files = actual.files;
                 });
             } catch (err) {
+                // eslint-disable-next-line no-console
                 console.log(err);
                 process.exit();
             }
