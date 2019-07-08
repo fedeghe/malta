@@ -7,7 +7,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/fedeghe/malta/badge.svg)](https://snyk.io/test/github/fedeghe/malta)
 [![Build Status](https://travis-ci.org/fedeghe/malta.svg?branch=master)](https://travis-ci.org/fedeghe/malta) [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
 
-![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.3**
+![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.4**
 
 # Malta is ...  
 a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
@@ -301,7 +301,9 @@ now the Malta rebuild will include the right file depending on the `my.config.bo
 Malta uses three kind of placeholders, to be used in the main template or in any file involved (but _vars.json_)  
 
 - **\$\$filePath\$\$**  
-  _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder.
+  _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder.  
+  
+
 
 - **\$varPath$\**  
   _varPath_ is the key path for a variable that Malta will search in a _vars.json_ file that should be found in the template folder (or wherever the -vars options indicates)  
@@ -315,7 +317,22 @@ Malta uses three kind of placeholders, to be used in the main template or in any
     ```
 
 - **!{expression}!**
-  _expression_ can contain anything that must be evaluated (`eval` function is used)
+  _expression_ can contain anything that must be evaluated (`eval` function is used)  
+
+From version 4.0.0 also the following alternative placeholders are available (passing `placeholderMode:'func'` in the _options_):  
+- **maltaF('filepath'[, {'passed':2, 'vars': 'hello'}])**  // keys must be quoted
+- **maltaV('varPath'[, fallbackValue])**  
+- **maltaE(expression)**  
+hint about the _maltaE_: it should not contain ( and ) otherwise will fail, the only allowed parenthesis are those one from _maltaV(...)_, which can still be part of the _expression_:  
+
+```
+// OK
+var foo = maltaE(maltaV('my.number.var.is.a.bit.deep') + 5),
+    boo = maltaE(Math.pow(2,3) * maltaV(my.num) + 3)
+
+// ERROR
+var boo = maltaE(Math.pow(maltaV(my.num), 2) + 3)
+```
 
 --- 
 
@@ -366,7 +383,7 @@ There are some placeholders that can be used within any involved file:
 - \_\_TIME\_\_ : the HH : MM : SS build time  
 - \_\_DATE\_\_ : the D / M / YYYY build date   
 - \_\_YEAR\_\_ : the YYYY format build year  
-- \_\_FILESNUM\_\_ : the number of files glued togheter  
+- \_\_FILES\_\_ : the number of files glued togheter  
 - \_\_VERSION\_\_ : Malta version  
 - \_\_BUILDNUMBER\_\_ : build number  
 - \_\_FILE\_\_ : template name  
