@@ -601,8 +601,8 @@ Malta.prototype.reg = {
 
         // the RegExp is (similar to the var one)
         //
-        innerVars: (n) => new RegExp(`maltaVar\\('${n}',([^)]*)?\\)`, 'g'),
-        innerVarsBackup: () => new RegExp(/maltaVar\('[^,]*'(,(?:\s*)?([^)]*))?\)/g)
+        innerVars: (n) => new RegExp(`maltaVar\\(['"]${n}['"],([^)]*)?\\)`, 'g'),
+        innerVarsBackup: () => new RegExp(/maltaVar\(['"][^,]*['"](,(?:\s*)?([^)]*))?\)/g)
     }
 };
 
