@@ -3,11 +3,11 @@ var assert = require('assert'),
     path = require('path'),
     malta = require('../src/index.js');
 
-describe('tpl, func placeholderMode', function () {
+describe('tpl (placeholderMode: func)', function () {
     var trgFolder = path.resolve('test/fs'),
         m = malta.get();
 
-    it('the output file should have right default values, func placeholderMode', () => {
+    it('the output file should have right default values (placeholderMode: func)', () => {
         m.check(['#' + trgFolder + '/source/tpl/tpl0ph.js', trgFolder + '/build', '-vars=test/fs/vars2.json', '-options=verbose:0,showPath:false,placeholderMode:\'func\'']).start(function (o){
             fs.readFile(trgFolder + '/build/tpl0ph.js', (err, cnt) => {
                 if (err) throw err;
@@ -20,7 +20,7 @@ describe('tpl, func placeholderMode', function () {
         });
     });
 
-    it('the output file should have right passed values, func placeholderMode again', () => {
+    it('the output file should have right passed values (placeholderMode: func)', () => {
         m.check(['#' + trgFolder + '/source/tpl/tpl1ph.js', trgFolder + '/build', '-vars=test/fs/vars2.json', '-options=verbose:0,showPath:false,placeholderMode:\'func\'']).start(function (o){
             fs.readFile(trgFolder + '/build/tpl1ph.js', (err, cnt) => {
                 if (err) throw err;
