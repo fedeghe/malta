@@ -381,7 +381,7 @@ Malta.checkDeps = function () {
 Malta.checkExec = function (ex) {
     let err;
 
-    childProcess.exec(`which ${ex}`, function (error) {
+    childProcess.exec(`which ${ex}`, error => {
         if (error !== null) {
             err = {
                 err: `${error}`,
@@ -461,7 +461,7 @@ Malta.getRunsFromPath = function (p) {
 };
 
 Malta.replaceLinenumbers = function (tpl) {
-    return tpl.split(/\n/).map(function (line, i) {
+    return tpl.split(/\n/).map((line, i) => {
         return line.replace(/__LINE__/g, i + 1);
     }).join(NL);
 };
@@ -593,10 +593,12 @@ Malta.prototype.reg = {
         // the regExp is
         // /maltaVar\('([A-z0-9-_/.\[\]]+)'\)/
         vars: 'maltaVar\\(\'([A-z0-9-_/.\\[\\]]*)\'\\)',
+        // vars: 'maltaVar\\(\'([^\']*)\'\\)',
+        // vars: 'maltaVar\\(\'(.*)\'\\)',
 
         // the RegExp is
         // /maltaExpression\(([^{}]*)\)/
-        calc: 'maltaExpression\\((.*)\\)',
+        calc: 'maltaExpression\\(([^)]*)\\)',
 
 
         // the RegExp is (similar to the var one)
@@ -1193,7 +1195,9 @@ Malta.prototype.replace_all = function (tpl) {
 Malta.prototype.replace_calc = function (tpl) {
     const self = this;
     return tpl.replace(new RegExp(self.reg[self.placeholderMode].calc, 'g'), function (str, $1) {
-        return eval($1);
+        var s;
+        eval(`s = $1`);
+        return s;
     });
 };
 
@@ -1203,7 +1207,17 @@ Malta.prototype.replace_calc = function (tpl) {
  * @return {[type]}     [description]
  */
 Malta.prototype.replace_vars = function (tpl) {
-    const self = this;
+    const self = this,
+        rep = val => {
+            switch (self.placeholderMode) {
+                case 'dolla':
+                    return `$${val}$`;
+                case 'func':
+                    return `maltaVar('${val}')`;
+                default: return val;
+            }
+        };
+
     return tpl.replace(new RegExp(self.reg[self.placeholderMode].vars, 'g'), function (str, $1) {
         let isPackageVar = false,
             t;
@@ -1222,7 +1236,7 @@ Malta.prototype.replace_vars = function (tpl) {
         if (isPackageVar) {
             t = utils.checkns(`${$1}`, self.execPackageVars);
         }
-        return typeof t !== UNDEFINED ? t : `$${$1}$`;
+        return typeof t !== UNDEFINED ? t : rep($1);
     });
 };
 
