@@ -1,8 +1,8 @@
-var time = '0:15:31',
+var time = '0:23:30',
     date = '9/7/2019'
     year = '2019',
     filesnum = '2',
-    version = '3.9.17',
+    version = '4.0.0',
     buildnumber = '1',
     file = 'wired.js',
     line = '8';
