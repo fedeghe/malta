@@ -593,9 +593,7 @@ Malta.prototype.reg = {
         // the regExp is
         // /maltaV\('([A-z0-9-_/.\[\]]+)'\)/
         // either
-        // vars: 'maltaV\\(\'([A-z0-9-_/.\\[\\]]*)\'\\)',
-        // either
-        vars: 'maltaV\\(\'([^\']*)\'\\)',
+        vars: 'maltaV\\(\'([A-z0-9-_/.\\[\\]]*)\'\\)',
 
         // nope fails the maltaE
         // vars: 'maltaV\\(\'(.*)\'\\)',

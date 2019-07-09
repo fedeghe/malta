@@ -213,6 +213,8 @@ here the following key:values are considered:
         Only on MacOS. Use _osascript_ to show a sticky message at each build (verbose has to be > 0).
     - *justCopy*: *boolean* (default : false) [from v.3.9.11]  
         in case it is simply needed to skip the placeholders replacement, the file is simply copied (but still plugin processes if any)
+    - *placeholderMode*: 'dolla' or 'func' (default 'dolla')  
+        'func' is used to allow to use the new placeholders [**maltaV**, **maltaF**, **maltaE**] introduced in version **4.0.0**
         
 
 - **-plugins=**  
@@ -319,7 +321,7 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 - **!{expression}!**
   _expression_ can contain anything that must be evaluated (`eval` function is used)  
 
-From version 4.0.0 also the following alternative placeholders are available (passing `placeholderMode:'func'` in the _options_):  
+**Starting from version 4.0.0** also the following alternative placeholders are available (passing `placeholderMode:'func'` in the _options_):  
 - **maltaF('filepath'[, {'passed':2, 'vars': 'hello'}])**  // keys must be quoted
 - **maltaV('varPath'[, fallbackValue])**  
 - **maltaE(expression)**  
