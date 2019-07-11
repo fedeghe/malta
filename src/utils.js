@@ -143,8 +143,7 @@ const fs = require('fs'),
 
         if (typeof options !== 'undefined') {
             if ('delim' in options) {
-                start = options.delim[0];
-                end = options.delim[1];
+                [start, end] = options.delim;
             }
             if ('fb' in options) {
                 fb = options.fb;
