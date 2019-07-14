@@ -1,5 +1,5 @@
 function tpl0(){
-	return 2 + 3;
+	return 7 + 8;
 }
 
 function tpl1(){}

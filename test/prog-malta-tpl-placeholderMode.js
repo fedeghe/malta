@@ -13,7 +13,7 @@ describe('tpl (placeholderMode: func)', function () {
                 if (err) throw err;
                 eval(cnt+"");
                 assert.equal(typeof tpl0, 'function')
-                assert.equal(tpl0(), 5);
+                assert.equal(tpl0(), 15);
                 assert.equal(typeof tpl1, 'function');
                 assert.equal(typeof tpl2, 'function');
             });
