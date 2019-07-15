@@ -4,6 +4,7 @@ Plugins available
 ### [malta-apollo-srv][1pre]
 Starts automatically an Apollo server, based on [Apollo-server npm package][1preb]  
 
+---
 ### [malta-babel][1]
 Transpills es6 code, based on [babel npm package][1b]  
 
