@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.0.4** solved subdependency vulerability
 - **4.0.3** fixed some bugs in the nre placeholders
 - **4.0.0** new placeholders available
 - **3.9.17** allow plugins to pass an error message
