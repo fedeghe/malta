@@ -1,6 +1,9 @@
 Plugins available
 -----------------
 
+### [malta-apollo-srv][1pre]
+Starts automatically an Apollo server, based on [Apollo-server npm package][1preb]  
+
 ### [malta-babel][1]
 Transpills es6 code, based on [babel npm package][1b]  
 
@@ -145,6 +148,7 @@ Umd plugin
 
 [0]: https://www.npmjs.org
 
+[1pre]: https://www.npmjs.com/package/malta-apollo-srv
 [1]: https://www.npmjs.com/package/malta-babel
 [2]: https://www.npmjs.com/package/malta-beautify
 [2bis]: https://www.npmjs.com/package/malta-browser-refresh
@@ -182,6 +186,7 @@ Umd plugin
 [23]: https://www.npmjs.com/package/malta-umd
 [24]: https://www.npmjs.com/package/malta-translate
 
+[1preb]: https://www.npmjs.com/package/apollo-server
 [1b]: https://www.npmjs.com/package/babel
 [2b]: https://www.npmjs.com/package/js-beautify
 [3b]: https://www.npmjs.com/package/coffee
