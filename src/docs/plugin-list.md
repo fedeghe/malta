@@ -37,6 +37,10 @@ Launches a raw basic development server
 Creates a ebup file from md files, based on [epub-gen npm package][5trisb]  
 
 ---
+### [malta-graphviz][5quad]  
+Graphviz output, based obviously on `graphviz`  
+
+---
 ### [malta-haml][6pre]  
 Creates html files from haml files, based on [hamljs npm package][6preb]
 
@@ -158,6 +162,7 @@ Umd plugin
 [5]: https://www.npmjs.com/package/malta-del
 [5bis]: https://www.npmjs.com/package/malta-dev-srv
 [5tris]: https://www.npmjs.com/package/malta-epub
+[5quad]: https://www.npmjs.com/package/malta-graphviz
 [6pre]: https://www.npmjs.com/package/malta-haml
 
 [6]: https://www.npmjs.com/package/malta-header-comment
