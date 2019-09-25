@@ -61,13 +61,8 @@ Minifies html markup, based on [html-minifier npm package][7b]
 Create bookmarklet code from javascript code  
 
 ---
-### [malta-js-obfuscator][8pre]  
-Obfuscate javascript code using [js-obfuscator npm package][8preb]  
-
----
-### [malta-js-packer][8]  
-Packs javascript using [Dean Edwards ported packer npm package][8b]  
-**DEPRECATED**: some depencencies has broken it, use malta-js-obfuscator instead 
+### [malta-js-obfuscator][8]  
+Obfuscate javascript code using [js-obfuscator npm package][8b]  
 
 ---
 ### [malta-js-toolkit][9pre]  
@@ -169,8 +164,8 @@ Umd plugin
 [7]: https://www.npmjs.com/package/malta-html-minify
 [7pre]: https://www.npmjs.com/package/malta-html2pdf
 [7post]: https://www.npmjs.com/package/malta-js-bookmarklet
-[8]: https://www.npmjs.com/package/malta-js-packer
-[8pre]: https://www.npmjs.com/package/malta-js-obfuscator
+
+[8]: https://www.npmjs.com/package/malta-js-obfuscator
 [9pre]: https://www.npmjs.com/package/malta-js-toolkit
 [9]: https://www.npmjs.com/package/malta-js-uglify
 [10]: https://www.npmjs.com/package/malta-jsdoc
@@ -201,8 +196,8 @@ Umd plugin
 [6preb]: https://www.npmjs.com/package/hamljs
 [7preb]: https://www.npmjs.com/package/html-pdf
 [7b]: https://www.npmjs.com/package/html-minifier
-[8preb]: https://www.npmjs.com/package/javascript-obfuscator
-[8b]: https://www.npmjs.com/package/packer
+[8b]: https://www.npmjs.com/package/javascript-obfuscator
+
 [9b]: https://www.npmjs.com/package/uglify-js
 [10b]: https://www.npmjs.com/package/jsdoc
 [11b]: https://www.npmjs.com/package/jshint
