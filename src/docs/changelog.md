@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.0.6** `plugins/<pluginName>/index.js` added as possible path for plugin local search
 - **4.0.4** solved subdependency vulerability
 - **4.0.3** fixed some bugs in the nre placeholders
 - **4.0.0** new placeholders available
