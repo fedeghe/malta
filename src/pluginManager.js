@@ -53,6 +53,7 @@ PluginManager.prototype.maybeNotifyBuild = function (gotErrs) {
 PluginManager.prototype.add = function (fname, params) {
     const self = this,
         userPath = `${this.userPath}${fname}.js`,
+        userPathFolder = `${this.userPath}${fname}/index.js`,
         maltaPath = `${this.maltaPath}${fname}.js`;
 
     let plugin;
@@ -63,7 +64,12 @@ PluginManager.prototype.add = function (fname, params) {
         if (fs.existsSync(userPath)) {
             plugin = require(userPath);
 
-            // then check if malta package has it
+            // then check if malta package has it, in folder/index.js
+            //
+        } else if (fs.existsSync(userPathFolder)) {
+            plugin = require(userPathFolder);
+
+            // or in file
             //
         } else if (fs.existsSync(maltaPath)) {
             plugin = require(maltaPath);
@@ -106,7 +112,6 @@ PluginManager.prototype.doAdd = function (el, plu, params) {
     }
 };
 
-module.exports = PluginManager;
 
 function Executor (iterator, maltaInstance, pmInstance) {
     this.iterator = iterator;
@@ -179,3 +184,5 @@ Executor.prototype.callPlugin = function (p) {
     //
     return p.func.bind(malta)(malta.data, p.params);
 };
+
+module.exports = PluginManager;

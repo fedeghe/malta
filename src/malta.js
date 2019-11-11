@@ -764,10 +764,10 @@ Malta.prototype.check = function (a) {
     this.tplPath = path.resolve(execPath, argTemplate);
     this.outDir = path.resolve(execPath, argOutDir);
 
-    if (!(fs.existsSync(this.tplPath))) badArgs.push(this.tplPath);
-    if (!(fs.existsSync(this.outDir))) badArgs.push(this.outDir);
+    !(fs.existsSync(this.tplPath)) && badArgs.push(this.tplPath);
+    !(fs.existsSync(this.outDir)) && badArgs.push(this.outDir);
 
-    if (badArgs.length) Malta.badargs.apply(null, badArgs);
+    badArgs.length && Malta.badargs.apply(null, badArgs);
 
     this.tplName = path.basename(this.tplPath);
     // this.tplName = path.basename(argTemplate);
@@ -776,9 +776,8 @@ Malta.prototype.check = function (a) {
     this.tplCnt = fs.readFileSync(this.tplPath).toString();
     this.execDir = execPath;
 
-    if (this.baseDir === this.outDir) {
-        this.log_err('Output and template directories coincide. Malta won`t overwrite your template'.red());
-    }
+    this.baseDir === this.outDir
+    && this.log_err('Output and template directories coincide. Malta won`t overwrite your template'.red());
 
     this.inName = this.baseDir + DS + this.tplName;
     this.outName = this.outDir + DS + this.tplName;
