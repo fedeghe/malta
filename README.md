@@ -385,7 +385,7 @@ There are some placeholders that can be used within any involved file:
 - \_\_TIME\_\_ : the HH : MM : SS build time  
 - \_\_DATE\_\_ : the D / M / YYYY build date   
 - \_\_YEAR\_\_ : the YYYY format build year  
-- \_\_FILES\_\_ : the number of files glued togheter  
+- \_\_FILES\_\_ : the number of files glued together  
 - \_\_VERSION\_\_ : Malta version  
 - \_\_BUILDNUMBER\_\_ : build number  
 - \_\_FILE\_\_ : template name  
