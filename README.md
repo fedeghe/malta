@@ -220,7 +220,7 @@ here the following key:values are considered:
 - **-plugins=**  
 _Malta_ is shipped with a number of plugins to do as post-processing job every special task that was done before like compiling less files, packing js, etc... 
 To use one plugin a `-require` or `-plugins` argument must be specified when invoking _malta_ and if the plugin allows it, some parameters can be passed to it. On the same file more than one plugin can act serially:  a 3dot separated list of elements, one for each plugin with the following structure: `plugin-name(key:value,...)` will ensure each plugin start only when the previous one has finished his job and it will receive the right filename and content.
-Whenever some parameters are needed to be passed to the plugin, i9n case of string value, then You need to pass the string just wrap it into escaped double quotes \".  
+Whenever some parameters are needed to be passed to the plugin, in case of string value, then You need to pass the string just wrap it into escaped double quotes \".  
 
 <a name="smplugins"></a>
 
