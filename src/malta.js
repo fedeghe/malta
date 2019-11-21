@@ -684,10 +684,8 @@ Malta.prototype.build = function () {
         }
 
         const d = self.date(),
-            data = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
-
-        let msg = `@ ${data}
-${Malta.name} compiled ${self.outName} (${self.getSize(self.outName)})`;
+            data = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`,
+            msg = `@ ${data} ${Malta.name} compiled ${self.outName} (${self.getSize(self.outName)})`;
 
         self.t_end = self.date();
 
