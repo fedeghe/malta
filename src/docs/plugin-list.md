@@ -122,7 +122,11 @@ Creates html file from pug file, based on [pug npm package][18b]
 
 ---
 ### [malta-rename][19]  
-Renames a file  
+Renames a file 
+
+---
+### [malta-restify][19bis]  
+Starts a minimal rest server, based on [restify npm package][19bisb]  
 
 ---
 ### [malta-sass][20]  
@@ -181,6 +185,7 @@ Umd plugin
 [17]: https://www.npmjs.com/package/malta-pdf-merge
 [18]: https://www.npmjs.com/package/malta-pug
 [19]: https://www.npmjs.com/package/malta-rename
+[19bis]: https://www.npmjs.com/package/malta-restify
 [20]: https://www.npmjs.com/package/malta-sass
 [21]: https://www.npmjs.com/package/malta-svg2png
 [22]: https://www.npmjs.com/package/malta-typescript
@@ -209,6 +214,7 @@ Umd plugin
 [16b]: https://www.npmjs.com/package/nodemailer
 [17b]: https://www.npmjs.com/package/easy-pdf-merge
 [18b]: https://www.npmjs.com/package/pug
+[19bisb]: https://www.npmjs.com/package/restify
 [20b]: https://www.npmjs.com/package/sass
 [21b]: https://www.npmjs.com/package/svg-to-png
 [22b]: https://www.npmjs.com/package/tsc
