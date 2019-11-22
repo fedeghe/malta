@@ -15,8 +15,6 @@ describe('wired vars', function () {
                 assert.equal(/\d+:\d+:\d+/.test(`${time}`), true);
                 assert.equal(/\d+\/\d+\/\d+/.test(`${date}`), true);
                 assert.equal(/\d{4}/.test(`${year}`), true);
-            
-                
                 assert.equal(filesnum, 2)
                 assert.equal(version, malta.version);
                 assert.equal(buildnumber, 1);
