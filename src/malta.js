@@ -801,8 +801,14 @@ Malta.prototype.check = function (a) {
  * @return     {boolean}  The size.
  */
 Malta.prototype.getSize = function (path) {
-    const byted = fs.statSync(path).size,
+    let byted = 0,
+        kbyted = 0;
+    try {
+        byted = fs.statSync(path).size;
         kbyted = byted / 1024;
+    } catch (e) {
+        // ssssssshut the fuck up!
+    }
     return kbyted < 1 ? `${byted.toFixed(2)} B` : `${kbyted.toFixed(2)} KB`;
 };
 
