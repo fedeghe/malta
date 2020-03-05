@@ -259,7 +259,9 @@ Malta.running = true;
 Malta.NL = NL;
 
 Malta.TAB = TAB;
-
+/**
+ * @static
+ */
 Malta.execute = function (tmpExe, then) {
     const exe = tmpExe, // .join(' '),
         // c = tmpExe[0];
