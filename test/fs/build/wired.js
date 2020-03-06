@@ -1,6 +1,6 @@
-var time = '23:36:16',
-    date = '20/12/2019'
-    year = '2019',
+var time = '9:42:54',
+    date = '6/3/2020'
+    year = '2020',
     filesnum = '2',
     version = '4.0.7',
     buildnumber = '1',

@@ -3,8 +3,7 @@ var assert = require('assert'),
 	fs = require('fs'),
 	child_process = require('child_process'),
 	malta = require('../src/index.js'),
-	funcs = require('../src/functions.js'),
-	promise = require('promise');
+	funcs = require('../src/functions.js');
 
 describe('multi destinations', function () {
 
@@ -14,7 +13,7 @@ describe('multi destinations', function () {
 			ls.on('exit', function (code) {
 				// check the files
 				//
-				promise.all([(d) => {
+				Promise.all([(d) => {
 					fs.stat('test/fs/build/d1/multidest.js', function (err, cnt) {
 						assert.ok(cnt);
 						d();

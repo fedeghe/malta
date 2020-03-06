@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-require('src/stringproto.js')
+require('../src/stringproto.js')
 
 describe('string proto', function () {
     var str = "hello",
