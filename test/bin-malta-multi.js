@@ -1,9 +1,7 @@
 var assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
-	child_process = require('child_process'),
-	funcs = require('../src/functions.js'),
-	malta = require('../src/index.js');
+	child_process = require('child_process');
 
 describe('multi nested.json', function () {
 	it('should output correctly all files', function (done) {

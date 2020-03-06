@@ -1,8 +1,6 @@
-var assert = require('assert'),
-	path = require('path'),
+var path = require('path'),
 	fs = require('fs'),
-	child_process = require('child_process'),
-	malta = require('../src/index.js');
+	child_process = require('child_process');
 
 describe('Wildcard tpl', function () {
 	it('should create one file for each tpl found', function (done) {
