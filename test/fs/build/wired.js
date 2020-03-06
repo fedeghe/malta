@@ -1,4 +1,4 @@
-var time = '9:42:54',
+var time = '21:0:41',
     date = '6/3/2020'
     year = '2020',
     filesnum = '2',
