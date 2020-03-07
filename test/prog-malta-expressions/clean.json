@@ -1,0 +1,3 @@
+{
+    "EXE": "rm test/prog-malta-expressions/out/*.js"
+}

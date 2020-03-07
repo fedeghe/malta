@@ -1,0 +1,5 @@
+{
+    "EXE": [
+        "rm -rf test/bin-malta-exe/exefile.txt"
+    ]
+}

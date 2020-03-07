@@ -1,0 +1,10 @@
+{
+    "EXE": [
+        "mkdir -p test/bin-malta-multidestination/out/d1",
+        "mkdir -p test/bin-malta-multidestination/out/d2"
+    ],
+    "#test/bin-malta-multidestination/multidest.js": [
+        "test/bin-malta-multidestination/out/d1 -vars=test/bin-malta-multidestination/vars1.json -options=verbose:0",
+        "test/bin-malta-multidestination/out/d2 -vars=test/bin-malta-multidestination/vars2.json -options=verbose:0"
+    ]
+}

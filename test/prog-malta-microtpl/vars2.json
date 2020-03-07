@@ -1,0 +1,24 @@
+{
+	"tpl" : {
+		"zero" : true,
+		"one" : false,
+		"two" : true
+	},
+	"tplArr" : [
+		true,
+		false,
+		true,
+		{
+			"what" : "just a string"
+		}
+	],
+	// in line
+	"shpere" : {
+		/*
+			multi
+			line
+		*/
+		"radius" : 10
+	},
+	"sentence": "ciao mondo"
+}

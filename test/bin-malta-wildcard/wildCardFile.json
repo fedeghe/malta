@@ -1,0 +1,6 @@
+{
+    "EXE": [
+        "mkdir -p test/bin-malta-wildcard/out"
+    ],
+    "#test/bin-malta-wildcard/source/*.js": "test/bin-malta-wildcard/out"
+}

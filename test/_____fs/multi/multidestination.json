@@ -1,0 +1,10 @@
+{
+    "EXE" : [
+        "mkdir -p test/fs/build/d1",
+        "mkdir -p test/fs/build/d2"
+    ],
+    "#test/fs/source/multi/multidest.js" : [
+        "test/fs/build/d1 -vars=test/fs/vars1.json -options=verbose:0",
+        "test/fs/build/d2 -vars=test/fs/vars2.json -options=verbose:0"
+    ]
+}
