@@ -69,7 +69,7 @@ module.exports = (function () {
     }
 
     return {
-        observe: observe,
-        unobserve: unobserve
+        observe,
+        unobserve
     };
 })();
