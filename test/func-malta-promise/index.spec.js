@@ -35,6 +35,4 @@ describe('Father ... I promise', function () {;
 			done();
 		}).reject();
 	});
-
-	// });
 });
