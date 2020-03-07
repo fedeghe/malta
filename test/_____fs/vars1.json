@@ -1,9 +1,0 @@
-{
-    "env": {
-        "name": "production",
-        "version": "1.0",
-        "full": "$env.name$ v.$env.version$"
-    },
-    "author": "Federico Ghedina",
-    "sentence": "hello world"
-}
