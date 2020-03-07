@@ -1,8 +1,0 @@
-{
-	"EXE" : [
-		"mkdir -p test/fs/build/a/b/c/d/e/f/g/h",
-		"touch test/fs/build/a/b/c/d/e/f/g/h/file.txt",
-		"echo 'hello world' > test/fs/build/a/b/c/d/e/f/g/h/file.txt",
-		"rmdir test/fs/build/a/b/c/d/e/f/g/h"
-	]
-}

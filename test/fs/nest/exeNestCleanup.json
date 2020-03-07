@@ -1,5 +1,0 @@
-{
-    "EXE": [
-        "rm -rf test/fs/build/nest0/nest1/nest3/file.txt"
-    ]
-}

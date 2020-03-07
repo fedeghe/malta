@@ -1,3 +1,0 @@
-{
-	"EXE" : "touch test/fs/exefile.txt && rm test/fs/exefile.txt"
-}

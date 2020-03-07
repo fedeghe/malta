@@ -1,6 +1,0 @@
-{
-    "EXE" : [
-        "rm -rf test/fs/build/d1",
-        "rm -rf test/fs/build/d2"
-    ]
-}
