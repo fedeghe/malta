@@ -1,5 +1,4 @@
 [![npm version](https://badge.fury.io/js/malta.svg)](http://badge.fury.io/js/malta)
-[![Dependencies](https://david-dm.org/fedeghe/malta.svg)](https://david-dm.org/fedeghe/malta)
 [![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
 [![Package Quality](https://npm.packagequality.com/shield/malta.svg)](https://packagequality.com/#?package=malta)
 
