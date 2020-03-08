@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.0** removed Mpromise
 - **4.0.8** major test refactoring started
 - **4.0.7** small refactoring
 - **4.0.6** `plugins/<pluginName>/index.js` added as possible path for plugin local search

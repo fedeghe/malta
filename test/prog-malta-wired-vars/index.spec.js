@@ -10,7 +10,7 @@ describe('wired vars', function () {
     const m = malta.get();
     it('the output file should contain right values from wired values', done => {
         m.check([
-            `#${folder}/vars/wired.js`,
+            `#${folder}/wired.js`,
             `${folder}/out`,
             '-vars=test/prog-malta-wired-vars/vars1.json',
             '-options=verbose:0'

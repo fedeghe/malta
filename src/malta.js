@@ -3,7 +3,6 @@
 const fs = require('fs'),
     path = require('path'),
     childProcess = require('child_process'),
-    Mpromise = require('./maltapromise.js'),
     utils = require('./utils.js'),
     PluginManager = require('./pluginManager.js'),
     Sticky = require('./sticky.js'),
@@ -241,11 +240,6 @@ Malta.author = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
  * 0 nothing, 1 some, 2 a lot
  */
 Malta.verbose = 1;
-
-/**
- * allow simple promise to be used (eg malta-translate plugin)
- */
-Malta.Promise = Mpromise;
 
 /**
  * { item_description }
