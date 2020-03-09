@@ -256,20 +256,20 @@ For example:
 
 ``` json  
 {
-	"EXE" : [
-		"rm -rf dist",
-		"mkdir dist"
-	],
-	"dist/require.json" : true
+    "EXE" : [
+        "rm -rf dist",
+        "mkdir dist"
+    ],
+    "dist/require.json" : true
 }
 ```
-then _dist/require.json_ can contain something like:  
+then **_dist/require.json_** can contain something like:  
 
 ``` json  
 {
-	"EXE" : [
-		"mkdir dist/js"
-	],
+    "EXE" : [
+        "mkdir dist/js"
+    ],
     "src/tpl/main.js" : "dist/js"
 }
 ```
