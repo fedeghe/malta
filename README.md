@@ -326,7 +326,7 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 - **maltaE(expression)**  
 hint about the _maltaE_: it should not contain ( and ) otherwise will fail, the only allowed parenthesis are those one from _maltaV(...)_, which can still be part of the _expression_:  
 
-```
+``` js
 // OK
 var foo = maltaE(maltaV('my.number.var.is.a.bit.deep') + 5),
     boo = maltaE(Math.pow(2,3) * maltaV(my.num) + 3)
@@ -345,14 +345,14 @@ The `$$filePath$$` placeholder can optionally accept simple parameters:
 
 `$$triangles.svg{cx:100,cy:100,s:30,rot:30}$$`
 
-now within the `triangle.svg` we can use those vars:
-```
+now within the `triangle.svg` we can use those vars:  
+``` html
 <polygon
     points="0,!{-$s$}! !{$s$*Math.cos(Math.PI/6)}!,!{$s$*Math.sin(Math.PI/6)}! !{-$s$*Math.cos(Math.PI/6)}!,!{$s$*Math.sin(Math.PI/6)}!"
     fill="$fill|red$"
     stroke-width="$strkW|2$"
     stroke="$strkC|black$"
-    transform="translate($cx$ $cy$) rotate($rot$ 0 0)  ">
+    transform="translate($cx$ $cy$) rotate($rot$ 0 0)">
 </polygon>
 ```
 
@@ -381,14 +381,14 @@ Writing a plugin is extremely easy, just get a look at the _sample.js_ file in t
 
 There are some placeholders that can be used within any involved file:  
 
-- \_\_TIME\_\_ : the HH : MM : SS build time  
-- \_\_DATE\_\_ : the D / M / YYYY build date   
-- \_\_YEAR\_\_ : the YYYY format build year  
-- \_\_FILES\_\_ : the number of files glued together  
-- \_\_VERSION\_\_ : Malta version  
-- \_\_BUILDNUMBER\_\_ : build number  
-- \_\_FILE\_\_ : template name  
-- \_\_LINE\_\_ : line number  
+- **\_\_TIME\_\_** : the HH : MM : SS build time  
+- **\_\_DATE\_\_** : the D / M / YYYY build date   
+- **\_\_YEAR\_\_** : the YYYY format build year  
+- **\_\_FILES\_\_** : the number of files glued together  
+- **\_\_VERSION\_\_** : Malta version  
+- **\_\_BUILDNUMBER\_\_** : build number  
+- **\_\_FILE\_\_** : template name  
+- **\_\_LINE\_\_** : line number  
 
 --------
 
