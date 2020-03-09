@@ -1,4 +1,4 @@
-var assert = require('assert'),
+const assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
@@ -8,7 +8,7 @@ var assert = require('assert'),
 describe('EXE param in build file', function () {
 	it(`should create a file ${folder}/exefile.txt containing "hello world"`, function (done) {
 		try {
-			var ls = child_process.spawn('node',  ['src/bin.js', `${folder}/json/add.json`]);
+			const ls = child_process.spawn('node',  ['src/bin.js', `${folder}/json/add.json`]);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
 				fs.readFile(`${folder}/exefile.txt`,  'utf8', function(err, cnt){
@@ -24,7 +24,7 @@ describe('EXE param in build file', function () {
 
 	it('should remove the file just created', function (done) {
 		try {
-			var ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/remove.json`]);
+			const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/remove.json`]);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
 				fs.access(`${folder}/exefile.txt`, function (err, cnt) {
@@ -39,7 +39,7 @@ describe('EXE param in build file', function () {
 
 	it('should fail to execute the command set', function (done) {
 		try {
-			var ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/allfail.json`]);
+			const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/allfail.json`]);
 			ls.on('close', function (code) {
 				assert.notEqual(malta.executeCheck, code); // 0
 				done();
@@ -51,7 +51,7 @@ describe('EXE param in build file', function () {
 
 	it('should execute successfully all commands', function (done) {
 		try {
-			var ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/all.json`]);
+			const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/all.json`]);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
 				done();
@@ -63,7 +63,7 @@ describe('EXE param in build file', function () {
 
 	it('should execute successfully one command', function (done) {
 		try {
-			var ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/one.json`]);
+			const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/one.json`]);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
 				done();

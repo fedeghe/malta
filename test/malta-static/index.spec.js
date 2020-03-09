@@ -1,4 +1,4 @@
-var assert = require('assert'),
+const assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
@@ -6,9 +6,8 @@ var assert = require('assert'),
     doneFunc = require('../utils').doneFunc;
 
 describe('static methods', () => {
-    let m;
     it("should get a malta instance", () => {
-        m = malta.get();
+        let m = malta.get();
         assert(m instanceof malta, true);
     });
 });

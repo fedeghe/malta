@@ -1,11 +1,11 @@
-var assert = require('assert'),
+const assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     ob = require('../../src/observe'),
     folder = path.dirname(__filename);
 
 describe('folder observing', function () {
-    var observed = `${folder}/observed`;
+    const observed = `${folder}/observed`;
 
     it('observe function add', function (done) {
         ob.observe(observed, function (a) {

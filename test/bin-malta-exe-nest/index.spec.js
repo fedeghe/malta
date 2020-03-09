@@ -1,4 +1,4 @@
-var assert = require('assert'),
+const assert = require('assert'),
 	path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
@@ -10,7 +10,7 @@ describe('EXE nested param in build file', function () {
 
 	it('should create a folder tree starting from a single json that nests some others', function (done) {
 		try {
-			var ls = child_process.spawn('node',  ['src/bin.js', `${folder}/json/exenest0.json`]);
+			const ls = child_process.spawn('node',  ['src/bin.js', `${folder}/json/exenest0.json`]);
 			ls.on('close', function (code) {
 				assert.equal(malta.executeCheck, code); // 0
 
@@ -25,19 +25,5 @@ describe('EXE nested param in build file', function () {
 		}
 	});
 
-	// it('should remove the file just created', function (done) {
-	// 	try {
-	// 		var ls = child_process.spawn('node', ['src/bin.js', `${folder}/clean.json`]);
-	// 		ls.on('close', function (code) {
-	// 			assert.equal(malta.executeCheck, code); // 0
-	// 			fs.access(`${folder}/nest0/nest1/nest3/file.txt`, function (err, cnt) {
-	// 				assert.ok(err && err.code === 'ENOENT');
-	// 				done();
-	// 			});
-	// 		});
-	// 	} catch (err) {
-	// 		throw err;
-	// 	}
-    // });
     it('shoudl remove the file just created', doneFunc(folder));
 });

@@ -1,9 +1,9 @@
-var assert = require('assert');
+const assert = require('assert');
 
 require('../../src/stringproto.js')
 
 describe('string proto', function () {
-    var str = "hello",
+    const str = "hello",
         map = {
             "normal" : 0, "darken" : 2, "italic" : 54, "underline" : 4,
             "blink" : 5, "invert" : 7, "gray" : 30, "red" : 31,
@@ -15,15 +15,12 @@ describe('string proto', function () {
             "bgcyan" : 46, "bglightgray" : 47, "bgdefault" : 49, "bgdarkgray" : 100,
             "bglightred" : 101, "bglightgreen" : 102, "bglightyellow" : 103, "bglightblue" : 104,
             "bglightmagenta" : 105, "bglightcyan" : 106, "bgwhite" : 107
-        },
-        k = Object.keys(map),
-        i;
+        };
+
+    let i;
     
         it("should have the right colors", function () {
             for (i in map) {
-            // console.log(str[i]());
-            // console.log("\x1b[1;" + map[i] + "mhello\x1b[0m");
-            
                 assert.equal(String.prototype[i].call(str), "\x1b[1;" + map[i] + "m" + str + "\x1b[0m");
             }
         });

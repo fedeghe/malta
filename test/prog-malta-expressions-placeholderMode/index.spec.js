@@ -1,4 +1,4 @@
-var assert = require('assert'),
+const assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),

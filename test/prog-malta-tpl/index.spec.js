@@ -1,4 +1,4 @@
-var assert = require('assert'),
+const assert = require('assert'),
     fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
@@ -6,7 +6,7 @@ var assert = require('assert'),
     folder = path.dirname(__filename);
 
 describe('tpl', function () {
-    var m = malta.get();
+    const m = malta.get();
 
     it('the output file should have right default values', done => {
         m.check([
