@@ -21,6 +21,7 @@ function myplugin(obj, options) {
     
     /**
      * The context of the call is the malta instance,
+     * (that also means you cannot use an arrow func here)
      * so from here you can get all information about
      * the original template path, all plugins involved
      * all options, the output folder, an on..
@@ -51,14 +52,14 @@ function myplugin(obj, options) {
      * the next plugin will be invoked with an updated obj
      * only when the solve function is called passing the updated obj
      */
-    return function (solve, reject) {
+    return (solve, reject) => {
         /**
          * free to be async
          * transform the obj.content
          */
         dep.do_your_job(obj.content, options).then(content => {
 
-            fs.writeFile(obj.name, obj.content, function (err) {
+            fs.writeFile(obj.name, obj.content, err => {
                 if (err == null) {
                     msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
                 } else {
