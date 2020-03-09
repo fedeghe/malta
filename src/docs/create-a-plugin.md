@@ -7,10 +7,16 @@ A plugin is structured basically as follows:
 /**
  * load dependencies and whatever needed
  */
-var dep = require('lib'),
+const dep = require('lib'),
     path = require('path'),
     fs = require('fs');
 
+/**
+ * obj = {
+ *  name: the name of the input file (maybe fromt he previous plugin)
+ *  content: the content of the input file ( same as above )
+ * }
+ */ 
 function myplugin(obj, options) {
     
     /**
@@ -20,27 +26,19 @@ function myplugin(obj, options) {
      * all options, the output folder, an on..
      * @type Object
      */
-    var self = this,
-        
+    const self = this,
         /**
          * just to show some stats on the console
          * about the time required by the plugin
          */
         start = new Date(),
-        
-        /**
-         * a message the plugin can send to the console
-         */
-        msg,
         pluginName = path.basename(path.dirname(__filename));
+    /**
+     * a message the plugin can send to the console
+     */
+    let msg;
 
     options = options || {};
-    
-    /**
-     * The plugin can do his job on the current content (maybe modified by
-     * the previous plugin) using o.content  
-     */
-    obj.content = dep.do_your_job(obj.content, options);
     
     /**
      * Maybe the file name must be changed, this is the full path,
@@ -56,26 +54,31 @@ function myplugin(obj, options) {
     return function (solve, reject) {
         /**
          * free to be async
+         * transform the obj.content
          */
-        fs.writeFile(obj.name, obj.content, function (err) {
-            if (err == null) {
-                msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
-            } else {
-                console.log('[ERROR] '.red() + pluginName + ' says:');
-                console.dir(err);
+        dep.do_your_job(obj.content, options).then(content => {
 
+            fs.writeFile(obj.name, obj.content, function (err) {
+                if (err == null) {
+                    msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
+                } else {
+                    console.log('[ERROR] '.red() + pluginName + ' says:');
+                    console.dir(err);
+
+                    /**
+                     * something wrong, stop malta
+                     */
+                    self.stop();
+                }
+                
                 /**
-                 * something wrong, stop malta
+                 * allright, solve, notify and let malta proceed
                  */
-                self.stop();
-            }
-            
-            /**
-             * allright, solve, notify and let malta proceed
-             */
-            solve(obj);
-            self.notifyAndUnlock(start, msg);
-        })
+                solve(obj);
+                self.notifyAndUnlock(start, msg);
+            });
+
+        });
     }
 }
 /**
@@ -90,7 +93,9 @@ module.exports = myplugin;
 ## Listen to me    
 One of the cool things about `malta` is the watching for changes feature: it runs as a console demon and whenever a relevant change occours, it builds the right file again. If Your plugin involves a file passed as parameter that you would like to be involved in this watching process just use the `listen` function:  
 
-    self.listen(theFilePath) //relative to execution folder
+``` js
+self.listen(theFilePath) //relative to execution folder
+```
 
 ## Create a private local plugin  
 
@@ -98,5 +103,6 @@ Whenever a plugin is required through the `-require` (or `-plugins`) parameter, 
 So, if you want to write a private local plugin, just create a `plugins` folder
 and save for example a `myplugin.js` file containing the code of Your plugin, then just use it like a normal plugin:  
 
-    malta template.js out/folder -require=myplugin[from:1,to:10]
-
+``` js
+malta template.js out/folder -require=myplugin[from:1,to:10]
+```
