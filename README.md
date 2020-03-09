@@ -166,10 +166,11 @@ once started, Malta will start/stop on new files that could be added/removed to/
 <a name="multi_destinations"></a>
 
 ### More destinations for one file. 
-Since version 3.7.2.0 it is possible to write more files starting from the same template just specifying an array of destinations:
-``` json
+Since version 3.7.2.0 it is possible to write more files starting from the same template just specifying an array of destinations:  
+
+``` json  
 {
-	"src/mybook.md" : [
+    "src/mybook.md" : [
         "dist/uk -plugins=malta-translate[input:\"en\",output:\"it\"]...malta-markdown-pdf -vars=vars_it.json",
         "dist/de -plugins=malta-translate[input:\"en\",output:\"de\"]...malta-markdown-pdf -vars=vars_de.json"
     ]
@@ -237,7 +238,8 @@ the template (only in _multi-mode_). Can be used as well in the nested.json avoi
 ##### execute a terminal command (only _multi-mode_)  
 
 Is possible to execute one or more commands using the `EXE` key in the json file, containing an array of command or a single string for one command :  
-``` json
+
+``` json  
 {
     "EXE" : [
         "mkdir -p app/config app/controllers app/views app/routes",
@@ -250,8 +252,9 @@ Is possible to execute one or more commands using the `EXE` key in the json file
 Before version 3.7.2 this feature is available only on the main called json, not in a nested one.  
 Since version 3.7.2 it is possible to specify a EXE section in any nested json.  
   
-For example:
-``` json
+For example:  
+
+``` json  
 {
 	"EXE" : [
 		"rm -rf dist",
@@ -260,8 +263,9 @@ For example:
 	"dist/require.json" : true
 }
 ```
-then _dist/require.json_ can contain something like:
-``` json
+then _dist/require.json_ can contain something like:  
+
+``` json  
 {
 	"EXE" : [
 		"mkdir dist/js"
@@ -346,7 +350,8 @@ The `$$filePath$$` placeholder can optionally accept simple parameters:
 `$$triangles.svg{cx:100,cy:100,s:30,rot:30}$$`
 
 now within the `triangle.svg` we can use those vars:  
-``` html
+
+``` html  
 <polygon
     points="0,!{-$s$}! !{$s$*Math.cos(Math.PI/6)}!,!{$s$*Math.sin(Math.PI/6)}! !{-$s$*Math.cos(Math.PI/6)}!,!{$s$*Math.sin(Math.PI/6)}!"
     fill="$fill|red$"
