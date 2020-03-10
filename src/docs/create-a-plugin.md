@@ -107,7 +107,7 @@ self.listen(theFilePath) //relative to execution folder
 
 Whenever a plugin is required through the `-require` (or `-plugins`) parameter, the first place `malta` will search for the file is in a `plugins` folder in the execution path (the folder from where you invoke `malta`).  
 So, if you want to write a private local plugin, just create a `plugins` folder
-and save for example a `myplugin.js` file containing the code of Your plugin, then just use it like a normal plugin:  
+and save for example a `myplugin.js` file (or a `myplugin/index.js`) containing the code of Your plugin, then just use it like a normal plugin:  
 
 ``` js
 malta template.js out/folder -require=myplugin[from:1,to:10]
