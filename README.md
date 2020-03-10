@@ -43,13 +43,13 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 
 If You do not have node installed yet, run:
 
-```
+``` shell  
 $ curl http://npmjs.org/install.sh | sh 
 ```
 
 then install malta running:
 
-```
+``` shell  
 $ [sudo] npm install malta [-g]
 ```
 
@@ -61,11 +61,11 @@ $ [sudo] npm install malta [-g]
 
 _Malta_ can be started from the shell console just passing the right parameters to the malta executable: 
 
-```
+``` shell  
 $ malta templateFile outDirectory -plugins=... -vars=... -options=...
 ```
 or
-```
+``` shell  
 $ malta conf.json
 ```
 ---
@@ -75,7 +75,8 @@ $ malta conf.json
 ### Programmatic  
 
 To use _malta_ within a javascript file just require it, _get_ a instance, pass a suitable array of parameters to the _check_ function and invoke _start_.
-``` js
+
+``` js  
 var Malta = require("malta");
 Malta.get().check([
     "templateFile", "outDirectory",
@@ -90,8 +91,10 @@ Malta.get().check([
      }
 */);
 ```
+
 Since version __3.3.3__ the start function returns a _thenable_, so is possible to pass a function through a `then` call; it will be executed as far as _all_ involved plugins have terminated their job:
-``` js
+
+``` js  
 Malta_CheckedParams_Instance
 .start(/*
     everybuild code, each plugin end, even first plain build
@@ -110,11 +113,13 @@ Malta_CheckedParams_Instance
 ### Single mode  
 
 The purpose of `single-mode` is just to build one file and in this case there are two mandatory parameters: _templateFile_ and _outDirectory_
-```
+
+``` shell
 $ malta templateFile outDirectory  [-plugins=...] [-vars=...] [-options=...]
 ```
 in programmatic this correspond to pass a corresponding array to the _check_ function :
-``` js
+
+``` js  
 var Malta = require("malta");
 Malta.get().check(["templatefile", "outDirectory"]).start();
 ```
@@ -127,7 +132,8 @@ Malta.get().check(["templatefile", "outDirectory"]).start();
 The _multi-mode_ purpose is to launch Malta on more that one build in one command. In this case it takes just one parameter that is the path to a json file which contains for each file the same informations. It uses as key the templateFile path and as value all other parameters space separated. E.g.:
 
 multifile.json:  
-``` json
+
+``` json  
 {  
     "palette.less" : "../../public_html/css -vars=./vars/deploy.json",  
     "common.less" : "../../public_html/css -plugins=malta-less[compress:false] -options=skipPlain=true", 
@@ -137,24 +143,28 @@ multifile.json:
 ```
 
 `nested.json` is allowed ONLY since v 3.2.4 (malta will not take care about reference loops)
-where nested.json :
-``` json
+where nested.json :  
+
+``` json  
 {
     "common.js" : "../../public_html/js -plugins=malta-js-uglify",  
     "lib.js" : "../../public_html/js -plugins=malta-js-uglify"
 }
 ```
 then run 
-```
+
+``` shell  
 $ malta multifile.json
 ```
 _multi-mode_ is not available within a script, then the following code **will not work**:
-``` js
+
+``` js  
 // ...
 Malta.get().check(["multifile.json"]).start();
 ```
 moreover since 3.0.16 a simple kind of wildcards can be used in the json keys : 
-``` json
+
+``` json  
 {
     "src/controllers/*.js" : "../../public_html/js -plugins=malta-js-uglify"
 }
