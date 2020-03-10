@@ -12,10 +12,15 @@ const dep = require('lib'),
     fs = require('fs');
 
 /**
+ * This is the exported function,
+ * will be called passing exactly two parameters:
  * obj = {
  *  name: the name of the input file (maybe fromt he previous plugin)
  *  content: the content of the input file ( same as above )
  * }
+ * and
+ * options = {}  an dobject htat contains what passed to the plugin
+ * 
  */ 
 function myplugin(obj, options) {
     
@@ -59,7 +64,7 @@ function myplugin(obj, options) {
          */
         dep.do_your_job(obj.content, options).then(content => {
 
-            fs.writeFile(obj.name, obj.content, err => {
+            fs.writeFile(obj.name, content, err => {
                 if (err == null) {
                     msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
                 } else {
