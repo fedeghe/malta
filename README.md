@@ -283,7 +283,8 @@ Another feature introduced since 3.7.2 is the possibility to specify more than o
 ### Microtemplating (experimental)   
 
 Starting from the version `3.5.3` a simple microtemplating functionality is builtin; within the template just use the `<malta%` and `%malta>` placeholders to set your logic on the template composition (or any involved file):
-``` js
+
+``` js  
 ... all your awesome code here
 <malta% if($my.config.bool$) { %malta>
     ...
@@ -308,14 +309,13 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 - **\$\$filePath\$\$**  
   _filepath_ is the path to the desired file relative to the templateFile directory; if starts with / then will be relative to the execution folder.  
   
-
-
 - **\$varPath$\**  
   _varPath_ is the key path for a variable that Malta will search in a _vars.json_ file that should be found in the template folder (or wherever the -vars options indicates)  
 
 - **\$PACKAGE.varpath\$**  
     Starting from _v.3.9.0_ it is possible to use another placeholder to use anywhere all values contained in the `package.json` found in the folder where malta has been lanuched.  For example assume in the `root` folder we have a `package.json` and we would like to use the `version` and the `repository.url` within our source. Will be enough to add a special placeholder that contains the path of the value inside the `package.json` prepended with a `PACKAGE.` as follows:
-    ```
+
+    ``` js  
     $PACKAGE.name$ 
     // or
     $PACKAGE.repository.url$
@@ -330,7 +330,7 @@ Malta uses three kind of placeholders, to be used in the main template or in any
 - **maltaE(expression)**  
 hint about the _maltaE_: it should not contain ( and ) otherwise will fail, the only allowed parenthesis are those one from _maltaV(...)_, which can still be part of the _expression_:  
 
-``` js
+``` js  
 // OK
 var foo = maltaE(maltaV('my.number.var.is.a.bit.deep') + 5),
     boo = maltaE(Math.pow(2,3) * maltaV(my.num) + 3)
