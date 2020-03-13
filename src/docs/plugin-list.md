@@ -1,20 +1,24 @@
 Plugins available
 -----------------
 
-### [malta-apollo-srv][l1]
-Starts automatically an Apollo server, based on [Apollo-server npm package][l1lib]  
+### [malta-apollo-srv][l0]
+Starts automatically an Apollo server, based on [Apollo-server npm package][l0lib]  
 
 ---
-### [malta-babel][l2]
-Transpills es6 code, based on [babel npm package][l2lib]  
+### [malta-babel][l1]
+Transpills es6 code, based on [babel npm package][l1lib]  
 
 ---
-### [malta-beautify][l3]  
-Beautify js, css and html, based on [js-beautify npm package][l3lib]  
+### [malta-beautify][l2]  
+Beautify js, css and html, based on [js-beautify npm package][l2lib]  
 
 ---
-### [malta-browser-refresh][l4]  
+### [malta-browser-refresh][l3]  
 Trigger browser refresh whenever relavant files are updated
+
+---
+### [malta-browserify][l4]  
+Runs browserify, based on [browserify npm package][l4lib]  
 
 ---
 ### [malta-coffeescript][l5]  
@@ -152,10 +156,11 @@ Umd plugin
 
 [0]: https://www.npmjs.org
 
-[l1]: https://www.npmjs.com/package/malta-apollo-srv
-[l2]: https://www.npmjs.com/package/malta-babel
-[l3]: https://www.npmjs.com/package/malta-beautify
-[l4]: https://www.npmjs.com/package/malta-browser-refresh
+[l0]: https://www.npmjs.com/package/malta-apollo-srv
+[l1]: https://www.npmjs.com/package/malta-babel
+[l2]: https://www.npmjs.com/package/malta-beautify
+[l3]: https://www.npmjs.com/package/malta-browser-refresh
+[l4]: https://www.npmjs.com/package/malta-browserify
 [l5]: https://www.npmjs.com/package/malta-coffeescript
 [l6]: https://www.npmjs.com/package/malta-css-uglify
 [l7]: https://www.npmjs.com/package/malta-del
@@ -190,9 +195,10 @@ Umd plugin
 [l36]: https://www.npmjs.com/package/malta-typescript
 [l37]: https://www.npmjs.com/package/malta-umd
 
-[l1lib]: https://www.npmjs.com/package/apollo-server
-[l2lib]: https://www.npmjs.com/package/babel
-[l3lib]: https://www.npmjs.com/package/js-beautify
+[l0lib]: https://www.npmjs.com/package/apollo-server
+[l1lib]: https://www.npmjs.com/package/babel
+[l2lib]: https://www.npmjs.com/package/js-beautify
+[l4lib]: https://www.npmjs.com/package/browserify
 [l5lib]: https://www.npmjs.com/package/coffee
 [l6lib]: https://www.npmjs.com/package/uglifycss
 [l9lib]: https://www.npmjs.com/package/epub-gen
