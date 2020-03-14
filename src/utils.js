@@ -76,7 +76,8 @@ const fs = require('fs'),
      * @return     {boolean}  { description_of_the_return_value }
      */
     jsonFromStr = s => {
-        const r = {};
+        // eslint-disable-next-line prefer-const
+        let r = {};
         if (s === undefined) {
             return false;
         }
