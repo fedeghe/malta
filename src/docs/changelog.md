@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.4** dependencies update
 - **4.1.3** audit driven dependencies update
 - **4.1.1** gh ignores empty folders, thus
 - **4.1.0** removed Mpromise
