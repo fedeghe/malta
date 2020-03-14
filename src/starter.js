@@ -17,7 +17,7 @@ function print (msg, i, tot) {
 
 (function _M (_args, _len) {
     function go (_runs) {
-        for (let tpl in _runs) {
+        for (const tpl in _runs) {
             // check if is inclusion {whatever.json : true}
             //
             if (tpl.match(/\.json$/) && _runs[tpl] === true) {

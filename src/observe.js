@@ -1,14 +1,14 @@
 const fs = require('fs');
 
 module.exports = (function () {
-    let elements = {};
+    const elements = {};
 
     function arrDiff (a, b) {
-        let bAdded = [],
+        const bAdded = [],
             bRemoved = [],
             astr = a.join(':::'),
-            bstr = b.join(':::'),
-            i, l;
+            bstr = b.join(':::');
+        let i, l;
 
         for (i = 0, l = a.length; i < l; i++) {
             if (bstr.indexOf(a[i]) < 0) bRemoved.push(a[i]);
@@ -20,8 +20,8 @@ module.exports = (function () {
     }
 
     function observe (folder, cb) {
-        let actual = {},
-            previous = false;
+        const actual = {};
+        let previous = false;
 
         if (folder in elements) return false;
 

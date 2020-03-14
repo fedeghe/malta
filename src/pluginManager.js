@@ -128,7 +128,7 @@ Executor.prototype.run = function () {
             pins = self.pm.plugins[ext] || [];
 
         if (malta.outName.match(new RegExp(`.*\\.${ext}$`))) {
-            let iterator = utils.getIterator(pins);
+            const iterator = utils.getIterator(pins);
             (function go () {
                 let res,
                     pl;

@@ -18,9 +18,9 @@ function rainbowize (offset) {
                 94 + offset, // lightblue
                 95 + offset, // lightmagenta
                 96 + offset // lightcyan
-            ];
-        let i = 0, j = 0,
+            ],
             out = [];
+        let i = 0, j = 0;
         for (null; i < l; i++) out.push(els[i] !== ' ' ? tpl.replace('%code%', cols[j++ % cols.length]).replace('%char%', els[i]) : els[i]);
         return out.join('');
     };

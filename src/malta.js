@@ -340,9 +340,9 @@ Malta.outVersion = function (doNotWrite) {
  * @return     {Object} the running instance of Malta
  */
 Malta.checkDeps = function () {
-    let i, l,
+    let i, l;
+    const deps = [].slice.call(arguments, 0),
         errs = [];
-    const deps = [].slice.call(arguments, 0);
 
     for (i = 0, l = deps.length; i < l; i++) {
         try {
@@ -431,8 +431,8 @@ Malta.stop = function (msg) {
 
 Malta.getRunsFromPath = function (p) {
     let ret = false,
-        demonRet = {},
-        i,
+        i;
+    const demonRet = {},
         demon = p.match(/#/);
     if (demon) {
         p = p.replace('#', '');
@@ -612,8 +612,10 @@ function getCommentFn (pre, post) {
 }
 
 function objMultiKey (o) {
-    let ret = {}, i, j, jl, ks;
+    const ret = {};
+    let i, j, jl, ks;
     for (i in o) {
+        // eslint-disable-next-line no-prototype-builtins
         if (o.hasOwnProperty(i)) {
             ks = i.split('|');
             for (j = 0, jl = ks.length; j < jl; j++) ret[ks[j]] = o[i];
@@ -629,8 +631,8 @@ function objMultiKey (o) {
 Malta.prototype.comments = objMultiKey({
     'html|xml|svg': getCommentFn(`<!--${NL}`, `${NL}-->${NL}`),
     'pug|c|cpp|js|jsx|css|less|scss|php|java|ts': getCommentFn(`/*${NL}`, `${NL}*/${NL}`),
-    'rb': getCommentFn(`=begin${NL}`, `${NL}=end${NL}`),
-    'hs': getCommentFn(`{-${NL}`, `${NL}-}${NL}`)
+    rb: getCommentFn(`=begin${NL}`, `${NL}=end${NL}`),
+    hs: getCommentFn(`{-${NL}`, `${NL}-}${NL}`)
 });
 
 /**
@@ -730,10 +732,8 @@ Malta.prototype.checkInvolved = function () {
  * @return {[type]}   [description]
  */
 Malta.prototype.check = function (a) {
-    let tmp,
-        badArgs = [],
-        argTemplate,
-        argOutDir;
+    let tmp;
+    const badArgs = [];
 
     // stop with usage info in case not enough args are given
     //
@@ -748,8 +748,9 @@ Malta.prototype.check = function (a) {
 
     // template and outdir params
     //
-    argTemplate = a[0];
-    argOutDir = a[1];
+    // eslint-disable-next-line one-var
+    const argTemplate = a[0],
+        argOutDir = a[1];
 
     // check tpl and destination
     // if called badargs will stop malta
@@ -852,10 +853,12 @@ Malta.prototype.loadPlugins = function () {
     const self = this,
         allargs = self.args.join(' '),
         reqs = allargs.match(/-(plugins|require)=([^\s$]*)/),
-        p = reqs ? reqs[2].split('...') : [];
+        p = reqs ? reqs[2].split('...') : [],
+        l = p.length;
 
-    let i = 0, l = p.length,
+    let i = 0,
         parts;
+
 
     self.log_debug('Loading plugins'.yellow());
 
@@ -983,7 +986,6 @@ Malta.prototype.delete_result = function () {
  */
 Malta.prototype.parse = function (path) {
     const self = this;
-    let cnt;
 
     // update cached content and time for that file,
     // that at first cycle will be always the tpl, but
@@ -993,7 +995,8 @@ Malta.prototype.parse = function (path) {
 
     // get updated content
     //
-    cnt = self.files[path].content;
+    // eslint-disable-next-line one-var
+    const cnt = self.files[path].content;
     self.lastEditedFile = path;
 
     // start recursive dig
@@ -1008,11 +1011,11 @@ Malta.prototype.parse = function (path) {
             //
             for (let i = 0, l = els.length; i < l; i++) {
                 const p = els[i].match(new RegExp(self.reg[self.placeholderMode].files)),
-                    f = p[2];
-                let tmp,
+                    f = p[2],
                     fname = f.match(/^\//)
                         ? execPath + f
                         : self.baseDir + DS + f;
+                let tmp;
 
                 if (f) {
                     if (self.queue[self.queue.length - 1] !== fname) self.queue.push(fname);
@@ -1048,11 +1051,10 @@ Malta.prototype.microTpl = function (cnt) {
             outer: /(<malta%.*%malta>)/gm,
             inner: /<malta%(.*)%malta>/
         },
-        m = `${cnt}`.split(rx.outer);
-
-    let r,
+        m = `${cnt}`.split(rx.outer),
         ev = ['r = [];'];
-    // rout = [];
+
+    let r;
 
     if (m.length > 1) {
         m.forEach(function (el) {
@@ -1196,7 +1198,7 @@ Malta.prototype.replace_calc = function (tpl) {
     const self = this;
     return tpl.replace(new RegExp(self.reg[self.placeholderMode].calc, 'g'), function (str, $1) {
         var s;
-        eval(`s = $1`);
+        eval('s = $1');
         return s;
     });
 };

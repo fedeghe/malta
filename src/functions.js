@@ -13,12 +13,12 @@ const Malta = require('./malta'),
             isCommand = Malta.isCommand(key),
             exclude = function (filename) {
                 return filename.match(/\.buildNum\.json$/);
-            };
+            },
+            multiElements = {};
 
         let noDemon = key.match(/#(.*)/),
             folder,
-            ext,
-            multiElements = {};
+            ext;
 
         if (!isCommand && multi) {
             noDemon = multi[0].match(/#(.*)/);

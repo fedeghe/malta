@@ -7,7 +7,7 @@ const os = require('os'),
     tools = {
         mac: [
             'osascript',
-            `-e 'display notification "{icon} {message}" with title "{title}"{sound}'`
+            '-e \'display notification "{icon} {message}" with title "{title}"{sound}\''
         ],
         linux: [
             'notify-send',

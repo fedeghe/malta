@@ -76,7 +76,7 @@ const fs = require('fs'),
      * @return     {boolean}  { description_of_the_return_value }
      */
     jsonFromStr = s => {
-        let r = {};
+        const r = {};
         if (s === undefined) {
             return false;
         }
@@ -136,9 +136,7 @@ const fs = require('fs'),
             end = '%',
             fb = null,
             clean = false,
-            reg,
             straight = true,
-            // str,
             tmp, last;
 
         if (typeof options !== 'undefined') {
@@ -152,7 +150,7 @@ const fs = require('fs'),
         }
 
         // reg = new RegExp('\\' + start + '(\\\+)?([A-z0-9-_\.]*)' + '\\' + end, 'g');
-        reg = new RegExp(`\\${start}(\\+)?([A-z0-9-_.]*)\\${end}`, 'g');
+        const reg = new RegExp(`\\${start}(\\+)?([A-z0-9-_.]*)\\${end}`, 'g');
 
         while (straight) {
             if (!(tpl.match(reg))) {
