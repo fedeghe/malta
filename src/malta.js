@@ -264,7 +264,7 @@ Malta.execute = function (tmpExe, then) {
         command = exec(exe.join(' '));
 
     command.stdout.on('data', function (data) {
-        console.log(`${data}`);
+        Malta.log_debug(`${data}`);
     });
     command.on('close', function (code) {
         Malta.executeCheck += ~~code;
@@ -273,7 +273,7 @@ Malta.execute = function (tmpExe, then) {
     });
     command.on('error', function (code, err) {
         Malta.executeCheck += ~~code;
-        console.log(`> \`${exe}\` child process exited with code ${code}`);
+        Malta.log_debug(`> \`${exe}\` child process exited with code ${code}`);
         process.exit(1);
     });
 };
@@ -304,7 +304,7 @@ Malta.badargs = function (tpl, dst) {
  */
 Malta.log_help = function () {
     Malta.outVersion(true);
-    console.log([
+    Malta.log_debug([
         'Usage:',
         '> malta [templatefile] [outdir] {options}',
         '> malta [buildfile.json]'
@@ -328,7 +328,7 @@ Malta.outVersion = function (doNotWrite) {
             '╚', line, '╝', NL
         ].join('');
     if (!doNotWrite) fs.writeFileSync(Malta.printfile, '');
-    console.log(top);
+    Malta.log_debug(top);
 };
 
 /**
@@ -360,10 +360,9 @@ Malta.checkDeps = function () {
         }
     }
     for (i = 0, l = errs.length; i < l; i++) {
-        console.log(`${errs[i].err.code.red()}: ${errs[i].msg}`);
+        Malta.log_debug(`${errs[i].err.code.red()}: ${errs[i].msg}`);
     }
     if (errs.length) Malta.stop();
-    return this;
 };
 
 /**
@@ -387,11 +386,10 @@ Malta.checkExec = function (ex) {
                     `install \`${ex}\` and try again`.yellow()
                 ].join('')
             };
-            console.log(`${err.err.red()} ${err.msg}`);
+            Malta.log_debug(`${err.err.red()} ${err.msg}`);
             Malta.stop();
         }
     });
-    return this;
 };
 
 /**
@@ -421,8 +419,8 @@ Malta.isCommand = function (s) {
 Malta.stop = function (msg) {
     if (!Malta.running) return;
     if (Malta.verbose > 0) {
-        console.log(`${Malta.name} has stopped ${NL}`);
-        msg && console.log(`msg: ${msg}`);
+        Malta.log_debug(`${Malta.name} has stopped ${NL}`);
+        msg && Malta.log_debug(`msg: ${msg}`);
     }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
@@ -481,8 +479,8 @@ Malta.prototype.date = function () {
  * @param      {string}  pluginName  The plugin name
  */
 Malta.prototype.doErr = function (err, obj, pluginName) {
-    console.log(`[ERROR on ${obj.name} using ${pluginName}] :`.red());
-    console.dir(err);
+    Malta.log_debug(`[ERROR on ${obj.name} using ${pluginName}] :`.red());
+    Malta.log_dir(err);
 };
 
 /**
@@ -495,7 +493,7 @@ Malta.log_debug = Malta.prototype.log_debug = function (msg) {
         return;
     }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    console.log(msg);
+    Malta.log_debug(msg);
 };
 
 /**
@@ -508,7 +506,7 @@ Malta.log_dir = Malta.prototype.log_dir = function (msg) {
         return;
     }
     msg = (this.proc ? `${this.proc} ` : '') + JSON.stringify(msg);
-    console.log(msg);
+    Malta.log_debug(msg);
 };
 
 /**
@@ -521,7 +519,7 @@ Malta.log_info = Malta.prototype.log_info = function (msg) {
         return;
     }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    console.log(msg);
+    Malta.log_debug(msg);
 };
 
 /**
@@ -534,7 +532,7 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
         return;
     }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    console.log(msg);
+    Malta.log_debug(msg);
 };
 
 /**
@@ -545,7 +543,7 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
 Malta.log_err = Malta.prototype.log_err = function (msg) {
     if (Malta.verbose > 0) {
         msg = (this.proc ? `${this.proc} ` : '') + '[ERROR]: '.red() + msg.red();
-        console.log(msg);
+        Malta.log_debug(msg);
     }
     Malta.stop('log_err');
 };
@@ -558,7 +556,7 @@ Malta.log = Malta.prototype.log = function (msg) {
     if (Malta.verbose > 0) {
         msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
         // console.dir(process.env)
-        process.env.NODE_ENV !== 'test' && console.log(msg);
+        process.env.NODE_ENV !== 'test' && Malta.log_debug(msg);
     }
 };
 
@@ -675,8 +673,8 @@ Malta.prototype.build = function () {
     //
     fs.writeFile(self.outName, self.data.content, function (err) {
         if (err) {
-            console.log(`Malta error writing file '${self.outName}' error: `);
-            console.dir(err);
+            Malta.log_debug(`Malta error writing file '${self.outName}' error: `);
+            Malta.log_dir(err);
             Malta.stop();
         }
 
@@ -932,7 +930,7 @@ Malta.prototype.loadVars = function () {
                 }
                 self.log_debug('Loaded vars file '.yellow() + NL + self.varPath);
             } else {
-                console.log(`${self.varPath} not valid`.red());
+                Malta.log_debug(`${self.varPath} not valid`.red());
                 self.vars = {};
             }
         } catch (e) {
@@ -976,7 +974,7 @@ Malta.prototype.notifyAndUnlock = function (start, msg) {
  */
 Malta.prototype.delete_result = function () {
     const self = this;
-    console.log(self.outName);
+    Malta.log_debug(self.outName);
 };
 
 /**
@@ -1074,11 +1072,10 @@ Malta.prototype.microTpl = function (cnt) {
         try {
             eval(ev.join(NL));
         } catch (e) {
-            console.log('Malta microtemplating error evaluating code: '.red());
-            console.log(ev.join(NL));
+            Malta.log_debug('Malta microtemplating error evaluating code: '.red());
+            Malta.log_debug(ev.join(NL));
             Malta.stop(e.message);
         }
-
 
         /*
         // remove empty lines from r
@@ -1090,7 +1087,6 @@ Malta.prototype.microTpl = function (cnt) {
     }
     return cnt;
 };
-
 
 /**
  * [replace_all description]
@@ -1341,7 +1337,7 @@ Malta.prototype.watch = function () {
             //
             if (!fs.existsSync(f)) {
                 self.shut();
-                console.log('REMOVED '.yellow() + f + NL);
+                Malta.log_debug('REMOVED '.yellow() + f + NL);
 
                 // something changed ?
                 //
@@ -1370,7 +1366,7 @@ Malta.prototype.watch = function () {
                             e.stop && Malta.stop(e.message);
                         }
                     } else {
-                        console.log(`${self.varPath} not valid`.red());
+                        Malta.log_debug(`${self.varPath} not valid`.red());
                     }
                 }
 

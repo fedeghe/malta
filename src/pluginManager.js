@@ -2,10 +2,8 @@
 /* eslint-disable no-console */
 const fs = require('fs'),
     path = require('path'),
-
-    execPath = process.cwd();
-
-const utils = require('./utils.js');
+    execPath = process.cwd(),
+    utils = require('./utils.js');
 
 function PluginManager (instance) {
     this.userPath = `${execPath}/plugins/`;
@@ -148,9 +146,9 @@ Executor.prototype.run = function () {
                             go();
                         }).catch(function (msg) {
                             self.pm.maybeNotifyBuild({ gotErrs: msg });
-                            console.log(`Plugin '${pl.name}' error: `);
+                            malta.log_debug(`Plugin '${pl.name}' error: `);
                             // console.log(Malta.TAB + msg);
-                            console.log(msg);
+                            malta.log_debug(msg);
                             go();
                             // malta.stop();
                         });

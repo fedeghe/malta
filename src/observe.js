@@ -1,4 +1,5 @@
-const fs = require('fs');
+const fs = require('fs'),
+    Malta = require('./malta');
 
 module.exports = (function () {
     const elements = {};
@@ -51,7 +52,7 @@ module.exports = (function () {
                 });
             } catch (err) {
                 // eslint-disable-next-line no-console
-                console.log(err);
+                Malta.log_debug(err);
                 process.exit();
             }
         }, 100);
