@@ -165,7 +165,7 @@ Executor.prototype.run = function () {
             self.run();
         }
     } else {
-        if (typeof malta.endCb === 'function') malta.endCb();
+        if (typeof malta.endCb === 'function') malta.endCb(malta.data);
         self.pm.maybeNotifyBuild();
     }
 };
