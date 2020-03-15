@@ -1,5 +1,4 @@
 node_modules
-/plugins/
 npm-debug.log
 plugin_ideas.md
 !/test/**
