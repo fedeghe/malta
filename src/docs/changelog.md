@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.9** better coverage
 - **4.1.7** better coverage
 - **4.1.6** dependencies update, lints
 - **4.1.3** audit driven dependencies update
