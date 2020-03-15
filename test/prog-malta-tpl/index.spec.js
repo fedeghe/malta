@@ -61,6 +61,34 @@ describe('tpl', function () {
             );
         });
     });
+    it('should remove the folders/files just created', doneFunc(folder));
+
+    it('the output file should have right passed values, demon mode', done => {
+        m.check([
+            `${folder}/tpl/tpl1.js`,
+            `${folder}/out`,
+            '-vars=test/prog-malta-tpl/vars2.json',
+            '-options=verbose:0,showPath:false'
+        ]).start(function (o){
+            fs.readFile(
+                `${folder}/out/tpl1.js`,
+                'utf8',
+                (err, cnt) => {
+                    if (err) throw err;
+                    try {
+                        eval(cnt + "");
+                        assert.equal(typeof tpl0, 'function')
+                        assert.equal(tpl0(), 3);
+                        assert.equal(typeof tpl1, 'function');
+                        assert.equal(typeof tpl2, 'function');
+                        done();
+                    } catch (e) {
+                        done(new Error(`Failed eval on \`${__filename}\``))
+                    }
+                }
+            );
+        }).then(() => m.stop());
+    });
 
     it('should remove the folders/files just created', doneFunc(folder));
 });
