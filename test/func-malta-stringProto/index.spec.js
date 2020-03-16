@@ -24,7 +24,10 @@ describe('string proto', function () {
                 assert.equal(String.prototype[i].call(str), "\x1b[1;" + map[i] + "m" + str + "\x1b[0m");
             }
         });
-    it ("should have the bainbow color", function () {
+    it ("should have the rainbow color", function () {
         assert.ok(str.rainbow().length > 0);
+    });
+    it ("should have the rainbow color (blank)", function () {
+        assert.ok('a b c d e f'.rainbow().length > 0);
     });
 });
