@@ -33,12 +33,15 @@ describe('static methods', () => {
             done()
         }
     });
+    
     it("should get runs from path", done => {
         const ret = malta.getRunsFromPath('package.json');
         Object.keys(ret).length && done()
     });
+
     it("should get runs from path no demon", done => {
         const ret = malta.getRunsFromPath('#test/static-malta/getRunsFromPath.json');
         Object.keys(ret).length && done()
     });
+
 });

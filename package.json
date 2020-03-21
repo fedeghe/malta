@@ -6,7 +6,7 @@
     "scripts": {
         "lint": "./node_modules/.bin/eslint --ignore-path .eslintignore .",
         "precommit": "yarn lint",
-        "test": "rm -rf test/fs/build && NODE_PATH=. NODE_ENV=test mocha test/**/*.spec.js",
+        "test": "NODE_PATH=. NODE_ENV=test mocha test/**/*.spec.js",
         "cover": "nyc npm test && nyc report --reporter=html",
         "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
     },
