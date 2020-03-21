@@ -1,0 +1,3 @@
+{
+    "test/bin-malta-ex/*.json": "test/bin-malta-ex/zzz"
+}

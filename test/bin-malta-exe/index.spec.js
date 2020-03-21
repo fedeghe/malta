@@ -91,8 +91,16 @@ describe('EXE param in build file', function () {
             done();
         });
     });
+
     it('should skip and undemon', function (done) {
         const ls = child_process.spawn('node', ['src/bin.js', 'json/skip.json']);
+        ls.on('close', function (code) {
+            done();
+        });
+    });
+    
+    it('should handle multidest', function (done) {
+        const ls = child_process.spawn('node', ['src/bin.js', 'json/multi.json']);
         ls.on('close', function (code) {
             done();
         });
