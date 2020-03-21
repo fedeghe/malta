@@ -362,7 +362,11 @@ Malta.checkDeps = function () {
     for (i = 0, l = errs.length; i < l; i++) {
         Malta.log_debug(`${errs[i].err.code.red()}: ${errs[i].msg}`);
     }
-    if (errs.length) Malta.stop();
+    if (errs.length) {
+        Malta.stop(() => {
+            throw new Error('Error in dependencies check');
+        });
+    }
 };
 
 /**
@@ -374,22 +378,24 @@ Malta.checkDeps = function () {
  * @return     {Object}  the running instance of Malta
  */
 Malta.checkExec = function (ex) {
-    let err;
+    const proc = childProcess.exec(`which ${ex}`),
+        error = proc.stderr.toString().trim();
 
-    childProcess.exec(`which ${ex}`, error => {
-        if (error !== null) {
-            err = {
-                err: `${error}`,
-                msg: [
-                    NL, ex.underline(), ' executable is needed', NL,
-                    'but cannot be found'.italic(), NL,
-                    `install \`${ex}\` and try again`.yellow()
-                ].join('')
-            };
-            Malta.log_debug(`${err.err.red()} ${err.msg}`);
-            Malta.stop();
-        }
-    });
+    if (error) {
+        const err = {
+            err: `${error}`,
+            msg: [
+                NL, ex.underline(), ' executable is needed', NL,
+                'but cannot be found'.italic(), NL,
+                `install \`${ex}\` and try again`.yellow()
+            ].join('')
+        };
+        Malta.log_debug(`${err.err.red()} ${err.msg}`);
+
+        Malta.stop(() => {
+            throw new Error(error);
+        });
+    }
 };
 
 /**
@@ -416,11 +422,14 @@ Malta.isCommand = function (s) {
 /**
  * { function_description }
  */
-Malta.stop = function (msg) {
+Malta.stop = function (what) {
+    if (typeof what === 'function') {
+        what();
+    }
     if (!Malta.running) return;
     if (Malta.verbose > 0) {
         Malta.log_debug(`${Malta.name} has stopped ${NL}`);
-        msg && Malta.log_debug(`msg: ${msg}`);
+        what && Malta.log_debug(`msg: ${what}`);
     }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;

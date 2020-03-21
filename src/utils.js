@@ -117,11 +117,12 @@ const fs = require('fs'),
      */
     getIterator = els => {
         let i = 0;
+        const len = els.length;
         return {
             reset: () => { i = 0; },
-            hasNext: () => i < els.length,
+            hasNext: () => i < len,
             next: () => els[i++],
-            size: () => els.length
+            size: () => len
         };
     },
 
