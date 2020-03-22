@@ -377,25 +377,10 @@ Malta.checkDeps = function () {
  * @param      {string}  ex     the name of the executable to be checked
  * @return     {Object}  the running instance of Malta
  */
-Malta.checkExec = function (ex) {
-    const proc = childProcess.exec(`which ${ex}`),
-        error = proc.stderr.toString().trim();
-
-    if (error) {
-        const err = {
-            err: `${error}`,
-            msg: [
-                NL, ex.underline(), ' executable is needed', NL,
-                'but cannot be found'.italic(), NL,
-                `install \`${ex}\` and try again`.yellow()
-            ].join('')
-        };
-        Malta.log_debug(`${err.err.red()} ${err.msg}`);
-
-        Malta.stop(() => {
-            throw new Error(error);
-        });
-    }
+Malta.checkExec = function (ex, fn) {
+    childProcess.exec(`which ${ex}`, error => {
+        fn && fn(error);
+    });
 };
 
 /**
@@ -498,11 +483,11 @@ Malta.prototype.doErr = function (err, obj, pluginName) {
  * @return {[type]}     [description]
  */
 Malta.log_debug = Malta.prototype.log_debug = function (msg) {
-    if (Malta.verbose < 2) {
-        return;
-    }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    Malta.log_debug(msg);
+    if (Malta.verbose === 2) {
+        console.log(msg);
+        return msg;
+    }
 };
 
 /**
@@ -511,11 +496,11 @@ Malta.log_debug = Malta.prototype.log_debug = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_dir = Malta.prototype.log_dir = function (msg) {
-    if (Malta.verbose < 2) {
-        return;
-    }
     msg = (this.proc ? `${this.proc} ` : '') + JSON.stringify(msg);
-    Malta.log_debug(msg);
+    if (Malta.verbose === 2) {
+        Malta.log_debug(msg);
+        return msg;
+    }
 };
 
 /**
@@ -524,11 +509,11 @@ Malta.log_dir = Malta.prototype.log_dir = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_info = Malta.prototype.log_info = function (msg) {
-    if (Malta.verbose === 0) {
-        return;
-    }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    Malta.log_debug(msg);
+    if (Malta.verbose !== 0) {
+        Malta.log_debug(msg);
+        return msg;
+    }
 };
 
 /**
@@ -537,11 +522,11 @@ Malta.log_info = Malta.prototype.log_info = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_warn = Malta.prototype.log_warn = function (msg) {
-    if (Malta.verbose === 0) {
-        return;
-    }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    Malta.log_debug(msg);
+    if (Malta.verbose !== 0) {
+        Malta.log_debug(msg);
+        return msg;
+    }
 };
 
 /**
@@ -550,11 +535,11 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_err = Malta.prototype.log_err = function (msg) {
-    if (Malta.verbose > 0) {
-        msg = (this.proc ? `${this.proc} ` : '') + '[ERROR]: '.red() + msg.red();
+    msg = (this.proc ? `${this.proc} ` : '') + '[ERROR]: '.red() + msg.red();
+    if (Malta.verbose !== 0) {
         Malta.log_debug(msg);
+        return msg;
     }
-    Malta.stop('log_err');
 };
 /**
  * [log description]
@@ -566,6 +551,7 @@ Malta.log = Malta.prototype.log = function (msg) {
         msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
         // console.dir(process.env)
         process.env.NODE_ENV !== 'test' && Malta.log_debug(msg);
+        return msg;
     }
 };
 

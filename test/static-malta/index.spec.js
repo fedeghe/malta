@@ -10,28 +10,25 @@ describe('static methods', () => {
         try{
             malta.checkDeps('malta', 'lodash', 'do not exists');
         } catch(e) {
-            console.err(e)
-        }
-        finally {
+            // console.log('Comes here then an error is rethrown')
             done();
         }
     });
     it("should check executable", done => {
         try{
-            malta.checkExec('java');
+            malta.checkExec('java', (err) => {
+                !err && done()
+            });
         } catch(e) {
-            console.err(e)
+            // console.log('Comes here then an error is rethrown')
+            // throw e;
         }
-        finally {
-            done();
-        }
+        
     });
     it("should check non existent executable", done => {
-        try{
-            malta.checkExec('javazzzzz')
-        } catch(e) {
-            done()
-        }
+        malta.checkExec('javazzzzz', (err) => {
+            err && done()
+        });
     });
     
     it("should get runs from path", done => {
@@ -41,7 +38,62 @@ describe('static methods', () => {
 
     it("should get runs from path no demon", done => {
         const ret = malta.getRunsFromPath('#test/static-malta/getRunsFromPath.json');
-        Object.keys(ret).length && done()
+        Object.keys(ret).length && done();
+    });
+
+    it("should log_debug", () => {
+        malta.verbose = 2;
+        const msg = malta.log_debug('my debug');
+        assert(msg === 'my debug');
+    });
+    it("should not log_debug", () => {
+        malta.verbose = 0;
+        const msg = malta.log_debug('my debug');
+        assert(typeof msg === 'undefined');
+    });
+
+    it("should log_err", () => {
+        malta.verbose = 2;
+        const msg = malta.log_err('my error');
+        assert(msg.length > 0);
+    });
+    it("should not log_err", () => {
+        malta.verbose = 0;
+        const msg = malta.log_err('my error');
+        assert(typeof msg === 'undefined');
+    });
+
+    it("should log_dir", () => {
+        malta.verbose = 2;
+        const msg = malta.log_dir({dir: 'there'});
+        assert(msg == JSON.stringify({"dir":"there"}));
+    });
+    it("should not log_dir", () => {
+        malta.verbose = 0;
+        const msg = malta.log_dir({dir: 'there'});
+        assert(typeof msg === 'undefined');
+    });
+    
+    it("should log_info", () => {
+        malta.verbose = 2;
+        const msg = malta.log_info('info there');
+        assert(msg == 'info there');
+    });
+    it("should not log_info", () => {
+        malta.verbose = 0;
+        const msg = malta.log_info('info there');
+        assert(typeof msg === 'undefined');
+    });
+
+    it("should log_warn", () => {
+        malta.verbose = 2;
+        const msg = malta.log_warn('warn there');
+        assert(msg == 'warn there');
+    });
+    it("should not log_warn", () => {
+        malta.verbose = 0;
+        const msg = malta.log_warn('warn there');
+        assert(typeof msg === 'undefined');
     });
 
 });
