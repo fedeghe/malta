@@ -4,5 +4,6 @@ var time = '__TIME__',
     filesnum = '__FILES__',
     version = '__VERSION__',
     buildnumber = '__BUILDNUMBER__',
+    buildnum = '__BUILDNUM__',
     file = '__FILE__',
     line = '__LINE__';

@@ -28,8 +28,9 @@ describe('wired vars', function () {
                         assert.equal(filesnum, 2)
                         assert.equal(version, malta.version);
                         assert.equal(typeof buildnumber, 'string');
+                        assert.equal(typeof buildnum, 'string');
                         assert.equal(file, 'wired.js');
-                        assert.equal(line, 8);
+                        assert.equal(line, 9);
                         done();
                     } catch (e) {
                         done(new Error(`Failed eval on \`${__filename}\``));

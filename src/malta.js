@@ -378,9 +378,7 @@ Malta.checkDeps = function () {
  * @return     {Object}  the running instance of Malta
  */
 Malta.checkExec = function (ex, fn) {
-    childProcess.exec(`which ${ex}`, error => {
-        fn && fn(error);
-    });
+    childProcess.exec(`which ${ex}`, error => fn && fn(error));
 };
 
 /**
@@ -390,9 +388,7 @@ Malta.checkExec = function (ex, fn) {
  * memberof   Malta
  * return     {Object}  a new Malta instance
  */
-Malta.get = function () {
-    return new Malta();
-};
+Malta.get = () => new Malta();
 
 /**
  * Determines if command.
@@ -400,9 +396,7 @@ Malta.get = function () {
  * @param      {string}  s       { parameter_description }
  * @return     {string}  True if command, False otherwise.
  */
-Malta.isCommand = function (s) {
-    return s.match(/^EXE/);
-};
+Malta.isCommand = s => s.match(/^EXE/);
 
 /**
  * { function_description }
@@ -448,11 +442,10 @@ Malta.getRunsFromPath = function (p) {
     return ret;
 };
 
-Malta.replaceLinenumbers = function (tpl) {
-    return tpl.split(/\n/).map((line, i) => {
-        return line.replace(/__LINE__/g, i + 1);
-    }).join(NL);
-};
+Malta.replaceLinenumbers = tpl =>
+    tpl.split(/\n/).map((line, i) =>
+        line.replace(/__LINE__/g, i + 1)
+    ).join(NL);
 
 // PROTO
 
@@ -461,9 +454,7 @@ Malta.replaceLinenumbers = function (tpl) {
  * @param  {[type]} ) {return      new Date( [description]
  * @return {[type]}   [description]
  */
-Malta.prototype.date = function () {
-    return new Date();
-};
+Malta.prototype.date = () => new Date();
 
 /**
  * { function_description }
@@ -472,9 +463,9 @@ Malta.prototype.date = function () {
  * @param      {<type>}  obj         The object
  * @param      {string}  pluginName  The plugin name
  */
+// eslint-disable-next-line handle-callback-err
 Malta.prototype.doErr = function (err, obj, pluginName) {
     Malta.log_debug(`[ERROR on ${obj.name} using ${pluginName}] :`.red());
-    Malta.log_dir(err);
 };
 
 /**
@@ -634,39 +625,39 @@ Malta.prototype.comments = objMultiKey({
  */
 Malta.prototype.build = function () {
     const self = this;
-    let baseTplContent = self.files[self.tplPath].content;
+    let baseTplContent = this.files[this.tplPath].content;
 
-    self.t_start = self.date();
+    this.t_start = this.date();
 
-    self.data = {
+    this.data = {
         content: null,
         name: null
     };
 
     // for sure the tpl is involved
-    self.involvedFiles = 1;
-    self.signBuildNumber();
-    self.involvedFiles += self.hasVars();
+    this.involvedFiles = 1;
+    this.signBuildNumber();
+    this.involvedFiles += this.hasVars();
 
-    if (self.justCopy === false) {
-        while (baseTplContent.match(new RegExp(self.reg[self.placeholderMode].files, 'g'))) {
-            baseTplContent = self.replace_all(baseTplContent);
+    if (this.justCopy === false) {
+        while (baseTplContent.match(new RegExp(this.reg[this.placeholderMode].files, 'g'))) {
+            baseTplContent = this.replace_all(baseTplContent);
         }
 
         // wiredvars
         //
-        baseTplContent = self.replace_vars(baseTplContent);
-        baseTplContent = self.replace_wiredvars(baseTplContent);
-        baseTplContent = self.replace_calc(baseTplContent);
-        baseTplContent = self.microTpl(baseTplContent);
+        baseTplContent = this.replace_vars(baseTplContent);
+        baseTplContent = this.replace_wiredvars(baseTplContent);
+        baseTplContent = this.replace_calc(baseTplContent);
+        baseTplContent = this.microTpl(baseTplContent);
     }
 
-    self.data.content = baseTplContent;
-    self.data.name = self.outName;
+    this.data.content = baseTplContent;
+    this.data.name = this.outName;
 
     // do write
     //
-    fs.writeFile(self.outName, self.data.content, function (err) {
+    fs.writeFile(this.outName, this.data.content, function (err) {
         if (err) {
             Malta.log_debug(`Malta error writing file '${self.outName}' error: `);
             Malta.log_dir(err);
@@ -789,11 +780,11 @@ Malta.prototype.check = function (a) {
  * @param      {<type>}   path    The path
  * @return     {boolean}  The size.
  */
-Malta.prototype.getSize = function (path) {
+Malta.prototype.getSize = aPath => {
     let byted = 0,
         kbyted = 0;
     try {
-        byted = fs.statSync(path).size;
+        byted = fs.statSync(aPath).size;
         kbyted = byted / 1024;
     } catch (e) {
         // ssssssshut the fuck up!
@@ -806,7 +797,7 @@ Malta.prototype.getSize = function (path) {
  * @return {Boolean} [description]
  */
 Malta.prototype.hasVars = function () {
-    return this.vars !== {};
+    return JSON.stringify(this.vars) !== '{}';
 };
 
 /**
@@ -878,10 +869,9 @@ Malta.prototype.loadPlugins = function () {
  * @return {void}       [description]
  */
 Malta.prototype.listen = function (fpath) {
-    const self = this;
     // listen to changes
-    if (!(fpath in self.files)) {
-        self.files[fpath] = utils.createEntry(fpath);
+    if (!(fpath in this.files)) {
+        this.files[fpath] = utils.createEntry(fpath);
     }
 };
 
@@ -968,8 +958,7 @@ Malta.prototype.notifyAndUnlock = function (start, msg) {
  * { function_description }
  */
 Malta.prototype.delete_result = function () {
-    const self = this;
-    Malta.log_debug(self.outName);
+    Malta.log_debug(this.outName);
 };
 
 /**
@@ -984,13 +973,13 @@ Malta.prototype.parse = function (path) {
     // that at first cycle will be always the tpl, but
     // then will be any modified file
     //
-    self.files[path] = utils.createEntry(path);
+    this.files[path] = utils.createEntry(path);
 
     // get updated content
     //
     // eslint-disable-next-line one-var
-    const cnt = self.files[path].content;
-    self.lastEditedFile = path;
+    const cnt = this.files[path].content;
+    this.lastEditedFile = path;
 
     // start recursive dig
     //
@@ -1038,7 +1027,7 @@ Malta.prototype.parse = function (path) {
 };
 
 
-Malta.prototype.microTpl = function (cnt) {
+Malta.prototype.microTpl = Malta.microTpl = cnt => {
     // "use strict" /// not here cause eval
     const rx = {
             outer: /(<malta%.*%malta>)/gm,
@@ -1071,13 +1060,6 @@ Malta.prototype.microTpl = function (cnt) {
             Malta.log_debug(ev.join(NL));
             Malta.stop(e.message);
         }
-
-        /*
-        // remove empty lines from r
-        r = r.filter(function (v) {
-            return v.length;
-        });
-        */
         return r.join(NL);
     }
     return cnt;

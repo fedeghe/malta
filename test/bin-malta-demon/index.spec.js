@@ -36,5 +36,38 @@ describe('multi watch', function () {
             throw err;
         }
     });
+    it('should output correctly all files, watching for changes', done => {
+        try {
+            const ls = child_process.spawn('node', ['src/bin.js', `${folder}/test.js`, 'out', '-options=watchInterval:100,verbose:2']),
+                modify = (solve, reject) =>
+                    fs.writeFile(`${folder}/test.js`, 'var t = 3;',
+                        err => (err ? reject : solve)()
+                    ),
+                check = () => new Promise((solve, reject) =>
+                    fs.readFile(`${folder}/code/test.js`,
+                        (err, content) => (`${content}` === 'var t = 3;' ? solve : reject)()
+                    )
+                ),
+                kill = () => {
+                    done();
+                    ls.stdin.pause();
+                    ls.kill();
+                };
+
+            setTimeout(() => {
+                new Promise(modify).then(
+                    () => new Promise((s) => {
+                        setTimeout(s, 200)
+                    })
+                ).then(check).then(
+                    () => new Promise((s) => {
+                        setTimeout(s, 400)
+                    })
+                ).then(kill);
+            }, 600);
+        } catch (err) {
+            throw err;
+        }
+    });
     it('should cleanup correctly all files', doneFunc(folder));
 });
