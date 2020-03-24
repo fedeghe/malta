@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.12** small refactor
 - **4.1.11** better coverage
 - **4.1.9** better coverage
 - **4.1.7** better coverage
