@@ -485,7 +485,7 @@ Malta.prototype.doErr = (err, obj, pluginName) => {
  */
 Malta.log_debug = Malta.prototype.log_debug = function (msg) {
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    if (Malta.verbose > 0) {
+    if (Malta.verbose === 2) {
         console.log(msg);
         return msg;
     }
