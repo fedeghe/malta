@@ -1,7 +1,7 @@
 Changelog
 --------- 
 
-- **4.1.15** recover log messages
+- **4.1.17** recover log messages
 - **4.1.12** small refactor
 - **4.1.11** better coverage
 - **4.1.9** better coverage
