@@ -97,17 +97,4 @@ describe('static methods', () => {
         assert(console.log.calls.length === 0);
         assert(typeof msg === 'undefined');
     });
-
-    it("should log_warn", () => {
-        malta.verbose = 2;
-        const msg = malta.log_warn('warn there');
-        assert(console.log.calls.length === 1);
-        assert(msg == 'warn there');
-    });
-    it("should not log_warn", () => {
-        malta.verbose = 0;
-        const msg = malta.log_warn('warn there');
-        assert(console.log.calls.length === 0);
-        assert(typeof msg === 'undefined');
-    });
 });

@@ -485,7 +485,7 @@ Malta.prototype.doErr = (err, obj, pluginName) => {
  */
 Malta.log_debug = Malta.prototype.log_debug = function (msg) {
     msg = (this.proc ? `${this.proc} ` : '') + msg;
-    if (Malta.verbose === 2) {
+    if (Malta.verbose > 0) {
         console.log(msg);
         return msg;
     }
@@ -510,19 +510,6 @@ Malta.log_dir = Malta.prototype.log_dir = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_info = Malta.prototype.log_info = function (msg) {
-    msg = (this.proc ? `${this.proc} ` : '') + msg;
-    if (Malta.verbose !== 0) {
-        Malta.log_debug(msg);
-        return msg;
-    }
-};
-
-/**
- * [log_warn description]
- * @param  {[type]} msg [description]
- * @return {[type]}     [description]
- */
-Malta.log_warn = Malta.prototype.log_warn = function (msg) {
     msg = (this.proc ? `${this.proc} ` : '') + msg;
     if (Malta.verbose !== 0) {
         Malta.log_debug(msg);
