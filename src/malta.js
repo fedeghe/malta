@@ -341,7 +341,7 @@ Malta.outVersion = doNotWrite => {
             '╚', line, '╝', NL
         ].join('');
     if (!doNotWrite) fs.writeFileSync(Malta.printfile, '');
-    Malta.log_debug(top);
+    console.log(top);
 };
 
 /**
@@ -484,11 +484,11 @@ Malta.prototype.doErr = (err, obj, pluginName) => {
  * @return {[type]}     [description]
  */
 Malta.log_debug = Malta.prototype.log_debug = function (msg) {
-    msg = (this.proc ? `${this.proc} ` : '') + msg;
-    if (Malta.verbose > 0) {
-        console.log(msg);
-        return msg;
+    if (Malta.verbose < 2) {
+        return;
     }
+    msg = (this.proc ? `${this.proc} ` : '') + msg;
+    console.log(msg);
 };
 
 /**
@@ -497,11 +497,11 @@ Malta.log_debug = Malta.prototype.log_debug = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_dir = Malta.prototype.log_dir = function (msg) {
-    msg = (this.proc ? `${this.proc} ` : '') + JSON.stringify(msg);
-    if (Malta.verbose === 2) {
-        console.log(msg);
-        return msg;
+    if (Malta.verbose < 2) {
+        return;
     }
+    msg = (this.proc ? `${this.proc} ` : '') + JSON.stringify(msg);
+    console.log(msg);
 };
 
 /**
@@ -510,24 +510,24 @@ Malta.log_dir = Malta.prototype.log_dir = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_info = Malta.prototype.log_info = function (msg) {
-    msg = (this.proc ? `${this.proc} ` : '') + msg;
-    if (Malta.verbose > 0) {
-        console.log(msg);
-        return msg;
+    if (Malta.verbose === 0) {
+        return;
     }
+    msg = (this.proc ? `${this.proc} ` : '') + msg;
+    console.log(msg);
 };
 
 /**
- * [log_err description]
+ * [log_warn description]
  * @param  {[type]} msg [description]
  * @return {[type]}     [description]
  */
-Malta.log_err = Malta.prototype.log_err = function (msg) {
-    msg = (this.proc ? `${this.proc} ` : '') + '[ERROR]: '.red() + msg.red();
-    if (Malta.verbose !== 0) {
-        Malta.log_debug(msg);
-        return msg;
+Malta.log_warn = Malta.prototype.log_warn = function (msg) {
+    if (Malta.verbose === 0) {
+        return;
     }
+    msg = (this.proc ? `${this.proc} ` : '') + msg;
+    console.log(msg);
 };
 /**
  * [log description]
@@ -537,7 +537,6 @@ Malta.log_err = Malta.prototype.log_err = function (msg) {
 Malta.log = Malta.prototype.log = function (msg) {
     if (Malta.verbose > 0) {
         msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
-        // console.dir(process.env)
         process.env.NODE_ENV !== 'test' && Malta.log_debug(msg);
         return msg;
     }
