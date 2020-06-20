@@ -35,8 +35,8 @@ Date: __DATE__
     // write here the content of the src/a.js file 
     // the path is relative to the template folder
     //
-    $$src/a.js$$   
-    console.debug(!{$width$ * $height$ / 7 - 8}!)
+    $$src/a.js$$ // or maltaF('src/a.js') if placeholderMode='func' is passed in options ***
+    console.debug(!{$width$ * $height$ / 7 - 8}!) // or maltaE(MaltaV('width') * MaltaV('height') / 7 - 8) ***
 }();
 ```
 and here is the _**src/a.js**_ :  
@@ -47,7 +47,7 @@ function hello(n) {
     // as before, always relative to the template
     // even if this was at 10th inclusion level
     //
-    $$src/inner/b.js$$  
+    $$src/inner/b.js$$ // or maltaF('src/inner/b.js') ***
 }                       
 hello('Federico'), hello('Federico');
 ```
