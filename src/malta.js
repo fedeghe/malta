@@ -417,8 +417,8 @@ Malta.stop = what => {
     }
     if (!Malta.running) return;
     if (Malta.verbose > 0) {
-        Malta.log_debug(`${Malta.name} has stopped ${NL}`);
-        what && Malta.log_debug(`msg: ${what}`);
+        console.log(`${Malta.name} has stopped ${NL}`);
+        what && console.log(`msg: ${what}`);
     }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
