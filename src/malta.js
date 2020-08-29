@@ -437,7 +437,13 @@ Malta.getRunsFromPath = p => {
     if (fs.existsSync(p)) {
         ret = fs.readFileSync(p, { encoding: 'UTF8' });
         ret = utils.cleanJson(ret);
-        ret = JSON.parse(ret);
+        try {
+            ret = JSON.parse(ret);
+        } catch (err) {
+            Malta.log_info('Looks like a json configuration file is incorrect');
+            Malta.log_err(err);
+            Malta.stop();
+        }
     }
     if (demon) {
         for (i in ret) {
@@ -528,6 +534,17 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
     }
     msg = (this.proc ? `${this.proc} ` : '') + msg;
     console.log(msg);
+};
+
+/**
+ * [log_err description]
+ * @param  {[type]} msg [description]
+ * @return {[type]}     [description]
+ */
+Malta.log_err = Malta.prototype.log_err = function (err, msg) {
+    console.log('ERROR'.red());
+    msg && console.log(msg);
+    console.log(err);
 };
 /**
  * [log description]
