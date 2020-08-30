@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.22** errors in plugins are notified
 - **4.1.21** now is again clear when json config is not valid
 - **4.1.20** stop messages are back
 - **4.1.19** out_version recovered
