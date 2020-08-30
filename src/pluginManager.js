@@ -78,7 +78,8 @@ PluginManager.prototype.add = function (fname, params) {
             plugin = require(fname);
         }
     } catch (e) {
-        this.mself.log_err(`\`${fname}\` required plugin not found!`);
+        this.mself.log_err(`\`${fname}\` required plugin not found OR there was an error in the plugin!`);
+        this.mself.log_err(e);
     }
 
     if ('ext' in plugin) {
