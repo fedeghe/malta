@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.25** bit more coverage  
 - **4.1.23** small fix in the tests and log functions  
 - **4.1.22** errors in plugins are notified  
 - **4.1.21** now is again clear when json config is not valid
