@@ -62,6 +62,18 @@ describe('EXE param in build file', function () {
         }
     });
 
+    it('should not execute anything', function (done) {
+        try {
+            const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/zero.json`]);
+            ls.on('close', function (code) {
+                assert.equal(malta.executeCheck, code); // 0
+                done();
+            });
+        } catch (err) {
+            throw err;
+        }
+    });
+
     it('should execute successfully one command', function (done) {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/one.json`]);
