@@ -61,9 +61,10 @@ describe('static methods', () => {
 
     it("should log_err", () => {
         malta.verbose = 2;
-        const msg = malta.log_err('my error');
-        assert(console.log.calls.length === 1);
+        const msg = malta.log_err('my error', 'my error message');
+        assert(console.log.calls.length === 3);
         assert(msg.length > 0);
+        assert(msg === 'my error message');
     });
     it("should not log_err", () => {
         malta.verbose = 0;
