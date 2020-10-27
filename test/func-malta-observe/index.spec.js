@@ -27,9 +27,9 @@ describe('folder observing', function () {
         ob.observe(observed, function (a) {
             assert.equal(a.added.length, 0);
             assert.equal(a.removed.length, 1);
-            ob.unobserve(observed)
+            ob.unobserve(observed, 'txt')
             done()
-        });
+        }, 'txt');
         setTimeout(function () {
             fs.unlink(observed + '/message1.txt', function (err) {
                 if (err) throw err;
@@ -40,9 +40,9 @@ describe('folder observing', function () {
     it('unobserve function', function (done) {
         ob.observe(observed, function () {
             throw {};
-        });
+        }, 'txt');
         
-        ob.unobserve(observed);
+        ob.unobserve(observed, 'txt');
 
         setTimeout(function () {
             fs.writeFile(observed + '/message2.txt', 'Hello Node.js', function (err) {

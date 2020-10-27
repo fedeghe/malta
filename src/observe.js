@@ -20,13 +20,22 @@ module.exports = (function () {
         return { added: bAdded, removed: bRemoved };
     }
 
-    function observe (folder, cb) {
+    function observe (folder, cb, extension) {
         const actual = {};
         let previous = false;
 
-        if (folder in elements) return false;
+        // if (folder in elements) return false;
 
-        elements[folder] = setInterval(function () {
+        if (!(folder in elements)) {
+            elements[folder] = {};
+        }
+        if (!(extension in elements[folder])) {
+            elements[folder][extension] = {};
+        } else {
+            return false;
+        }
+
+        elements[folder][extension] = setInterval(() => {
             try {
                 fs.readdir(folder, function (err, files) {
                     if (err) throw err;
@@ -46,7 +55,7 @@ module.exports = (function () {
                     if (previous.files.length !== actual.files.length) {
                         actual.time = new Date();
 
-                        cb(arrDiff(previous.files, actual.files));
+                        cb(arrDiff(previous.files, actual.files), extension);
                     }
                     previous.files = actual.files;
                 });
@@ -60,11 +69,13 @@ module.exports = (function () {
         return true;
     }
 
-    function unobserve (folder) {
+    function unobserve (folder, extension) {
         if (folder in elements) {
-            clearInterval(elements[folder]);
-            delete elements[folder];
-            return true;
+            if (extension in elements[folder]) {
+                clearInterval(elements[folder][extension]);
+                delete elements[folder][extension];
+                return true;
+            }
         }
         return false;
     }
