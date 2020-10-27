@@ -44,9 +44,9 @@ const Malta = require('./malta'),
             // if demon mode then observe folder, add / remove
             //
             if (!noDemon) {
-                watcher.observe(folder, diff => {
+                watcher.observe(folder, (diff, extension) => {
                     diff.added.filter(function (v) {
-                        return v.match(new RegExp(`.*\\.${ext}$`));
+                        return v.match(new RegExp(`.*\\.${extension}$`));
                     }).forEach(v => {
                         if (exclude(v)) return;
                         ++processNum;
@@ -55,7 +55,7 @@ const Malta = require('./malta'),
                     });
 
                     diff.removed.filter(v => {
-                        return v.match(new RegExp(`.*\\.${ext}$`));
+                        return v.match(new RegExp(`.*\\.${extension}$`));
                     }).forEach(v => {
                         const outFile = multiElements[v].data.name;
                         // remove out file if exists
@@ -64,7 +64,7 @@ const Malta = require('./malta'),
                         multiElements[v] = null;
                         Malta.log_debug(`${'REMOVED'.yellow()} ${folder}/${v}${NL}`);
                     });
-                });
+                }, ext);
             }
         } else {
             ++processNum;

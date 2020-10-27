@@ -1,7 +1,7 @@
 Changelog
 --------- 
 
-- **4.1.26** fixed observing mode in json sub-grouped files  
+- **4.1.27** fixed observing mode in json sub-grouped files  
 - **4.1.25** bit more coverage  
 - **4.1.23** small fix in the tests and log functions  
 - **4.1.22** errors in plugins are notified  
