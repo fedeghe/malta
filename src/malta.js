@@ -18,18 +18,13 @@ const fs = require('fs'),
     TAB = '\t',
     UNDEFINED = 'undefined',
     getCommentFn = (pre, post) => cnt => pre + cnt + post,
-    objMultiKey = o => {
-        const ret = {};
-        let i, j, jl, ks;
-        for (i in o) {
-        // eslint-disable-next-line no-prototype-builtins
-            if (o.hasOwnProperty(i)) {
-                ks = i.split('|');
-                for (j = 0, jl = ks.length; j < jl; j++) ret[ks[j]] = o[i];
-            }
-        }
-        return ret;
-    };
+    objMultiKey = o =>
+        Object.keys(o).reduce((acc, mk) =>
+            mk.split('|').reduce((iacc, ext) => {
+                iacc[ext] = o[mk];
+                return iacc;
+            }, acc),
+        {});
 
 // string proto for console colors
 require('./stringproto');
@@ -253,18 +248,10 @@ Malta.author = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
  * 0 nothing, 1 some, 2 a lot
  */
 Malta.verbose = 1;
-
-/**
- * { item_description }
- */
 Malta.printfile = '.printVersion';
-
 Malta.executeCheck = 0;
-
 Malta.running = true;
-
 Malta.NL = NL;
-
 Malta.TAB = TAB;
 /**
  * @static
@@ -296,6 +283,7 @@ Malta.execute = (tmpExe, then) => {
  * @param  {[type]} tpl [description]
  * @param  {[type]} dst [description]
  * @return {[type]}     [description]
+ * @static
  */
 Malta.badargs = (tpl, dst) => {
     const msg = [
@@ -314,6 +302,7 @@ Malta.badargs = (tpl, dst) => {
 /**
  * [log_help description]
  * @return {[type]} [description]
+ * @static
  */
 Malta.log_help = () => {
     Malta.outVersion(true);
@@ -356,24 +345,43 @@ Malta.checkDeps = (...deps) => {
     let i, l;
     const errs = [];
 
-    for (i = 0, l = deps.length; i < l; i++) {
+    // for (i = 0, l = deps.length; i < l; i++) {
+    //     try {
+    //         require.resolve(deps[i]);
+    //     } catch (e) {
+    //         errs.push({
+    //             err: e,
+    //             msg: [
+    //                 NL, deps[i].underline(), ' package is needed',
+    //                 NL, 'by a plugin ',
+    //                 NL, 'but cannot be found'.italic(),
+    //                 NL, `run \`npm install ${deps[i]}\``.yellow()
+    //             ].join('')
+    //         });
+    //     }
+    // }
+    deps.forEach(dep => {
         try {
-            require.resolve(deps[i]);
+            require.resolve(dep);
         } catch (e) {
             errs.push({
                 err: e,
                 msg: [
-                    NL, deps[i].underline(), ' package is needed',
+                    NL, dep.underline(), ' package is needed',
                     NL, 'by a plugin ',
                     NL, 'but cannot be found'.italic(),
                     NL, `run \`npm install ${deps[i]}\``.yellow()
                 ].join('')
             });
         }
-    }
-    for (i = 0, l = errs.length; i < l; i++) {
-        Malta.log_debug(`${errs[i].err.code.red()}: ${errs[i].msg}`);
-    }
+    });
+
+    // for (i = 0, l = errs.length; i < l; i++) {
+    //     Malta.log_debug(`${errs[i].err.code.red()}: ${errs[i].msg}`);
+    // }
+    errs.forEach(err => {
+        Malta.log_debug(`${err.err.code.red()}: ${err.msg}`);
+    });
     if (errs.length) {
         Malta.stop(() => {
             throw new Error('Error in dependencies check');
@@ -830,23 +838,15 @@ Malta.prototype.loadPlugins = function () {
     const self = this,
         allargs = self.args.join(' '),
         reqs = allargs.match(/-(plugins|require)=([^\s$]*)/),
-        p = reqs ? reqs[2].split('...') : [],
-        l = p.length;
-
-    let i = 0,
-        parts;
-
+        plugins = reqs ? reqs[2].split('...') : [];
 
     self.log_debug('Loading plugins'.yellow());
 
-
-    for (null; i < l; i++) {
-        (function (j) {
-            parts = p[j].match(/([^[]*)(\[(.*)\])?/);
-            self.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
-            self.hasPlugins = true;
-        })(i);
-    }
+    plugins.forEach(plugin => {
+        const parts = plugin.match(/([^[]*)(\[(.*)\])?/);
+        self.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
+        self.hasPlugins = true;
+    });
 
     if (self.hasPlugins) {
         self.log_dir(self.pluginManager.plugins);
@@ -983,9 +983,8 @@ Malta.prototype.parse = function (path) {
 
         if (els) {
             // loop over all found
-            //
-            for (let i = 0, l = els.length; i < l; i++) {
-                const p = els[i].match(new RegExp(self.reg[self.placeholderMode].files)),
+            els.forEach(el => {
+                const p = el.match(new RegExp(self.reg[self.placeholderMode].files)),
                     f = p[2],
                     fname = f.match(/^\//)
                         ? execPath + f
@@ -1010,7 +1009,7 @@ Malta.prototype.parse = function (path) {
                         dig(`${self.files[fname].content}`);
                     }
                 }
-            }
+            });
         }
     })(`${cnt}`);
 

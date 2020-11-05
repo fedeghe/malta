@@ -11,17 +11,15 @@ const Malta = require('./malta'),
     multi = (key, el) => {
         const multi = key.match(/(.*)\/\*\.(.*)$/),
             isCommand = Malta.isCommand(key),
-            exclude = function (filename) {
-                return filename.match(/\.buildNum\.json$/);
-            },
+            exclude = filename => filename.match(/\.buildNum\.json$/),
             multiElements = {};
 
-        let noDemon = key.match(/#(.*)/),
+        let isDemon = !(key.match(/#(.*)/)),
             folder,
             ext;
 
         if (!isCommand && multi) {
-            noDemon = multi[0].match(/#(.*)/);
+            isDemon = !(multi[0].match(/#(.*)/));
             folder = multi[1];
             ext = multi[2];
             fs.readdir(folder.replace(/^#/, ''), (err, files) => {
@@ -43,11 +41,11 @@ const Malta = require('./malta'),
 
             // if demon mode then observe folder, add / remove
             //
-            if (!noDemon) {
+            if (isDemon) {
                 watcher.observe(folder, (diff, extension) => {
-                    diff.added.filter(function (v) {
-                        return v.match(new RegExp(`.*\\.${extension}$`));
-                    }).forEach(v => {
+                    diff.added.filter(
+                        v => v.match(new RegExp(`.*\\.${extension}$`))
+                    ).forEach(v => {
                         if (exclude(v)) return;
                         ++processNum;
                         multiElements[v] = proceed(`${folder}/${v}`, el);
@@ -59,7 +57,7 @@ const Malta = require('./malta'),
                     }).forEach(v => {
                         const outFile = multiElements[v].data.name;
                         // remove out file if exists
-                        if (fs.existsSync(outFile)) fs.unlink(outFile, () => { });
+                        if (fs.existsSync(outFile)) fs.unlink(outFile, () => {});
                         multiElements[v].shut();
                         multiElements[v] = null;
                         Malta.log_debug(`${'REMOVED'.yellow()} ${folder}/${v}${NL}`);
@@ -72,16 +70,16 @@ const Malta = require('./malta'),
         }
     },
     proceed = (tpl, options) => {
-        let i = 0,
-            l;
+        // let i = 0,
+        //     l;
         if (typeof options !== 'undefined' && options instanceof Array) {
-            l = options.length;
-            for (null; i < l; i++) proceed(tpl, options[i]);
+            // l = options.length;
+
+            // for (null; i < l; i++) proceed(tpl, options[i]);
+            options.forEach(option => proceed(tpl, option));
         } else {
             options = options || '';
-            let o = [tpl];
-
-            o = o.concat(options.split(/\s/))
+            const o = [tpl].concat(options.split(/\s/))
                 .concat([`proc=${processNum}`]);
             return Malta.get().check(o).start();
         }

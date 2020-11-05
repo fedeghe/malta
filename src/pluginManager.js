@@ -174,7 +174,7 @@ Executor.prototype.callPlugin = function (p) {
     malta.log_debug([
         '> ',
         p.name.yellow(),
-        (p.params ? `called passing ${JSON.stringify(p.params).darkgray()}` : '')
+        (p.params ? ` called passing ${JSON.stringify(p.params).darkgray()}` : '')
     ].join(''));
 
     malta.doBuild = true;
