@@ -1361,6 +1361,12 @@ Malta.prototype.watch = function () {
     return this;
 };
 
+Malta.prototype.write = function () {
+    const self = this;
+    self.log_debug(`Writing ${self.data.name}`.yellow() + ` ~${self.getSize(self.data.name)}`.green());
+    fs.writeFile(this.data.name, this.data.content, () => {});
+};
+
 Malta.prototype.shut = function () {
     clearInterval(this.watch_TI);
 };

@@ -7,18 +7,19 @@ const assert = require('assert'),
     doneFunc = require('../utils').doneFunc;
 
 
-describe('plugin base', function () {
+describe('plugin->plugin based', function () {
     const m = malta.get();
     it('should output correctly all files', done => {
         m.check([
-            `#${folder}/code/pluginme.js`,
+            `#${folder}/code/index.js`,
             `${folder}/out`,
-            '-plugins=myplugin[name:\"plugin_is_working\"]',
+            '-plugins=myplugin[name:\"one_plugin_is_working\"]...myplugin2[name:\"v2-another_plugin_is_working\"]',
             '-options=verbose:0',
         ]).start(o => {
             assert(o.content.length)
         }).then((o) => {
-            assert(o.content.match(/^\/\/\>\splugin_is_working/))
+            assert(o.content.match(/^\/\/\>\>\sv2-another_plugin_is_working/m))
+            assert(o.content.match(/^\/\/\>\sone_plugin_is_working/m))
             done()
         });
     });

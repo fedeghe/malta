@@ -157,6 +157,9 @@ Executor.prototype.run = function () {
                         go();
                     }
                 } else {
+                    // plugins for this file are done, rem plugins should not override the out file,
+                    // cause now malta has the ending name and content and can do it once
+                    malta.write();
                     self.run();
                 }
             })();
