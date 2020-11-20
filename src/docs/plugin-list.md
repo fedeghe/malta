@@ -1,4 +1,4 @@
-## Available plugins  
+## Available plugins (39)  
 
 [apollo-srv](#apollo-srv) \~ 
 [babel](#babel) \~ 
@@ -10,6 +10,7 @@
 [del](#del) \~ 
 [dev-srv](#dev-srv) \~ 
 [epub](#epub) \~ 
+[es-uglify](#es-uglify) \~ 
 [graphviz](#graphviz) \~ 
 [haml](#haml) \~ 
 [header-comment](#header-comment) \~ 
@@ -99,6 +100,12 @@ Launches a raw basic development server
 
 ### [malta-epub][l9]  
 Creates a ebup file from md files, based on [epub-gen npm package][l9lib]  
+
+---
+<a name="es-uglify" />
+
+### [malta-es-uglify][l9BIS]  
+Uglifies es code, based on [uglify-es npm package][l9BISlib]  
 
 ---
 <a name="graphviz" />
@@ -324,6 +331,7 @@ Umd plugin
 [l16lib]: https://www.npmjs.com/package/javascript-obfuscator
 [l18lib]: https://www.npmjs.com/package/uglify-js
 [l19lib]: https://www.npmjs.com/package/jsdoc
+[l9BISlib]: https://www.npmjs.com/package/uglify-es
 [l20lib]: https://www.npmjs.com/package/jshint
 [l21lib]: https://www.npmjs.com/package/jslint
 [l23lib]: https://www.npmjs.com/package/less
