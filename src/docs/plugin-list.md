@@ -1,6 +1,43 @@
 ## Available plugins  
 
-[apollo-srv](#apollo-srv) \~ [babel](#babel) \~ [beautify](#beautify) \~ [browser-refresh](#browser-refresh) \~ [browserify](#browserify) \~ [coffeescript](#coffeescript) \~ [css-uglify](#css-uglify) \~ [del](#del) \~ [dev-srv](#dev-srv) \~ [epub](#epub) \~ [es-uglify](#es-uglify) \~ [graphviz](#graphviz) \~ [haml](#haml) \~ [header-comment](#header-comment) \~ [html-minify](#html-minify) \~ [html2pdf](#html2pdf) \~ [js-bookmarklet](#js-bookmarklet) \~ [js-obfuscator](#js-obfuscator) \~ [js-toolkit](#js-toolkit) \~ [js-uglify](#js-uglify) \~ [jsdoc](#jsdoc) \~ [jshint](#jshint) \~ [jslint](#jslint) \~ [json-minify](#json-minify) \~ [less](#less) \~ [markdown](#markdown) \~ [markdown-pdf](#markdown-pdf) \~ [millijs](#millijs) \~ [mocha](#mocha) \~ [notify](#notify) \~ [pdf-merge](#pdf-merge) \~ [pug](#pug) \~ [rename](#rename) \~ [restify](#restify) \~ [sass](#sass) \~ [svg2png](#svg2png) \~ [translate](#translate) \~ [typescript](#typescript) \~ [umd](#umd)
+[apollo-srv](#apollo-srv) \~ 
+[babel](#babel) \~ 
+[beautify](#beautify) \~ 
+[browser-refresh](#browser-refresh) \~ 
+[browserify](#browserify) \~ 
+[coffeescript](#coffeescript) \~ 
+[css-uglify](#css-uglify) \~ 
+[del](#del) \~ 
+[dev-srv](#dev-srv) \~ 
+[epub](#epub) \~ 
+[graphviz](#graphviz) \~ 
+[haml](#haml) \~ 
+[header-comment](#header-comment) \~ 
+[html2pdf](#html2pdf) \~ 
+[html-minify](#html-minify) \~ 
+[js-bookmarklet](#js-bookmarklet) \~ 
+[js-obfuscator](#js-obfuscator) \~ 
+[js-toolkit](#js-toolkit) \~ 
+[js-uglify](#js-uglify) \~ 
+[jsdoc](#jsdoc) \~ 
+[jshint](#jshint) \~ 
+[jslint](#jslint) \~ 
+[json-minify](#json-minify) \~ 
+[less](#less) \~ 
+[markdown](#markdown) \~ 
+[markdown-pdf](#markdown-pdf) \~ 
+[millijs](#millijs) \~ 
+[mocha](#mocha) \~ 
+[notify](#notify) \~ 
+[pdf-merge](#pdf-merge) \~ 
+[pug](#pug) \~ 
+[rename](#rename) \~ 
+[restify](#restify) \~ 
+[sass](#sass) \~ 
+[svg2png](#svg2png) \~ 
+[translate](#translate) \~ 
+[typescript](#typescript) \~ 
+[umd](#umd)
 
 ---
 
