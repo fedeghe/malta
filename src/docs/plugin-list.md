@@ -289,6 +289,7 @@ Umd plugin
 [l7]: https://www.npmjs.com/package/malta-del
 [l8]: https://www.npmjs.com/package/malta-dev-srv
 [l9]: https://www.npmjs.com/package/malta-epub
+[l9BIS]: https://www.npmjs.com/package/malta-es-uglify
 [l10]: https://www.npmjs.com/package/malta-graphviz
 [l11]: https://www.npmjs.com/package/malta-haml
 [l12]: https://www.npmjs.com/package/malta-header-comment
