@@ -222,6 +222,12 @@ Runs mocha test at build, based on [mocha npm package][l27lib]
 Send email notification at build, based on [nodemailer npm package][l28lib]  
 
 ---
+<a name="parcel" />
+
+### [malta-parcel][l29BIS]  
+Starts Parcel automatically; needs a global install of [parcel-bundler npm package][l29BISlib]   
+
+---
 <a name="pdf-merge" />
 
 ### [malta-pdf-merge][l29]  
@@ -310,6 +316,7 @@ Umd plugin
 [l27]: https://www.npmjs.com/package/malta-mocha
 [l28]: https://www.npmjs.com/package/malta-notify
 [l29]: https://www.npmjs.com/package/malta-pdf-merge
+[l29BIS]: https://www.npmjs.com/package/malta-parcel
 [l30]: https://www.npmjs.com/package/malta-pug
 [l31]: https://www.npmjs.com/package/malta-rename
 [l32]: https://www.npmjs.com/package/malta-restify
@@ -341,6 +348,7 @@ Umd plugin
 [l27lib]: https://www.npmjs.com/package/mocha
 [l28lib]: https://www.npmjs.com/package/nodemailer
 [l29lib]: https://www.npmjs.com/package/easy-pdf-merge
+[l29BISlib]: https://www.npmjs.com/package/parcel-bundler
 [l30lib]: https://www.npmjs.com/package/pug
 [l32lib]: https://www.npmjs.com/package/restify
 [l33lib]: https://www.npmjs.com/package/sass
