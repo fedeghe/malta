@@ -30,6 +30,7 @@
 [millijs](#millijs) \~ 
 [mocha](#mocha) \~ 
 [notify](#notify) \~ 
+[parcel](#parcel) \~ 
 [pdf-merge](#pdf-merge) \~ 
 [pug](#pug) \~ 
 [rename](#rename) \~ 
