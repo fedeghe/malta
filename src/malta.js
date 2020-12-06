@@ -546,7 +546,7 @@ Malta.log_warn = Malta.prototype.log_warn = function (msg) {
  * @return {[type]}     [description]
  */
 Malta.log_err = Malta.prototype.log_err = function (err, msg) {
-    if (Malta.verbose < 2) {
+    if (Malta.verbose === 0) {
         return;
     }
     console.log('ERROR'.red());
