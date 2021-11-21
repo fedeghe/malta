@@ -11,9 +11,7 @@ const Malta = require('./malta'),
     multi = (key, el) => {
         const multi = key.match(/(.*)\/\*\.(.*)$/),
             isCommand = Malta.isCommand(key),
-            exclude = function (filename) {
-                return filename.match(/\.buildNum\.json$/);
-            },
+            exclude = filename => filename.match(/\.buildNum\.json$/),
             multiElements = {};
 
         let noDemon = key.match(/#(.*)/),

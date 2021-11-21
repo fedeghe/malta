@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
-const utils = require('./utils.js');
 
+const utils = require('./utils.js');
 
 class Executor {
     constructor (iterator, maltaInstance, pmInstance) {
@@ -39,10 +38,8 @@ class Executor {
                             }).catch(msg => {
                                 self.pm.maybeNotifyBuild({ gotErrs: msg });
                                 malta.log_debug(`Plugin '${pl.name}' error: `);
-                                // console.log(Malta.TAB + msg);
                                 malta.log_debug(msg);
                                 go();
-                                // malta.stop();
                             });
                         } else {
                             go();
