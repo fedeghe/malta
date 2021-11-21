@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.30** pluginManager refactor; better coverage
 - **4.1.29** dependencies vulnerability updates
 - **4.1.28** should again log errors  
 - **4.1.27** fixed observing mode in json sub-grouped files  
