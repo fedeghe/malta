@@ -39,6 +39,7 @@
             "error",
             "always"
         ],
-        "valid-typeof": 0
+        "valid-typeof": 0,
+        "space-before-function-paren": ["error", "always"]
     }
 }
