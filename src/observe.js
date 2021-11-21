@@ -1,10 +1,7 @@
 const fs = require('fs'),
-    Malta = require('./malta');
-
-module.exports = (function () {
-    const elements = {};
-
-    function arrDiff (a, b) {
+    Malta = require('./malta'),
+    elements = {},
+    arrDiff = (a, b) => {
         const bAdded = [],
             bRemoved = [],
             astr = a.join(':::'),
@@ -18,9 +15,8 @@ module.exports = (function () {
             if (astr.indexOf(b[i]) < 0) bAdded.push(b[i]);
         }
         return { added: bAdded, removed: bRemoved };
-    }
-
-    function observe (folder, cb, extension) {
+    },
+    observe  = (folder, cb, extension) => {
         const actual = {};
         let previous = false;
 
@@ -67,9 +63,8 @@ module.exports = (function () {
         }, 100);
 
         return true;
-    }
-
-    function unobserve (folder, extension) {
+    },
+    unobserve = (folder, extension) => {
         if (folder in elements) {
             if (extension in elements[folder]) {
                 clearInterval(elements[folder][extension]);
@@ -78,10 +73,10 @@ module.exports = (function () {
             }
         }
         return false;
-    }
-
-    return {
-        observe,
-        unobserve
     };
-})();
+
+
+module.exports = {
+    observe,
+    unobserve
+};

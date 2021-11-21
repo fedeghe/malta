@@ -4,16 +4,15 @@ const Malta = require('./malta'),
     functions = require('./functions'),
     execPath = process.cwd(),
     args = process.argv.slice(2),
-    len = args.length;
+    len = args.length,
+    print = (msg, i, tot) => {
+        const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined')
+            ? [parseInt(100 * i / tot, 10), '% '].join('').white()
+            : '';
+        Malta.log_debug(perc + msg);
+    };
 
 process.title = 'Malta';
-
-function print (msg, i, tot) {
-    const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined')
-        ? [parseInt(100 * i / tot, 10), '% '].join('').white()
-        : '';
-    Malta.log_debug(perc + msg);
-}
 
 (function _M (_args, _len) {
     function go (_runs) {
