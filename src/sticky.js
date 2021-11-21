@@ -21,10 +21,9 @@ const os = require('os'),
         return false;
     })();
 
-module.exports = function (title, message, errs, testcb) {
-    'use strict';
+module.exports = (title, message, errs, testcb) => {
     if (typeof testcb === 'undefined') {
-        testcb = function () { return null; };
+        testcb = () => null;
     }
     if (!(currentOs in tools)) return;
     const exeData = tools[currentOs],
@@ -38,7 +37,7 @@ module.exports = function (title, message, errs, testcb) {
     setImmediate(() => {
         childProcess.exec(`which ${exec}`, error => {
             if (error === null) {
-                childProcess.exec(`${exec} ${params}`, function (error) {
+                childProcess.exec(`${exec} ${params}`, error => {
                     if (error) {
                         // eslint-disable-next-line no-console
                         console.log(error);

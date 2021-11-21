@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.31** executor refactor; some enhancements
 - **4.1.30** pluginManager refactor; better coverage
 - **4.1.29** dependencies vulnerability updates
 - **4.1.28** should again log errors  
