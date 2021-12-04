@@ -4,7 +4,7 @@ const fs = require('fs'),
     Executor = require('./executor'),
     execPath = process.cwd(),
     utils = require('./utils.js');
-    
+
 class PluginManager {
     constructor (instance) {
         this.userPath = `${execPath}/plugins/`;
