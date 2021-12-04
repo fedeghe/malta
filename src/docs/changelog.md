@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.32** fix bug introduced in 1.4.32 refactor and show errors to user by default
 - **4.1.31** executor refactor; some enhancements
 - **4.1.30** pluginManager refactor; better coverage
 - **4.1.29** dependencies vulnerability updates
