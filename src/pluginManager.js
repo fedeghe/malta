@@ -4,8 +4,7 @@ const fs = require('fs'),
     Executor = require('./executor'),
     execPath = process.cwd(),
     utils = require('./utils.js');
-
-
+    
 class PluginManager {
     constructor (instance) {
         this.userPath = `${execPath}/plugins/`;
@@ -51,7 +50,8 @@ class PluginManager {
     add (fname, params) {
         const userPath = `${this.userPath}${fname}.js`,
             userPathFolder = `${this.userPath}${fname}/index.js`,
-            maltaPath = `${this.maltaPath}${fname}.js`;
+            maltaPath = `${this.maltaPath}${fname}.js`,
+            self = this;
 
         let plugin;
 
@@ -83,9 +83,7 @@ class PluginManager {
 
         if ('ext' in plugin) {
             if (utils.isArray(plugin.ext)) {
-                plugin.ext.forEach(function (ext) {
-                    this.doAdd(ext, plugin, params);
-                });
+                plugin.ext.forEach(ext => self.doAdd(ext, plugin, params));
             } else if (utils.isString(plugin.ext)) {
                 this.doAdd(plugin.ext, plugin, params);
             }

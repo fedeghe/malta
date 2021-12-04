@@ -271,8 +271,6 @@ Malta.TAB = TAB;
  */
 Malta.execute = (tmpExe, then) => {
     const exe = tmpExe, // .join(' '),
-        // c = tmpExe[0];
-        // opt = tmpExe.length > 1 ? tmpExe.slice(1).join(' ') : false,
         exec = childProcess.exec,
         command = exec(exe.join(' '));
 
@@ -281,7 +279,10 @@ Malta.execute = (tmpExe, then) => {
     });
     command.on('close', function (code) {
         Malta.executeCheck += ~~code;
-        if (code) process.exit(1);
+        if (code) {
+            Malta.log_err(`> \`${exe}\` child process closed with code ${code}`);
+            process.exit(1);
+        }
         if (typeof then !== UNDEFINED) then();
     });
     command.on('error', function (code, err) {
@@ -422,7 +423,7 @@ Malta.stop = what => {
     }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
-    process.exit();
+    // process.exit();
 };
 
 Malta.getRunsFromPath = p => {
