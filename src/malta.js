@@ -423,7 +423,7 @@ Malta.stop = what => {
     }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
-    // process.exit();
+    process.exit();
 };
 
 Malta.getRunsFromPath = p => {
