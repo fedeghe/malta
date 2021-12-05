@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.34** coverage enhanced
 - **4.1.33** fix bug introduced in 1.4.32 refactor and show errors to user by default
 - **4.1.31** executor refactor; some enhancements
 - **4.1.30** pluginManager refactor; better coverage
