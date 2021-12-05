@@ -7,12 +7,12 @@ const assert = require('assert'),
     doneFunc = require('../utils').doneFunc;
 
 describe('EXE param in build file', function () {
-    it(`should create a file ${folder}/exefile.txt containing "hello world"`, function (done) {
+    it(`should create a file ${folder}/out/exefile.txt containing "hello world"`, function (done) {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/add.json`]);
             ls.on('close', function (code) {
                 assert.equal(malta.executeCheck, code); // 0
-                fs.readFile(`${folder}/exefile.txt`, 'utf8', function (err, cnt) {
+                fs.readFile(`${folder}/out/exefile1.txt`, 'utf8', function (err, cnt) {
                     if (err) throw err;
                     assert.equal(cnt.split(/\n/)[0], 'hello world')
                     done();
@@ -28,7 +28,7 @@ describe('EXE param in build file', function () {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/remove.json`]);
             ls.on('close', function (code) {
                 assert.equal(malta.executeCheck, code); // 0
-                fs.access(`${folder}/exefile.txt`, function (err, cnt) {
+                fs.access(`${folder}/out/exefile2.txt`, function (err, cnt) {
                     assert.ok(err && err.code === 'ENOENT');
                     done();
                 });
@@ -85,6 +85,7 @@ describe('EXE param in build file', function () {
             throw err;
         }
     });
+
     it('should execute command ', function (done) {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', '-clean']);
@@ -97,27 +98,5 @@ describe('EXE param in build file', function () {
         }
     });
 
-    it('should close', function (done) {
-        const ls = child_process.spawn('node', ['src/bin.js']);
-        ls.on('close', function (code) {
-            done();
-        });
-    });
-
-    it('should skip and undemon', function (done) {
-        const ls = child_process.spawn('node', ['src/bin.js', 'json/skip.json']);
-        ls.on('close', function (code) {
-            done();
-        });
-    });
-    
-    it('should handle multidest', function (done) {
-        const ls = child_process.spawn('node', ['src/bin.js', 'json/multi.json']);
-        ls.on('close', function (code) {
-            done();
-        });
-    });
-
-    it('shoudl remove the file just created', doneFunc(folder));
-
+    it('should remove the file just created', doneFunc(folder));
 });

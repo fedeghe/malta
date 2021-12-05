@@ -1,5 +1,6 @@
 {
     "EXE": [
-        "rm -rf test/bin-malta-exe/exefile.txt"
+        "touch test/bin-malta-exe/out/exefile2.txt",
+        "rm -rf test/bin-malta-exe/out/exefile2.txt"
     ]
 }

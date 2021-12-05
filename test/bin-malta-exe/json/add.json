@@ -1,6 +1,6 @@
 {
     "EXE": [
-        "touch test/bin-malta-exe/exefile.txt",
-        "echo 'hello world' > test/bin-malta-exe/exefile.txt"
+        "touch test/bin-malta-exe/out/exefile1.txt",
+        "echo 'hello world' > test/bin-malta-exe/out/exefile1.txt"
     ]
 }

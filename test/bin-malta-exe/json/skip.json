@@ -1,9 +1,7 @@
 {
     "EXE": [
-        "mkdir test/bin-malta-exe/out",
+        "mkdir test/bin-malta-exe/out2",
         "which node"
     ],
-    "!test/bin-malta-exe/add.json": "test/bin-malta-exe/out",
-    "#test/bin-malta-exe/add.json": "test/bin-malta-exe/out",
-    "test/bin-malta-exe/add.json": "test/bin-malta-exe/out"
+    "!test/bin-malta-exe/json/add.json": "test/bin-malta-exe/out2"
 }

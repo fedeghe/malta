@@ -25,5 +25,5 @@ describe('EXE nested param in build file', function () {
 		}
 	});
 
-    it('shoudl remove the file just created', doneFunc(folder));
+    it('should remove the file just created', doneFunc(folder));
 });

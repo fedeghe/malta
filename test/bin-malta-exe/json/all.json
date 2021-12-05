@@ -1,8 +1,7 @@
 {
     "EXE": [
-        "mkdir -p test/bin-malta-exe/a/b/c/d/e/f/g/h/i/l/m",
-        "touch test/bin-malta-exe/a/b/c/d/e/f/g/h/i/l/m/file.txt",
-        "echo 'hello world' > test/bin-malta-exe/a/b/c/d/e/f/g/h/i/l/m/file.txt",
-        "rm -rf test/bin-malta-exe/a"
+        "mkdir -p test/bin-malta-exe/out/a/b/c/d/e/f/g/h/i/l/m",
+        "touch test/bin-malta-exe/out/a/b/c/d/e/f/g/h/i/l/m/file.txt",
+        "echo 'hello world' > test/bin-malta-exe/out/a/b/c/d/e/f/g/h/i/l/m/file.txt"
     ]
 }
