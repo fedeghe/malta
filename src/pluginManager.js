@@ -9,6 +9,7 @@ class PluginManager {
     constructor (instance) {
         this.userPath = `${execPath}/plugins/`;
         this.maltaPath = `${__dirname}/../plugins/`;
+        this.testPath = `${__dirname}/../test/`;
         this.mself = instance;
         this.plugins = {};
         this.executor = null;
@@ -50,6 +51,7 @@ class PluginManager {
     add (fname, params) {
         const userPath = `${this.userPath}${fname}.js`,
             userPathFolder = `${this.userPath}${fname}/index.js`,
+            testPathFolder = `${this.testPath}${fname}/index.js`,
             maltaPath = `${this.maltaPath}${fname}.js`,
             self = this;
 
@@ -62,6 +64,11 @@ class PluginManager {
                 plugin = require(userPath);
 
                 // then check if malta package has it, in folder/index.js
+                //
+            } else if (fs.existsSync(testPathFolder)) {
+                plugin = require(testPathFolder);
+
+                // or in file
                 //
             } else if (fs.existsSync(userPathFolder)) {
                 plugin = require(userPathFolder);

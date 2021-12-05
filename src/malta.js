@@ -844,6 +844,7 @@ Malta.prototype.loadPlugins = function () {
     for (null; i < l; i++) {
         (function (j) {
             parts = p[j].match(/([^[]*)(\[(.*)\])?/);
+            // console.log('parts: ', parts);
             self.pluginManager.add(parts[1], utils.jsonFromStr(parts[3]) || false);
             self.hasPlugins = true;
         })(i);
