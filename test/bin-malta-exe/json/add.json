@@ -1,5 +1,6 @@
 {
     "EXE": [
+        "mkdir -p test/bin-malta-exe/out",
         "touch test/bin-malta-exe/out/exefile1.txt",
         "echo 'hello world' > test/bin-malta-exe/out/exefile1.txt"
     ]

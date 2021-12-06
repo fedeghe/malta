@@ -1,7 +1,7 @@
 const path = require('path'),
     fs = require('fs');
 
-function testPlugin(obj, options) {
+function testPlugin2(obj, options) {
     const self = this,
         start = new Date(),
         pluginName = path.basename(path.dirname(__filename));
@@ -26,5 +26,5 @@ function testPlugin(obj, options) {
         });
     }
 }
-testPlugin.ext = 'json';
-module.exports = testPlugin;
+testPlugin2.ext = ['json', 'js'];
+module.exports = testPlugin2;

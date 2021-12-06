@@ -1,5 +1,5 @@
 {
     "EXE": [
-        "rm -rf test/bin-malta-exe/out"
+        "rm -rf test/bin-malta-exe/out/*"
     ]
 }

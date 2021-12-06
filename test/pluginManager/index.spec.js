@@ -11,6 +11,7 @@ describe('plugin manager', function () {
     it('should output expected result', function (done) {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/one.json`]);
+            // ls.stdout.on('data', d => console.log(d.toString()));
             ls.on('exit', function (code) {
                 assert.equal(malta.executeCheck, code);
                 fs.readFile(`${folder}/out/test.flat.json`, 'utf8', function (err, cnt) {
