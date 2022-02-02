@@ -247,7 +247,7 @@ Malta.version = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
  * @static
  * @type {String}
  */
-Malta.author = 'version' in packageInfo ? packageInfo.version : 'x.y.z';
+Malta.author = 'author' in packageInfo ? packageInfo.author : 'Federio C. Ghedina ';
 
 /**
  * 0 nothing, 1 some, 2 a lot
