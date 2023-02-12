@@ -16,7 +16,7 @@ describe('static methods', () => {
 
     it("should get a malta instance", () => {
         let m = malta.get();
-        assert(m instanceof malta, true);
+        assert(m instanceof malta);
     });
 
     it("should check dependencies", done => {
