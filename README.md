@@ -4,7 +4,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/fedeghe/malta/badge.svg?branch=master)](https://coveralls.io/github/fedeghe/malta?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/fedeghe/malta/badge.svg)](https://snyk.io/test/github/fedeghe/malta)
-[![Build Status](https://travis-ci.org/fedeghe/malta.svg?branch=master)](https://travis-ci.org/fedeghe/malta) [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
+ [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
 
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.4**
 

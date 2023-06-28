@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.37** just readme typo
 - **4.1.36** update dependencies
 - **4.1.34** coverage enhanced
 - **4.1.33** fix bug introduced in 1.4.32 refactor and show errors to user by default
