@@ -4,3 +4,5 @@ node_modules/
 tmp/
 coverage/
 devtest/
+.nyc_output/
+.vscode/

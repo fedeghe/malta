@@ -1,6 +1,7 @@
 Changelog
 --------- 
 
+- **4.1.40** remove from npm package unuseful stuff
 - **4.1.39** remove a lot of unused files from npm package
 - **4.1.38** added the npmignore, better late than never
 - **4.1.37** just readme typo
