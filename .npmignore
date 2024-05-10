@@ -6,3 +6,6 @@ coverage/
 devtest/
 .nyc_output/
 .vscode/
+TODO.test
+_config.yml
+plugin_ideas.md
