@@ -1,4 +1,4 @@
-## Available plugins (39)  
+## Available plugins (40)  
 
 [apollo-srv](#apollo-srv) \~ 
 [babel](#babel) \~ 
@@ -16,6 +16,7 @@
 [header-comment](#header-comment) \~ 
 [html2pdf](#html2pdf) \~ 
 [html-minify](#html-minify) \~ 
+[jest](#jest) \~ 
 [js-bookmarklet](#js-bookmarklet) \~ 
 [js-obfuscator](#js-obfuscator) \~ 
 [js-toolkit](#js-toolkit) \~ 
@@ -137,6 +138,12 @@ Get a pdf from an html, based on [html-pdf npm package][l13lib]
 
 ### [malta-html-minify][l14]  
 Minifies html markup, based on [html-minifier npm package][l14lib]  
+
+---
+<a name="jest" />
+
+### [malta-jest][l15z]  
+Run jest tests   
 
 ---
 <a name="js-bookemarlet" />
@@ -302,6 +309,7 @@ Umd plugin
 [l12]: https://www.npmjs.com/package/malta-header-comment
 [l14]: https://www.npmjs.com/package/malta-html-minify
 [l13]: https://www.npmjs.com/package/malta-html2pdf
+[l15z]: https://www.npmjs.com/package/malta-jest
 [l15]: https://www.npmjs.com/package/malta-js-bookmarklet
 [l16]: https://www.npmjs.com/package/malta-js-obfuscator
 [l17]: https://www.npmjs.com/package/malta-js-toolkit
