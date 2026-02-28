@@ -6,7 +6,12 @@ const path = require('path'),
     root = path.resolve(folder, '../..'),
     bin = path.join(root, 'src/bin.js'),
     pluginPath = path.join(folder, 'plugins/testPlugin'),
+    outFolder = path.join(folder, 'out'),
     doneFunc = require('../utils').doneFunc;
+
+const ensureOutFolder = () => {
+    fs.mkdirSync(outFolder, { recursive: true });
+};
 
 const waitForFile = (filePath, timeoutMs = 20000, intervalMs = 100) => new Promise((resolve, reject) => {
     const start = Date.now();
@@ -22,16 +27,19 @@ const waitForFile = (filePath, timeoutMs = 20000, intervalMs = 100) => new Promi
 
 const runAndRead = (buildFile, outFile) => new Promise((resolve, reject) => {
     const ls = child_process.spawn('node', [bin, buildFile], { cwd: root });
-    let stderr = '';
+    let stdio = '';
 
     ls.on('error', reject);
+    ls.stdout.on('data', chunk => {
+        stdio += `${chunk}`;
+    });
     ls.stderr.on('data', chunk => {
-        stderr += `${chunk}`;
+        stdio += `${chunk}`;
     });
 
     ls.on('close', code => {
         if (code !== malta.executeCheck) {
-            return reject(new Error(`Unexpected exit code: ${code}\n${stderr}`));
+            return reject(new Error(`Unexpected exit code: ${code}\n${stdio}`));
         }
 
         waitForFile(outFile)
@@ -42,7 +50,7 @@ const runAndRead = (buildFile, outFile) => new Promise((resolve, reject) => {
                 });
             })
             .catch(err => {
-                reject(new Error(`${err.message}\n${stderr}`));
+                reject(new Error(`${err.message}\n${stdio}`));
             });
     });
 });
@@ -54,12 +62,16 @@ describe('plugin manager', function () {
     const createBuildFile = (name, template, plugin) => {
         const p = path.join(folder, `${name}.tmp.json`);
         const conf = {
-            [template]: `${folder}/out -plugins=${plugin} -options=verbose:0`
+            [template]: `${outFolder} -plugins=${plugin} -options=verbose:0`
         };
         fs.writeFileSync(p, JSON.stringify(conf, null, 4), 'utf8');
         tempBuildFiles.push(p);
         return p;
     };
+
+    beforeEach(() => {
+        ensureOutFolder();
+    });
 
     afterAll(() => {
         tempBuildFiles.forEach(p => {
@@ -73,7 +85,7 @@ describe('plugin manager', function () {
             `#${folder}/code/test.json`,
             `${pluginPath}`
         );
-        const cnt = await runAndRead(build, `${folder}/out/test.flat.json`);
+        const cnt = await runAndRead(build, `${outFolder}/test.flat.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should output expected result - options to plugin', async function () {
@@ -82,7 +94,7 @@ describe('plugin manager', function () {
             `#${folder}/code/test.json`,
             `${pluginPath}[name:'xxx']`
         );
-        const cnt = await runAndRead(build, `${folder}/out/test.xxx.json`);
+        const cnt = await runAndRead(build, `${outFolder}/test.xxx.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should output expected result - wildCard - options to plugin', async function () {
@@ -91,7 +103,7 @@ describe('plugin manager', function () {
             `#${folder}/code/*.json`,
             `${pluginPath}[name:'yyy']`
         );
-        const cnt = await runAndRead(build, `${folder}/out/test.yyy.json`);
+        const cnt = await runAndRead(build, `${outFolder}/test.yyy.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should remove the folders/files just created', doneFunc(folder));
