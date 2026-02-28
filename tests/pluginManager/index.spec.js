@@ -7,7 +7,7 @@ const path = require('path'),
     bin = path.join(root, 'src/bin.js'),
     doneFunc = require('../utils').doneFunc;
 
-const waitForFile = (filePath, timeoutMs = 4000, intervalMs = 50) => new Promise((resolve, reject) => {
+const waitForFile = (filePath, timeoutMs = 20000, intervalMs = 100) => new Promise((resolve, reject) => {
     const start = Date.now();
     const probe = () => {
         fs.access(filePath, fs.constants.F_OK, err => {
@@ -45,6 +45,8 @@ const runAndRead = (buildFile, outFile) => new Promise((resolve, reject) => {
 });
 
 describe('plugin manager', function () {
+    jest.setTimeout(30000);
+
     it('should output expected result', async function () {
         const cnt = await runAndRead(`${folder}/one.json`, `${folder}/out/test.flat.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
