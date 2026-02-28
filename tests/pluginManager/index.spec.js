@@ -44,7 +44,6 @@ const runAndRead = (buildFile, outFile) => new Promise((resolve, reject) => {
     });
 });
 
-
 describe('plugin manager', function () {
     it('should output expected result', async function () {
         const cnt = await runAndRead(`${folder}/one.json`, `${folder}/out/test.flat.json`);

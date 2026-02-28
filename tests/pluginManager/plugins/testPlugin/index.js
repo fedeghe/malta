@@ -12,18 +12,18 @@ function testPlugin(obj, options) {
 
     return (solve, reject) => {
         const content = obj.content.replace(/\n/gm, '').replace(/\s/g, '');
-        fs.writeFile(obj.name, content, err => {
-            if (err == null) {
-                msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name + ' (' + self.getSize(obj.name) + ')';
-            } else {
-                console.log('[ERROR] '.red() + pluginName + ' says:');
-                console.dir(err);
-                reject(err);
-                self.stop();
-            }
+        try {
+            // Keep this test plugin deterministic for CLI child-process tests.
+            fs.writeFileSync(obj.name, content);
+            msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name + ' (' + self.getSize(obj.name) + ')';
             solve(obj);
             self.notifyAndUnlock(start, msg);
-        });
+        } catch (err) {
+            console.log('[ERROR] '.red() + pluginName + ' says:');
+            console.dir(err);
+            reject(err);
+            self.stop();
+        }
     }
 }
 testPlugin.ext = 'json';
