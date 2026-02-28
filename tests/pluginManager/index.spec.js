@@ -5,6 +5,7 @@ const path = require('path'),
     folder = path.dirname(__filename),
     root = path.resolve(folder, '../..'),
     bin = path.join(root, 'src/bin.js'),
+    pluginPath = path.join(folder, 'plugins/testPlugin'),
     doneFunc = require('../utils').doneFunc;
 
 const waitForFile = (filePath, timeoutMs = 20000, intervalMs = 100) => new Promise((resolve, reject) => {
@@ -40,23 +41,57 @@ const runAndRead = (buildFile, outFile) => new Promise((resolve, reject) => {
                     resolve(cnt);
                 });
             })
-            .catch(reject);
+            .catch(err => {
+                reject(new Error(`${err.message}\n${stderr}`));
+            });
     });
 });
 
 describe('plugin manager', function () {
     jest.setTimeout(30000);
+    const tempBuildFiles = [];
+
+    const createBuildFile = (name, template, plugin) => {
+        const p = path.join(folder, `${name}.tmp.json`);
+        const conf = {
+            [template]: `${folder}/out -plugins=${plugin} -options=verbose:0`
+        };
+        fs.writeFileSync(p, JSON.stringify(conf, null, 4), 'utf8');
+        tempBuildFiles.push(p);
+        return p;
+    };
+
+    afterAll(() => {
+        tempBuildFiles.forEach(p => {
+            try { fs.unlinkSync(p); } catch (e) {}
+        });
+    });
 
     it('should output expected result', async function () {
-        const cnt = await runAndRead(`${folder}/one.json`, `${folder}/out/test.flat.json`);
+        const build = createBuildFile(
+            'one',
+            `#${folder}/code/test.json`,
+            `${pluginPath}`
+        );
+        const cnt = await runAndRead(build, `${folder}/out/test.flat.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should output expected result - options to plugin', async function () {
-        const cnt = await runAndRead(`${folder}/oneWithOption.json`, `${folder}/out/test.xxx.json`);
+        const build = createBuildFile(
+            'oneWithOption',
+            `#${folder}/code/test.json`,
+            `${pluginPath}[name:'xxx']`
+        );
+        const cnt = await runAndRead(build, `${folder}/out/test.xxx.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should output expected result - wildCard - options to plugin', async function () {
-        const cnt = await runAndRead(`${folder}/wildCardWithOption.json`, `${folder}/out/test.yyy.json`);
+        const build = createBuildFile(
+            'wildCardWithOption',
+            `#${folder}/code/*.json`,
+            `${pluginPath}[name:'yyy']`
+        );
+        const cnt = await runAndRead(build, `${folder}/out/test.yyy.json`);
         expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should remove the folders/files just created', doneFunc(folder));
