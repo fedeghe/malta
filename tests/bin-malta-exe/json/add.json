@@ -1,0 +1,6 @@
+{
+    "EXE": [
+        "touch tests/bin-malta-exe/exefile.txt",
+        "echo 'hello world' > tests/bin-malta-exe/exefile.txt"
+    ]
+}

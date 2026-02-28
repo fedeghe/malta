@@ -1,6 +1,9 @@
 Changelog
 --------- 
 
+- **4.1.44** 
+  - mocha => jest
+  - coveralls => codecov
 - **4.1.42** update plugin list
 - **4.1.41** remove from npm package unuseful stuff
 - **4.1.39** remove a lot of unused files from npm package

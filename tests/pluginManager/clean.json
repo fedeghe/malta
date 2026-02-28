@@ -1,0 +1,5 @@
+{
+    "EXE": [
+        "rm -f tests/pluginManager/out/*.json"
+    ]
+}

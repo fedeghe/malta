@@ -1,0 +1,5 @@
+{
+    "#tests/bin-malta-multi/code/multi0.js": "tests/bin-malta-multi/out",
+    "#tests/bin-malta-multi/code/multi1.js": "tests/bin-malta-multi/out",
+    "!tests/bin-malta-multi/code/skipped.js": "tests/bin-malta-multi/out"
+}

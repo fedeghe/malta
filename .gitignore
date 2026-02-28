@@ -1,7 +1,7 @@
 node_modules
 npm-debug.log
 plugin_ideas.md
-!/test/**
+!/tests/**
 /devtest/
 .buildNum.json
 .printVersion

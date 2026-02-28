@@ -1,5 +1,0 @@
-{
-    "EXE": [
-        "rm -rf test/bin-malta-multidestination/out"
-    ]
-}

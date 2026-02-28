@@ -1,0 +1,3 @@
+{
+    "tests/bin-malta-demon/code/*.js": "tests/bin-malta-demon/out"
+}
