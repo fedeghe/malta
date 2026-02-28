@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    path = require('path'),
+const path = require('path'),
     fs = require('fs'),
     child_process = require('child_process'),
     malta = require('../../src/index.js'),
@@ -11,10 +10,10 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/add.json`]);
             ls.on('close', function (code) {
-                assert.equal(malta.executeCheck, code); // 0
+                expect(code).toBe(malta.executeCheck); // 0
                 fs.readFile(`${folder}/exefile.txt`, 'utf8', function (err, cnt) {
                     if (err) throw err;
-                    assert.equal(cnt.split(/\n/)[0], 'hello world')
+                    expect(cnt.split(/\n/)[0]).toBe('hello world');
                     done();
                 });
             });
@@ -27,9 +26,9 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/remove.json`]);
             ls.on('close', function (code) {
-                assert.equal(malta.executeCheck, code); // 0
+                expect(code).toBe(malta.executeCheck); // 0
                 fs.access(`${folder}/exefile.txt`, function (err, cnt) {
-                    assert.ok(err && err.code === 'ENOENT');
+                    expect(err && err.code === 'ENOENT').toBe(true);
                     done();
                 });
             });
@@ -42,7 +41,7 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/allfail.json`]);
             ls.on('close', function (code) {
-                assert.notEqual(malta.executeCheck, code); // 0
+                expect(code).not.toBe(malta.executeCheck); // 0
                 done();
             });
         } catch (err) {
@@ -54,7 +53,7 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/all.json`]);
             ls.on('close', function (code) {
-                assert.equal(malta.executeCheck, code); // 0
+                expect(code).toBe(malta.executeCheck); // 0
                 done();
             });
         } catch (err) {
@@ -66,7 +65,7 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/zero.json`]);
             ls.on('close', function (code) {
-                assert.equal(malta.executeCheck, code); // 0
+                expect(code).toBe(malta.executeCheck); // 0
                 done();
             });
         } catch (err) {
@@ -78,7 +77,7 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', `${folder}/json/one.json`]);
             ls.on('close', function (code) {
-                assert.equal(malta.executeCheck, code); // 0
+                expect(code).toBe(malta.executeCheck); // 0
                 done();
             });
         } catch (err) {
@@ -89,7 +88,7 @@ describe('EXE param in build file', function () {
         try {
             const ls = child_process.spawn('node', ['src/bin.js', '-clean']);
             ls.on('close', function (code) {
-                assert.equal(malta.executeCheck, code); // 0
+                expect(code).toBe(malta.executeCheck); // 0
                 done();
             });
         } catch (err) {

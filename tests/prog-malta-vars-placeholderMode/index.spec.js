@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
     doneFunc = require('../utils').doneFunc,
@@ -21,11 +20,11 @@ describe('vars.json params (placeholderMode: func)', () => {
                     if (err) throw err;
                     try {
                         eval(cnt + "");
-                        assert.equal(JSON.stringify(env), '{"name":"production","version":"1.0","full":"production v.1.0"}')
-                        assert.equal(author, 'Federico Ghedina');
-                        assert.equal(env.version, '1.0');
-                        assert.equal(fromPackageName, 'malta');
-                        assert.equal(fromPackageMain, 'src/index.js');
+                        expect(JSON.stringify(env)).toBe('{"name":"production","version":"1.0","full":"production v.1.0"}');
+                        expect(author).toBe('Federico Ghedina');
+                        expect(env.version).toBe('1.0');
+                        expect(fromPackageName).toBe('malta');
+                        expect(fromPackageMain).toBe('src/index.js');
                         done();
                     } catch (e) {
                         done(new Error(`Failed eval on \`${__filename}\``));

@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     ob = require('../../src/observe'),
     folder = path.dirname(__filename);
@@ -9,8 +8,8 @@ describe('folder observing', function () {
 
     it('observe function add', function (done) {
         ob.observe(observed, function (a) {
-            assert.equal(a.added.length, 1);
-            assert.equal(a.removed.length, 0);
+            expect(a.added.length).toBe(1);
+            expect(a.removed.length).toBe(0);
             ob.unobserve(observed);
             done();
         });
@@ -25,8 +24,8 @@ describe('folder observing', function () {
     it('observe function remove', function (done) {
         
         ob.observe(observed, function (a) {
-            assert.equal(a.added.length, 0);
-            assert.equal(a.removed.length, 1);
+            expect(a.added.length).toBe(0);
+            expect(a.removed.length).toBe(1);
             ob.unobserve(observed, 'txt')
             done()
         }, 'txt');

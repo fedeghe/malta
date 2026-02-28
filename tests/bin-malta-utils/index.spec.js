@@ -1,5 +1,4 @@
-const assert = require('assert'),
-	path = require('path'),
+const path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
 	utils = require('../../src/utils.js'),
@@ -12,9 +11,9 @@ describe('utilty functions', function () {
 	it('createEntry', function () {
 		try {
 			const entry = utils.createEntry(`${folder}/vars1.json`);
-			assert.ok(entry.content.length > 0)
-			assert.ok(entry.time > 0)
-			assert.ok(entry.cachevalid)
+			expect(entry.content.length).toBeGreaterThan(0);
+			expect(entry.time).toBeGreaterThan(0);
+			expect(entry.cachevalid).toBeTruthy();
 		} catch (err) {
 			throw err;
 		}
@@ -22,18 +21,15 @@ describe('utilty functions', function () {
 
 	it('getFileExtension', function () {
 		try {
-			assert.equal(
+			expect(
 				utils.getFileExtension('tests/vars1.json'),
-				'json'
-			)
-			assert.equal(
+			).toBe('json');
+			expect(
 				utils.getFileExtension('tests/vars1.java'),
-				'java'
-			)
-			assert.equal(
+			).toBe('java');
+			expect(
 				utils.getFileExtension('tests/vars1.cpp'),
-				'cpp'
-			)
+			).toBe('cpp');
 		} catch (err) {
 			throw err;
 		}
@@ -44,8 +40,8 @@ describe('utilty functions', function () {
 			const ext1 = m.utils.getFileTime(`${folder}/vars1.json`),
 				ext2 = m.utils.getFileTime(`${folder}/vars2.json`);
 
-			assert.equal(typeof ext1, 'number')
-			assert.equal(typeof ext2, 'number')
+			expect(typeof ext1).toBe('number');
+			expect(typeof ext2).toBe('number');
 		} catch (err) {
 			throw err;
 		}
@@ -56,16 +52,14 @@ describe('utilty functions', function () {
 			const arr1 = m.utils.uniquearr([1,2,3,4,1,2,3,4,5]),
 				arr2 = m.utils.uniquearr(['a','b','c','a','d','d','e','f','g','f','a']);
 			
-			assert.equal(arr1.length, 5);
-			assert.equal(
+			expect(arr1.length).toBe(5);
+			expect(
 				JSON.stringify(arr1),
-				JSON.stringify([1,2,3,4,5])
-			);
-			assert.equal(arr2.length, 7);
-			assert.equal(
+			).toBe(JSON.stringify([1,2,3,4,5]));
+			expect(arr2.length).toBe(7);
+			expect(
 				JSON.stringify(arr2),
-				JSON.stringify(['a','b','c','d','e','f','g'])
-			);
+			).toBe(JSON.stringify(['a','b','c','d','e','f','g']));
 		} catch (err) {
 			throw err;
 		}
@@ -91,14 +85,12 @@ describe('utilty functions', function () {
 					},
 					full : "$a$$_.b$$_._.c$$_._._.d$"
 				});
-			assert.equal(
+			expect(
 				JSON.stringify(trans1),
-				JSON.stringify({"name":"malta","version":"unknown","full":"malta v.unknown"})
-			);
-			assert.equal(
+			).toBe(JSON.stringify({"name":"malta","version":"unknown","full":"malta v.unknown"}));
+			expect(
 				JSON.stringify(trans2),
-				JSON.stringify({"a":"a","_":{"b":"b","_":{"c":"c","_":{"d":"d"}}},"full":"abcd"})
-			);
+			).toBe(JSON.stringify({"a":"a","_":{"b":"b","_":{"c":"c","_":{"d":"d"}}},"full":"abcd"}));
 		} catch (err) {
 			throw err;
 		}
@@ -117,15 +109,15 @@ describe('utilty functions', function () {
 				full: "$a$$_.b$$_._.c$$_._._.d$"
 			}, 2);
 		} catch(e){
-			assert.equal(e instanceof Error, true);
+			expect(e instanceof Error).toBe(true);
 		}
 	});
 
 	it('validateJson', () => {
 		const f1 = utils.validateJson('{s:1}'),
 			f2 = utils.validateJson('{"s":1}');
-		assert.equal(f1, false);
-		assert.equal(f2, true);
+		expect(f1).toBe(false);
+		expect(f2).toBe(true);
 	});
 
 	it('isArray', () => {
@@ -146,7 +138,7 @@ describe('utilty functions', function () {
 			out: true
 		}];
 		benchs.forEach(bench => {
-			assert.equal(utils.isArray(bench.in), bench.out);
+			expect(utils.isArray(bench.in)).toBe(bench.out);
 		});
 	});
 	it('isString', () => {
@@ -167,23 +159,23 @@ describe('utilty functions', function () {
 			out: false
 		}];
 		benchs.forEach(bench => {
-			assert.equal(utils.isString(bench.in), bench.out);
+			expect(utils.isString(bench.in)).toBe(bench.out);
 		});
 	});
 
 	it('getIterator', () => {
 		const it = utils.getIterator([1,2,3]);
-		assert.equal(it.size(), 3);
-		assert.equal(it.hasNext(), true);
-		assert.equal(it.next(), 1);
-		assert.equal(it.hasNext(), true);
-		assert.equal(it.next(), 2);
-		assert.equal(it.hasNext(), true);
-		assert.equal(it.next(), 3);
-		assert.equal(it.hasNext(), false);
-		assert.equal(it.size(), 3);
+		expect(it.size()).toBe(3);
+		expect(it.hasNext()).toBe(true);
+		expect(it.next()).toBe(1);
+		expect(it.hasNext()).toBe(true);
+		expect(it.next()).toBe(2);
+		expect(it.hasNext()).toBe(true);
+		expect(it.next()).toBe(3);
+		expect(it.hasNext()).toBe(false);
+		expect(it.size()).toBe(3);
 		it.reset();
-		assert.equal(it.hasNext(), true);
+		expect(it.hasNext()).toBe(true);
 	});
 
 	describe('jsonFromStr', () => {
@@ -207,10 +199,9 @@ describe('utilty functions', function () {
 
 		benchs.forEach(bench => 
 			it(bench.label, () => {
-				assert.equal(
+				expect(
 					JSON.stringify(utils.jsonFromStr(bench.in)),
-					JSON.stringify(bench.out)
-				);
+				).toBe(JSON.stringify(bench.out));
 			})
 		);
 	})
@@ -311,7 +302,7 @@ describe('utilty functions', function () {
 		}];
 		benchs.forEach(bench => {
 			it (bench.label, () => {
-				assert.equal(utils.replaceAll(...bench.in), bench.out)
+				expect(utils.replaceAll(...bench.in)).toBe(bench.out);
 			})
 		});
 	});
@@ -346,10 +337,9 @@ describe('utilty functions', function () {
 
 		benchs.forEach(bench =>
 			it(bench.label, () => {
-				assert.equal(
+				expect(
 					JSON.stringify(utils.checkns.apply(null, bench.in)),
-					JSON.stringify(bench.out)
-				);
+				).toBe(JSON.stringify(bench.out));
 			})
 		);
 	});
@@ -360,9 +350,9 @@ __LINE__ number two
 __LINE__
 number four`,
 			res = utils.replaceLinenumbers(tpl).split("\n");
-		assert.equal(res.length, 4);
-		assert.equal(/^2/.test(res[1]), true);
-		assert.equal(/^3/.test(res[2]), true);
+		expect(res.length).toBe(4);
+		expect(/^2/.test(res[1])).toBe(true);
+		expect(/^3/.test(res[2])).toBe(true);
 	});
 
 });

@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
     doneFunc = require('../utils').doneFunc,
@@ -22,15 +21,15 @@ describe('wired vars', function () {
                     if (err) throw err;
                     try {
                         eval(cnt + "");
-                        assert.equal(/\d+:\d+:\d+/.test(`${time}`), true);
-                        assert.equal(/\d+\/\d+\/\d+/.test(`${date}`), true);
-                        assert.equal(/\d{4}/.test(`${year}`), true);
-                        assert.equal(filesnum, 2)
-                        assert.equal(version, malta.version);
-                        assert.equal(typeof buildnumber, 'string');
-                        assert.equal(typeof buildnum, 'string');
-                        assert.equal(file, 'wired.js');
-                        assert.equal(line, 9);
+                        expect(/\d+:\d+:\d+/.test(`${time}`)).toBe(true);
+                        expect(/\d+\/\d+\/\d+/.test(`${date}`)).toBe(true);
+                        expect(/\d{4}/.test(`${year}`)).toBe(true);
+                        expect(filesnum == 2).toBe(true);
+                        expect(version).toBe(malta.version);
+                        expect(typeof buildnumber).toBe('string');
+                        expect(typeof buildnum).toBe('string');
+                        expect(file).toBe('wired.js');
+                        expect(line == 9).toBe(true);
                         done();
                     } catch (e) {
                         done(new Error(`Failed eval on \`${__filename}\``));

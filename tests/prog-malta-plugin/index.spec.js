@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    path = require('path'),
+const path = require('path'),
     fs = require('fs'),
     malta = require('../../src/index.js'),
     child_process = require('child_process'),
@@ -16,9 +15,9 @@ describe('plugin base', function () {
             '-plugins=myplugin[name:\"plugin_is_working\"]',
             '-options=verbose:0',
         ]).start(o => {
-            assert(o.content.length)
+            expect(o.content.length).toBeGreaterThan(0);
         }).then((o) => {
-            assert(o.content.match(/^\/\/\splugin_is_working/))
+            expect(o.content.match(/^\/\/\splugin_is_working/)).toBeTruthy();
             done()
         });
     });

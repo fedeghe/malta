@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
     doneFunc = require('../utils').doneFunc,
@@ -21,10 +20,10 @@ describe('tpl (placeholderMode: func)', function () {
                 (err, cnt) => {
                     try {
                         eval(cnt + "");
-                        assert.equal(typeof tpl0, 'function')
-                        assert.equal(tpl0(), 15);
-                        assert.equal(typeof tpl1, 'function');
-                        assert.equal(typeof tpl2, 'function');
+                        expect(typeof tpl0).toBe('function');
+                        expect(tpl0()).toBe(15);
+                        expect(typeof tpl1).toBe('function');
+                        expect(typeof tpl2).toBe('function');
                         done()
                     } catch (e) {
                         done(new Error(`Failed eval on \`${__filename}\``))
@@ -48,10 +47,10 @@ describe('tpl (placeholderMode: func)', function () {
                     if (err) throw err;
                     try {
                         eval(cnt + "");
-                        assert.equal(typeof tpl0, 'function')
-                        assert.equal(tpl0(), 3);
-                        assert.equal(typeof tpl1, 'function');
-                        assert.equal(typeof tpl2, 'function');
+                        expect(typeof tpl0).toBe('function');
+                        expect(tpl0()).toBe(3);
+                        expect(typeof tpl1).toBe('function');
+                        expect(typeof tpl2).toBe('function');
                         done()
                     } catch (e) {
                         done(new Error(`Failed eval on \`${__filename}\``))

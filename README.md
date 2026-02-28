@@ -2,7 +2,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
 [![Package Quality](https://npm.packagequality.com/shield/malta.svg)](https://packagequality.com/#?package=malta)
 
-[![Coverage Status](https://coveralls.io/repos/github/fedeghe/malta/badge.svg?branch=master)](https://coveralls.io/github/fedeghe/malta?branch=master)
+[![codecov](https://codecov.io/gh/fedeghe/malta/graph/badge.svg?token=9HlRLlbewR)](https://codecov.io/gh/fedeghe/malta)
 [![Known Vulnerabilities](https://snyk.io/test/github/fedeghe/malta/badge.svg)](https://snyk.io/test/github/fedeghe/malta)
  [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
 
@@ -19,21 +19,25 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 
 ### Get started  
 
-- [installation](#installation)
-- [command line](#commandline)
-- [programmatic](#programmatic)
-- [single mode](#single_mode)
-- [multi mode](#multi_mode)
-- [multi destinations](#multi_destinations)
-- [parameters](#parameters)
-- [complete example of usage][2]
-- [microtemplating](#microtemplating)
-- [placeholders](#placeholders)
-- [something more about placeholders](#smplaceholders)
-- [plugins list][3]
-- [something more about plugins](#smplugins)
-- [write your plugin in 5 minutes](#writeyourplugin)
-- [changelog][4]
+- [Malta is ...](#malta-is-)
+    - [... plugin based](#-plugin-based)
+    - [Get started](#get-started)
+    - [Installation](#installation)
+    - [Command line Usage](#command-line-usage)
+    - [Programmatic](#programmatic)
+    - [Single mode](#single-mode)
+    - [Multi mode](#multi-mode)
+    - [More destinations for one file.](#more-destinations-for-one-file)
+    - [Parameters](#parameters)
+    - [Something more about plugins](#something-more-about-plugins)
+        - [no demon (only _multi-mode_)](#no-demon-only-multi-mode)
+        - [execute a terminal command (only _multi-mode_)](#execute-a-terminal-command-only-multi-mode)
+    - [Microtemplating (experimental)](#microtemplating-experimental)
+    - [Placeholders](#placeholders)
+    - [Something more about placeholders](#something-more-about-placeholders)
+    - [Write Your plugin in 5 minutes](#write-your-plugin-in-5-minutes)
+    - [Hints](#hints)
+    - [Wired vars](#wired-vars)
 
 ---
 

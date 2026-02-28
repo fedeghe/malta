@@ -1,7 +1,6 @@
 const path = require('path'),
 	fs = require('fs'),
     child_process = require('child_process'),
-    assert = require('assert'),
     folder = path.dirname(__filename),
     doneFunc = require('../utils').doneFunc;
 

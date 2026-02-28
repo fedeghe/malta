@@ -1,5 +1,4 @@
-const assert = require('assert'),
-	path = require('path'),
+const path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
 	malta = require('../../src/index.js'),
@@ -16,12 +15,12 @@ describe('multi destinations', function () {
 				//
 				Promise.all([(d) => {
 					fs.stat(`${folder}/out/d1/multidest.js`, function (err, cnt) {
-						assert.ok(cnt);
+						expect(Boolean(cnt)).toBe(true);
 						d();
 					});
 				}, (d) => {
 					fs.stat(`${folder}/out/d2/multidest.js`, function (err, cnt) {
-						assert.ok(cnt);
+						expect(Boolean(cnt)).toBe(true);
 						d();
 					});
 				}]).then(() => {
@@ -29,7 +28,7 @@ describe('multi destinations', function () {
 				});
 			});
 			ls.stderr.on('data', function(err) {
-				assert.ok(false)
+				expect(false).toBe(true);
 			});
 		} catch (err) {
 			throw err;

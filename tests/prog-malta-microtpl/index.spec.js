@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
     doneFunc = require('../utils').doneFunc,
@@ -20,9 +19,9 @@ describe('microtpl', function () {
                 (err, cnt) => {
                     if (err) throw err;
                     eval(cnt+"");
-                    assert.equal(typeof tpl0, 'function');
-                    assert.equal(typeof tpl1, 'undefined');
-                    assert.equal(typeof tpl2, 'function');
+                    expect(typeof tpl0).toBe('function');
+                    expect(typeof tpl1).toBe('undefined');
+                    expect(typeof tpl2).toBe('function');
                 }
             );
         });

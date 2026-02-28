@@ -1,5 +1,4 @@
-const assert = require('assert'),
-	path = require('path'),
+const path = require('path'),
 	fs = require('fs'),
 	child_process = require('child_process'),
     folder = path.dirname(__filename),
@@ -11,12 +10,12 @@ describe('multi nested.json', function () {
 		try {
 			const ls = child_process.spawn('node', ['src/bin.js', `${folder}/nested.json`]);
 			ls.on('exit', function (code) {
-				assert.equal(code, 0);
+				expect(code).toBe(0);
 				//check the files?...not yet
 				done();
 			});
 			ls.stderr.on('data', function(err) {
-				assert.ok(false)
+				expect(false).toBe(true);
 			});
 		} catch (err) {
 			throw err;

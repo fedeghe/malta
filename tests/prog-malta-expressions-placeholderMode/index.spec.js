@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    fs = require('fs'),
+const fs = require('fs'),
     path = require('path'),
     malta = require('../../src/index.js'),
     doneFunc = require('../utils').doneFunc,
@@ -21,10 +20,10 @@ describe('expressions placeholders (placeholderMode: func)', () => {
                     if (err) throw err;
                     try {
                         eval(cnt + "");
-                        assert.equal(a, 7)
-                        assert.equal(b, 7)
-                        assert.equal(c, 'just a string')
-                        assert.equal(parseFloat(sphereVolume.toFixed(2), 10), 4188.79)
+                        expect(a).toBe(7);
+                        expect(b).toBe(7);
+                        expect(c).toBe('just a string');
+                        expect(parseFloat(sphereVolume.toFixed(2), 10)).toBe(4188.79);
                         done();
                     } catch (e) {
                         done(new Error(`Failed eval on \`${__filename}\``));

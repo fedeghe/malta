@@ -1,5 +1,4 @@
-const assert = require('assert'),
-    path = require('path'),
+const path = require('path'),
     fs = require('fs'),
     child_process = require('child_process'),
     folder = path.dirname(__filename),

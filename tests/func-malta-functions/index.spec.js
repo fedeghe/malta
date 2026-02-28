@@ -1,5 +1,4 @@
-const assert = require('assert'),
-	fs = require('fs'),
+const fs = require('fs'),
 	path = require('path'),
 	functions = require('../../src/functions'),
     folder = path.dirname(__filename);
