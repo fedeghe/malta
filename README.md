@@ -1,6 +1,5 @@
 [![npm version](https://badge.fury.io/js/malta.svg)](http://badge.fury.io/js/malta)
 [![npm downloads](https://img.shields.io/npm/dm/malta.svg)](https://npmjs.org/package/malta)
-[![Package Quality](https://npm.packagequality.com/shield/malta.svg)](https://packagequality.com/#?package=malta)
 
 [![codecov](https://codecov.io/gh/fedeghe/malta/graph/badge.svg?token=9HlRLlbewR)](https://codecov.io/gh/fedeghe/malta)
 [![Known Vulnerabilities](https://snyk.io/test/github/fedeghe/malta/badge.svg)](https://snyk.io/test/github/fedeghe/malta)
