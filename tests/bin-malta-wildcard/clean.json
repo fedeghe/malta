@@ -1,0 +1,3 @@
+{
+    "EXE": "rm -rf tests/bin-malta-wildcard/out"
+}

@@ -1,0 +1,3 @@
+{
+    "EXE": "rm tests/bin-malta-multi/out/*.js"
+}

@@ -1,3 +1,0 @@
-{
-    "EXE": "touch test/bin-malta-exe/exefile.txt && rm test/bin-malta-exe/exefile.txt"
-}

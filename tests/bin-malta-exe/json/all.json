@@ -1,0 +1,8 @@
+{
+    "EXE": [
+        "mkdir -p tests/bin-malta-exe/a/b/c/d/e/f/g/h/i/l/m",
+        "touch tests/bin-malta-exe/a/b/c/d/e/f/g/h/i/l/m/file.txt",
+        "echo 'hello world' > tests/bin-malta-exe/a/b/c/d/e/f/g/h/i/l/m/file.txt",
+        "rm -rf tests/bin-malta-exe/a"
+    ]
+}

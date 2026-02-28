@@ -1,0 +1,7 @@
+{
+    "EXE": [
+        "rm -rf tests/bin-malta-exe-nest/nest0",
+        "mkdir -p tests/bin-malta-exe-nest/nest0"
+    ],
+    "tests/bin-malta-exe-nest/json/exenest1.json": true
+}

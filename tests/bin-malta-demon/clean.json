@@ -1,0 +1,6 @@
+{
+    "EXE": [
+        "rm tests/bin-malta-demon/out/*.js",
+        "echo 'var t = 1;' > tests/bin-malta-demon/test.js"
+    ]
+}

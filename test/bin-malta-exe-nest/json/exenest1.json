@@ -1,6 +1,0 @@
-{
-    "EXE": [
-        "mkdir -p test/bin-malta-exe-nest/nest0/nest1"
-    ],
-    "test/bin-malta-exe-nest/json/exenest2.json": true
-}

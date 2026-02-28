@@ -1,0 +1,3 @@
+{
+    "#tests/pluginManager/code/test.json": "tests/pluginManager/out -plugins=pluginManager/plugins/testPlugin -options=verbose:3"
+}

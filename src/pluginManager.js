@@ -9,7 +9,7 @@ class PluginManager {
     constructor (instance) {
         this.userPath = `${execPath}/plugins/`;
         this.maltaPath = `${__dirname}/../plugins/`;
-        this.testPath = `${__dirname}/../test/`;
+        this.testPath = `${__dirname}/../tests/`;
         this.mself = instance;
         this.plugins = {};
         this.executor = null;

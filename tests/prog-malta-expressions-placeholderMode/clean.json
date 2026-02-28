@@ -1,0 +1,3 @@
+{
+    "EXE": "rm tests/prog-malta-expressions-placeholderMode/out/*.js"
+}
