@@ -7,58 +7,56 @@ const path = require('path'),
     bin = path.join(root, 'src/bin.js'),
     doneFunc = require('../utils').doneFunc;
 
+const waitForFile = (filePath, timeoutMs = 4000, intervalMs = 50) => new Promise((resolve, reject) => {
+    const start = Date.now();
+    const probe = () => {
+        fs.access(filePath, fs.constants.F_OK, err => {
+            if (!err) return resolve();
+            if (Date.now() - start >= timeoutMs) return reject(err);
+            setTimeout(probe, intervalMs);
+        });
+    };
+    probe();
+});
+
+const runAndRead = (buildFile, outFile) => new Promise((resolve, reject) => {
+    const ls = child_process.spawn('node', [bin, buildFile], { cwd: root });
+    let stderr = '';
+
+    ls.on('error', reject);
+    ls.stderr.on('data', chunk => {
+        stderr += `${chunk}`;
+    });
+
+    ls.on('close', code => {
+        if (code !== malta.executeCheck) {
+            return reject(new Error(`Unexpected exit code: ${code}\n${stderr}`));
+        }
+
+        waitForFile(outFile)
+            .then(() => {
+                fs.readFile(outFile, 'utf8', (err, cnt) => {
+                    if (err) return reject(err);
+                    resolve(cnt);
+                });
+            })
+            .catch(reject);
+    });
+});
+
 
 describe('plugin manager', function () {
-    it('should output expected result', function (done) {
-        try {
-            const ls = child_process.spawn('node', [bin, `${folder}/one.json`], { cwd: root });
-            ls.on('error', done);
-            ls.on('exit', function (code) {
-                if (code !== malta.executeCheck) return done(new Error(`Unexpected exit code: ${code}`));
-                fs.readFile(`${folder}/out/test.flat.json`, 'utf8', function (err, cnt) {
-                    if (err) return done(err);
-                    expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
-                    done();
-                });
-            });
-            
-        } catch (err) {
-            throw err;
-        }
+    it('should output expected result', async function () {
+        const cnt = await runAndRead(`${folder}/one.json`, `${folder}/out/test.flat.json`);
+        expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
-    it('should output expected result - options to plugin', function (done) {
-        try {
-            const ls = child_process.spawn('node', [bin, `${folder}/oneWithOption.json`], { cwd: root });
-            ls.on('error', done);
-            ls.on('exit', function (code) {
-                if (code !== malta.executeCheck) return done(new Error(`Unexpected exit code: ${code}`));
-                fs.readFile(`${folder}/out/test.xxx.json`, 'utf8', function (err, cnt) {
-                    if (err) return done(err);
-                    expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
-                    done();
-                });
-            });
-            
-        } catch (err) {
-            throw err;
-        }
+    it('should output expected result - options to plugin', async function () {
+        const cnt = await runAndRead(`${folder}/oneWithOption.json`, `${folder}/out/test.xxx.json`);
+        expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
-    it('should output expected result - wildCard - options to plugin', function (done) {
-        try {
-            const ls = child_process.spawn('node', [bin, `${folder}/wildCardWithOption.json`], { cwd: root });
-            ls.on('error', done);
-            ls.on('exit', function (code) {
-                if (code !== malta.executeCheck) return done(new Error(`Unexpected exit code: ${code}`));
-                fs.readFile(`${folder}/out/test.yyy.json`, 'utf8', function (err, cnt) {
-                    if (err) return done(err);
-                    expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
-                    done();
-                });
-            });
-            
-        } catch (err) {
-            throw err;
-        }
+    it('should output expected result - wildCard - options to plugin', async function () {
+        const cnt = await runAndRead(`${folder}/wildCardWithOption.json`, `${folder}/out/test.yyy.json`);
+        expect(cnt).toBe('{"person":{"name":"Federico","surname":"Ghedina"}}');
     });
     it('should remove the folders/files just created', doneFunc(folder));
 });
