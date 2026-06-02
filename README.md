@@ -7,6 +7,8 @@
 
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.4**
 
+![malta npm](https://click.jmvc.org/p/mxA4Ie7v/1)
+
 # Malta is ...  
 a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
