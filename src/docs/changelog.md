@@ -1,7 +1,7 @@
 Changelog
 --------- 
 
-- **4.1.48**
+- **4.1.49**
     - fix url-asylum track px 
     - malta-upload added to the list
 - **4.1.45** just urlo track px

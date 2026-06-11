@@ -19,8 +19,6 @@ Everytime _malta_ builds the main file it is possible to start a chain of action
 ---
 
 ### Get started
-- [Malta is ...](#malta-is-)
-- [... plugin based](#-plugin-based)
 - [installation](#installation)
 - [command line Usage](#command-line-usage)
 - [programmatic](#programmatic)
