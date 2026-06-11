@@ -10,15 +10,17 @@
 ![malta npm](https://click.jmvc.org/p/1/mxA4Ie7v)
 
 # Malta is ...
-a super simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
+a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
 ### ... plugin based
 
-Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows for example to transpil es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_ and a lot more. 
+Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows for example to transpile es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_ and a lot more. 
 
 ---
 
-### Get started  
+### Get started
+- [Malta is ...](#malta-is-)
+- [... plugin based](#-plugin-based)
 - [installation](#installation)
 - [command line Usage](#command-line-usage)
 - [programmatic](#programmatic)
@@ -220,7 +222,7 @@ here the following key:values are considered:
         0 no console messages
         1 default messages
         2 verbose messages
-    - *notifyBuild*: *boolean* (deafult : true)  
+    - *notifyBuild*: *boolean* (default : true)  
         Only on MacOS. Use _osascript_ to show a sticky message at each build (verbose has to be > 0).
     - *justCopy*: *boolean* (default : false) [from v.3.9.11]  
         in case it is simply needed to skip the placeholders replacement, the file is simply copied (but still plugin processes if any)
@@ -324,7 +326,7 @@ Malta uses three kind of placeholders, to be used in the main template or in any
   _varPath_ is the key path for a variable that Malta will search in a _vars.json_ file that should be found in the template folder (or wherever the -vars options indicates)  
 
 - **\$PACKAGE.varpath\$**  
-    Starting from _v.3.9.0_ it is possible to use another placeholder to use anywhere all values contained in the `package.json` found in the folder where malta has been lanuched.  For example assume in the `root` folder we have a `package.json` and we would like to use the `version` and the `repository.url` within our source. Will be enough to add a special placeholder that contains the path of the value inside the `package.json` prepended with a `PACKAGE.` as follows:
+    Starting from _v.3.9.0_ it is possible to use another placeholder to use anywhere all values contained in the `package.json` found in the folder where malta has been launched.  For example assume in the `root` folder we have a `package.json` and we would like to use the `version` and the `repository.url` within our source. Will be enough to add a special placeholder that contains the path of the value inside the `package.json` prepended with a `PACKAGE.` as follows:
 
     ``` js  
     $PACKAGE.name$ 

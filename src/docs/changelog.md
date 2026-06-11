@@ -1,7 +1,9 @@
 Changelog
 --------- 
 
-- **4.1.47** just fix url-asylum track px
+- **4.1.48**
+    - fix url-asylum track px 
+    - malta-upload added to the list
 - **4.1.45** just urlo track px
 - **4.1.44** 
   - mocha => jest

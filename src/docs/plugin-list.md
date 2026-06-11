@@ -41,6 +41,7 @@
 [translate](#translate) \~ 
 [typescript](#typescript) \~ 
 [umd](#umd)
+[upload](#upload)
 
 ---
 
@@ -290,6 +291,12 @@ Transpills typescript code to javascript code, based on [tsc npm package][l36lib
 Umd plugin 
 
 -------
+<a name="upload" />
+
+### [malta-upload][l38]  
+File upload server plugin 
+
+-------
 
 [0]: https://www.npmjs.org
 
@@ -334,6 +341,7 @@ Umd plugin
 [l35]: https://www.npmjs.com/package/malta-translate
 [l36]: https://www.npmjs.com/package/malta-typescript
 [l37]: https://www.npmjs.com/package/malta-umd
+[l38]: https://www.npmjs.com/package/malta-upload
 
 [l0lib]: https://www.npmjs.com/package/apollo-server
 [l1lib]: https://www.npmjs.com/package/babel
