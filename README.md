@@ -9,36 +9,32 @@
 
 ![malta npm](https://click.jmvc.org/p/1/mxA4Ie7v)
 
-# Malta is ...  
-a super-simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
+# Malta is ...
+a super simple & handy tool which allows to build on the fly big files editing its separated parts and assembling in one following a main template file. In every involved file you can use variables coming from a json file, or use a value obtained evaluating an expression that involves those variables. Once started every change will trigger the right fresh build.
 
-### ... plugin based   
+### ... plugin based
 
 Everytime _malta_ builds the main file it is possible to start a chain of actions where each action is done by a plugin. The shipped plugins allows for example to transpil es6, coffeescript and typescript, to compile _.less_, _.sass_, _.pug_, _.md_, to get a _.png_ from an _.svg_ and a lot more. 
 
 ---
 
 ### Get started  
-
-- [Malta is ...](#malta-is-)
-    - [... plugin based](#-plugin-based)
-    - [Get started](#get-started)
-    - [Installation](#installation)
-    - [Command line Usage](#command-line-usage)
-    - [Programmatic](#programmatic)
-    - [Single mode](#single-mode)
-    - [Multi mode](#multi-mode)
-    - [More destinations for one file.](#more-destinations-for-one-file)
-    - [Parameters](#parameters)
-    - [Something more about plugins](#something-more-about-plugins)
-        - [no demon (only _multi-mode_)](#no-demon-only-multi-mode)
-        - [execute a terminal command (only _multi-mode_)](#execute-a-terminal-command-only-multi-mode)
-    - [Microtemplating (experimental)](#microtemplating-experimental)
-    - [Placeholders](#placeholders)
-    - [Something more about placeholders](#something-more-about-placeholders)
-    - [Write Your plugin in 5 minutes](#write-your-plugin-in-5-minutes)
-    - [Hints](#hints)
-    - [Wired vars](#wired-vars)
+- [installation](#installation)
+- [command line Usage](#command-line-usage)
+- [programmatic](#programmatic)
+- [single mode](#single-mode)
+- [multi mode](#multi-mode)
+- [more destinations for one file.](#more-destinations-for-one-file)
+- [parameters](#parameters)
+- [complete example of usage][2]
+- [microtemplating (experimental)](#microtemplating-experimental)
+- [placeholders](#placeholders)
+- [something more about placeholders](#something-more-about-placeholders)
+- [plugins list][3]
+- [something more about plugins](#something-more-about-plugins)
+- [write Your plugin in 5 minutes](#write-your-plugin-in-5-minutes)
+- [hints](#hints)
+- [wired vars](#wired-vars)
 
 ---
 
