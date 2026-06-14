@@ -1,5 +1,6 @@
 const path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    colors = require('../../src/colors');
 
 function myplugin(obj, options) {
     const self = this,
@@ -12,9 +13,9 @@ function myplugin(obj, options) {
             obj.content = `// ${options.name}\n${obj.content}`;
             fs.writeFile(obj.name, obj.content, err => {
                 if (err == null) {
-                    msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
+                    msg = 'plugin ' + colors.white(pluginName) + ' wrote ' + obj.name +' (' + self.getSize(obj.name) + ')';
                 } else {
-                    console.log('[ERROR] '.red() + pluginName + ' says:');
+                    console.log(colors.red('[ERROR] ') + pluginName + ' says:');
                     console.dir(err);
                     self.stop();
                 }

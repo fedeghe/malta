@@ -76,17 +76,116 @@ const fs = require('fs'),
      * @return     {boolean}  { description_of_the_return_value }
      */
     jsonFromStr = s => {
-        // eslint-disable-next-line prefer-const
-        let r = {};
         if (s === undefined) {
             return false;
         }
+        const str = String(s);
+        let i = 0;
+        const len = str.length;
+
+        const skipWs = () => {
+            while (i < len && /\s/.test(str[i])) i++;
+        };
+
+        const parseString = () => {
+            const quote = str[i++];
+            let res = '';
+            while (i < len && str[i] !== quote) {
+                if (str[i] === '\\' && i + 1 < len) {
+                    i++;
+                    res += str[i++];
+                } else {
+                    res += str[i++];
+                }
+            }
+            if (i < len) i++;
+            return res;
+        };
+
+        const parseLiteral = () => {
+            let start = i;
+            let depth = 0;
+            while (i < len) {
+                const ch = str[i];
+                if (ch === '{' || ch === '[') {
+                    depth++;
+                    i++;
+                } else if (ch === '}' || ch === ']') {
+                    if (depth === 0) break;
+                    depth--;
+                    i++;
+                } else if (ch === ',' && depth === 0) {
+                    break;
+                } else {
+                    i++;
+                }
+            }
+            const val = str.slice(start, i).trim();
+            if (val === 'true') return true;
+            if (val === 'false') return false;
+            if (val === 'null') return null;
+            if (/^-?\d+(\.\d+)?$/.test(val)) return parseFloat(val);
+            return val;
+        };
+
+        const parseValue = () => {
+            skipWs();
+            if (i >= len) return undefined;
+            const ch = str[i];
+            if (ch === '"' || ch === "'") return parseString();
+            if (ch === '{') return parseObject();
+            if (ch === '[') return parseArray();
+            return parseLiteral();
+        };
+
+        const parseObject = () => {
+            const obj = {};
+            if (str[i] === '{') i++;
+            while (i < len) {
+                skipWs();
+                if (i < len && (str[i] === '}' || str[i] === ']')) { i++; break; }
+                let key = '';
+                if (str[i] === '"' || str[i] === "'") {
+                    key = parseString();
+                } else {
+                    while (i < len && /[a-zA-Z0-9_$]/.test(str[i])) key += str[i++];
+                }
+                skipWs();
+                if (!(i < len && str[i] === ':')) {
+                    throw new Error('Invalid object syntax');
+                }
+                i++; // skip :
+                obj[key] = parseValue();
+                skipWs();
+                if (i < len && str[i] === ',') i++;
+                else break;
+            }
+            return obj;
+        };
+
+        const parseArray = () => {
+            const arr = [];
+            i++;
+            while (i < len) {
+                skipWs();
+                if (i < len && str[i] === ']') { i++; break; }
+                arr.push(parseValue());
+                skipWs();
+                if (i < len && str[i] === ',') i++;
+            }
+            return arr;
+        };
+
         try {
-            eval(`r = {${s}}`);
+            skipWs();
+            if (i < len && str[i] === '{') {
+                return parseObject();
+            }
+            // implicit object: wrap as if {s}
+            return parseObject();
         } catch (e) {
-            return r;
+            return {};
         }
-        return r;
     },
 
     /**
@@ -219,6 +318,7 @@ const fs = require('fs'),
         return (function _ (o) {
             let y, j;
             for (j in o) {
+                if (!Object.prototype.hasOwnProperty.call(o, j)) continue;
                 switch (typeof o[j]) {
                     case 'string':
                         y = aVarIn(o[j]);

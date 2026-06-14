@@ -5,6 +5,8 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/fedeghe/malta/badge.svg)](https://snyk.io/test/github/fedeghe/malta)
  [![changelog](https://img.shields.io/badge/changelog-md-blue.svg?style=flat-square)][4]
 
+ ![Static Badge](https://img.shields.io/badge/Human%20coded-100%25-blue?style=plastic)
+
 ![malta logo](https://raw.githubusercontent.com/fedeghe/malta/master/src/media/malta.png) **v.4**
 
 ![malta npm](https://click.jmvc.org/p/1/mxA4Ie7v)

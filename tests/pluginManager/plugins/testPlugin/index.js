@@ -1,5 +1,6 @@
 const path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    colors = require('../../../../src/colors');
 
 function testPlugin(obj, options) {
     const self = this,
@@ -15,11 +16,11 @@ function testPlugin(obj, options) {
         try {
             // Keep this test plugin deterministic for CLI child-process tests.
             fs.writeFileSync(obj.name, content);
-            msg = 'plugin ' + pluginName.white() + ' wrote ' + obj.name + ' (' + self.getSize(obj.name) + ')';
+            msg = 'plugin ' + colors.white(pluginName) + ' wrote ' + obj.name + ' (' + self.getSize(obj.name) + ')';
             solve(obj);
             self.notifyAndUnlock(start, msg);
         } catch (err) {
-            console.log('[ERROR] '.red() + pluginName + ' says:');
+            console.log(colors.red('[ERROR] ') + pluginName + ' says:');
             console.dir(err);
             reject(err);
             self.stop();
