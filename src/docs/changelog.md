@@ -1,6 +1,6 @@
 Changelog
 --------- 
-- **v4.2.2** 
+- **v4.2.3** 
     - **Security**: removed all eval calls from the core. jsonFromStr now uses a safe manual parser; microTpl runs inside an isolated vm context; replace_calc returns content without executing it.  
     - **Robustness**: removed all internal process.exit calls. Build, plugin, and child-process errors are now propagated or logged without killing the Node process.  
     - **Performance**: replaced the file watcher from polling (setInterval + fs.statSync) to event-driven fs.watch, with a lightweight periodic refresh for new files.  
