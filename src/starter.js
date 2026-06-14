@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+require('./stringproto');
+
 const Malta = require('./malta'),
     colors = require('./colors'),
     path = require('path'),

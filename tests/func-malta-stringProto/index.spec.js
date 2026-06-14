@@ -1,3 +1,5 @@
+require('../../src/stringproto');
+
 const colors = require('../../src/colors');
 
 describe('colors module', function () {
@@ -27,5 +29,34 @@ describe('colors module', function () {
     });
     it ("should have the rainbow color (blank)", function () {
         expect(colors.rainbow('a b c d e f').length).toBeGreaterThan(0);
+    });
+});
+
+describe('String.prototype colors', function () {
+    it("should extend String.prototype with color methods", function () {
+        expect(typeof ''.red).toBe('function');
+        expect(typeof ''.green).toBe('function');
+        expect(typeof ''.yellow).toBe('function');
+        expect(typeof ''.white).toBe('function');
+        expect(typeof ''.gray).toBe('function');
+        expect(typeof ''.darkgray).toBe('function');
+        expect(typeof ''.cyan).toBe('function');
+        expect(typeof ''.darkcyan).toBe('function');
+        expect(typeof ''.underline).toBe('function');
+        expect(typeof ''.rainbow).toBe('function');
+    });
+
+    it("should return colored strings", function () {
+        expect('hello'.red()).toBe(colors.red('hello'));
+        expect('hello'.green()).toBe(colors.green('hello'));
+        expect('hello'.yellow()).toBe(colors.yellow('hello'));
+        expect('hello'.white()).toBe(colors.white('hello'));
+    });
+
+    it("should be non-enumerable", function () {
+        const keys = [];
+        for (const k in '') keys.push(k);
+        expect(keys).not.toContain('red');
+        expect(keys).not.toContain('green');
     });
 });
