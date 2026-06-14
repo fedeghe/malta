@@ -1,5 +1,6 @@
 
-const utils = require('./utils.js');
+const utils = require('./utils.js'),
+    colors = require('./colors');
 
 class Executor {
     constructor (iterator, maltaInstance, pmInstance) {
@@ -61,8 +62,8 @@ class Executor {
         const malta = this.malta;
         malta.log_debug([
             '> ',
-            p.name.yellow(),
-            (p.params ? `called passing ${JSON.stringify(p.params).darkgray()}` : '')
+            colors.yellow(p.name),
+            (p.params ? `called passing ${colors.darkgray(JSON.stringify(p.params))}` : '')
         ].join(''));
 
         malta.doBuild = true;

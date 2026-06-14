@@ -2,6 +2,7 @@
 let processNum = 0;
 
 const Malta = require('./malta'),
+    colors = require('./colors'),
     watcher = require('./observe'),
     spawn = require('child_process').spawn,
     fs = require('fs'),
@@ -49,7 +50,7 @@ const Malta = require('./malta'),
                         if (exclude(v)) return;
                         ++processNum;
                         multiElements[v] = proceed(`${folder}/${v}`, el);
-                        Malta.log_debug(`${'ADDED'.yellow()} ${folder}/${v}${NL}`);
+                        Malta.log_debug(`${colors.yellow('ADDED')} ${folder}/${v}${NL}`);
                     });
 
                     diff.removed.filter(v => {
@@ -60,7 +61,7 @@ const Malta = require('./malta'),
                         if (fs.existsSync(outFile)) fs.unlink(outFile, () => { });
                         multiElements[v].shut();
                         multiElements[v] = null;
-                        Malta.log_debug(`${'REMOVED'.yellow()} ${folder}/${v}${NL}`);
+                        Malta.log_debug(`${colors.yellow('REMOVED')} ${folder}/${v}${NL}`);
                     });
                 }, ext);
             }

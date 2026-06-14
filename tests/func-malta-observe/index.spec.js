@@ -1,6 +1,7 @@
 const fs = require('fs'),
     path = require('path'),
     ob = require('../../src/observe'),
+    Malta = require('../../src/malta'),
     folder = path.dirname(__filename);
 
 describe('folder observing', function () {
@@ -40,7 +41,7 @@ describe('folder observing', function () {
         ob.observe(observed, function () {
             throw {};
         }, 'txt');
-        
+
         ob.unobserve(observed, 'txt');
 
         setTimeout(function () {
@@ -50,9 +51,32 @@ describe('folder observing', function () {
                     fs.unlink(observed + '/message2.txt', function (err) {
                         if (err) throw err;
                         done();
-                    });    
+                    });
                 }, 100)
-            });    
+            });
         }, 100)
+    });
+
+    it('should return false for unobserve on unknown folder', function () {
+        expect(ob.unobserve('nonexistent')).toBe(false);
+    });
+
+    it('should return false for unobserve on unknown extension', function () {
+        ob.observe(observed, () => {}, 'txt');
+        expect(ob.unobserve(observed, 'css')).toBe(false);
+        ob.unobserve(observed, 'txt');
+    });
+
+    it('should handle readdir error gracefully', function (done) {
+        const readdirSpy = jest.spyOn(fs, 'readdir').mockImplementation((dir, cb) => cb(new Error('fail')));
+        const logSpy = jest.spyOn(Malta, 'log_debug').mockImplementation(() => {});
+        ob.observe(observed, () => {}, 'txt');
+        setTimeout(() => {
+            expect(logSpy).toHaveBeenCalledWith(expect.any(Error));
+            logSpy.mockRestore();
+            readdirSpy.mockRestore();
+            ob.unobserve(observed, 'txt');
+            done();
+        }, 150);
     });
 });

@@ -56,9 +56,7 @@ const fs = require('fs'),
                     previous.files = actual.files;
                 });
             } catch (err) {
-                // eslint-disable-next-line no-console
                 Malta.log_debug(err);
-                process.exit();
             }
         }, 100);
 

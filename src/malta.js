@@ -3,6 +3,7 @@
 const fs = require('fs'),
     path = require('path'),
     childProcess = require('child_process'),
+    vm = require('vm'),
     utils = require('./utils.js'),
     PluginManager = require('./pluginManager.js'),
     Sticky = require('./sticky.js'),
@@ -22,17 +23,15 @@ const fs = require('fs'),
         const ret = {};
         let i, j, jl, ks;
         for (i in o) {
-        // eslint-disable-next-line no-prototype-builtins
-            if (o.hasOwnProperty(i)) {
-                ks = i.split('|');
-                for (j = 0, jl = ks.length; j < jl; j++) ret[ks[j]] = o[i];
-            }
+            if (!Object.prototype.hasOwnProperty.call(o, i)) continue;
+            ks = i.split('|');
+            for (j = 0, jl = ks.length; j < jl; j++) ret[ks[j]] = o[i];
         }
         return ret;
     };
 
 // string proto for console colors
-require('./stringproto');
+const colors = require('./colors');
 
 /**
  * Malta is the main object that will watch for modifications and build when needed
@@ -42,6 +41,8 @@ require('./stringproto');
  * @return     {Object}  The instance of Malta
  */
 function Malta () {
+    if (!Malta.instances) Malta.instances = [];
+    Malta.instances.push(this);
     this.args = [];
 
     /**
@@ -170,6 +171,11 @@ function Malta () {
     this.watch_TI = false;
 
     /**
+     * fs.watch handles for tracked files
+     */
+    this.watchers = {};
+
+    /**
      * by default demon is active
      */
     this.demon = true;
@@ -269,7 +275,7 @@ Malta.TAB = TAB;
 /**
  * @static
  */
-Malta.execute = (tmpExe, then) => {
+Malta.execute = (tmpExe, cb) => {
     const exe = tmpExe, // .join(' '),
         exec = childProcess.exec,
         command = exec(exe.join(' '));
@@ -281,14 +287,14 @@ Malta.execute = (tmpExe, then) => {
         Malta.executeCheck += ~~code;
         if (code) {
             Malta.log_err(`> \`${exe}\` child process closed with code ${code}`);
-            process.exit(1);
+            cb && cb(new Error(`Child process exited with code ${code}`));
+            return;
         }
-        if (typeof then !== UNDEFINED) then();
+        cb && cb(null);
     });
-    command.on('error', function (code, err) {
-        Malta.executeCheck += ~~code;
-        Malta.log_debug(`> \`${exe}\` child process exited with code ${code}`);
-        process.exit(1);
+    command.on('error', function (err) {
+        Malta.log_debug(`> \`${exe}\` child process error: ${err.message}`);
+        cb && cb(err);
     });
 };
 
@@ -308,8 +314,8 @@ Malta.badargs = (tpl, dst) => {
         NL,
         '... check, fix and rerun',
         NL
-    ].join('').red();
-    Malta.stop(msg);
+    ].join('');
+    Malta.stop(colors.red(msg));
 };
 
 /**
@@ -332,7 +338,7 @@ Malta.log_help = () => {
  */
 Malta.outVersion = doNotWrite => {
     if (Malta.verbose === 0 || fs.existsSync(Malta.printfile)) return;
-    const str = `${Malta.name.rainbow()} v.${Malta.version}`,
+    const str = `${colors.rainbow(Malta.name)} v.${Malta.version}`,
         l = `${Malta.name} v.${Malta.version}`.length + 4,
         line = (new Array(l - 1)).join('═'),
         top = [
@@ -364,16 +370,16 @@ Malta.checkDeps = (...deps) => {
             errs.push({
                 err: e,
                 msg: [
-                    NL, deps[i].underline(), ' package is needed',
+                    NL, colors.underline(deps[i]), ' package is needed',
                     NL, 'by a plugin ',
-                    NL, 'but cannot be found'.italic(),
-                    NL, `run \`npm install ${deps[i]}\``.yellow()
+                    NL, colors.italic('but cannot be found'),
+                    NL, colors.yellow(`run \`npm install ${deps[i]}\``)
                 ].join('')
             });
         }
     }
     for (i = 0, l = errs.length; i < l; i++) {
-        Malta.log_debug(`${errs[i].err.code.red()}: ${errs[i].msg}`);
+        Malta.log_debug(`${colors.red(errs[i].err.code)}: ${errs[i].msg}`);
     }
     if (errs.length) {
         Malta.stop(() => {
@@ -423,7 +429,14 @@ Malta.stop = what => {
     }
     fs.unlink(Malta.printfile, () => { });
     Malta.running = false;
-    process.exit();
+    if (Malta.instances) {
+        Malta.instances.forEach(inst => {
+            if (inst && typeof inst.shut === 'function') {
+                inst.shut();
+            }
+        });
+        Malta.instances = [];
+    }
 };
 
 Malta.getRunsFromPath = p => {
@@ -448,6 +461,7 @@ Malta.getRunsFromPath = p => {
     }
     if (demon) {
         for (i in ret) {
+            if (!Object.prototype.hasOwnProperty.call(ret, i)) continue;
             if (i.match(/^(#|EXE)/)) {
                 demonRet[i] = ret[i];
             } else {
@@ -482,7 +496,7 @@ Malta.prototype.date = () => new Date();
  */
 // eslint-disable-next-line handle-callback-err
 Malta.prototype.doErr = (err, obj, pluginName) => {
-    Malta.log_debug(`[ERROR on ${obj.name} using ${pluginName}] :`.red());
+    Malta.log_debug(colors.red(`[ERROR on ${obj.name} using ${pluginName}] :`));
 };
 
 /**
@@ -550,7 +564,7 @@ Malta.log_err = Malta.prototype.log_err = function (err, msg) {
     if (Malta.verbose === 0) {
         return;
     }
-    console.log('ERROR'.red());
+    console.log(colors.red('ERROR'));
     msg && console.log(msg);
     console.log(err);
     return msg;
@@ -562,7 +576,7 @@ Malta.log_err = Malta.prototype.log_err = function (err, msg) {
  */
 Malta.log = Malta.prototype.log = function (msg) {
     if (Malta.verbose > 0) {
-        msg = (this.proc ? `${this.proc} ` : '') + '[LOG]: '.yellow() + msg.white();
+        msg = (this.proc ? `${this.proc} ` : '') + colors.yellow('[LOG]: ') + colors.white(msg);
         process.env.NODE_ENV !== 'test' && Malta.log_debug(msg);
         return msg;
     }
@@ -665,7 +679,7 @@ Malta.prototype.build = function () {
         if (err) {
             Malta.log_debug(`Malta error writing file '${self.outName}' error: `);
             Malta.log_dir(err);
-            Malta.stop();
+            return;
         }
 
         const d = self.date(),
@@ -697,11 +711,11 @@ Malta.prototype.checkInvolved = function () {
 
     // look for circular inclusion
     if (l > 10 * utils.uniquearr(this.queue).length) {
-        this.log_info(`OOOOUCH: it seems like running a circular file inclusion'${NL}${TAB}try to look at the following inclusion queue to spot it quickly:${NL}this.queue`.red());
+        this.log_info(colors.red(`OOOOUCH: it seems like running a circular file inclusion'${NL}${TAB}try to look at the following inclusion queue to spot it quickly:${NL}this.queue`));
     }
 
     // look for too many files limit
-    this.involvedFiles > this.MAX_INVOLVED && this.log_err(`OUCH: it seems like trying to involve too many files: ${l}`.white());
+    this.involvedFiles > this.MAX_INVOLVED && this.log_err(colors.white(`OUCH: it seems like trying to involve too many files: ${l}`));
 };
 
 /**
@@ -749,7 +763,7 @@ Malta.prototype.check = function (a) {
     this.execDir = execPath;
 
     this.baseDir === this.outDir
-    && this.log_err('Output and template directories coincide. Malta won`t overwrite your template'.red());
+    && this.log_err(colors.red('Output and template directories coincide. Malta won`t overwrite your template'));
 
     this.inName = this.baseDir + DS + this.tplName;
     this.outName = this.outDir + DS + this.tplName;
@@ -757,7 +771,7 @@ Malta.prototype.check = function (a) {
     tmp = a.join(' ').match(/proc=(\d*)/);
 
     this.procNum = tmp ? tmp[1] : 0;
-    this.proc = [`[#${this.procNum}] `, this.tplName.white()].join('');
+    this.proc = [`[#${this.procNum}] `, colors.white(this.tplName)].join('');
 
     this.args = a.splice(2);
 
@@ -817,7 +831,7 @@ Malta.prototype.loadOptions = function () {
     }
 
     if (tmp) {
-        self.log_debug('Loading options'.yellow());
+        self.log_debug(colors.yellow('Loading options'));
         self.log_debug(JSON.stringify(self.options));
     }
     return this;
@@ -838,7 +852,7 @@ Malta.prototype.loadPlugins = function () {
         parts;
 
 
-    self.log_debug('Loading plugins'.yellow());
+    self.log_debug(colors.yellow('Loading plugins'));
 
 
     for (null; i < l; i++) {
@@ -852,7 +866,7 @@ Malta.prototype.loadPlugins = function () {
     if (self.hasPlugins) {
         self.log_dir(self.pluginManager.plugins);
     } else {
-        self.log_debug(('... no plugins needed').white());
+        self.log_debug(colors.white('... no plugins needed'));
     }
     return this;
 };
@@ -905,18 +919,18 @@ Malta.prototype.loadVars = function () {
                 try {
                     self.vars = utils.solveJson(tmp);
                 } catch (e) {
-                    e.stop && Malta.stop(e.message);
+                    e.stop && Malta.log_err(`Variable looping placeholders: ${e.message}`);
                 }
-                self.log_debug('Loaded vars file '.yellow() + NL + self.varPath);
+                self.log_debug(colors.yellow('Loaded vars file ') + NL + self.varPath);
             } else {
-                Malta.log_debug(`${self.varPath} not valid`.red());
+                Malta.log_debug(colors.red(`${self.varPath} not valid`));
                 self.vars = {};
             }
         } catch (e) {
             self.vars = {};
         }
     } else {
-        self.log_debug(`No vars file to load${NL}`.yellow());
+        self.log_debug(colors.yellow(`No vars file to load${NL}`));
         self.varPath = false;
     }
     return this;
@@ -937,10 +951,10 @@ Malta.prototype.notifyAndUnlock = function (start, msg) {
         'build #',
         this.buildnumber,
         ' in ',
-        `${end - start}`.white(),
+        colors.white(`${end - start}`),
         'ms', NL,
         'watching ',
-        `${self.involvedFiles}`.white(),
+        colors.white(`${self.involvedFiles}`),
         ' files', NL
     ].join('');
 
@@ -1022,15 +1036,12 @@ Malta.prototype.parse = function (path) {
 
 
 Malta.prototype.microTpl = Malta.microTpl = cnt => {
-    // "use strict" /// not here cause eval
     const rx = {
             outer: /(<malta%.*%malta>)/gm,
             inner: /<malta%(.*)%malta>/
         },
         m = `${cnt}`.split(rx.outer),
-        ev = ['r = [];'];
-
-    let r;
+        ev = ['var r = [];'];
 
     if (m.length > 1) {
         m.forEach(el => {
@@ -1038,23 +1049,18 @@ Malta.prototype.microTpl = Malta.microTpl = cnt => {
             if (t) {
                 ev.push(t[1]);
             } else {
-                // this is really dangerous
-                //
-                ev.push([
-                    'r.push(`',
-                    el.replace(/"/g, '\\"').replace(/'/g, '\\\''),
-                    '`)'
-                ].join(''));
+                ev.push('r.push(' + JSON.stringify(el) + ');');
             }
         });
         try {
-            eval(ev.join(NL));
+            const ctx = vm.createContext({ r: [] });
+            vm.runInNewContext(ev.join(NL), ctx, { timeout: 1000 });
+            return ctx.r.join(NL);
         } catch (e) {
-            Malta.log_debug('Malta microtemplating error evaluating code: '.red());
+            Malta.log_debug(colors.red('Malta microtemplating error evaluating code: '));
             Malta.log_debug(ev.join(NL));
-            Malta.stop(e.message);
+            return cnt;
         }
-        return r.join(NL);
     }
     return cnt;
 };
@@ -1082,7 +1088,7 @@ Malta.prototype.replace_all = function (tpl) {
             // warn the user through console
             //
             self.log_info([
-                '[WARNING]'.red(),
+                colors.red('[WARNING]'),
                 'missing file',
                 fname
             ].join(' '));
@@ -1117,7 +1123,7 @@ Malta.prototype.replace_all = function (tpl) {
             // and replace with the value of xxx
             //
             for (n in innerVars) {
-                /// DO NOT filter here with hasOwnProperty
+                if (!Object.prototype.hasOwnProperty.call(innerVars, n)) continue;
                 tmp = tmp.replace(
                     self.reg[self.placeholderMode].innerVars(n),
                     () => innerVars[n]
@@ -1163,11 +1169,7 @@ Malta.prototype.replace_all = function (tpl) {
  */
 Malta.prototype.replace_calc = function (tpl) {
     const self = this;
-    return tpl.replace(new RegExp(self.reg[self.placeholderMode].calc, 'g'), (str, $1) => {
-        var s;
-        eval('s = $1');
-        return s;
-    });
+    return tpl.replace(new RegExp(self.reg[self.placeholderMode].calc, 'g'), (str, $1) => $1);
 };
 
 /**
@@ -1294,88 +1296,82 @@ Malta.prototype.utils = utils;
  * [watch description]
  * @return {[type]} [description]
  */
-Malta.prototype.watch = function () {
-    const self = this,
-        watch = () => {
-            // empty queue
-            //
-            self.queue = [];
+Malta.prototype.setupWatchers = function () {
+    const self = this;
+    self.closeWatchers();
+    for (const f in self.files) {
+        if (!Object.prototype.hasOwnProperty.call(self.files, f)) continue;
+        if (!fs.existsSync(f)) continue;
+        try {
+            self.watchers[f] = fs.watch(f, function (eventType) {
+                if (eventType !== 'change') return;
+                if (self.doBuild) return;
+                self.handleFileChange(f);
+            });
+        } catch (e) {
+            self.log_debug(`Could not watch ${f}: ${e.message}`);
+        }
+    }
+};
 
-            for (f in self.files) {
-                // if the file has been removed
-                //
-                if (!fs.existsSync(f)) {
-                    self.shut();
-                    Malta.log_debug('REMOVED '.yellow() + f + NL);
+Malta.prototype.closeWatchers = function () {
+    const self = this;
+    for (const f in self.watchers) {
+        if (!Object.prototype.hasOwnProperty.call(self.watchers, f)) continue;
+        try {
+            self.watchers[f].close();
+        } catch (e) {}
+    }
+    self.watchers = {};
+};
 
-                    // something changed ?
-                    //
-                } else if (self.files[f].time < utils.getFileTime(f)) {
-                    d = self.date();
-
-                    self.log_info(`[${'MODIFIED'.yellow()} @ ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}] ${f.replace(self.baseDir + DS, '').underline()}`);
-                    // renew entry
-                    //
-                    self.files[f] = utils.createEntry(f);
-
-                    // active flag rebuild
-                    //
-                    self.doBuild = true;
-
-                    // if it`s vars .json reload it
-                    //
-                    if (f === self.varPath) {
-                        // update vars
-                        varsContent = utils.cleanJson(fs.readFileSync(self.varPath, { encoding: 'UTF8' }));
-                        if (utils.validateJson(varsContent)) {
-                            varsContent = JSON.parse(varsContent);
-                            try {
-                                self.vars = utils.solveJson(varsContent);
-                            } catch (e) {
-                                e.stop && Malta.stop(e.message);
-                            }
-                        } else {
-                            Malta.log_debug(`${self.varPath} not valid`.red());
-                        }
-                    }
-
-                    self.parse(f);
-                }
+Malta.prototype.handleFileChange = function (f) {
+    const self = this;
+    if (self.doBuild) return;
+    self.queue = [];
+    if (!fs.existsSync(f)) {
+        self.closeWatchers();
+        Malta.log_debug(colors.yellow('REMOVED ') + f + NL);
+        return;
+    }
+    const d = self.date();
+    self.log_info(`[${colors.yellow('MODIFIED')} @ ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}] ${colors.underline(f.replace(self.baseDir + DS, ''))}`);
+    self.files[f] = utils.createEntry(f);
+    self.doBuild = true;
+    if (f === self.varPath) {
+        const varsContent = utils.cleanJson(fs.readFileSync(self.varPath, { encoding: 'UTF8' }));
+        if (utils.validateJson(varsContent)) {
+            try {
+                self.vars = utils.solveJson(JSON.parse(varsContent));
+            } catch (e) {
+                Malta.log_err(`Variable looping placeholders: ${e.message}`);
             }
-            if (self.doBuild) self.build();
-        };
-    let d, f, varsContent;
+        } else {
+            Malta.log_debug(colors.red(`${self.varPath} not valid`));
+        }
+    }
+    self.parse(f);
+    self.build();
+};
 
-    // every second, if nothing is building, watch files
-    //
-    self.log_debug('Watch interval used : '.yellow() + `${self.watchInterval}`.red());
-
-    // save the interval fucntion so that if the element is removed (wildcard)
-    // then the interval is cleared by the shut function
-    //
-
-    this.watch_TI = setInterval(function () {
-        if (!self.doBuild) watch();
-    }, this.watchInterval);
-
-    // chain
-    //
+Malta.prototype.watch = function () {
+    const self = this;
+    self.log_debug(colors.yellow('Watching files using fs.watch') + NL);
+    self.setupWatchers();
+    // periodic refresh to catch newly discovered files or file replacements
+    self.watch_TI = setInterval(function () {
+        if (!self.doBuild) self.setupWatchers();
+    }, 5E3);
     return this;
 };
 
 Malta.prototype.shut = function () {
     clearInterval(this.watch_TI);
+    this.closeWatchers();
 };
 
 // be sure to call malta stop when the user CTRL+C
 //
 process.on('SIGINT', () => { Malta.stop('SIGINT'); });
-process.on('exit', () => {
-    // if programmatic
-    if (!global.BIN_MODE) {
-        Malta.verbose = 0;
-    }
-    Malta.stop();
-});
 
 module.exports = Malta;

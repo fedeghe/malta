@@ -3,7 +3,8 @@ const fs = require('fs'),
     path = require('path'),
     Executor = require('./executor'),
     execPath = process.cwd(),
-    utils = require('./utils.js');
+    utils = require('./utils.js'),
+    colors = require('./colors');
 
 class PluginManager {
     constructor (instance) {
@@ -20,10 +21,10 @@ class PluginManager {
             pluginKeys = Object.keys(this.plugins);
         let iterator;
 
-        if (pluginKeys.length) mself.log_info('Starting plugins'.yellow());
+        if (pluginKeys.length) mself.log_info(colors.yellow('Starting plugins'));
 
         if (mself.hasPlugins) {
-            mself.log_debug(`on ${mself.outName.underline()} called plugins:`);
+            mself.log_debug(`on ${colors.underline(mself.outName)} called plugins:`);
             iterator = utils.getIterator(pluginKeys);
             this.executor = new Executor(iterator, mself, this);
             this.executor.run();
@@ -46,6 +47,7 @@ class PluginManager {
                 gotErrs
             );
         }
+        mself.doBuild = false;
     }
 
     add (fname, params) {

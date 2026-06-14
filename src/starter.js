@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const Malta = require('./malta'),
+    colors = require('./colors'),
     path = require('path'),
     functions = require('./functions'),
     execPath = process.cwd(),
@@ -7,7 +8,7 @@ const Malta = require('./malta'),
     len = args.length,
     print = (msg, i, tot) => {
         const perc = (typeof i !== 'undefined' && typeof tot !== 'undefined')
-            ? [parseInt(100 * i / tot, 10), '% '].join('').white()
+            ? colors.white([parseInt(100 * i / tot, 10), '% '].join(''))
             : '';
         Malta.log_debug(perc + msg);
     };
@@ -18,6 +19,7 @@ try {
     (function _M (_args, _len) {
         function go (_runs) {
             for (const tpl in _runs) {
+                if (!Object.prototype.hasOwnProperty.call(_runs, tpl)) continue;
                 // check if is inclusion {whatever.json : true}
                 //
                 if (tpl.match(/\.json$/) && _runs[tpl] === true) {
@@ -52,7 +54,7 @@ try {
                 (function (commands) {
                     Malta.log_info([
                         Malta.NL,
-                        'EXE'.red(),
+                        colors.red('EXE'),
                         'section for',
                         _args[0]
                     ].join(' '));
@@ -66,13 +68,21 @@ try {
                             (function start () {
                                 if (i < clen - 1) {
                                     print(`execution: ${commands[i]}`, i + 1, clen);
-                                    Malta.execute(commands[i].split(/\s/), () => {
+                                    Malta.execute(commands[i].split(/\s/), (err) => {
+                                        if (err) {
+                                            Malta.log_err(err.message);
+                                            process.exit(1);
+                                        }
                                         ++i;
                                         start();
                                     });
                                 } else {
                                     print(`execution: ${commands[i]}`, i + 1, clen);
-                                    Malta.execute(commands[i].split(/\s/), () => {
+                                    Malta.execute(commands[i].split(/\s/), (err) => {
+                                        if (err) {
+                                            Malta.log_err(err.message);
+                                            process.exit(1);
+                                        }
                                         print('...done!\n');
                                         delete runs.EXE;
                                         go(runs);
@@ -81,7 +91,11 @@ try {
                             })();
                         } else {
                             print(`execution: ${commands}`, 1, 1);
-                            Malta.execute(commands.split(/\s/), function () {
+                            Malta.execute(commands.split(/\s/), function (err) {
+                                if (err) {
+                                    Malta.log_err(err.message);
+                                    process.exit(1);
+                                }
                                 print(`...done!${Malta.NL}`);
                                 delete runs.EXE;
                                 go(runs);

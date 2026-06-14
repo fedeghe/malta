@@ -1,6 +1,6 @@
-require('../../src/stringproto.js')
+const colors = require('../../src/colors');
 
-describe('string proto', function () {
+describe('colors module', function () {
     const str = "hello",
         map = {
             "normal" : 0, "darken" : 2, "italic" : 54, "underline" : 4,
@@ -16,16 +16,16 @@ describe('string proto', function () {
         };
 
     let i;
-    
-        it("should have the right colors", function () {
-            for (i in map) {
-                expect(String.prototype[i].call(str)).toBe("\x1b[1;" + map[i] + "m" + str + "\x1b[0m");
-            }
-        });
+
+    it("should have the right colors", function () {
+        for (i in map) {
+            expect(colors[i](str)).toBe("\x1b[1;" + map[i] + "m" + str + "\x1b[0m");
+        }
+    });
     it ("should have the rainbow color", function () {
-        expect(str.rainbow().length).toBeGreaterThan(0);
+        expect(colors.rainbow(str).length).toBeGreaterThan(0);
     });
     it ("should have the rainbow color (blank)", function () {
-        expect('a b c d e f'.rainbow().length).toBeGreaterThan(0);
+        expect(colors.rainbow('a b c d e f').length).toBeGreaterThan(0);
     });
 });
