@@ -17,13 +17,13 @@ describe('folder observing', function () {
         setTimeout(function () {
             fs.writeFile(observed + '/message1.txt', 'Hello Node.js', function (err) {
                 if (err) throw err;
-            });    
-        }, 300)
+            });
+        }, 600)
     });
 
 
     it('observe function remove', function (done) {
-        
+
         ob.observe(observed, function (a) {
             expect(a.added.length).toBe(0);
             expect(a.removed.length).toBe(1);
@@ -33,8 +33,8 @@ describe('folder observing', function () {
         setTimeout(function () {
             fs.unlink(observed + '/message1.txt', function (err) {
                 if (err) throw err;
-            });    
-        }, 300)
+            });
+        }, 600)
     });
 
     it('unobserve function', function (done) {
@@ -77,6 +77,6 @@ describe('folder observing', function () {
             readdirSpy.mockRestore();
             ob.unobserve(observed, 'txt');
             done();
-        }, 150);
+        }, 600);
     });
 });

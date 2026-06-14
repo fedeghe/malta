@@ -12,13 +12,23 @@ describe('Malta static methods', function () {
         prevVerbose = Malta.verbose;
         Malta.running = true;
         Malta.instances = [];
+        Malta.executeCheck = 0;
         jest.restoreAllMocks();
     });
 
     afterEach(() => {
         Malta.verbose = prevVerbose;
         Malta.running = true;
+        Malta.instances = [];
+        Malta.executeCheck = 0;
         jest.restoreAllMocks();
+    });
+
+    afterAll(() => {
+        Malta.verbose = 1;
+        Malta.running = true;
+        Malta.instances = [];
+        Malta.executeCheck = 0;
     });
 
     it('Malta.execute should call cb with error on non-zero exit', function (done) {
@@ -142,15 +152,34 @@ describe('Malta static methods', function () {
 });
 
 describe('Malta prototype methods', function () {
-    let m;
+    let m,
+        prevVerbose;
 
     beforeEach(() => {
+        prevVerbose = Malta.verbose;
+        Malta.running = true;
+        Malta.instances = [];
+        Malta.executeCheck = 0;
         m = new Malta();
         jest.restoreAllMocks();
     });
 
     afterEach(() => {
+        if (m && typeof m.shut === 'function') {
+            try { m.shut(); } catch (e) {}
+        }
+        Malta.verbose = prevVerbose;
+        Malta.running = true;
+        Malta.instances = [];
+        Malta.executeCheck = 0;
         jest.restoreAllMocks();
+    });
+
+    afterAll(() => {
+        Malta.verbose = 1;
+        Malta.running = true;
+        Malta.instances = [];
+        Malta.executeCheck = 0;
     });
 
     it('doErr should log debug', function () {
