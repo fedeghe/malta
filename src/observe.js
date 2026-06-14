@@ -1,6 +1,7 @@
 const fs = require('fs'),
     Malta = require('./malta'),
     elements = {},
+    DEFAULT_INTERVAL = 500,
     arrDiff = (a, b) => {
         const bAdded = [],
             bRemoved = [],
@@ -20,8 +21,6 @@ const fs = require('fs'),
         const actual = {};
         let previous = false;
 
-        // if (folder in elements) return false;
-
         if (!(folder in elements)) {
             elements[folder] = {};
         }
@@ -34,7 +33,10 @@ const fs = require('fs'),
         elements[folder][extension] = setInterval(() => {
             try {
                 fs.readdir(folder, function (err, files) {
-                    if (err) throw err;
+                    if (err) {
+                        Malta.log_debug(err);
+                        return;
+                    }
                     if (!files) return;
 
                     if (!previous) {
@@ -58,7 +60,7 @@ const fs = require('fs'),
             } catch (err) {
                 Malta.log_debug(err);
             }
-        }, 100);
+        }, DEFAULT_INTERVAL);
 
         return true;
     },

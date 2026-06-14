@@ -10,7 +10,9 @@
     ],
     "coveragePathIgnorePatterns": [
         "node_modules",
-        "tests"
+        "tests",
+        "src/starter.js",
+        "src/bin.js"
     ],
     "coverageDirectory": "<rootDir>/coverage/",
     "coverageThreshold": {
