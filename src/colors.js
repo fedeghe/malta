@@ -46,6 +46,7 @@ module.exports = {
     blue: s => conc(34, s),
     magenta: s => conc(35, s),
     cyan: s => conc(36, s),
+    darkcyan: s => conc(36, s),
     lightgray: s => conc(37, s),
     darkgray: s => conc(90, s),
     lightred: s => conc(91, s),
