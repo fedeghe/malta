@@ -14,6 +14,7 @@ const methods = {
     blue: colors.blue,
     magenta: colors.magenta,
     cyan: colors.cyan,
+    darkcyan: colors.darkcyan,
     lightgray: colors.lightgray,
     darkgray: colors.darkgray,
     lightred: colors.lightred,
