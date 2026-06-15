@@ -40,7 +40,7 @@
 [svg2png](#svg2png) \~ 
 [translate](#translate) \~ 
 [typescript](#typescript) \~ 
-[umd](#umd)
+[umd](#umd) \~ 
 [upload](#upload)
 
 ---
