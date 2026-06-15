@@ -1,10 +1,9 @@
 Changelog
 --------- 
-- **v4.2.5** 
+- **v4.2.7** 
     - **Security**: removed all eval calls from the core. jsonFromStr now uses a safe manual parser; microTpl runs inside an isolated vm context; replace_calc returns content without executing it.  
     - **Robustness**: removed all internal process.exit calls. Build, plugin, and child-process errors are now propagated or logged without killing the Node process.  
     - **Performance**: replaced the file watcher from polling (setInterval + fs.statSync) to event-driven fs.watch, with a lightweight periodic refresh for new files.  
-    - **Quality**: removed stringproto.js (String.prototype pollution) and introduced the colors.js utility module for console coloring.  
     - **Maintainability**: updated engines.node to >=18.0.0, aligned with actual devDependency requirements. Added hasOwnProperty checks to all for...in loops.  
     - **Coverage**: raised code coverage 
 
