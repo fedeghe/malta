@@ -28,6 +28,7 @@
 [less](#less) \~ 
 [markdown](#markdown) \~ 
 [markdown-pdf](#markdown-pdf) \~ 
+[millicss](#millicss) \~ 
 [millijs](#millijs) \~ 
 [mocha](#mocha) \~ 
 [notify](#notify) \~ 
@@ -213,6 +214,12 @@ Creates html files from md files, based on [markdown npm package][l24lib]
 Creates pdf files from md files, based on [markdown-pdf npm package][l25lib]  
 
 ---
+<a name="millicss" />
+
+### [malta-millicss][l260]  
+Reduce a bit the size of stylesheets files
+
+---
 <a name="millijs" />
 
 ### [malta-millijs][l26]  
@@ -328,6 +335,7 @@ File upload server plugin
 [l23]: https://www.npmjs.com/package/malta-less
 [l24]: https://www.npmjs.com/package/malta-markdown
 [l25]: https://www.npmjs.com/package/malta-markdown-pdf
+[l260]: https://www.npmjs.com/package/malta-millicss
 [l26]: https://www.npmjs.com/package/malta-millijs
 [l27]: https://www.npmjs.com/package/malta-mocha
 [l28]: https://www.npmjs.com/package/malta-notify
